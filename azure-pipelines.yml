@@ -6,7 +6,7 @@
 trigger:
 - master
 
-pool: amp-pool
+pool: amp-agent-pool
 
 variables:
   solution: '**/*.sln'
