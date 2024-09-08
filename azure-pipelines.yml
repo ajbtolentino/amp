@@ -15,14 +15,23 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Restore'
   inputs:
     command: 'restore'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build'
   inputs:
     command: 'build'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Running Tests'
   inputs:
     command: 'test'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test'
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/TEST-*.xml'
