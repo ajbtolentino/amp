@@ -31,7 +31,6 @@ steps:
     command: 'test'
 
 - task: PublishTestResults@2
-  displayName: 'Publish Test'
   inputs:
-    testResultsFormat: 'VSTest'
+    testResultsFormat: 'XUnit'
     testResultsFiles: '**/TEST-*.xml'
