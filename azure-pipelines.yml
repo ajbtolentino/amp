@@ -26,11 +26,12 @@ steps:
     command: 'build'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Running Tests'
+  displayName: 'Unit Tests'
   inputs:
     command: 'test'
 
 - task: PublishTestResults@2
+  displayName: 'Publish Unit Tests'
   inputs:
     testResultsFormat: 'XUnit'
     testResultsFiles: '**/TEST-*.xml'
