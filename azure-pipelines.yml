@@ -6,7 +6,7 @@
 trigger:
 - master
 
-pool: ems-agent-pool
+pool: Default
 
 variables:
   solution: '**/*.sln'
