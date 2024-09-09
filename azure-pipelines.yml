@@ -19,14 +19,14 @@ steps:
   displayName: 'Restore'
   inputs:
     command: 'restore'
-    projects: 'AMP.EMS.API.csproj'
+    projects: '**/AMP.EMS.API.csproj'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
     command: 'build'
-    projects: 'AMP.EMS.API.csproj'
+    projects: '**/AMP.EMS.API.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
