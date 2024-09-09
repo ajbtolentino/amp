@@ -6,7 +6,8 @@
 trigger:
 - master
 
-pool: amp-agent-pool
+pool:   
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
