@@ -1,7 +1,7 @@
 using System;
-using AMP.Shared.Data;
+using AMP.Shared.Core;
 
-namespace AMP.Shared.Data;
+namespace AMP.Shared.Infrastructure;
 
 public interface IRepository<TEntity, TID> where TEntity : IEntity<TID>
 {

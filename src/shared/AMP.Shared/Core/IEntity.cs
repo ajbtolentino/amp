@@ -1,6 +1,6 @@
 using System;
 
-namespace AMP.Shared.Data;
+namespace AMP.Shared.Core;
 
 public interface IEntity<T>
 {
