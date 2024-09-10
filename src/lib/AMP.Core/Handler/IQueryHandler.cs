@@ -1,6 +1,6 @@
 using System;
 
-namespace AMP.Shared.Handlers;
+namespace AMP.Core.Handler;
 
 public interface IQueryHandler<TRequest, TResponse> : IHandler<TRequest, TResponse>
 {
