@@ -1,14 +1,13 @@
 using System;
-using AMP.Core.DbContext;
 using AMP.Core.Entity;
 using AMP.EMS.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Infrastructure;
 
-public class EFDbContext : DbContext, IApplicationDbContext
+public class EMSDbContext : DbContext
 {
-    public EFDbContext(DbContextOptions<EFDbContext> options)
+    public EMSDbContext(DbContextOptions<EMSDbContext> options)
         : base(options)
     {
 

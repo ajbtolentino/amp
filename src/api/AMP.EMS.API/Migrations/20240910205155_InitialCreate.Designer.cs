@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AMP.EMS.API.Migrations
 {
-    [DbContext(typeof(EFDbContext))]
+    [DbContext(typeof(EMSDbContext))]
     [Migration("20240910205155_InitialCreate")]
     partial class InitialCreate
     {

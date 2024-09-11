@@ -1,14 +1,13 @@
 using System;
-using AMP.Core.DbContext;
 using AMP.Core.Entity;
 
 namespace AMP.Core.Repository;
 
-public interface IRepository<TEntity, TID> where TEntity : IEntity<TID>
+public interface IRepository<TDbContext, TEntity> where TEntity : class
 {
     IEnumerable<TEntity> GetAll();
-    TEntity Get(TID id);
+    TEntity Get<TKey>(TKey key);
     TEntity Add(TEntity entity);
     TEntity Update(TEntity entity);
-    void Delete(TID id);
+    void Delete<TKey>(TKey id);
 }

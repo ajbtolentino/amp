@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\lib\AMP.Core\AMP.Core.csproj" />
+    <ProjectReference Include="..\..\lib\AMP.Infrastructure\AMP.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

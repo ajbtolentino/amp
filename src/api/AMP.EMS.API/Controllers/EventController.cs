@@ -1,5 +1,6 @@
-using AMP.Core.DbContext;
+using AMP.Core.Repository;
 using AMP.EMS.API.Entities;
+using AMP.EMS.API.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,11 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
-        private readonly IApplicationDbContext applicationDbContext;
+        private readonly IRepository<EMSDbContext, Event> eventRepository;
 
-        public EventController(IApplicationDbContext applicationDbContext)
+        public EventController(IRepository<EMSDbContext, Event> eventRepository)
         {
-            this.applicationDbContext = applicationDbContext;
+            this.eventRepository = eventRepository;
         }
 
         /// <summary>
@@ -23,45 +24,49 @@ namespace AMP.EMS.API.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var todos = this.applicationDbContext.GetAll<Event, Guid>();
+            var events = this.eventRepository.GetAll();
 
-            return Ok(todos);
+            return Ok(events);
         }
 
         /// <summary>
-        /// Returns event by eventId
+        /// Returns event by id
         /// </summary>
-        /// <param name="eventId">Id of the todo</param>
+        /// <param name="id">Id of the todo</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{eventId}")]
-        public IActionResult Get(Guid eventId)
+        [Route("{id}")]
+        public IActionResult Get(Guid id)
         {
-            var todo = this.applicationDbContext.GetAll<Event, Guid>().FirstOrDefault(e => e.Id == eventId);
+            var @event = this.eventRepository.Get(id);
 
-            return Ok(todo);
+            return Ok(@event);
         }
 
         /// <summary>
-        /// Adds a new todo
+        /// Adds a new event
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post(Event @event)
         {
-            return Ok();
+            @event.Id = Guid.NewGuid();
+
+            var newEvent = this.eventRepository.Add(@event);
+
+            return Ok(newEvent);
         }
 
         /// <summary>
-        /// Updates an existing todo
+        /// Updates an existing event
         /// </summary>
-        /// <param name="todoId"></param>
+        /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("{eventId}")]
-        public IActionResult Put()
+        [Route("{id}")]
+        public IActionResult Put(Guid id)
         {
             return Ok();
         }
@@ -72,8 +77,8 @@ namespace AMP.EMS.API.Controllers
         /// <param name="eventId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("{eventId}")]
-        public IActionResult Delete(Guid eventId)
+        [Route("{id}")]
+        public IActionResult Delete(Guid id)
         {
             return Ok();
         }

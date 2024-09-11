@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AMP.EMS.API.Migrations
 {
-    [DbContext(typeof(EFDbContext))]
+    [DbContext(typeof(EMSDbContext))]
     partial class EFDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

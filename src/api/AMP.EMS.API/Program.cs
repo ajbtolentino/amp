@@ -1,11 +1,14 @@
-using AMP.Core.DbContext;
+using AMP.Core.Repository;
+using AMP.EMS.API.Entities;
 using AMP.EMS.API.Infrastructure;
+using AMP.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<EFDbContext>(options => options.UseSqlite("Data Source=ems.db"));
-builder.Services.AddScoped<IApplicationDbContext>((a) => a.GetService<EFDbContext>());
+builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite("Data Source=ems.db"));
+
+builder.Services.AddScoped<IRepository<EMSDbContext, Event>, Repository<EMSDbContext, Event>>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -19,7 +22,7 @@ var app = builder.Build();
 // migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService<EFDbContext>();
+    var dataContext = scope.ServiceProvider.GetRequiredService<EMSDbContext>();
     dataContext.Database.Migrate();
 }
 
