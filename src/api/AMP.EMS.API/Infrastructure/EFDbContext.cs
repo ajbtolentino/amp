@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Infrastructure;
 
+/// <summary>
+/// EMS Database Context
+/// </summary>
 public class EMSDbContext : DbContext
 {
     public EMSDbContext(DbContextOptions<EMSDbContext> options)
