@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.Infrastructure.Repository;
 
-public class Repository<TDbContext, TEntity> : IRepository<TDbContext, TEntity>
+public class EFRepository<TDbContext, TEntity> : IRepository<TEntity>
     where TDbContext : DbContext
     where TEntity : class
 {
     private readonly TDbContext dbContext;
 
-    public Repository(TDbContext dbContext)
+    public EFRepository(TDbContext dbContext)
     {
         this.dbContext = dbContext;
     }
