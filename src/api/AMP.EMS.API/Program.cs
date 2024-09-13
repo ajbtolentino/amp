@@ -29,7 +29,10 @@ builder.Services.AddSwaggerGen(c =>
                 TokenUrl = new Uri("https://localhost:5001/connect/token"),
                 Scopes = new Dictionary<string, string>
                 {
-                    { "api1", "api1" }
+                    { "openid", "openid" },
+                    { "profile", "profile" },
+                    { "scope1", "scope1" },
+                    { "scope2", "scope2" }
                 }
             }
         }
