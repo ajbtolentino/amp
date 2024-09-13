@@ -1,11 +1,12 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Entities;
 using AMP.EMS.API.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EventController : ControllerBase
@@ -46,7 +47,7 @@ namespace AMP.EMS.API.Controllers
         /// <summary>
         /// Adds a new event
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="event"></param>
         /// <returns></returns>
         [HttpPost]
         public IActionResult Post(Event @event)
@@ -61,14 +62,19 @@ namespace AMP.EMS.API.Controllers
         /// <summary>
         /// Updates an existing event
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="model"></param>
+        /// <param name="event"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("{id}")]
-        public IActionResult Put(Guid id)
+        public IActionResult Put(Event @event)
         {
-            return Ok();
+            var entity = this.eventRepository.Get(@event.Id);
+            entity.DateCreated = @event.DateCreated;
+            entity.DateUpdated = @event.DateUpdated;
+            entity.Name = @event.Name;
+
+            var result = this.eventRepository.Update(entity);
+
+            return Ok(result);
         }
 
         /// <summary>
@@ -80,6 +86,7 @@ namespace AMP.EMS.API.Controllers
         [Route("{id}")]
         public IActionResult Delete(Guid id)
         {
+            this.eventRepository.Delete(id);
             return Ok();
         }
     }

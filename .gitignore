@@ -397,4 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 **/.DS_Store
-src/api/AMP.EMS.API/ems.db
+**/ems.db
+src/api/AMP.Identity.API/keys/is-signing-key-439B6903EDC960C85646B5831C7F2F45.json

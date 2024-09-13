@@ -17,7 +17,9 @@ public class Repository<TDbContext, TEntity> : IRepository<TDbContext, TEntity>
     public TEntity Add(TEntity entity)
     {
         var result = this.dbContext.Add(entity).Entity;
+
         this.dbContext.SaveChanges();
+
         return result;
     }
 
@@ -41,6 +43,10 @@ public class Repository<TDbContext, TEntity> : IRepository<TDbContext, TEntity>
 
     public TEntity Update(TEntity entity)
     {
-        return this.dbContext.Update<TEntity>(entity).Entity;
+        var result = this.dbContext.Update<TEntity>(entity).Entity;
+
+        this.dbContext.SaveChanges();
+
+        return result;
     }
 }
