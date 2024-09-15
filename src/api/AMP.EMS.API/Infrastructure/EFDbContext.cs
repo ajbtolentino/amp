@@ -8,14 +8,8 @@ namespace AMP.EMS.API.Infrastructure;
 /// <summary>
 /// EMS Database Context
 /// </summary>
-public class EMSDbContext : DbContext
+public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(options)
 {
-    public EMSDbContext(DbContextOptions<EMSDbContext> options)
-        : base(options)
-    {
-
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -36,14 +30,15 @@ public class EMSDbContext : DbContext
     public void Delete<TEntity, TID>(TID id) where TEntity : class, IEntity<TID>
     {
         var entity = this.Set<TEntity>().Find(id);
-        this.Set<TEntity>().Remove(entity);
+
+        if (entity != null) this.Set<TEntity>().Remove(entity);
     }
 
     public TEntity Get<TEntity, TID>(TID id) where TEntity : class, IEntity<TID>
     {
         if (id is null) throw new NullReferenceException(nameof(id));
 
-        return this.Set<TEntity>().Find(id);
+        return this.Set<TEntity>().Find(id)!;
     }
 
     public IEnumerable<TEntity> GetAll<TEntity, TID>() where TEntity : class, IEntity<TID>

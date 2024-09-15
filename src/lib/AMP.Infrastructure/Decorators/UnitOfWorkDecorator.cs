@@ -1,5 +1,6 @@
 using System;
 using AMP.Core.Repository;
+using AMP.Core.Transaction;
 using Microsoft.Extensions.Logging;
 
 namespace AMP.Infrastructure.Decorators;
@@ -9,18 +10,11 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
     private readonly IUnitOfWork unitOfWork = unitOfWork;
     private readonly ILogger logger = logger;
 
-    public void BeginTransaction()
+    public IDbTransaction BeginTransaction()
     {
         logger.LogInformation($"Decorator - {nameof(BeginTransaction)}");
 
-        this.unitOfWork.BeginTransaction();
-    }
-
-    public void CommitTransaction()
-    {
-        logger.LogInformation($"Decorator - {nameof(CommitTransaction)}");
-
-        this.unitOfWork.CommitTransaction();
+        return this.unitOfWork.BeginTransaction();
     }
 
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
