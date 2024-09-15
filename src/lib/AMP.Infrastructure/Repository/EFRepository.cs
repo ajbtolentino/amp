@@ -3,23 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.Infrastructure.Repository;
 
-public class EFRepository<TDbContext, TEntity> : IRepository<TEntity>
-    where TDbContext : DbContext
+public class EFRepository<TEntity>(DbContext dbContext) : IRepository<TEntity>
     where TEntity : class
 {
-    private readonly TDbContext dbContext;
-
-    public EFRepository(TDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
+    private readonly DbContext dbContext = dbContext;
 
     public TEntity Add(TEntity entity)
     {
         var result = this.dbContext.Add(entity).Entity;
-
-        this.dbContext.SaveChanges();
-
         return result;
     }
 
@@ -44,9 +35,6 @@ public class EFRepository<TDbContext, TEntity> : IRepository<TEntity>
     public TEntity Update(TEntity entity)
     {
         var result = this.dbContext.Update<TEntity>(entity).Entity;
-
-        this.dbContext.SaveChanges();
-
         return result;
     }
 }

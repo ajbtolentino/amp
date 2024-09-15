@@ -8,14 +8,10 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]"), Authorize]
     [ApiController]
-    public class EventController : ControllerBase
+    public class EventController(IUnitOfWork unitOfWork) : ControllerBase
     {
-        private readonly IRepository<Event> eventRepository;
-
-        public EventController(IRepository<Event> eventRepository)
-        {
-            this.eventRepository = eventRepository;
-        }
+        private readonly IUnitOfWork unitOfWork = unitOfWork;
+        private readonly IRepository<Event> eventRepository = unitOfWork.Repository<Event>();
 
         /// <summary>
         /// Returns all events
@@ -51,9 +47,9 @@ namespace AMP.EMS.API.Controllers
         [HttpPost]
         public IActionResult Post(Event @event)
         {
-            @event.Id = Guid.NewGuid();
-
             var newEvent = this.eventRepository.Add(@event);
+
+            this.unitOfWork.SaveChanges();
 
             return Ok(newEvent);
         }
@@ -73,6 +69,8 @@ namespace AMP.EMS.API.Controllers
 
             var result = this.eventRepository.Update(entity);
 
+            this.unitOfWork.SaveChanges();
+
             return Ok(result);
         }
 
@@ -86,6 +84,9 @@ namespace AMP.EMS.API.Controllers
         public IActionResult Delete(Guid id)
         {
             this.eventRepository.Delete(id);
+
+            this.unitOfWork.SaveChanges();
+
             return Ok();
         }
     }

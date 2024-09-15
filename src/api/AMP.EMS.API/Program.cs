@@ -1,6 +1,7 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Entities;
 using AMP.EMS.API.Infrastructure;
+using AMP.Infrastructure.Decorators;
 using AMP.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -15,8 +16,6 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -52,6 +51,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+//Add authentication
 builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
     {
@@ -59,17 +59,22 @@ builder.Services.AddAuthentication()
         options.TokenValidationParameters.ValidateAudience = false;
     });
 
-builder.Services.AddAuthorization(options =>
+//Add DbContext
+builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite("Data Source=ems.db"));
+builder.Services.AddScoped<DbContext, EMSDbContext>();
+
+//Add Unit of Work with Decorator
+builder.Services.AddScoped<EFUnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork>(provider =>
 {
-    options.AddPolicy("ApiScope", policy =>
-    {
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "api1");
-    });
+    var unitOfWork = provider.GetRequiredService<EFUnitOfWork>();
+    var logger = provider.GetRequiredService<ILogger<UnitOfWorkDecorator>>();
+
+    return new UnitOfWorkDecorator(unitOfWork, logger);
 });
 
-builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite("Data Source=ems.db"));
-builder.Services.AddScoped<IRepository<Event>, EFRepository<EMSDbContext, Event>>();
+//Add Repositories
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EFRepository<>));
 
 var app = builder.Build();
 
