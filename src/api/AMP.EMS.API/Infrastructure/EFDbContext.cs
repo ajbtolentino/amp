@@ -1,6 +1,5 @@
-using System;
 using AMP.Core.Entity;
-using AMP.EMS.API.Entities;
+using AMP.EMS.API.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Infrastructure;

@@ -1,8 +1,6 @@
-using System;
-using AMP.Core.Entity;
 using AMP.Infrastructure.Entity;
 
-namespace AMP.EMS.API.Entities;
+namespace AMP.EMS.API.Core.Entities;
 
 public class Event : BaseEntity<Guid>
 {

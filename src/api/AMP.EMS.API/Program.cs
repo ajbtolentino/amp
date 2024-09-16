@@ -1,10 +1,11 @@
 using AMP.Core.Repository;
-using AMP.Core.Transaction;
-using AMP.EMS.API.Entities;
+using AMP.EMS.API.Core.Entities;
 using AMP.EMS.API.Infrastructure;
 using AMP.Infrastructure.Decorators;
+using AMP.Infrastructure.Middlewares;
 using AMP.Infrastructure.Repository;
-using AMP.Infrastructure.Transaction;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
@@ -65,16 +66,6 @@ builder.Services.AddAuthentication()
 builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite("Data Source=ems.db"));
 builder.Services.AddScoped<DbContext, EMSDbContext>();
 
-//Add IDbTransaction
-builder.Services.AddTransient<IDbTransaction>(provider =>
-{
-    var dbContext = provider.GetRequiredService<DbContext>();
-    var dbTransaction = new EFDbTransaction(dbContext.Database.BeginTransaction());
-    var logger = provider.GetRequiredService<ILogger<DbTransactionDecorator>>();
-
-    return new DbTransactionDecorator(dbTransaction, logger);
-});
-
 //Add Unit of Work with Decorator
 builder.Services.AddScoped<EFUnitOfWork>();
 builder.Services.AddScoped<IUnitOfWork>(provider =>
@@ -88,6 +79,9 @@ builder.Services.AddScoped<IUnitOfWork>(provider =>
 //Add Repositories
 builder.Services.AddScoped(typeof(EFRepository<>));
 
+//Add Middleware
+// builder.Services.AddScoped<IActionResultExecutor<ObjectResult>, ResponseEnvelopeResultExecutor>();
+
 var app = builder.Build();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -98,6 +92,8 @@ using (var scope = app.Services.CreateScope())
     var dataContext = scope.ServiceProvider.GetRequiredService<EMSDbContext>();
     dataContext.Database.Migrate();
 }
+
+app.UseMiddleware<RequestLogMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();

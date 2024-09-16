@@ -1,6 +1,5 @@
 using AMP.Core.Repository;
-using AMP.EMS.API.Entities;
-using AMP.EMS.API.Infrastructure;
+using AMP.EMS.API.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +9,6 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventController(IUnitOfWork unitOfWork) : ControllerBase
     {
-        private readonly IUnitOfWork unitOfWork = unitOfWork;
         private readonly IRepository<Event> eventRepository = unitOfWork.Repository<Event>();
 
         /// <summary>
@@ -47,20 +45,20 @@ namespace AMP.EMS.API.Controllers
         [HttpPost]
         public IActionResult Post(Event @event)
         {
-            using var transaction = this.unitOfWork.BeginTransaction();
-
             try
             {
-                var newEvent = this.eventRepository.Add(@event);
-                this.unitOfWork.SaveChanges();
+                unitOfWork.BeginTransaction();
 
-                transaction.Commit();
+                var newEvent = this.eventRepository.Add(@event);
+
+                unitOfWork.SaveChanges();
+                unitOfWork.CommitTransaction();
 
                 return Ok(newEvent);
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
+                unitOfWork.RollbackTransaction();
 
                 return Problem(ex.Message);
             }
@@ -74,25 +72,25 @@ namespace AMP.EMS.API.Controllers
         [HttpPut]
         public IActionResult Put(Event @event)
         {
-            using var transaction = this.unitOfWork.BeginTransaction();
-
             try
             {
+                unitOfWork.BeginTransaction();
+
                 var entity = this.eventRepository.Get(@event.Id);
                 entity.DateCreated = @event.DateCreated;
                 entity.DateUpdated = @event.DateUpdated;
                 entity.Name = @event.Name;
 
                 var result = this.eventRepository.Update(entity);
-                this.unitOfWork.SaveChanges();
 
-                transaction.Commit();
+                unitOfWork.SaveChanges();
+                unitOfWork.CommitTransaction();
 
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
+                unitOfWork.RollbackTransaction();
 
                 return Problem(ex.Message);
             }
@@ -107,20 +105,20 @@ namespace AMP.EMS.API.Controllers
         [Route("{id}")]
         public IActionResult Delete(Guid id)
         {
-            using var transaction = this.unitOfWork.BeginTransaction();
-
             try
             {
-                this.eventRepository.Delete(id);
-                this.unitOfWork.SaveChanges();
+                unitOfWork.BeginTransaction();
 
-                transaction.Commit();
+                this.eventRepository.Delete(id);
+
+                unitOfWork.SaveChanges();
+                unitOfWork.CommitTransaction();
 
                 return Ok();
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
+                unitOfWork.RollbackTransaction();
 
                 return Problem(ex.Message);
             }

@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\lib\AMP.Core\AMP.Core.csproj" />
-    <ProjectReference Include="..\..\lib\AMP.Infrastructure\AMP.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\common\AMP.Core\AMP.Core.csproj" />
+    <ProjectReference Include="..\..\common\AMP.Infrastructure\AMP.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
