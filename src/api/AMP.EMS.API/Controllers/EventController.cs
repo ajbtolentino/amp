@@ -60,7 +60,7 @@ namespace AMP.EMS.API.Controllers
             {
                 unitOfWork.RollbackTransaction();
 
-                return Problem(ex.Message);
+                throw ex;
             }
         }
 

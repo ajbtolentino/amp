@@ -1,7 +1,6 @@
-using System;
 using System.Net;
 
-namespace AMP.Core.Responses;
+namespace AMP.Infrastructure.Responses;
 
 public class OkResponse<T>(HttpStatusCode httpStatusCode, string message) : BaseResponse(httpStatusCode, message)
 {

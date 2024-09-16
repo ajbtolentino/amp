@@ -1,8 +1,8 @@
 using System;
 
-namespace AMP.Core.Responses;
+namespace AMP.Infrastructure.Responses;
 
 public class ExceptionResponse
 {
-    
+
 }

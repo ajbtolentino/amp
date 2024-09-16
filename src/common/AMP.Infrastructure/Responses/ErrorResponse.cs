@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 
-namespace AMP.Core.Responses;
+namespace AMP.Infrastructure.Responses;
 
 public class ErrorResponse(HttpStatusCode statusCode, string message) : BaseResponse(statusCode, message)
 {

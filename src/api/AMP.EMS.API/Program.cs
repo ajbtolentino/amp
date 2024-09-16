@@ -81,6 +81,8 @@ builder.Services.AddScoped(typeof(EFRepository<>));
 
 //Add Middleware
 // builder.Services.AddScoped<IActionResultExecutor<ObjectResult>, ResponseEnvelopeResultExecutor>();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
@@ -93,7 +95,10 @@ using (var scope = app.Services.CreateScope())
     dataContext.Database.Migrate();
 }
 
+app.UseExceptionHandler();
+
 app.UseMiddleware<RequestLogMiddleware>();
+// app.UseMiddleware<ResponseHandlingMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
