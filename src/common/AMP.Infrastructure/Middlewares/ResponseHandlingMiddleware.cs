@@ -6,6 +6,11 @@ using Newtonsoft.Json;
 
 namespace AMP.Infrastructure.Middlewares;
 
+/// <summary>
+/// response wrapper
+/// </summary>
+/// <param name="next"></param>
+/// <param name="logger"></param>
 public class ResponseHandlingMiddleware(RequestDelegate next, ILogger<ResponseHandlingMiddleware> logger)
 {
     public async Task Invoke(HttpContext context)
