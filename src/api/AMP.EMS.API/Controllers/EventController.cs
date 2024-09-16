@@ -1,5 +1,6 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace AMP.EMS.API.Controllers
         {
             var events = this.eventRepository.GetAll();
 
-            return Ok(events);
+            return Ok(new OkResponse<IEnumerable<Event>>(string.Empty) { Data = events });
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace AMP.EMS.API.Controllers
         {
             var @event = this.eventRepository.Get(id);
 
-            return Ok(@event);
+            return Ok(new OkResponse<Event>(string.Empty) { Data = @event });
         }
 
         /// <summary>
@@ -54,13 +55,13 @@ namespace AMP.EMS.API.Controllers
                 unitOfWork.SaveChanges();
                 unitOfWork.CommitTransaction();
 
-                return Ok(newEvent);
+                return Ok(new OkResponse<Event>(string.Empty) { Data = newEvent });
             }
             catch (Exception ex)
             {
                 unitOfWork.RollbackTransaction();
 
-                throw ex;
+                return Problem(ex.Message);
             }
         }
 

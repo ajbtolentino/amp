@@ -79,11 +79,6 @@ builder.Services.AddScoped<IUnitOfWork>(provider =>
 //Add Repositories
 builder.Services.AddScoped(typeof(EFRepository<>));
 
-//Add Middleware
-// builder.Services.AddScoped<IActionResultExecutor<ObjectResult>, ResponseEnvelopeResultExecutor>();
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
-
 var app = builder.Build();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -95,10 +90,8 @@ using (var scope = app.Services.CreateScope())
     dataContext.Database.Migrate();
 }
 
-app.UseExceptionHandler();
-
-app.UseMiddleware<RequestLogMiddleware>();
-// app.UseMiddleware<ResponseHandlingMiddleware>();
+//Add Middleware
+app.UseMiddleware<RequestPipelineMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();

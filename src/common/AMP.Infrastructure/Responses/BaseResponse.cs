@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace AMP.Infrastructure.Responses;
 
-public class BaseResponse(HttpStatusCode httpStatusCode, string message)
+public class BaseApiResponse(HttpStatusCode httpStatusCode, string message)
 {
     public HttpStatusCode StatusCode { get; set; } = httpStatusCode;
     public string Message { get; set; } = message;
