@@ -75,6 +75,8 @@ builder.Host.ConfigureLogger();
 
 var app = builder.Build();
 
+app.UseRequestLogging();
+
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 // migrate any database changes on startup (includes initial db creation)

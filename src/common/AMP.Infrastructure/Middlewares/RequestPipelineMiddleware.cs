@@ -16,7 +16,12 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
         //https://github.com/nayanbunny/dotnet-webapi-response-wrapper-sample/blob/main/DotNet.ResponseWrapper.Sample.Api/Middleware/ResponseWrapperMiddleware.cs
         try
         {
-            _logger.LogInformation("Request: {Method} {Path}", context.Request.Method, context.Request.Path);
+            var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
+            _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request body {Body}",
+                        context.Request.Method,
+                        context.Request.Path,
+                        context.Request.QueryString,
+                        request);
 
             // Storing Context Body Response
             var currentBody = context.Response.Body;
@@ -37,7 +42,12 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
             // Read Memory Stream data to the end
             var response = new StreamReader(memoryStream).ReadToEnd();
 
-            _logger.LogInformation("Response: {StatusCode} {Response}", context.Response.StatusCode, response);
+            _logger.LogInformation("HTTP {Method} {Path} {QueryString} returned with a status {StatusCode} and response {Response}",
+                            context.Request.Method,
+                            context.Request.Path,
+                            context.Request.QueryString,
+                            context.Response.StatusCode,
+                            response);
 
             // returing response to caller
             await context.Response.WriteAsync(response);
