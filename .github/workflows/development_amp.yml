@@ -21,8 +21,14 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
+      - name: Restore dependencies
+        run: dotnet restore
+      
+      - name: Build
         run: dotnet build --configuration Release
+      
+      - name: Test
+        run: dotnet test --no-build --verbosity normal         
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
