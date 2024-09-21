@@ -37,7 +37,7 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
             // Read Memory Stream data to the end
             var response = new StreamReader(memoryStream).ReadToEnd();
 
-            _logger.LogInformation("Response: {StatusCode} {response}", context.Response.StatusCode, response);
+            _logger.LogInformation("Response: {StatusCode} {Response}", context.Response.StatusCode, response);
 
             // returing response to caller
             await context.Response.WriteAsync(response);

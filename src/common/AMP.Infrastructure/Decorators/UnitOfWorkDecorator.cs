@@ -10,14 +10,14 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
 
     public IDbTransaction BeginTransaction()
     {
-        logger.LogInformation($"Starting transaction...");
+        // logger.LogInformation($"Starting transaction...");
 
         return unitOfWork.BeginTransaction();
     }
 
     public void CommitTransaction()
     {
-        logger.LogInformation($"Committing transaction...");
+        // logger.LogInformation($"Committing transaction...");
 
         unitOfWork.CommitTransaction();
     }
@@ -31,14 +31,14 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
 
     public void RollbackTransaction()
     {
-        logger.LogInformation($"Rolling back transaction...");
+        // logger.LogInformation($"Rolling back transaction...");
 
         unitOfWork.RollbackTransaction();
     }
 
     public void SaveChanges()
     {
-        logger.LogInformation($"Saving changes...");
+        // logger.LogInformation($"Saving changes...");
 
         unitOfWork.SaveChanges();
     }

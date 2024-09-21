@@ -1,16 +1,15 @@
-using AMP.Core.Repository;
-using AMP.EMS.API.Core.Entities;
 using AMP.EMS.API.Infrastructure;
-using AMP.Infrastructure.Decorators;
 using AMP.Infrastructure.Middlewares;
 using AMP.Infrastructure.Repository;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Security.Claims;
+using AMP.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var config = builder.Configuration;
+
+builder.Host.ConfigureLogger();
 
 builder.Services.AddCors();
 
@@ -28,7 +27,7 @@ builder.Services.AddSwaggerGen(c =>
         {
             ClientCredentials = new OpenApiOAuthFlow
             {
-                TokenUrl = new Uri("https://localhost:5001/connect/token"),
+                TokenUrl = new Uri(config.GetValue<string>("TokenUrl")!),
                 Scopes = new Dictionary<string, string>
                 {
                     { "openid", "openid" },
@@ -58,26 +57,21 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:5001";
+        options.Authority = config.GetValue<string>("Authority");
         options.TokenValidationParameters.ValidateAudience = false;
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite("Data Source=ems.db"));
+builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite(config.GetConnectionString("EMSConnectionString")));
 builder.Services.AddScoped<DbContext, EMSDbContext>();
 
 //Add Unit of Work with Decorator
-builder.Services.AddScoped<EFUnitOfWork>();
-builder.Services.AddScoped<IUnitOfWork>(provider =>
-{
-    var unitOfWork = provider.GetRequiredService<EFUnitOfWork>();
-    var logger = provider.GetRequiredService<ILogger<UnitOfWorkDecorator>>();
-
-    return new UnitOfWorkDecorator(unitOfWork, logger);
-});
+builder.Services.ConfigureUnitOfWork<EFUnitOfWork>();
 
 //Add Repositories
 builder.Services.AddScoped(typeof(EFRepository<>));
+
+builder.Host.ConfigureLogger();
 
 var app = builder.Build();
 
