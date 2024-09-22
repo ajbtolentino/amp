@@ -10,7 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build:
+  Build-Test:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -30,15 +31,17 @@ jobs:
       - name: Build IdP API
         run: dotnet build ./src/api/AMP.Identity.API/AMP.Identity.API.csproj --configuration Release
 
-      - name: Test EMS API
+      - name: Test
         run: dotnet test --no-build --verbosity normal         
 
   Publish-EMS-API:
     name: Publish EMS API
-    needs: Build
+    needs: Build-Test
     runs-on: ubuntu-latest        
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Publish EMS API
         run: dotnet publish ./src/api/AMP.EMS.API/AMP.EMS.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/ems-api
 
@@ -50,10 +53,12 @@ jobs:
 
   Publish-IdP-API:
     name: Publish EMS API
-    needs: Build
+    needs: Build-Test
     runs-on: ubuntu-latest   
 
     steps:
+      - uses: actions/checkout@v4
+
       - name: Publish IdP API
         run: dotnet publish ./src/api/AMP.Identity.API/AMP.Identity.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/idp-api
 
