@@ -15,6 +15,8 @@ jobs:
     name: Restore Build and Test
     runs-on: ubuntu-latest
 
+    permissions: write-all
+
     steps:
       - uses: actions/checkout@v4
         
@@ -34,7 +36,6 @@ jobs:
 
       - name: Test
         run: dotnet test --verbosity normal --logger trx --collect:"XPlat Code Coverage"
-
       - name: Combine Coverage Reports # This is because one report is produced per project, and we want one result for all of them.
         uses: danielpalme/ReportGenerator-GitHub-Action@5.2.4
         with:
@@ -46,14 +47,12 @@ jobs:
           tag: "${{ github.run_number }}_${{ github.run_id }}" # Optional tag or build version.
           customSettings: "" # Optional custom settings (separated by semicolon). See: https://github.com/danielpalme/ReportGenerator/wiki/Settings.
           toolpath: "reportgeneratortool" # Default directory for installing the dotnet tool.
-
       - name: Upload Combined Coverage XML
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: ${{ github.workspace }}/Cobertura.xml
           retention-days: 5
-
       - name: Publish Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
@@ -66,6 +65,13 @@ jobs:
           indicators: true
           output: both
           thresholds: "10 30"
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
 
       - name: Upload Test Result Files
         uses: actions/upload-artifact@v4
