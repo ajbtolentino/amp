@@ -7,7 +7,7 @@ using System.Text.Json;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Test;
 
-namespace IdentityServerHost;
+namespace DuendeSoftware;
 
 public static class TestUsers
 {

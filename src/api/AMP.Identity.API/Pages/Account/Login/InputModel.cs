@@ -3,7 +3,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServerHost.Pages.Login;
+namespace DuendeSoftware.Pages.Login;
 
 public class InputModel
 {

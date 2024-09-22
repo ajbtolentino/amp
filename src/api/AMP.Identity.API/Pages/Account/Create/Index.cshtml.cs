@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServerHost.Pages.Create;
+namespace DuendeSoftware.Pages.Create;
 
 [SecurityHeaders]
 [AllowAnonymous]

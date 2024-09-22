@@ -1,17 +1,43 @@
-using AMP.Identity.API;
+﻿using DuendeSoftware;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-builder.Host.UseSerilog((ctx, lc) => lc
-    .ReadFrom.Configuration(ctx.Configuration));
+Log.Information("Starting up");
 
-builder.Services.AddCors();
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-var app = builder
-.ConfigureServices()
-.ConfigurePipeline();
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .ReadFrom.Configuration(ctx.Configuration));
 
-app.UseIdentityServer();
+    builder.Services.AddCors();
 
-app.Run();
+    var app = builder
+        .ConfigureServices()
+        .ConfigurePipeline();
+
+    // this seeding is only for the template to bootstrap the DB and users.
+    // in production you will likely want a different approach.
+    // if (args.Contains("/seed"))
+    // {
+    Log.Information("Seeding database...");
+    SeedData.EnsureSeedData(app);
+    Log.Information("Done seeding database. Exiting.");
+    // return;
+    // }
+
+    app.Run();
+}
+catch (Exception ex) when (ex is not HostAbortedException)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}
