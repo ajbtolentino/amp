@@ -1,43 +1,48 @@
-﻿using DuendeSoftware;
+﻿// Project: Aguafrommars/TheIdServer
+// Copyright (c) 2022 @Olivier Lefebvre
+using Aguacongas.TheIdServer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using System.Diagnostics;
+using System.Linq;
+using TheIdServer;
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+var builder = WebApplication.CreateBuilder(args);
 
-Log.Information("Starting up");
+builder.Host.UseSerilog((hostingContext, configuration) =>
+                        configuration.ReadFrom.Configuration(hostingContext.Configuration));
 
-try
+var configuration = builder.Configuration;
+
+var services = builder.Services;
+
+services.AddTheIdServer(configuration);
+
+var seed = args.Any(x => x == "/seed");
+if (seed)
 {
-    var builder = WebApplication.CreateBuilder(args);
-
-    builder.Host.UseSerilog((ctx, lc) => lc
-        .ReadFrom.Configuration(ctx.Configuration));
-
-    builder.Services.AddCors();
-
-    var app = builder
-        .ConfigureServices()
-        .ConfigurePipeline();
-
-    // this seeding is only for the template to bootstrap the DB and users.
-    // in production you will likely want a different approach.
-    // if (args.Contains("/seed"))
-    // {
-    Log.Information("Seeding database...");
-    SeedData.EnsureSeedData(app);
-    Log.Information("Done seeding database. Exiting.");
-    // return;
-    // }
-
-    app.Run();
+    args = args.Except(new[] { "/seed" }).ToArray();
 }
-catch (Exception ex) when (ex is not HostAbortedException)
+
+var app = builder.Build();
+
+if (seed)
 {
-    Log.Fatal(ex, "Unhandled exception");
+    var config = app.Services.GetRequiredService<IConfiguration>();
+    SeedData.EnsureSeedData(config, app.Services);
+    return;
 }
-finally
+
+var activitySource = new ActivitySource("TheIdServer");
+
+app.Use(async (context, next) =>
 {
-    Log.Information("Shut down complete");
-    Log.CloseAndFlush();
-}
+    using var activity = activitySource.StartActivity("Request");
+    await next().ConfigureAwait(false);
+});
+app.UseTheIdServer(app.Environment, configuration);
+
+app.Run();

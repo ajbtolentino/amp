@@ -399,6 +399,10 @@ FodyWeavers.xsd
 **/.DS_Store
 **/ems.db
 **/IdentityServer.db
+*.DS_Store
+*.db
+*.db-shm
+*.db-wal
 src/api/AMP.Identity.API/keys/is-signing-key-439B6903EDC960C85646B5831C7F2F45.json
 src/api/AMP.EMS.API/ems.db
 src/api/AMP.EMS.API/ems.db-shm
@@ -409,3 +413,6 @@ src/api/AMP.Identity.API/IdentityServer.db-shm
 src/api/AMP.Identity.API/IdentityServer.db-wal
 src/.DS_Store
 src/api/AMP.Identity.API/wwwroot/lib/bootstrap/LICENSE
+src/api/AMP.Identity.API/TheIdServer.db
+src/api/AMP.Identity.API/TheIdServer.db-shm
+src/api/AMP.Identity.API/TheIdServer.db-wal

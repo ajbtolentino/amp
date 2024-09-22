@@ -20,25 +20,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    var authority = config.GetValue<string>("Authority")!;
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Type = SecuritySchemeType.OAuth2,
-        Flows = new OpenApiOAuthFlows
-        {
-            ClientCredentials = new OpenApiOAuthFlow
-            {
-                TokenUrl = new Uri(config.GetValue<string>("TokenUrl")!),
-                Scopes = new Dictionary<string, string>
-                {
-                    { "openid", "openid" },
-                    { "profile", "profile" },
-                    { "scope1", "scope1" },
-                    { "scope2", "scope2" }
-                }
-            }
-        }
+        Type = SecuritySchemeType.OpenIdConnect,
+        OpenIdConnectUrl = new Uri($"{authority}.well-known/openid-configuration")
     });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
         {
             new OpenApiSecurityScheme
             {
@@ -48,7 +36,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] { }
+            Array.Empty<string>()
         }
     });
 });
