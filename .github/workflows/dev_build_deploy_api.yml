@@ -10,13 +10,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  Build-Test:
-    name: Build and Test
+  Build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
+        
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
@@ -27,20 +26,49 @@ jobs:
       
       - name: Build EMS API
         run: dotnet build ./src/api/AMP.EMS.API/AMP.EMS.API.csproj --configuration Release
-      
+
       - name: Build IdP API
         run: dotnet build ./src/api/AMP.Identity.API/AMP.Identity.API.csproj --configuration Release
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal         
+        run: dotnet test --no-build --verbosity normal   
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-api-build
+          path: .
+
+  Test:
+    name: Test
+    needs: Build
+    runs-on: ubuntu-latest    
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-api-build
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal   
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-api-test
+          path: .
 
   Publish-EMS-API:
     name: Publish EMS API
-    needs: Build-Test
+    needs: Test
     runs-on: ubuntu-latest        
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-api-test
 
       - name: Publish EMS API
         run: dotnet publish ./src/api/AMP.EMS.API/AMP.EMS.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/ems-api
@@ -52,12 +80,15 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/ems-api
 
   Publish-IdP-API:
-    name: Publish EMS API
-    needs: Build-Test
+    name: Publish IdP API
+    needs: Test
     runs-on: ubuntu-latest   
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-api-test
 
       - name: Publish IdP API
         run: dotnet publish ./src/api/AMP.Identity.API/AMP.Identity.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/idp-api
