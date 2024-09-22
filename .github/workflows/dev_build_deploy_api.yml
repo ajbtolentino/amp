@@ -30,25 +30,21 @@ jobs:
       - name: Build IdP API
         run: dotnet build ./src/api/AMP.Identity.API/AMP.Identity.API.csproj --configuration Release
 
-      - name: Test
-        run: dotnet test --no-build --verbosity normal   
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dev-api-build
-          path: .
-
   Test:
     name: Test
     needs: Build
     runs-on: ubuntu-latest    
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
         with:
-          name: dev-api-build
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
 
       - name: Test
         run: dotnet test --no-build --verbosity normal   
@@ -65,10 +61,15 @@ jobs:
     runs-on: ubuntu-latest        
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
         with:
-          name: dev-api-test
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
 
       - name: Publish EMS API
         run: dotnet publish ./src/api/AMP.EMS.API/AMP.EMS.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/ems-api
@@ -85,10 +86,15 @@ jobs:
     runs-on: ubuntu-latest   
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
         with:
-          name: dev-api-test
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
 
       - name: Publish IdP API
         run: dotnet publish ./src/api/AMP.Identity.API/AMP.Identity.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/idp-api
