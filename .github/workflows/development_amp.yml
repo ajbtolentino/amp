@@ -65,7 +65,8 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'amp/ems'
+          app-name: 'amp'
           slot-name: 'Production'
           package: .
+          VirtualApplication: 'ems'
           
