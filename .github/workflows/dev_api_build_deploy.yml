@@ -30,9 +30,17 @@ jobs:
       - name: Build IdP API
         run: dotnet build ./src/api/AMP.Identity.API/AMP.Identity.API.csproj --configuration Release
 
+  Test:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Test
         run: dotnet test --no-build --verbosity normal         
 
+  Publish:
+    runs-on: ubuntu-latest        
+
+    steps:
       - name: Publish EMS API
         run: dotnet publish ./src/api/AMP.EMS.API/AMP.EMS.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/ems-api
 
@@ -50,7 +58,7 @@ jobs:
         with:
           name: idp-api
           path: ${{env.DOTNET_ROOT}}/idp-api
-
+          
   Deploy-EMS-API:
     name: Deploy EMS API
     runs-on: ubuntu-latest
