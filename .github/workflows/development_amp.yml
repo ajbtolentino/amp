@@ -68,5 +68,5 @@ jobs:
           app-name: 'amp'
           slot-name: 'Production'
           package: .
-          VirtualApplication: 'ems'
+          target-path: 'ems'
           
