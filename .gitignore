@@ -416,3 +416,4 @@ src/api/AMP.Identity.API/wwwroot/lib/bootstrap/LICENSE
 src/api/AMP.Identity.API/TheIdServer.db
 src/api/AMP.Identity.API/TheIdServer.db-shm
 src/api/AMP.Identity.API/TheIdServer.db-wal
+src/.DS_Store
