@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
-name: Production - Build Identity Provider
+name: Production - Deploy Identity Provider
 
 on:
   push:
