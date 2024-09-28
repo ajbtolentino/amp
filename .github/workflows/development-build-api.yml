@@ -28,9 +28,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       
-      - name: Build Identity Provider
-        run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj --configuration Release
-
       - name: Build EMS API
         run: dotnet build ./src/api/AMP.EMS.API/AMP.EMS.API.csproj --configuration Release
 
