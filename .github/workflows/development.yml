@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
-name: Development
+name: API Development
 
 on:
   push:
@@ -50,26 +50,6 @@ jobs:
         with:
           trx_files: "${{ github.workspace }}/**/*.trx"
 
-  Publish-Identity-Provider:
-      name: Publish Identity Provider
-      needs: Build
-      runs-on: ubuntu-latest   
-      steps:
-        - uses: actions/checkout@v4
-        - name: Set up .NET Core
-          uses: actions/setup-dotnet@v4
-          with:
-            dotnet-version: '8.x'
-        - name: Restore dependencies
-          run: dotnet restore
-        - name: Publish Identity
-          run: dotnet publish ./src/admin/AMP.Identity/AMP.Identity.csproj -c Release -o ${{env.DOTNET_ROOT}}/idp
-        - name: Upload Identity
-          uses: actions/upload-artifact@v4
-          with:
-            name: idp
-            path: ${{env.DOTNET_ROOT}}/idp
-
   Publish-EMS-API:
     name: Publish EMS API
     needs: Build
@@ -94,35 +74,6 @@ jobs:
         with:
           name: ems-api
           path: ${{env.DOTNET_ROOT}}/ems-api
-
-  Deploy-Identity-Provider:
-      name: Deploy Identity Provider
-      runs-on: ubuntu-latest
-      needs: Publish-Identity-Provider
-      environment:
-        name: 'Production'
-        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-      permissions:
-        id-token: write #This is required for requesting the JWT
-      steps:
-        - name: Download artifact from build job
-          uses: actions/download-artifact@v4
-          with:
-            name: idp
-        
-        - name: Login to Azure
-          uses: azure/login@v2
-          with:
-            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DE723C34555542DA86E36ED0282BFDAC }}
-            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_39F4F690335F4CD8BCAB6AEDD38B8DBE }}
-            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_846825B2A1DC4C8189C2F65766A8DC90 }}
-        - name: Deploy to Azure Web App
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v3
-          with:
-            app-name: 'amp-idp'
-            slot-name: 'Production'
-            package: .
 
   Deploy-EMS-API:
     name: Deploy EMS API
