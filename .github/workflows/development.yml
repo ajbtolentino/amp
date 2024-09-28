@@ -28,7 +28,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       
-      - name: Build IdP API
+      - name: Build Identity
         run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj --configuration Release
 
       - name: Build EMS API
@@ -62,7 +62,7 @@ jobs:
             dotnet-version: '8.x'
         - name: Restore dependencies
           run: dotnet restore
-        - name: Publish IdP API
+        - name: Publish Identity
           run: dotnet publish ./src/admin/AMP.Identity/AMP.Identity.csproj -c Release -o ${{env.DOTNET_ROOT}}/idp
         - name: Upload Identity
           uses: actions/upload-artifact@v4
@@ -100,7 +100,7 @@ jobs:
       runs-on: ubuntu-latest
       needs: Publish-Identity
       environment:
-        name: 'Production'
+        name: 'Development'
         url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
       permissions:
         id-token: write #This is required for requesting the JWT
@@ -108,19 +108,19 @@ jobs:
         - name: Download artifact from build job
           uses: actions/download-artifact@v4
           with:
-            name: idp-api
+            name: idp
         
         - name: Login to Azure
           uses: azure/login@v2
           with:
-            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2E72561306CA400EBC72036080D49248 }}
-            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_62C62560DE684B49949263B7116C07BF }}
-            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4D63F152DF0648F7BDA032E480653201 }}
+            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DE723C34555542DA86E36ED0282BFDAC }}
+            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_39F4F690335F4CD8BCAB6AEDD38B8DBE }}
+            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_846825B2A1DC4C8189C2F65766A8DC90 }}
         - name: Deploy to Azure Web App
           id: deploy-to-webapp
           uses: azure/webapps-deploy@v3
           with:
-            app-name: 'amp-idp-api-dev'
+            app-name: 'amp-idp'
             slot-name: 'Production'
             package: .
 
@@ -129,7 +129,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Publish-EMS-API
     environment:
-      name: 'Production'
+      name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
