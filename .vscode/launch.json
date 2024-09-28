@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/api/AMP.Identity.API/bin/Debug/net8.0/AMP.Identity.API.dll",
+            "program": "${workspaceFolder}/src/admin/AMP.Identity/bin/Debug/net8.0/AMP.Identity.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/api/AMP.Identity.API",
+            "cwd": "${workspaceFolder}/src/admin/AMP.Identity",
             "stopAtEntry": false,
             "console": "externalTerminal",
             "serverReadyAction": {

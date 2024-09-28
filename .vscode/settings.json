@@ -1,3 +1,7 @@
 {
-    "dotnet.defaultSolution": "AMP.sln"
+    "dotnet.defaultSolution": "AMP.sln",
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "appsettings.json": "appSettings.*.json"
+    },
 }
