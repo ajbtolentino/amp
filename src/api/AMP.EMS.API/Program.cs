@@ -5,6 +5,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using AMP.Infrastructure.Extensions;
 
+using AMP.EMS.API.Infrastructure;
+using AMP.Infrastructure.Middlewares;
+using AMP.Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using AMP.Infrastructure.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration;
