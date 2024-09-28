@@ -28,7 +28,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       
-      - name: Build Identity
+      - name: Build Identity Provider
         run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj --configuration Release
 
       - name: Build EMS API
@@ -50,8 +50,8 @@ jobs:
         with:
           trx_files: "${{ github.workspace }}/**/*.trx"
 
-  Publish-Identity:
-      name: Publish Identity
+  Publish-Identity-Provider:
+      name: Publish Identity Provider
       needs: Build
       runs-on: ubuntu-latest   
       steps:
@@ -95,12 +95,12 @@ jobs:
           name: ems-api
           path: ${{env.DOTNET_ROOT}}/ems-api
 
-  Deploy-Identity:
-      name: Deploy Identity
+  Deploy-Identity-Provider:
+      name: Deploy Identity Provider
       runs-on: ubuntu-latest
-      needs: Publish-Identity
+      needs: Publish-Identity-Provider
       environment:
-        name: 'Development'
+        name: 'Production'
         url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
       permissions:
         id-token: write #This is required for requesting the JWT
@@ -129,7 +129,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Publish-EMS-API
     environment:
-      name: 'Development'
+      name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
