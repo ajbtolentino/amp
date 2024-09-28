@@ -24,7 +24,7 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
 
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
     {
-        logger.LogInformation($"Accessing {nameof(TEntity)} repository...");
+        logger.LogInformation($"Accessing {typeof(TEntity).Name} repository...");
 
         return unitOfWork.Repository<TEntity>();
     }
