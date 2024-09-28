@@ -6,9 +6,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/api/AMP.Identity.API/bin/Debug/net8.0/AMP.Identity.API.dll",
+            "program": "${workspaceFolder}/src/admin/AMP.Identity/bin/Debug/net8.0/AMP.Identity.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/api/AMP.Identity.API",
+            "cwd": "${workspaceFolder}/src/admin/AMP.Identity",
             "stopAtEntry": false,
             "console": "externalTerminal",
             "serverReadyAction": {
@@ -32,18 +32,35 @@
             "cwd": "${workspaceFolder}/src/api/AMP.EMS.API",
             "stopAtEntry": false,
             "console": "externalTerminal",
+            "console": "externalTerminal",
             "serverReadyAction": {
                 "action": "openExternally",
                 "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Local"
+                "ASPNETCORE_ENVIRONMENT": "Local""ASPNETCORE_ENVIRONMENT": "Local"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
         },
         {
+            "name": "Docker .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/src/api/AMP.EMS.API/AMP.EMS.API.csproj"
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "All API",
+            "configurations": [
+                "AMP.EMS.API (Loca)",
+                "AMP.Identity.API (Local)"
+            ]
             "name": "Docker .NET Launch",
             "type": "docker",
             "request": "launch",
