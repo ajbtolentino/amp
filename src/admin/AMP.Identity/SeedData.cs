@@ -53,6 +53,8 @@ namespace AMP.Identity
             var logger = loggerFactory.CreateLogger("SeedUsers");
             var roleMgr = provider.GetRequiredService<RoleManager<IdentityRole>>();
 
+            logger.LogInformation("Seeding users...");
+
             var roles = new string[]
             {
                 SharedConstants.WRITERPOLICY,

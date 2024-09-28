@@ -27,6 +27,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMP.Identity", "src\admin\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMP.Identity.BlazorApp", "src\admin\AMP.Identity.BlazorApp\AMP.Identity.BlazorApp.csproj", "{3F5E28D8-EEC0-40F8-964C-C4DB9D939C55}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{F69F7EC9-B569-4E7E-9B23-7217FD841F92}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		docker-compose.debug.yml = docker-compose.debug.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{4187DC86-2A99-49F1-9321-1EC2AF325371}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
