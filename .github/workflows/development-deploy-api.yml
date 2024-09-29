@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: Publish-EMS-API
     environment:
-      name: 'Production'
+      name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
