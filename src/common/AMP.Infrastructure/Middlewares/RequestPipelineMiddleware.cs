@@ -16,12 +16,12 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
         //https://github.com/nayanbunny/dotnet-webapi-response-wrapper-sample/blob/main/DotNet.ResponseWrapper.Sample.Api/Middleware/ResponseWrapperMiddleware.cs
         try
         {
-            var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
-            _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request body {Body}",
-                        context.Request.Method,
-                        context.Request.Path,
-                        context.Request.QueryString,
-                        request);
+            // var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
+            // _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request body {Body}",
+            //             context.Request.Method,
+            //             context.Request.Path,
+            //             context.Request.QueryString,
+            //             request);
 
             // Storing Context Body Response
             var currentBody = context.Response.Body;
