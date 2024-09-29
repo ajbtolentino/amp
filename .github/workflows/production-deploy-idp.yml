@@ -44,7 +44,7 @@ jobs:
             EmailApiAuthentication.ClientId: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_ID}}
             EmailApiAuthentication.ClientSecret: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SECRET}}
             EmailApiAuthentication.Scope: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
-            Serilog.WriteTo.0..Args.serverUrl: ${{vars.SEQ_URL}}
+            Serilog.WriteTo.0.Args.serverUrl: ${{vars.SEQ_URL}}
 
         - name: Substitute appsettings in AMP.Identity.BlazorApp
           uses: microsoft/variable-substitution@v1 
