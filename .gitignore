@@ -403,6 +403,7 @@ FodyWeavers.xsd
 *.db
 *.db-shm
 *.db-wal
+keys/
 src/api/AMP.Identity.API/keys/is-signing-key-439B6903EDC960C85646B5831C7F2F45.json
 src/api/AMP.EMS.API/ems.db
 src/api/AMP.EMS.API/ems.db-shm

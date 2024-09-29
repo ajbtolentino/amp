@@ -2,12 +2,12 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
-name: Development - Build API
+name: Build Identity Provider
 
 on:
   push:
-    branches:
-      - development
+    paths: 
+      - 'src/admin/**'
   workflow_dispatch:
 
 jobs:
@@ -28,11 +28,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       
-      - name: Build EMS API
-        run: dotnet build ./src/api/AMP.EMS.API/AMP.EMS.API.csproj --configuration Release
+      - name: Build Identity Provider
+        run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj --configuration Release
 
       - name: Test
-        run: dotnet test ./tests/api/AMP.EMS.API.Tests --verbosity normal --logger trx --collect:"XPlat Code Coverage"
+        run: dotnet test ./tests/admin/AMP.Identity.Test --verbosity normal --logger trx --collect:"XPlat Code Coverage"
 
       - name: Upload Test Result Files
         uses: actions/upload-artifact@v4
