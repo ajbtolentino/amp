@@ -52,9 +52,9 @@ jobs:
             files: './src/admin/AMP.Identity.BlazorApp/wwwroot/appsettings.json'
           env:
             apiBaseUrl: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/api
-            defaultScopes.2: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
             providerOptions.authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
             providerOptions.clientId: ${{secrets.IDP_ADMIN_CLIENT_ID}}
+            providerOptions.defaultScopes.2: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
             providerOptions.postLogoutRedirectUri: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/authentication/logout-callbackß
             providerOptions.redirectUri: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/authentication/login-callback
             welcomeContenUrl: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/api/welcomefragment
