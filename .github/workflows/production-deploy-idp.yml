@@ -31,7 +31,8 @@ jobs:
             DbType: ${{vars.IDP_DB_TYPE}}
             CorsAllowedOrigin.0: ${{vars.IDP_AUTHORITY_HTTP_URL}}
             CorsAllowedOrigin.1: ${{vars.IDP_AUTHORITY_HTTPS_URL}}
-            CorsAllowedOrigin.2: ${{vars.EMS_API_URL}}
+            CorsAllowedOrigin.2: ${{vars.EMS_API_HTTP_URL}}
+            CorsAllowedOrigin.3: ${{vars.EMS_API_HTTPS_URL}}
             ApiAuthentication.Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}
             ApiAuthentication.ApiName: ${{secrets.IDP_API_NAME}}
             ApiAuthentication.ApiSecret: ${{secrets.IDP_API_SECRET}}
