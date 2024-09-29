@@ -7,7 +7,7 @@ name: Production - Deploy Identity Provider
 on:
   workflow_dispatch:
 
-jobs:
+jobs: 
   Publish-Identity-Provider:
       name: Publish Identity Provider
       runs-on: ubuntu-latest   
@@ -17,6 +17,46 @@ jobs:
           uses: actions/setup-dotnet@v4
           with:
             dotnet-version: '8.x'
+
+        - name: Substitute appsettings in AMP.Identity
+          uses: microsoft/variable-substitution@v1 
+          with:
+            files: './src/admin/AMP.Identity/appsettings.json'
+          env:
+            ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
+            IdentityServer.Key.StorageKind: ${{env.IDP_STORAGE_KIND}}
+            DataProtectionOptions.StorageKind: ${{env.IDP_STORAGE_KIND}}
+            DbType: ${{env.IDP_DB_TYPE}}
+            CorsAllowedOrigin[0]: ${{env.IDP_AUTHORITY_HTTP_URL}}
+            CorsAllowedOrigin[1]: ${{env.IDP_AUTHORITY_HTTPS_URL}}
+            ApiAuthentication.Authority: ${{env.IDP_AUTHORITY_HTTPS_URL}}
+            ApiAuthentication.ApiName: ${{secrets.IDP_API_NAME}}
+            ApiAuthentication.ApiSecret: ${{secrets.IDP_API_SECRET}}
+            PrivateServerAuthentication.Authority: ${{env.IDP_AUTHORITY_HTTPS_URL}}
+            PrivateServerAuthentication.ApiUrl: ${{env.IDP_AUTHORITY_HTTPS_URL}}/api
+            PrivateServerAuthentication.ClientId: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_ID}}
+            PrivateServerAuthentication.ClientSecret: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SECRET}}
+            PrivateServerAuthentication.Scope: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
+            EmailApiAuthentication.Authority: ${{env.IDP_AUTHORITY_HTTPS_URL}}
+            EmailApiAuthentication.ApiUrl: ${{env.IDP_AUTHORITY_HTTPS_URL}}/api
+            EmailApiAuthentication.ClientId: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_ID}}
+            EmailApiAuthentication.ClientSecret: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SECRET}}
+            EmailApiAuthentication.Scope: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
+            Serilog.WriteTo[0].Args.serverUrl: ${{env.SEQ_URL}}
+
+        - name: Substitute appsettings in AMP.Identity.BlazorApp
+          uses: microsoft/variable-substitution@v1 
+          with:
+            files: './src/admin/AMP.Identity.BlazorApp/wwwroot/appsettings.json'
+          env:
+            apiBaseUrl: ${{env.IDP_AUTHORITY_HTTPS_URL}}/api
+            defaultScopes[2]: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
+            providerOptions.authority: ${{env.IDP_AUTHORITY_HTTPS_URL}}/
+            providerOptions.clientId: ${{secrets.IDP_ADMIN_CLIENT_ID}}
+            providerOptions.postLogoutRedirectUri: ${{env.IDP_AUTHORITY_HTTPS_URL}}/authentication/logout-callbackß
+            providerOptions.redirectUri: ${{env.IDP_AUTHORITY_HTTPS_URL}}/authentication/login-callback
+            welcomeContenUrl: ${{env.IDP_AUTHORITY_HTTPS_URL}}/api/welcomefragment
+
         - name: Restore dependencies
           run: dotnet restore
         - name: Publish Identity
