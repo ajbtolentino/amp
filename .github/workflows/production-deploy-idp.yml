@@ -11,6 +11,8 @@ jobs:
   Publish-Identity-Provider:
       name: Publish Identity Provider
       runs-on: ubuntu-latest   
+      environment:
+        name: 'Production'
       steps:
         - uses: actions/checkout@v4
         - name: Set up .NET Core
