@@ -16,12 +16,12 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
         //https://github.com/nayanbunny/dotnet-webapi-response-wrapper-sample/blob/main/DotNet.ResponseWrapper.Sample.Api/Middleware/ResponseWrapperMiddleware.cs
         try
         {
-            // var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
-            // _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request body {Body}",
-            //             context.Request.Method,
-            //             context.Request.Path,
-            //             context.Request.QueryString,
-            //             request);
+            var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
+            _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request body {Body}",
+                        context.Request.Method,
+                        context.Request.Path,
+                        context.Request.QueryString,
+                        request);
 
             // Storing Context Body Response
             var currentBody = context.Response.Body;
@@ -33,28 +33,35 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
             // Passing call to Controller
             await next(context);
 
-            // Resetting Context Body Response
-            context.Response.Body = currentBody;
+            if (!context.Response.ContentType.Contains("image"))
+            {
+                // Resetting Context Body Response
+                context.Response.Body = currentBody;
 
-            // Setting Memory Stream Position to Beginning
-            memoryStream.Seek(0, SeekOrigin.Begin);
+                // Setting Memory Stream Position to Beginning
+                memoryStream.Seek(0, SeekOrigin.Begin);
 
-            // Read Memory Stream data to the end
-            var response = new StreamReader(memoryStream).ReadToEnd();
+                // Read Memory Stream data to the end
+                var response = new StreamReader(memoryStream).ReadToEnd();
 
-            _logger.LogInformation("HTTP {Method} {Path} {QueryString} returned with a status {StatusCode} and response {Response}",
-                            context.Request.Method,
-                            context.Request.Path,
-                            context.Request.QueryString,
-                            context.Response.StatusCode,
-                            response);
+                _logger.LogInformation("HTTP {Method} {Path} {QueryString} returned with a status {StatusCode} and response {Response}",
+                                context.Request.Method,
+                                context.Request.Path,
+                                context.Request.QueryString,
+                                context.Response.StatusCode,
+                                response);
 
-            // returing response to caller
-            await context.Response.WriteAsync(response);
+                // returing response to caller
+                await context.Response.WriteAsync(response);
+            }
+            else
+            {
+                await context.Response.BodyWriter.WriteAsync(new byte[] { 1 });
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError("Exception: {Message} {InnerException}", ex.Message, ex.InnerException);
+            _logger.LogError("Exception: {Exception}", ex);
         }
     }
 }
