@@ -29,7 +29,7 @@ jobs:
             IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
             DataProtectionOptions.StorageKind: ${{vars.IDP_STORAGE_KIND}}
             DbType: ${{vars.IDP_DB_TYPE}}
-            CorsAllowedOrigin.0.: ${{vars.IDP_AUTHORITY_HTTP_URL}}
+            CorsAllowedOrigin.0: ${{vars.IDP_AUTHORITY_HTTP_URL}}
             CorsAllowedOrigin.1: ${{vars.IDP_AUTHORITY_HTTPS_URL}}
             ApiAuthentication.Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}
             ApiAuthentication.ApiName: ${{secrets.IDP_API_NAME}}
@@ -52,7 +52,7 @@ jobs:
             files: './src/admin/AMP.Identity.BlazorApp/wwwroot/appsettings.json'
           env:
             apiBaseUrl: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/api
-            defaultScopes.2.: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
+            defaultScopes.2: ${{secrets.IDP_PUBLIC_SERVER_CLIENT_SCOPE}}
             providerOptions.authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
             providerOptions.clientId: ${{secrets.IDP_ADMIN_CLIENT_ID}}
             providerOptions.postLogoutRedirectUri: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/authentication/logout-callbackß
