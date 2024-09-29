@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]"), Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class EventController(IUnitOfWork unitOfWork) : ControllerBase
     {
