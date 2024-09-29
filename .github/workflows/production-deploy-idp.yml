@@ -23,7 +23,7 @@ jobs:
         - name: Substitute appsettings in AMP.Identity
           uses: microsoft/variable-substitution@v1 
           with:
-            files: './src/admin/AMP.Identity/appsettings.json'
+            files: './src/admin/AMP.Identity/appsettings*.json'
           env:
             ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
             IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
@@ -49,7 +49,7 @@ jobs:
         - name: Substitute appsettings in AMP.Identity.BlazorApp
           uses: microsoft/variable-substitution@v1 
           with:
-            files: './src/admin/AMP.Identity.BlazorApp/wwwroot/appsettings.json'
+            files: './src/admin/AMP.Identity.BlazorApp/wwwroot/appsettings*.json'
           env:
             apiBaseUrl: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/api
             providerOptions.authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
