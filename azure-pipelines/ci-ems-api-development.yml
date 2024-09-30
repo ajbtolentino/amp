@@ -44,7 +44,6 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Publish Web Project'
   inputs:
-    azureSubscription: 'amp-mid-azuredevops-development'
     command: 'publish'
     publishWebProjects: false
     projects: '**/AMP.EMS.API.csproj'
