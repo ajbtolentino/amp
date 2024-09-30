@@ -52,7 +52,7 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Visual Studio Professional Subscription'
+    azureSubscription: 'amp-mid-azuredevops-development'
     appType: 'webApp'
     WebAppName: 'amp-ems-api-dev'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
