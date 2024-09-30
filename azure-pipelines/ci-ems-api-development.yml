@@ -33,6 +33,7 @@ steps:
   displayName: 'Unit Tests'
   inputs:
     command: 'test'
+    projects: '**/api/**.csproj'
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
@@ -40,6 +41,13 @@ steps:
   inputs:
     testResultsFormat: 'VSTest'
     testResultsFiles: '**/TEST-*.xml'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    azureSubscription: 'amp-mid-azuredevops-development'
+    command: 'publish'
+    projects: '**/AMP.EMS.API.csproj'
+    arguments: '--configuration $(buildConfiguration)'
     
 - task: AzureRmWebAppDeployment@4
   inputs:
