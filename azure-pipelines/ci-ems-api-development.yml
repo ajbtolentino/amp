@@ -18,8 +18,7 @@ stages:
 - stage: 'Build'
   displayName: 'Build and Test'
   jobs: 
-  - job: 'Build'
-    displayName: 'Build job'
+  - job:  'Build'
     pool:   
       vmImage: 'ubuntu-latest'
     steps:
@@ -63,8 +62,7 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)'
       artifact: drop
 
-- stage:
-  displayName: 'Development'
+- stage:  'Development'
   dependsOn: 'Build'
   condition:  succeeded()
   pool:   
