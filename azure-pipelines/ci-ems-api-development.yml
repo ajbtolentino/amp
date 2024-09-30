@@ -65,13 +65,38 @@ stages:
 
 - stage:
   displayName: 'Development'
-  trigger: manual
+  dependsOn: 'Build'
   condition:  succeeded()
   pool:   
     vmImage: 'windows-latest'
   jobs:
     - deployment: Deploy
       environment: Development
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Deploy'
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'amp-mid-azuredevops-development'
+                appType: 'webApp'
+                WebAppName: 'amp-ems-api-dev'
+                packageForLinux: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+                enableCustomDeployment: true
+                DeploymentType: 'webDeploy'
+- stage:
+  displayName: 'Production'
+  dependsOn: 'Build'
+  condition:  succeeded()
+  pool:   
+    vmImage: 'windows-latest'
+  jobs:
+    - deployment: Deploy
+      environment: Production
       strategy:
         runOnce:
           deploy:
