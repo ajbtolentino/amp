@@ -89,7 +89,7 @@ stages:
                 DeploymentType: 'webDeploy'
 - stage:
   displayName: 'Production'
-  dependsOn: 'Build'
+  dependsOn: 'Development'
   condition:  succeeded()
   pool:   
     vmImage: 'windows-latest'
