@@ -14,51 +14,53 @@ variables:
 
 stages:
 - stage: 'Build'
-  displayName: 'Build the web application'
+  displayName: 'Build and Test'
   jobs: 
   - job: 'Build'
     displayName: 'Build job'
     pool:   
       vmImage: 'ubuntu-latest'
-      steps:
-      - task: DotNetCoreCLI@2
-        displayName: 'Restore'
-        inputs:
-          command: 'restore'
-          projects: '**/AMP.EMS.API.csproj'
-          feedsToUse: 'select'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore'
+      inputs:
+        command: 'restore'
+        projects: '**/AMP.EMS.API.csproj'
+        feedsToUse: 'select'
 
-      - task: DotNetCoreCLI@2
-        displayName: 'Build'
-        inputs:
-          command: 'build'
-          projects: '**/AMP.EMS.API.csproj'
-          arguments: '--configuration $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '**/AMP.EMS.API.csproj'
+        arguments: '--configuration $(buildConfiguration)'
 
-      - task: DotNetCoreCLI@2
-        displayName: 'Unit Tests'
-        inputs:
-          projects: '**/api/*.csproj'
-          command: 'test'
+    - task: DotNetCoreCLI@2
+      displayName: 'Unit Tests'
+      inputs:
+        projects: '**/api/*.csproj'
+        command: 'test'
 
-      - task: PublishTestResults@2
-        condition: succeededOrFailed()
-        displayName: 'Publish Unit Tests'
-        inputs:
-          testResultsFormat: 'VSTest'
-          testResultsFiles: '**/TEST-*.xml'
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      displayName: 'Publish Unit Tests'
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '**/TEST-*.xml'
 
-- stage: 'Development'
-  displayName: 'Deploy to the dev environment'
-  dependsOn: Build
+- stage: 'Deployment'
+  displayName: 'Deployment'
+  trigger: manual
   condition:  succeeded()
+  pool:   
+    vmImage: 'windows-latest'
   jobs:
-    - job: 'Deploy'
-      pool:   
-        vmImage: 'windows-latest'
+    - deployment: Deploy
+      environment: Development
+    - job: 'Development'
       steps:
       - task: DotNetCoreCLI@2
-        displayName: 'Publish Web Project'
+        displayName: 'Publish'
         inputs:
           command: 'publish'
           publishWebProjects: false
@@ -66,7 +68,6 @@ stages:
           arguments: '--configuration $(buildConfiguration) -o output'
           zipAfterPublish: true
           modifyOutputPath: true
-
       - task: AzureRmWebAppDeployment@4
         displayName: 'Deploy'
         inputs:
