@@ -58,13 +58,20 @@ stages:
         zipAfterPublish: true
         modifyOutputPath: true
 
+- stage: 'Publish'
+  displayName: 'Publish Artifact'
+  trigger: manual
+  jobs: 
+  - job:  'Publish'
+    pool:   
+      vmImage: 'ubuntu-latest'
+    steps:
     - publish: '$(Build.ArtifactStagingDirectory)'
       displayName: 'Publish Artifact'
       artifact: drop
 
 - stage:  'Development'
-  dependsOn: 'Build'
-  condition:  false
+  dependsOn: 'Publish'
   pool:   
     vmImage: 'windows-latest'
   jobs:
@@ -89,7 +96,6 @@ stages:
 - stage:
   displayName: 'Production'
   dependsOn: 'Development'
-  condition:  false
   pool:   
     vmImage: 'windows-latest'
   jobs:
