@@ -65,7 +65,7 @@ stages:
 
 - stage:  'Development'
   dependsOn: 'Build'
-  condition:  eq(variables['Build.Reason'], 'Manual')
+  condition:  and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
   pool:   
     vmImage: 'windows-latest'
   jobs:
@@ -90,7 +90,7 @@ stages:
 - stage:
   displayName: 'Production'
   dependsOn: 'Development'
-  condition:  eq(variables['Build.Reason'], 'Manual')
+  condition:  and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
   pool:   
     vmImage: 'windows-latest'
   jobs:
