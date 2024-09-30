@@ -12,6 +12,7 @@ pool:
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  environment: 'Development'
 
 steps:
 - task: DotNetCoreCLI@2
