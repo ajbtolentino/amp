@@ -47,7 +47,7 @@ steps:
     azureSubscription: 'amp-mid-azuredevops-development'
     command: 'publish'
     publishWebProjects: false
-    projects: '**/src/api/AMP.EMS.API.csproj'
+    projects: '**/AMP.EMS.API.csproj'
     arguments: '--configuration $(buildConfiguration) -o output'
     zipAfterPublish: true
     modifyOutputPath: true
