@@ -46,6 +46,7 @@ steps:
   inputs:
     azureSubscription: 'amp-mid-azuredevops-development'
     command: 'publish'
+    publishWebProjects: true
     projects: '**/src/api/AMP.EMS.API.csproj'
     arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/Output'
     zipAfterPublish: true
