@@ -10,7 +10,6 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -25,15 +24,15 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Build'
   inputs:
+    projects: '*/AMP.EMS.API.csproj'
     command: 'build'
-    projects: '**/AMP.EMS.API.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Unit Tests'
   inputs:
+    projects: '*/api/*.csproj'
     command: 'test'
-    projects: '**/api/**.csproj'
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
@@ -45,9 +44,9 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Publish'
   inputs:
+    projects: '*/api/*AMP.EMS.API.csproj'
     azureSubscription: 'amp-mid-azuredevops-development'
     command: 'publish'
-    projects: '**/AMP.EMS.API.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: AzureRmWebAppDeployment@4
