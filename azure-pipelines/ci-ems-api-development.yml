@@ -12,7 +12,6 @@ trigger:
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  environment: 'Development'
 
 stages:
 - stage: 'Build'
@@ -65,7 +64,7 @@ stages:
 
 - stage:  'Development'
   dependsOn: 'Build'
-  condition:  and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+  condition:  false
   pool:   
     vmImage: 'windows-latest'
   jobs:
@@ -90,7 +89,7 @@ stages:
 - stage:
   displayName: 'Production'
   dependsOn: 'Development'
-  condition:  and(succeeded(), eq(variables['Build.Reason'], 'Manual'))
+  condition:  false
   pool:   
     vmImage: 'windows-latest'
   jobs:
