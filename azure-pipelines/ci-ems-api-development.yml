@@ -43,16 +43,20 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Publish'
   inputs:
     azureSubscription: 'amp-mid-azuredevops-development'
     command: 'publish'
     projects: '**/AMP.EMS.API.csproj'
     arguments: '--configuration $(buildConfiguration)'
-    
+
 - task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy'
   inputs:
     ConnectionType: 'AzureRM'
     azureSubscription: 'amp-mid-azuredevops-development'
     appType: 'webApp'
     WebAppName: 'amp-ems-api-dev'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    enableCustomDeployment: true
+    DeploymentType: 'webDeploy'
