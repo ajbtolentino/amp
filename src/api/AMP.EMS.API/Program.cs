@@ -50,7 +50,7 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite(config.GetConnectionString("EMSConnectionString")));
+builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<DbContext, EMSDbContext>();
 
 //Add Unit of Work with Decorator

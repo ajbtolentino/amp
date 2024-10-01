@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     [ApiController]
-    public class EventController(IUnitOfWork unitOfWork) : ControllerBase
+    public class AuthenticatedEventController(IUnitOfWork unitOfWork) : ControllerBase
     {
         private readonly IRepository<Event> eventRepository = unitOfWork.Repository<Event>();
 

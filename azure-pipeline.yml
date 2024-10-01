@@ -1,0 +1,119 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/process/create-multistage-pipeline?view=azure-devops
+
+trigger:
+  paths:
+    include:
+      - 'src/api/**'
+
+variables:
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+stages:
+- stage: 'Build'
+  displayName: 'Build and Test'
+  jobs: 
+  - job:  'Build'
+    pool:   
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore'
+      inputs:
+        command: 'restore'
+        projects: '**/AMP.EMS.API.csproj'
+        feedsToUse: 'select'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Build'
+      inputs:
+        command: 'build'
+        projects: '**/AMP.EMS.API.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Unit Tests'
+      inputs:
+        projects: '**/api/*.csproj'
+        command: 'test'
+
+    - task: PublishTestResults@2
+      condition: succeededOrFailed()
+      displayName: 'Publish Unit Tests'
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '**/TEST-*.xml'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish Web Project'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '**/AMP.EMS.API.csproj'
+        arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: true
+        modifyOutputPath: true
+
+- stage: 'Publish'
+  displayName: 'Publish Artifact'
+  trigger: manual
+  jobs: 
+  - job:  'Publish'
+    pool:   
+      vmImage: 'ubuntu-latest'
+    steps:
+    - publish: '$(Build.ArtifactStagingDirectory)'
+      displayName: 'Publish Artifact'
+      artifact: drop
+
+- stage:  'Development'
+  dependsOn: 'Publish'
+  pool:   
+    vmImage: 'windows-latest'
+  jobs:
+    - deployment: Deploy
+      environment: Development
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Deploy'
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'amp-mid-azuredevops-development'
+                appType: 'webApp'
+                WebAppName: 'amp-ems-api-dev'
+                packageForLinux: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+                enableCustomDeployment: true
+                DeploymentType: 'webDeploy'
+- stage:
+  displayName: 'Production'
+  dependsOn: 'Development'
+  pool:   
+    vmImage: 'windows-latest'
+  jobs:
+    - deployment: Deploy
+      environment: Production
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+            - task: AzureRmWebAppDeployment@4
+              displayName: 'Deploy'
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'amp-mid-azuredevops-development'
+                appType: 'webApp'
+                WebAppName: 'amp-ems-api-dev'
+                packageForLinux: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+                enableCustomDeployment: true
+                DeploymentType: 'webDeploy'
