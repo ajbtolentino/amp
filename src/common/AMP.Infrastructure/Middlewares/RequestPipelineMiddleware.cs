@@ -16,19 +16,29 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
         //https://github.com/nayanbunny/dotnet-webapi-response-wrapper-sample/blob/main/DotNet.ResponseWrapper.Sample.Api/Middleware/ResponseWrapperMiddleware.cs
         try
         {
+            // Using MemoryStream to hold Controller Request
+            // using var requestMemoryStream = new MemoryStream();
+            // context.Request.Body = requestMemoryStream;
+
+            context.Request.EnableBuffering();
+
             var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
-            _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request body {Body}",
+            _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request \n{Request}",
                         context.Request.Method,
                         context.Request.Path,
                         context.Request.QueryString,
                         request);
 
+            context.Request.Body.Position = 0;
+
             // Storing Context Body Response
             var currentBody = context.Response.Body;
 
             // Using MemoryStream to hold Controller Response
-            using var memoryStream = new MemoryStream();
-            context.Response.Body = memoryStream;
+            using var responseMemoryStream = new MemoryStream();
+            context.Response.Body = responseMemoryStream;
+
+            // context.Request.Body.Seek(0, SeekOrigin.Begin);
 
             // Passing call to Controller
             await next(context);
@@ -39,10 +49,10 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
                 context.Response.Body = currentBody;
 
                 // Setting Memory Stream Position to Beginning
-                memoryStream.Seek(0, SeekOrigin.Begin);
+                responseMemoryStream.Seek(0, SeekOrigin.Begin);
 
                 // Read Memory Stream data to the end
-                var response = new StreamReader(memoryStream).ReadToEnd();
+                var response = await new StreamReader(responseMemoryStream).ReadToEndAsync();
 
                 _logger.LogInformation("HTTP {Method} {Path} {QueryString} returned with a status {StatusCode} and response {Response}",
                                 context.Request.Method,

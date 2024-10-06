@@ -8,122 +8,30 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController(IUnitOfWork unitOfWork) : ControllerBase
+    public class EventController(IUnitOfWork unitOfWork) : ApiBaseController<Event, Guid>(unitOfWork)
     {
-        private readonly IRepository<Event> eventRepository = unitOfWork.Repository<Event>();
+        public record EventData(string Name);
 
-        /// <summary>
-        /// Returns all events
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var events = this.eventRepository.GetAll();
-
-            return Ok(new OkResponse<IEnumerable<Event>>(string.Empty) { Data = events });
-        }
-
-        /// <summary>
-        /// Returns event by id
-        /// </summary>
-        /// <param name="id">Id of the todo</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("{id}")]
-        public IActionResult Get(Guid id)
-        {
-            var @event = this.eventRepository.Get(id);
-
-            return Ok(new OkResponse<Event>(string.Empty) { Data = @event });
-        }
-
-        /// <summary>
-        /// Adds a new event
-        /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
         [HttpPost]
-        public IActionResult Post(Event @event)
+        public IActionResult Post([FromBody] EventData data)
         {
-            try
+            return base.Post(new Event
             {
-                unitOfWork.BeginTransaction();
-
-                var newEvent = this.eventRepository.Add(@event);
-
-                unitOfWork.SaveChanges();
-                unitOfWork.CommitTransaction();
-
-                return Ok(new OkResponse<Event>(string.Empty) { Data = newEvent });
-            }
-            catch (Exception ex)
-            {
-                unitOfWork.RollbackTransaction();
-
-                return Problem(ex.Message);
-            }
+                Name = data.Name,
+                DateCreated = DateTime.Now
+            });
         }
 
-        /// <summary>
-        /// Updates an existing event
-        /// </summary>
-        /// <param name="event"></param>
-        /// <returns></returns>
         [HttpPut]
-        public IActionResult Put(Event @event)
-        {
-            try
-            {
-                unitOfWork.BeginTransaction();
-
-                var entity = this.eventRepository.Get(@event.Id);
-                entity.DateCreated = @event.DateCreated;
-                entity.DateUpdated = @event.DateUpdated;
-                entity.Name = @event.Name;
-
-                var result = this.eventRepository.Update(entity);
-
-                unitOfWork.SaveChanges();
-                unitOfWork.CommitTransaction();
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                unitOfWork.RollbackTransaction();
-
-                return Problem(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Deletes an event
-        /// </summary>
-        /// <param name="eventId"></param>
-        /// <returns></returns>
-        [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete(Guid id)
+        public IActionResult Put(Guid id, [FromBody] EventData data)
         {
-            try
+            return base.Put(new Event
             {
-                unitOfWork.BeginTransaction();
-
-                this.eventRepository.Delete(id);
-
-                unitOfWork.SaveChanges();
-                unitOfWork.CommitTransaction();
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                unitOfWork.RollbackTransaction();
-
-                return Problem(ex.Message);
-            }
-
+                Id = id,
+                Name = data.Name,
+                DateUpdated = DateTime.Now
+            });
         }
     }
 }

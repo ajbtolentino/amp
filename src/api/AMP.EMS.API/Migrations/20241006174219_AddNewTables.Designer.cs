@@ -3,6 +3,7 @@ using System;
 using AMP.EMS.API.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AMP.EMS.API.Migrations
 {
     [DbContext(typeof(EMSDbContext))]
-    partial class EFDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241006174219_AddNewTables")]
+    partial class AddNewTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -87,10 +90,6 @@ namespace AMP.EMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("GuestId");
-
                     b.ToTable("Invitations");
                 });
 
@@ -118,54 +117,7 @@ namespace AMP.EMS.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InvitationId");
-
                     b.ToTable("RSVPs");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.Invitation", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany("Invitations")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.Guest", "Guest")
-                        .WithMany("Invitations")
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Guest");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.RSVP", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.Invitation", "Invitation")
-                        .WithMany("RSVPs")
-                        .HasForeignKey("InvitationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Invitation");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.Event", b =>
-                {
-                    b.Navigation("Invitations");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.Guest", b =>
-                {
-                    b.Navigation("Invitations");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.Invitation", b =>
-                {
-                    b.Navigation("RSVPs");
                 });
 #pragma warning restore 612, 618
         }
