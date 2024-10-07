@@ -1,0 +1,12 @@
+<div class="card">
+    <p-menubar [model]="items">
+        <ng-template pTemplate="start">
+        </ng-template>
+        <ng-template pTemplate="end">
+            <div class="card flex justify-content-center">
+                <p-menu #menu [model]="profileItems" [popup]="true" />
+                <p-button (onClick)="menu.toggle($event)" icon="pi pi-fw pi-user" />
+            </div>
+        </ng-template>
+    </p-menubar>
+</div>
