@@ -3,10 +3,7 @@
 
 name: UI Workflow
 
-on:
-  push:
-    paths: 
-      - 'src/ui/AMP.EMS/**'
+on: [push]
 
 jobs:
   build:
