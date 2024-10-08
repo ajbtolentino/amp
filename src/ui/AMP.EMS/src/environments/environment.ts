@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    authUrl: "https://localhost:5443",
-    apiUrl: "http://localhost:6001"
+    authUrl: "https://amp-idp.azurewebsites.net",
+    apiUrl: "https://amp-ems-api-dev.azurewebsites.net"
 };
