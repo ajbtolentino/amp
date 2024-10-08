@@ -12,22 +12,22 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+ 
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '20'
         cache: 'npm'
-    - run: npm ci
-      working-directory: src/ui/AMP.EMS
+    - run: npm install
+      working-directory: ./src/ui/AMP.EMS
     - run: npm run build --if-present
-      working-directory: src/ui/AMP.EMS
+      working-directory: ./src/ui/AMP.EMS
     - run: npm test
-      working-directory: src/ui/AMP.EMS
+      working-directory: ./src/ui/AMP.EMS
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v2
+        with:
+          name: node-app
+          path: dist/angular-workflow-example/browser   
