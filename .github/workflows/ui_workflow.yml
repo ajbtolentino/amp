@@ -23,7 +23,7 @@ jobs:
         cache-dependency-path: '**/package-lock.json'
     - run: npm install
       working-directory: ./src/ui/AMP.EMS
-    - run: npm run build --if-present
+    - run: npm run build -prod
       working-directory: ./src/ui/AMP.EMS
     - run: npm test
       working-directory: ./src/ui/AMP.EMS
