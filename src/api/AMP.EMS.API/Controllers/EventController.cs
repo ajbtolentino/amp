@@ -6,30 +6,38 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     [ApiController]
     public class EventController(IUnitOfWork unitOfWork) : ApiBaseController<Event, Guid>(unitOfWork)
     {
-        public record EventData(string Name);
+        public record EventData(string Name, string Description);
+
+        [HttpGet]
+        public new IActionResult GetAll()
+        {
+            return base.GetAll();
+        }
 
         [HttpPost]
-        public IActionResult Post([FromBody] EventData data)
+        public async Task<IActionResult> Post([FromBody] EventData data)
         {
-            return base.Post(new Event
+            return await base.Post(new Event
             {
                 Name = data.Name,
+                Description = data.Description,
                 DateCreated = DateTime.Now
             });
         }
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Put(Guid id, [FromBody] EventData data)
+        public async Task<IActionResult> Put(Guid id, [FromBody] EventData data)
         {
-            return base.Put(new Event
+            return await base.Put(new Event
             {
                 Id = id,
                 Name = data.Name,
+                Description = data.Description,
                 DateUpdated = DateTime.Now
             });
         }

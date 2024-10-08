@@ -8,5 +8,5 @@ public class Guest : BaseEntity<Guid>
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
 
-    public IReadOnlyCollection<Invitation> Invitations { get; set; } = [];
+    public ICollection<Invitation> Invitations { get; set; } = [];
 }

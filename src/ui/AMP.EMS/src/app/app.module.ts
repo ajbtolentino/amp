@@ -3,18 +3,14 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AuthConfigModule } from './auth/auth-config.module';
-import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
-import { HomeComponent } from './home/home.component';
-import { EventsComponent } from './events/events.component';
-import { InvitationsComponent } from './invitations/invitations.component';
-import { ForbiddenComponent } from './forbidden/forbidden.component';
-import { ProtectedComponent } from './protected/protected.component';
-import { NavigationComponent } from './navigation/navigation.component';
+import { AuthConfigModule } from './core/auth-config.module';
+import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
+import { HomeComponent } from './features/home/home.component';
+import { ForbiddenComponent } from './shared/forbidden/forbidden.component';
+import { NavigationComponent } from './shared/navigation/navigation.component';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { authInterceptor, autoLoginPartialRoutesGuard, LogLevel, provideAuth } from 'angular-auth-oidc-client';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
 
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
@@ -37,19 +33,26 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { EventService } from './events/event.service';
+import { EventService } from './core/event.service';
 import { FormsModule } from '@angular/forms';
+import { EventDetailsComponent } from './features/event-details/event-details.component';
+import { EventListComponent } from './features/event-list/event-list.component';
+import { InvitationDetailsComponent } from './features/invitation-details/invitation-details.component';
+import { InvitationService } from './core/invitation.service';
+import { GuestListComponent } from './features/guest-list/guest-list.component';
+import { GuestService } from './core/guest.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     UnauthorizedComponent,
     HomeComponent,
-    EventsComponent,
-    InvitationsComponent,
     ForbiddenComponent,
-    ProtectedComponent,
-    NavigationComponent
+    NavigationComponent,
+    EventDetailsComponent,
+    EventListComponent,
+    InvitationDetailsComponent,
+    GuestListComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -98,19 +101,33 @@ import { FormsModule } from '@angular/forms';
   }),
   provideRouter(
     [
-      { path: '', pathMatch: 'full', redirectTo: 'home' },
-      { path: 'home', component: HomeComponent },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'home'
+      },
+      {
+        path: 'home',
+        component: HomeComponent
+      },
       {
         path: 'events',
-        // loadChildren: () =>
-        //   import('./events/events.routes').then((m) => m.routes),
-        component: EventsComponent,
+        component: EventListComponent,
         canActivate: [autoLoginPartialRoutesGuard],
       },
-      { path: 'invitations', component: InvitationsComponent },
       {
-        path: 'protected',
-        component: ProtectedComponent,
+        path: 'events/:eventId',
+        component: EventDetailsComponent,
+        canActivate: [autoLoginPartialRoutesGuard],
+      },
+      {
+        path: 'guests',
+        component: GuestListComponent,
+        canActivate: [autoLoginPartialRoutesGuard],
+      },
+      {
+        path: 'invitations/:id',
+        component: InvitationDetailsComponent,
         canActivate: [autoLoginPartialRoutesGuard],
       },
       {
@@ -118,11 +135,16 @@ import { FormsModule } from '@angular/forms';
         component: ForbiddenComponent,
         canActivate: [autoLoginPartialRoutesGuard],
       },
-      { path: 'unauthorized', component: UnauthorizedComponent },
+      {
+        path: 'unauthorized',
+        component: UnauthorizedComponent
+      },
     ],
     withEnabledBlockingInitialNavigation()
   ),
     EventService,
+    InvitationService,
+    GuestService,
     MessageService,
     ConfirmationService,],
   bootstrap: [AppComponent]

@@ -5,9 +5,9 @@ namespace AMP.Core.Repository;
 
 public interface IRepository<TEntity> where TEntity : class
 {
-    IEnumerable<TEntity> GetAll();
-    TEntity Get<TKey>(TKey key);
-    TEntity Add(TEntity entity);
+    IQueryable<TEntity> GetAll();
+    Task<TEntity> Get<TKey>(TKey key);
+    Task<TEntity> Add(TEntity entity);
     TEntity Update(TEntity entity);
     void Delete<TKey>(TKey id);
 }

@@ -1,20 +1,37 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     [ApiController]
     public class InvitationController(IUnitOfWork unitOfWork) : ApiBaseController<Invitation, Guid>(unitOfWork)
     {
         public record InvitationData(string Code, Guid EventId, Guid GuestId);
 
-        [HttpPost]
-        public IActionResult Post([FromBody] InvitationData data)
+        [HttpGet]
+        [Route("{eventId}/details")]
+        public IActionResult GetAll(Guid? eventId)
         {
-            return base.Post(new Invitation
+            if (!eventId.HasValue)
+                return base.GetAll();
+
+            var collection = base.entityRepository.GetAll().AsNoTracking()
+                                .Where(_ => _.EventId == eventId)
+                                .Include(_ => _.Guest);
+
+            return Ok(new OkResponse<IEnumerable<Invitation>>(string.Empty) { Data = collection });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] InvitationData data)
+        {
+            return await base.Post(new Invitation
             {
                 Code = data.Code,
                 EventId = data.EventId,
@@ -24,9 +41,9 @@ namespace AMP.EMS.API.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public IActionResult Put(Guid id, [FromBody] InvitationData data)
+        public async Task<IActionResult> Put(Guid id, [FromBody] InvitationData data)
         {
-            return base.Put(new Invitation
+            return await base.Put(new Invitation
             {
                 Id = id,
                 Code = data.Code,

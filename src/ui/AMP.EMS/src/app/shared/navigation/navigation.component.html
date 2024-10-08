@@ -6,7 +6,7 @@
             <div class="card flex justify-content-center">
                 <p-menu #menu [model]="accountItems" [popup]="true" />
                 <p-avatar (click)="menu.toggle($event)" icon="pi pi-fw pi-user" shape="circle" size="large"
-                    label="{{getInitials()}}" severity="info" [style]="{ 'cursor' : 'pointer'}" />
+                    label="{{profileInitials}}" severity="info" [style]="{ 'cursor' : 'pointer'}" />
             </div>
         </ng-template>
     </p-menubar>

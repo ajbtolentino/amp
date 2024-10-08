@@ -15,11 +15,11 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
         return unitOfWork.BeginTransaction();
     }
 
-    public void CommitTransaction()
+    public async Task CommitTransactionAsync()
     {
         // logger.LogInformation($"Committing transaction...");
 
-        unitOfWork.CommitTransaction();
+        await unitOfWork.CommitTransactionAsync();
     }
 
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class
@@ -29,17 +29,15 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
         return unitOfWork.Repository<TEntity>();
     }
 
-    public void RollbackTransaction()
+    public async Task RollbackTransactionAsync()
     {
         // logger.LogInformation($"Rolling back transaction...");
 
-        unitOfWork.RollbackTransaction();
+        await unitOfWork.RollbackTransactionAsync();
     }
 
-    public void SaveChanges()
+    public async Task SaveChangesAsync()
     {
-        // logger.LogInformation($"Saving changes...");
-
-        unitOfWork.SaveChanges();
+        await unitOfWork.SaveChangesAsync();
     }
 }

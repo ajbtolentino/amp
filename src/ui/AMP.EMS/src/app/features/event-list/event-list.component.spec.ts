@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProtectedComponent } from './protected.component';
+import { EventListComponent } from './event-list.component';
 
-describe('ProtectedComponent', () => {
-  let component: ProtectedComponent;
-  let fixture: ComponentFixture<ProtectedComponent>;
+describe('EventListComponent', () => {
+  let component: EventListComponent;
+  let fixture: ComponentFixture<EventListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProtectedComponent]
+      declarations: [EventListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProtectedComponent);
+    fixture = TestBed.createComponent(EventListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

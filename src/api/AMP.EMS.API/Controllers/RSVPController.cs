@@ -1,19 +1,20 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Constants;
 using AMP.EMS.API.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     [ApiController]
     public class RSVPController(IUnitOfWork unitOfWork) : ApiBaseController<RSVP, Guid>(unitOfWork)
     {
         public record RSVPData(string Code, RSVPResponse Response, string PhoneNumber);
 
         [HttpPost]
-        public IActionResult Post([FromBody] RSVPData data)
+        public async Task<IActionResult> Post([FromBody] RSVPData data)
         {
             var invitation = unitOfWork.Repository<Invitation>().GetAll().FirstOrDefault(_ => _.Code == data.Code);
 
@@ -21,7 +22,7 @@ namespace AMP.EMS.API.Controllers
 
             if (!Enum.GetValues<RSVPResponse>().Contains(data.Response)) return BadRequest();
 
-            return base.Post(new RSVP
+            return await base.Post(new RSVP
             {
                 InvitationId = invitation.Id,
                 Response = data.Response

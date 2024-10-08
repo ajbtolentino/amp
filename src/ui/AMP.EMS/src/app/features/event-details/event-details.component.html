@@ -1,0 +1,88 @@
+<p-toast></p-toast>
+
+<p-toolbar>
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" (click)="openNew()"></button>
+        <button pButton pRipple label="Delete" icon="pi pi-trash" (click)="deleteSelectedEvents()"
+            [disabled]="!selectedItems || !selectedItems.length"></button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+            chooseLabel="Import"></p-fileUpload>
+        <button pButton pRipple label="Export" icon="pi pi-upload"></button>
+    </ng-template>
+</p-toolbar>
+
+<p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['name','code']"
+    [(selection)]="selectedItems" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+        <div>
+            <h5>Manage Invitations</h5>
+            <span>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                    placeholder="Search..." />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="name">Guest <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="name">Code <p-sortIcon field="code"></p-sortIcon></th>
+            <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
+            <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>
+                <p-tableCheckbox [value]="item"></p-tableCheckbox>
+            </td>
+            <td>{{item.guest.firstName}} {{item.guest.lastName}}</td>
+            <td>{{item.code}}</td>
+            <td>{{item.dateCreated}}</td>
+            <td>{{item.dateUpdated}}</td>
+            <td>
+                <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-pencil" (click)="edit(item)"
+                    pTooltip="Edit"></button>
+                <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-trash" (click)="delete(item)"
+                    pTooltip="Delete"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="dialog" header="Event Details" [modal]="true">
+    <ng-template pTemplate="content">
+        <div>
+            <label for="guestId">Guest</label>
+            <p-dropdown #guestSelection [options]="guestCollection" [(ngModel)]="item.guestId" [filter]="true"
+                optionValue="id" filterBy="firstName,lastName" placeholder="Select a Guest">
+                <ng-template let-guestSelection pTemplate="selectedItem">
+                    {{guestSelection.firstName}} {{guestSelection.lastName}}
+                </ng-template>
+                <ng-template let-guestSelection pTemplate="item">
+                    {{guestSelection.firstName}} {{guestSelection.lastName}}
+                </ng-template>
+            </p-dropdown>
+            <small *ngIf="submitted && !item.guestId">Guest is required.</small>
+        </div>
+        <div>
+            <label for="code">Code</label>
+            <input type="text" pInputText id="code" [(ngModel)]="item.code" required autofocus />
+            <small *ngIf="submitted && !item.code">Code is required.</small>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" (click)="saveEvent()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

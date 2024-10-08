@@ -1,8 +1,10 @@
+using System.Linq;
 using AMP.Core.Repository;
 using AMP.Infrastructure.Entity;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -15,7 +17,7 @@ namespace AMP.EMS.API.Controllers
         protected readonly IRepository<TEntity> entityRepository = unitOfWork.Repository<TEntity>();
 
         [HttpGet]
-        public IActionResult GetAll()
+        protected IActionResult GetAll()
         {
             var entities = this.entityRepository.GetAll();
 
@@ -24,37 +26,37 @@ namespace AMP.EMS.API.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var @event = this.entityRepository.Get(id);
+            var @event = await this.entityRepository.Get(id);
 
             return Ok(new OkResponse<TEntity>(string.Empty) { Data = @event });
         }
 
         [HttpPost]
-        protected IActionResult Post(TEntity entity)
+        protected async Task<IActionResult> Post(TEntity entity)
         {
             try
             {
                 unitOfWork.BeginTransaction();
 
-                var newEntity = this.entityRepository.Add(entity);
+                var newEntity = await this.entityRepository.Add(entity);
 
-                unitOfWork.SaveChanges();
-                unitOfWork.CommitTransaction();
+                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.CommitTransactionAsync();
 
                 return Ok(new OkResponse<TEntity>(string.Empty) { Data = newEntity });
             }
             catch (Exception ex)
             {
-                unitOfWork.RollbackTransaction();
+                await unitOfWork.RollbackTransactionAsync();
 
                 return Problem(ex.Message);
             }
         }
 
         [HttpPut]
-        protected IActionResult Put(TEntity entity)
+        protected async Task<IActionResult> Put(TEntity entity)
         {
             try
             {
@@ -62,14 +64,14 @@ namespace AMP.EMS.API.Controllers
 
                 var result = this.entityRepository.Update(entity);
 
-                unitOfWork.SaveChanges();
-                unitOfWork.CommitTransaction();
+                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.CommitTransactionAsync();
 
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                unitOfWork.RollbackTransaction();
+                await unitOfWork.RollbackTransactionAsync();
 
                 return Problem(ex.Message);
             }
@@ -77,7 +79,7 @@ namespace AMP.EMS.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
@@ -85,18 +87,42 @@ namespace AMP.EMS.API.Controllers
 
                 this.entityRepository.Delete(id);
 
-                unitOfWork.SaveChanges();
-                unitOfWork.CommitTransaction();
+                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.CommitTransactionAsync();
 
                 return Ok();
             }
             catch (Exception ex)
             {
-                unitOfWork.RollbackTransaction();
+                await unitOfWork.RollbackTransactionAsync();
 
                 return Problem(ex.Message);
             }
+        }
 
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAll([FromBody] IEnumerable<TKey> keys)
+        {
+            try
+            {
+                unitOfWork.BeginTransaction();
+
+                foreach (var key in keys)
+                {
+                    this.entityRepository.Delete(key);
+                }
+
+                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.CommitTransactionAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                await unitOfWork.RollbackTransactionAsync();
+
+                return Problem(ex.Message);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using AMP.Infrastructure.Extensions;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.HttpLogging;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,8 @@ builder.Host.ConfigureLogger();
 builder.Services.AddCors();
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

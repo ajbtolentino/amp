@@ -13,12 +13,24 @@ import "primeicons/primeicons.css";
 export class NavigationComponent implements OnInit {
   menuItems: MenuItem[] | undefined;
   accountItems: MenuItem[] | undefined;
+  profileInitials: string | undefined;
 
   private readonly oidcSecurityService = inject(OidcSecurityService);
   protected readonly authenticated = this.oidcSecurityService.authenticated;
 
   ngOnInit() {
     this.oidcSecurityService.isAuthenticated$.subscribe(() => this.refreshMenu());
+    this.oidcSecurityService.userData$.subscribe(data => {
+      this.profileInitials = '';
+
+      if (data?.userData?.given_name) {
+        this.profileInitials += data.userData.given_name[0];
+      }
+
+      if (data?.userData?.family_name) {
+        this.profileInitials += data.userData.family_name[0];
+      }
+    });
   }
 
   refreshMenu = () => {
@@ -30,8 +42,14 @@ export class NavigationComponent implements OnInit {
       },
       {
         label: 'Events',
-        icon: 'pi pi-star',
+        icon: 'pi pi-calendar',
         routerLink: '/events',
+        visible: this.authenticated().isAuthenticated
+      },
+      {
+        label: 'Guests',
+        icon: 'pi pi-users',
+        routerLink: '/guests',
         visible: this.authenticated().isAuthenticated
       }
     ];
@@ -60,13 +78,6 @@ export class NavigationComponent implements OnInit {
         ]
       }
     ]
-  }
-
-  getInitials = (): string => {
-    if (this.authenticated().isAuthenticated)
-      return "AT";
-
-    return "";
   }
 
   login(): void {

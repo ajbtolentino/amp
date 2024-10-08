@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { NavigationComponent } from './navigation/navigation.component';
+import { NavigationComponent } from './shared/navigation/navigation.component';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -16,10 +16,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.oidcSecurityService
       .checkAuth()
-      .subscribe(({ isAuthenticated, accessToken }) => {
-        console.log('app authenticated', isAuthenticated);
-        console.log(`Current access token is '${accessToken}'`);
-      });
+      .subscribe();
   }
 
   login(): void {

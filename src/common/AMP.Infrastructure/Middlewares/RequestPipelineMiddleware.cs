@@ -43,7 +43,7 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
             // Passing call to Controller
             await next(context);
 
-            if (!context.Response.ContentType.Contains("image"))
+            if (!context.Response?.ContentType?.Contains("image") == true)
             {
                 // Resetting Context Body Response
                 context.Response.Body = currentBody;
