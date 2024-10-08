@@ -42,6 +42,8 @@ import { InvitationService } from './core/invitation.service';
 import { GuestListComponent } from './features/guest-list/guest-list.component';
 import { GuestService } from './core/guest.service';
 
+import { environment } from './../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -89,9 +91,9 @@ import { GuestService } from './core/guest.service';
       unauthorizedRoute: '/unauthorized',
       logLevel: LogLevel.Debug,
       historyCleanupOff: false,
-      authority: 'https://localhost:5443',
-      redirectUrl: 'http://localhost:4200',
-      postLogoutRedirectUri: 'http://localhost:4200',
+      authority: environment.authUrl,
+      redirectUrl: window.location.origin,
+      postLogoutRedirectUri: window.location.origin,
       clientId: 'spa',
       scope: 'openid profile',
       responseType: 'code',
@@ -116,7 +118,7 @@ import { GuestService } from './core/guest.service';
         canActivate: [autoLoginPartialRoutesGuard],
       },
       {
-        path: 'events/:eventId',
+        path: 'events/:id',
         component: EventDetailsComponent,
         canActivate: [autoLoginPartialRoutesGuard],
       },

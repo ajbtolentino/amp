@@ -5,9 +5,11 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { lastValueFrom } from 'rxjs';
 import { Invitation } from './invitation';
 
+import { environment } from './../../environments/environment';
+
 @Injectable()
 export class InvitationService {
-    apiUrl: string = "http://localhost:6001";
+    apiUrl: string = environment.apiUrl;
     headers: HttpHeaders | undefined;
 
     private readonly oidcSecurityService = inject(OidcSecurityService);

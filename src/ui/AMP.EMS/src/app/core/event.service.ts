@@ -5,9 +5,11 @@ import { Event } from './event';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { lastValueFrom } from 'rxjs';
 
+import { environment } from './../../environments/environment';
+
 @Injectable()
 export class EventService {
-    apiUrl: string = "http://localhost:6001";
+    apiUrl: string = environment.apiUrl;
     headers: HttpHeaders | undefined;
 
     private readonly oidcSecurityService = inject(OidcSecurityService);
@@ -17,6 +19,10 @@ export class EventService {
             this.headers = new HttpHeaders({
                 Authorization: 'Bearer ' + token,
             }));
+    }
+
+    get = async (id: string) => {
+        return await lastValueFrom(this.http.get<any>(`${this.apiUrl}/api/event/${id}`, { headers: this.headers }));
     }
 
     getAll = async () => {

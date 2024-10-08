@@ -19,7 +19,7 @@
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
     <ng-template pTemplate="caption">
         <div>
-            <h5>Manage Invitations</h5>
+            <h5>{{this.event?.name}} - Manage Invitations</h5>
             <span>
                 <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                     placeholder="Search..." />
@@ -31,8 +31,8 @@
             <th>
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="name">Guest <p-sortIcon field="name"></p-sortIcon></th>
-            <th pSortableColumn="name">Code <p-sortIcon field="code"></p-sortIcon></th>
+            <th pSortableColumn="name">Guest<p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
             <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
             <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>
             <th></th>
@@ -57,7 +57,7 @@
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="dialog" header="Event Details" [modal]="true">
+<p-dialog [(visible)]="dialog" header="Invitation Details" [modal]="true">
     <ng-template pTemplate="content">
         <div>
             <label for="guestId">Guest</label>
@@ -74,7 +74,9 @@
         </div>
         <div>
             <label for="code">Code</label>
-            <input type="text" pInputText id="code" [(ngModel)]="item.code" required autofocus />
+            <input type="text" [disabled]="true" pInputText id="code" [(ngModel)]="item.code" required autofocus />
+            <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-trash" (click)="generateCode(5)"
+                pTooltip="Generate Code"></button>
             <small *ngIf="submitted && !item.code">Code is required.</small>
         </div>
     </ng-template>
