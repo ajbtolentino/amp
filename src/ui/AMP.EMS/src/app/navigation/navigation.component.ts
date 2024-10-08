@@ -11,19 +11,18 @@ import "primeicons/primeicons.css";
 })
 
 export class NavigationComponent implements OnInit {
-  items: MenuItem[] | undefined;
-  profileItems: MenuItem[] | undefined;
+  menuItems: MenuItem[] | undefined;
+  accountItems: MenuItem[] | undefined;
 
   private readonly oidcSecurityService = inject(OidcSecurityService);
-  private readonly eventService = inject(PublicEventsService);
   protected readonly authenticated = this.oidcSecurityService.authenticated;
 
   ngOnInit() {
-    this.oidcSecurityService.checkAuth().subscribe(() => this.refreshMenu());
+    this.oidcSecurityService.isAuthenticated$.subscribe(() => this.refreshMenu());
   }
 
   refreshMenu = () => {
-    this.items = [
+    this.menuItems = [
       {
         label: 'Home',
         icon: 'pi pi-home',
@@ -37,20 +36,37 @@ export class NavigationComponent implements OnInit {
       }
     ];
 
-    this.profileItems = [
+    this.accountItems = [
       {
-        label: 'Login',
-        icon: 'pi pi-sign-in',
-        visible: !this.authenticated().isAuthenticated,
-        command: () => this.login()
-      },
-      {
-        label: 'Logout',
-        icon: 'pi pi-sign-out',
-        visible: this.authenticated().isAuthenticated,
-        command: () => this.logout()
+        label: 'Account',
+        items: [
+          {
+            label: 'Profile',
+            icon: 'pi pi-sign-in',
+            visible: this.authenticated().isAuthenticated
+          },
+          {
+            label: 'Login',
+            icon: 'pi pi-sign-in',
+            visible: !this.authenticated().isAuthenticated,
+            command: () => this.login()
+          },
+          {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            visible: this.authenticated().isAuthenticated,
+            command: () => this.logout()
+          }
+        ]
       }
     ]
+  }
+
+  getInitials = (): string => {
+    if (this.authenticated().isAuthenticated)
+      return "AT";
+
+    return "";
   }
 
   login(): void {
