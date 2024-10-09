@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: node-app
-        path: ./src/ui/AMP.EMS/dist/amp.ems
+        path: ./src/ui/AMP.EMS/dist
 
   Deploy-EMS:
     name: Deploy EMS
