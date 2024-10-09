@@ -7,7 +7,7 @@ public interface IUnitOfWork
 {
     IRepository<TEntity> Repository<TEntity>() where TEntity : class;
     IDbTransaction BeginTransaction();
-    void CommitTransaction();
-    void RollbackTransaction();
-    void SaveChanges();
+    Task CommitTransactionAsync();
+    Task RollbackTransactionAsync();
+    Task SaveChangesAsync();
 }

@@ -4,17 +4,36 @@ using AMP.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using AMP.Infrastructure.Extensions;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.HttpLogging;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration;
+
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.All;
+    logging.RequestHeaders.Add(HeaderNames.ContentType);
+    logging.RequestHeaders.Add(HeaderNames.ContentDisposition);
+    logging.RequestHeaders.Add(HeaderNames.ContentEncoding);
+    logging.RequestHeaders.Add(HeaderNames.ContentLength);
+
+    logging.MediaTypeOptions.AddText("application/json");
+    logging.MediaTypeOptions.AddText("multipart/form-data");
+
+    logging.RequestBodyLogLimit = 1024;
+    logging.ResponseBodyLogLimit = 1024;
+});
 
 builder.Host.ConfigureLogger();
 
 builder.Services.AddCors();
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

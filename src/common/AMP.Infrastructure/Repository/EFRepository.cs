@@ -6,13 +6,13 @@ namespace AMP.Infrastructure.Repository;
 public class EFRepository<TEntity>(DbContext dbContext) : IRepository<TEntity>
     where TEntity : class
 {
-    public TEntity Add(TEntity entity) => dbContext.Add(entity).Entity;
+    public async Task<TEntity> Add(TEntity entity) => (await dbContext.AddAsync(entity)).Entity;
 
     public void Delete<TKey>(TKey key) => dbContext.Remove(dbContext.Find<TEntity>(key)!);
 
-    public TEntity Get<TKey>(TKey key) => dbContext.Find<TEntity>(key);
+    public async Task<TEntity> Get<TKey>(TKey key) => await dbContext.FindAsync<TEntity>(key);
 
-    public IEnumerable<TEntity> GetAll() => dbContext.Set<TEntity>().AsNoTracking();
+    public IQueryable<TEntity> GetAll() => dbContext.Set<TEntity>();
 
-    public TEntity Update(TEntity entity) => dbContext.Update<TEntity>(entity).Entity;
+    public TEntity Update(TEntity entity) => dbContext.Update(entity).Entity;
 }

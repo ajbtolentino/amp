@@ -33,8 +33,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{F69F7E
 		docker-compose.debug.yml = docker-compose.debug.yml
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{4187DC86-2A99-49F1-9321-1EC2AF325371}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{DFE8199D-E2BC-480F-BFBA-C2D31632187A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMP.Identity.IntegrationTest", "tests\admin\AMP.Identity.IntegrationTest\AMP.Identity.IntegrationTest.csproj", "{99F7A198-8E54-4503-9AA8-708F06D98E11}"

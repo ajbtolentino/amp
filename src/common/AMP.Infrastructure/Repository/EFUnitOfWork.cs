@@ -12,9 +12,9 @@ public class EFUnitOfWork(DbContext dbContext, IServiceProvider serviceProvider)
 
     public IDbTransaction BeginTransaction() => dbContext.Database.BeginTransaction().GetDbTransaction();
 
-    public void CommitTransaction() => dbContext.Database.CurrentTransaction.Commit();
+    public async Task CommitTransactionAsync() => await dbContext.Database.CurrentTransaction.CommitAsync();
 
-    public void RollbackTransaction() => dbContext.Database.CurrentTransaction.Rollback();
+    public async Task RollbackTransactionAsync() => await dbContext.Database.CurrentTransaction.RollbackAsync();
 
-    public void SaveChanges() => dbContext.SaveChanges();
+    public async Task SaveChangesAsync() => await dbContext.SaveChangesAsync();
 }
