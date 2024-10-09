@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Invitation } from '../../core/invitation';
-import { InvitationService } from '../../core/invitation.service';
+import { Invitation } from '../../core/models/invitation';
+import { InvitationService } from '../../core/services/invitation.service';
 import { ActivatedRoute } from '@angular/router';
-import { GuestService } from '../../core/guest.service';
-import { Guest } from '../../core/guest';
-import { EventService } from '../../core/event.service';
-import { Event } from '../../core/event';
+
+import { Guest } from '../../core/models/guest';
+import { Event } from '../../core/models/event';
+
+import { GuestService } from '../../core/services/guest.service';
+import { EventService } from '../../core/services/event.service';
 
 @Component({
   selector: 'app-event-details',

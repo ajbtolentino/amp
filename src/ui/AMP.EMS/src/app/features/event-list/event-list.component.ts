@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { EventService } from '../../core/event.service';
-import { Event } from '../../core/event';
+
+import { Event } from '../../core/models/event';
+
+import { EventService } from '../../core/services/event.service';
 
 @Component({
   selector: 'app-event-list',

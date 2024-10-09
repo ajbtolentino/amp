@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Invitation } from '../../core/invitation';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
-import { Guest } from '../../core/guest';
-import { GuestService } from '../../core/guest.service';
+
+import { Invitation } from '../../core/models/invitation';
+
+import { Guest } from '../../core/models/guest';
+import { GuestService } from '../../core/services/guest.service';
 
 @Component({
   selector: 'app-guest-list',

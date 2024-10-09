@@ -33,14 +33,14 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { EventService } from './core/event.service';
+import { EventService } from './core/services/event.service';
 import { FormsModule } from '@angular/forms';
 import { EventDetailsComponent } from './features/event-details/event-details.component';
 import { EventListComponent } from './features/event-list/event-list.component';
 import { InvitationDetailsComponent } from './features/invitation-details/invitation-details.component';
-import { InvitationService } from './core/invitation.service';
+import { InvitationService } from './core/services/invitation.service';
 import { GuestListComponent } from './features/guest-list/guest-list.component';
-import { GuestService } from './core/guest.service';
+import { GuestService } from './core/services/guest.service';
 
 import { environment } from './../environments/environment';
 
@@ -91,11 +91,11 @@ import { environment } from './../environments/environment';
       unauthorizedRoute: '/unauthorized',
       logLevel: LogLevel.Debug,
       historyCleanupOff: false,
-      authority: environment.authUrl,
+      authority: environment.IDP_AUTHORITY_HTTPS_URL,
       redirectUrl: window.location.origin,
       postLogoutRedirectUri: window.location.origin,
-      clientId: 'spa',
-      scope: 'openid profile',
+      clientId: environment.EMS_SPA_CLIENTID,
+      scope: environment.EMS_SPA_CLIENTSCOPE,
       responseType: 'code',
       silentRenew: true,
       useRefreshToken: true,
