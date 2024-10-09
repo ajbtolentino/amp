@@ -41,10 +41,17 @@
             ],
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "loader": {
+              ".ttf" : "binary",
+              ".eot" : "binary",
+              ".woff2" : "binary",
+              ".woff" : "binary",
+              ".svg" : "binary"
+            }
           },
           "configurations": {
             "production": {
@@ -109,7 +116,7 @@
             ],
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/primeng/resources/primeng.min.css",
               "src/styles.scss"
             ],
             "scripts": []
