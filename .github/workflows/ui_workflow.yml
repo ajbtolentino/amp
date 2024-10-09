@@ -7,6 +7,7 @@ on:
   push:
     paths: 
       - 'src/ui/AMP.EMS/**'
+      - '.github/workflows/ui_workfow.yml'
   workflow_dispatch:
 
 jobs:
@@ -39,7 +40,7 @@ jobs:
         envkey_EMS_SPA_APIURL: ${{ vars.EMS_SPA_APIURL }}
         envkey_EMS_SPA_CLIENTID: ${{ vars.EMS_SPA_CLIENTID }}
         envkey_EMS_SPA_CLIENTSCOPE: ${{ vars.EMS_SPA_CLIENTSCOPE }}
-        directory: environments
+        directory: ./src/ui/AMP.EMS/
         file_name: .env
     - run: npm install
       working-directory: ./src/ui/AMP.EMS
