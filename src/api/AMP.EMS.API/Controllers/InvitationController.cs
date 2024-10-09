@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Responses;
@@ -13,6 +14,16 @@ namespace AMP.EMS.API.Controllers
     public class InvitationController(IUnitOfWork unitOfWork) : ApiBaseController<Invitation, Guid>(unitOfWork)
     {
         public record InvitationData(string Code, Guid EventId, Guid GuestId);
+
+        [HttpGet]
+        [Route("{id}")]
+        [AllowAnonymous]
+        public new async Task<IActionResult> Get(Guid id)
+        {
+            var invitation = await this.entityRepository.Get(id);
+
+            return Ok(new OkResponse<Invitation>(string.Empty) { Data = invitation });
+        }
 
         [HttpGet]
         [Route("{eventId}/details")]
@@ -35,7 +46,8 @@ namespace AMP.EMS.API.Controllers
             {
                 Code = data.Code,
                 EventId = data.EventId,
-                GuestId = data.GuestId
+                GuestId = data.GuestId,
+                CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
             });
         }
 
@@ -49,7 +61,8 @@ namespace AMP.EMS.API.Controllers
                 Code = data.Code,
                 EventId = data.EventId,
                 GuestId = data.GuestId,
-                DateUpdated = DateTime.Now
+                DateUpdated = DateTime.Now,
+                UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
             });
         }
     }

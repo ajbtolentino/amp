@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Responses;
@@ -26,7 +27,8 @@ namespace AMP.EMS.API.Controllers
             {
                 FirstName = data.FirstName,
                 LastName = data.LastName,
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.Now,
+                CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
             });
         }
 
@@ -39,7 +41,8 @@ namespace AMP.EMS.API.Controllers
                 Id = id,
                 FirstName = data.FirstName,
                 LastName = data.LastName,
-                DateUpdated = DateTime.Now
+                DateUpdated = DateTime.Now,
+                UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
             });
         }
     }

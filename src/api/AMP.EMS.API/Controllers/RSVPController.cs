@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Constants;
 using AMP.EMS.API.Core.Entities;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]"), Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class RSVPController(IUnitOfWork unitOfWork) : ApiBaseController<RSVP, Guid>(unitOfWork)
     {
@@ -25,7 +26,8 @@ namespace AMP.EMS.API.Controllers
             return await base.Post(new RSVP
             {
                 InvitationId = invitation.Id,
-                Response = data.Response
+                Response = data.Response,
+                CreatedBy = invitation.GuestId.ToString()
             });
         }
     }
