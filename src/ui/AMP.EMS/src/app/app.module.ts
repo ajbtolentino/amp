@@ -43,6 +43,7 @@ import { GuestListComponent } from './features/guest-list/guest-list.component';
 import { GuestService } from './core/services/guest.service';
 
 import { environment } from './../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { environment } from './../environments/environment';
     BrowserAnimationsModule,
     BrowserModule,
     CalendarModule,
+    CommonModule,
     ContextMenuModule,
     ConfirmDialogModule,
     DialogModule,

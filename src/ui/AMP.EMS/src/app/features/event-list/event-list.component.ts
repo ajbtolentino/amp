@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { Event } from '../../core/models/event';
 
 import { EventService } from '../../core/services/event.service';
+import { Column } from '../../core/models/column';
 
 @Component({
   selector: 'app-event-list',
@@ -20,68 +21,91 @@ export class EventListComponent implements OnInit {
 
   selectedItems: Event[] | null = [];
 
-  submitted: boolean = false;
+  columns!: Column[]
+
+  loading: boolean = true;
+
+  isNew: boolean = false;
 
   constructor(private eventService: EventService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     this.refreshGrid();
+
+    this.columns = [
+      { field: 'id', header: 'Id', customExportHeader: 'Id' },
+      { field: 'name', header: 'Name' },
+    ];
   }
 
   refreshGrid = async () => {
+    this.loading = true;
+
     const res = await this.eventService.getAll();
 
     if (res?.data) this.items = res.data;
+
+    this.loading = false;
   }
 
-  openNew = () => {
+  addRow = async () => {
+    await this.refreshGrid();
+
     this.event = {};
-    this.submitted = false;
-    this.dialog = true;
+    this.items.unshift(this.event);
+    this.isNew = true;
   }
 
-  deleteSelectedItems = () => {
+  editRow = () => {
+    this.isNew = false;
+  }
+
+  deleteSelectedItems = async () => {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected events?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.items = this.items.filter(val => !this.selectedItems?.includes(val));
+      accept: async () => {
+        this.loading = true;
+
+        await this.eventService.deleteSelected([]);
+        await this.refreshGrid();
+
         this.selectedItems = null;
+
+        this.loading = false;
+
         this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
     });
   }
 
-  edit = (item: Event) => {
-    this.event = { ...item };
-    this.dialog = true;
-  }
-
-  delete = async (item: Event) => {
+  delete = async (itemToDelete: Event) => {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + item.name + '?',
+      message: 'Are you sure you want to delete ' + itemToDelete.name + '?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        if (item.id) {
-          await this.eventService.delete(item.id);
+        if (itemToDelete.id) {
+          this.loading = true;
+
+          await this.eventService.delete(itemToDelete.id);
           await this.refreshGrid();
+
+          this.loading = false;
+
           this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });
   }
 
-  hideDialog() {
-    this.dialog = false;
-    this.submitted = false;
-  }
-
-  save = async () => {
-    this.submitted = true;
+  save = async (item: Event | undefined) => {
+    if (item) this.event = item;
 
     if (this.event?.name?.trim()) {
+      this.loading = true;
+
       if (this.event.id) {
         await this.eventService.update(this.event);
         await this.refreshGrid();
@@ -93,9 +117,12 @@ export class EventListComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Event Created', life: 3000 });
       }
 
-      this.items = [...this.items];
-      this.dialog = false;
+      this.loading = false;
+
       this.event = {};
     }
+
+    await this.refreshGrid();
+    this.isNew = false;
   }
 }

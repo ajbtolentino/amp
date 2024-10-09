@@ -29,9 +29,11 @@ export class EventDetailsComponent implements OnInit {
 
   item: Invitation = {};
 
+  isNew: boolean = false;
+
   selectedItems: Invitation[] | null = [];
 
-  submitted: boolean = false;
+  loading: boolean = true;
 
   constructor(private eventService: EventService,
     private invitationService: InvitationService,
@@ -46,6 +48,8 @@ export class EventDetailsComponent implements OnInit {
   }
 
   refreshGrid = async () => {
+    this.loading = true;
+
     if (this.eventId) {
       const eventResponse = await this.eventService.get(this.eventId);
       if (eventResponse?.data) this.event = eventResponse.data;
@@ -53,17 +57,25 @@ export class EventDetailsComponent implements OnInit {
       const res = await this.invitationService.getAll(this.eventId);
       if (res?.data) this.items = res.data;
     }
+
+    this.loading = false;
   }
 
-  openNew = async () => {
+  addRow = async () => {
+    await this.refreshGrid();
     await this.loadGuests();
+
     this.item = {};
-    this.generateCode(5);
-    this.submitted = false;
-    this.dialog = true;
+    this.items.unshift(this.item);
+    this.isNew = true;
   }
 
-  deleteSelectedEvents = () => {
+  editRow = async () => {
+    this.isNew = false;
+    await this.loadGuests();
+  }
+
+  deleteSelectedItems = () => {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected events?',
       header: 'Confirm',
@@ -77,8 +89,12 @@ export class EventDetailsComponent implements OnInit {
   }
 
   loadGuests = async () => {
+    this.loading = true;
+
     const res = await this.guestService.getAll();
     if (res?.data) this.guestCollection = res.data;
+
+    this.loading = false;
   }
 
   edit = async (invitation: Invitation) => {
@@ -102,15 +118,12 @@ export class EventDetailsComponent implements OnInit {
     });
   }
 
-  hideDialog() {
-    this.dialog = false;
-    this.submitted = false;
-  }
-
-  saveEvent = async () => {
-    this.submitted = true;
+  save = async (item: Invitation) => {
+    this.item = item;
 
     if (this.item?.code?.trim() && this.item.guestId?.trim()) {
+      this.loading = true;
+
       this.item.eventId = this.eventId;
 
       if (this.item.id) {
@@ -124,11 +137,12 @@ export class EventDetailsComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
       }
 
-      await this.refreshGrid();
-
-      this.dialog = false;
       this.item = {};
+      this.loading = false;
     }
+
+    await this.refreshGrid();
+    this.isNew = false;
   }
 
   generateCode = (length: number) => {

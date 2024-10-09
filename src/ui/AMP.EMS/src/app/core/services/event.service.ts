@@ -27,4 +27,8 @@ export class EventService extends BaseService {
     delete = async (id: string) => {
         return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
     }
+
+    deleteSelected = async (ids: string[]) => {
+        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/event`, { headers: this.headers, body: ids }));
+    }
 }

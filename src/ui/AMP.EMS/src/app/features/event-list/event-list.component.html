@@ -1,29 +1,21 @@
-<p-toast></p-toast>
+<p-toast />
 
-<p-toolbar>
-    <ng-template pTemplate="left">
-        <button pButton pRipple label="New" icon="pi pi-plus" (click)="openNew()"></button>
-        <button pButton pRipple label="Delete" icon="pi pi-trash" (click)="deleteSelectedItems()"
-            [disabled]="!selectedItems || !selectedItems.length"></button>
-    </ng-template>
-
-    <ng-template pTemplate="right">
-        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
-            chooseLabel="Import"></p-fileUpload>
-        <button pButton pRipple label="Export" icon="pi pi-upload"></button>
-    </ng-template>
-</p-toolbar>
-
-<p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['name','description']"
-    [(selection)]="selectedItems" [rowHover]="true" dataKey="id"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+<p-table #dt [value]="items" [columns]="columns" [rows]="10" [paginator]="true" [loading]="loading"
+    [pEditableRow]="event" [globalFilterFields]="['name','description']" editMode="row" [(selection)]="selectedItems"
+    [rowHover]="true" dataKey="id">
     <ng-template pTemplate="caption">
-        <div>
-            <h5>Manage Events</h5>
-            <span>
+        <h5>Manage Events</h5>
+        <div class="flex align-items-center justify-content-between">
+            <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
                 <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
                     placeholder="Search..." />
             </span>
+            <p-button *ngIf="!isNew" label="New" icon="pi pi-plus" pInitEditableRow (onClick)="addRow()" />
+            <p-button *ngIf="isNew" label="Save" icon="pi pi-save" pInitEditableRow (onClick)="save(event)" />
+            <p-button label="Delete" icon="pi pi-trash" (click)="deleteSelectedItems()"
+                [disabled]="!selectedItems || !selectedItems.length" />
+            <p-button icon="pi pi-external-link" label="Export" (click)="dt.exportCSV()" />
         </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -38,45 +30,51 @@
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-item>
-        <tr>
+    <ng-template pTemplate="body" let-item let-editing="editing">
+        <tr [pEditableRow]="item">
             <td>
                 <p-tableCheckbox [value]="item"></p-tableCheckbox>
             </td>
-            <td>{{item.name}}</td>
-            <td>{{item.description}}</td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="item.name" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.name}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="item.description" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.description}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
             <td>{{item.dateCreated}}</td>
             <td>{{item.dateUpdated}}</td>
             <td>
-                <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-pencil" (click)="edit(item)"
-                    pTooltip="Edit"></button>
-                <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-trash" (click)="delete(item)"
-                    pTooltip="Delete"></button>
-                <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-envelope"
+                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                    (click)="editRow()" class="p-button-rounded p-button-text">
+                </button>
+                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-envelope"
                     routerLink="/events/{{item.id}}" pTooltip="Manage Invitations"></button>
+                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-trash"
+                    (click)="delete(item)" pTooltip="Delete"></button>
+
+                <button *ngIf="editing && !isNew" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                    (click)="save(item)" class="p-button-rounded p-button-text p-button-success mr-2">
+                </button>
+                <button *ngIf="editing && !isNew" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                    (click)="refreshGrid()" class="p-button-rounded p-button-text p-button-danger">
+                </button>
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="dialog" header="Event Details" [modal]="true">
-    <ng-template pTemplate="content">
-        <div>
-            <label for="name">Name</label>
-            <input type="text" pInputText id="name" [(ngModel)]="event.name" required autofocus />
-            <small *ngIf="submitted && !event.name">Name is required.</small>
-        </div>
-        <div>
-            <label for="description">Description</label>
-            <textarea id="description" pInputTextarea [(ngModel)]="event.description" required rows="3"
-                cols="20"></textarea>
-        </div>
-    </ng-template>
-
-    <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" (click)="save()"></button>
-    </ng-template>
-</p-dialog>
-
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog />
