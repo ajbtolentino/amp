@@ -39,7 +39,7 @@ jobs:
         envkey_EMS_SPA_APIURL: ${{ vars.EMS_SPA_APIURL }}
         envkey_EMS_SPA_CLIENTID: ${{ vars.EMS_SPA_CLIENTID }}
         envkey_EMS_SPA_CLIENTSCOPE: ${{ vars.EMS_SPA_CLIENTSCOPE }}
-        directory: ./src/ui/AMP.EMS/environments
+        directory: environments
         file_name: .env
     - run: npm install
       working-directory: ./src/ui/AMP.EMS
