@@ -1,7 +1,8 @@
 export const environment = {
-  IDP_AUTHORITY_HTTPS_URL: process.env["IDP_AUTHORITY_HTTPS_URL"],
-  EMS_SPA_APIURL: process.env["EMS_SPA_APIURL"],
-  EMS_SPA_CLIENTID: process.env["EMS_SPA_CLIENTID"],
-  EMS_SPA_CLIENTSCOPE: process.env["EMS_SPA_CLIENTSCOPE"],
-  production: true
-};
+    IDP_AUTHORITY_HTTPS_URL: 'http://localhost:6001',
+    EMS_SPA_APIURL: 'https://localhost:5443',
+    EMS_SPA_CLIENTID: 'spa',
+    EMS_SPA_CLIENTSCOPE: 'openid profile',
+    production: true,
+  };
+  
