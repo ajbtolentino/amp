@@ -41,6 +41,7 @@ jobs:
   Deploy-EMS:
     name: Deploy EMS
     runs-on: ubuntu-latest
+    needs: build
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
