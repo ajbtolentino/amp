@@ -55,15 +55,17 @@ namespace AMP.EMS.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] InvitationData data)
         {
-            return await base.Put(new Invitation
-            {
-                Id = id,
-                Code = data.Code,
-                EventId = data.EventId,
-                GuestId = data.GuestId,
-                DateUpdated = DateTime.Now,
-                UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
-            });
+            var entity = await this.entityRepository.Get(id);
+
+            if (entity == null) return BadRequest();
+
+            entity.Code = data.Code;
+            entity.EventId = data.EventId;
+            entity.GuestId = data.GuestId;
+            entity.DateUpdated = DateTime.Now;
+            entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
+            return await base.Put(entity);
         }
     }
 }

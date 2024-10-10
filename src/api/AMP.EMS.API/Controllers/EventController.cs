@@ -35,14 +35,16 @@ namespace AMP.EMS.API.Controllers
         [Route("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] EventData data)
         {
-            return await base.Put(new Event
-            {
-                Id = id,
-                Name = data.Name,
-                Description = data.Description,
-                DateUpdated = DateTime.Now,
-                UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
-            });
+            var entity = await this.entityRepository.Get(id);
+
+            if (entity == null) return BadRequest();
+
+            entity.Name = data.Name;
+            entity.Description = data.Description;
+            entity.DateUpdated = DateTime.Now;
+            entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
+            return await base.Put(entity);
         }
     }
 }
