@@ -1,0 +1,12 @@
+<div class="card">
+    <p-menubar [model]="menuItems">
+        <ng-template pTemplate="end">
+            <div class="card flex justify-content-center">
+                <p-button icon="pi pi-sign-in" label="Login" severity="info" *ngIf="!authenticated().isAuthenticated"
+                    (onClick)="login()" />
+                <p-button icon="pi pi-sign-out" label="Logout" severity="info" *ngIf="authenticated().isAuthenticated"
+                    (onClick)="logout()" />
+            </div>
+        </ng-template>
+    </p-menubar>
+</div>

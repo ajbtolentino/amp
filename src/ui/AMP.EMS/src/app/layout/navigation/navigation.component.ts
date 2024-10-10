@@ -36,9 +36,8 @@ export class NavigationComponent implements OnInit {
   refreshMenu = () => {
     this.menuItems = [
       {
-        label: 'Home',
         icon: 'pi pi-home',
-        routerLink: '/home'
+        routerLink: '/'
       },
       {
         label: 'Events',

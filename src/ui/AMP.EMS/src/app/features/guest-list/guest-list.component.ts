@@ -16,15 +16,15 @@ import { GuestService } from '../../core/services/guest.service';
 export class GuestListComponent implements OnInit {
   eventId: string | undefined;
 
-  dialog: boolean = false;
-
   items: Guest[] = [];
 
   item: Guest = {};
 
   selectedItems: Guest[] | null = [];
 
-  submitted: boolean = false;
+  isCreating: boolean = false;
+
+  loading: boolean = true;
 
   constructor(private service: GuestService,
     private messageService: MessageService,
@@ -36,14 +36,29 @@ export class GuestListComponent implements OnInit {
   }
 
   refreshGrid = async () => {
+    this.loading = true;
+
     const res = await this.service.getAll();
     if (res?.data) this.items = res.data;
+
+    this.loading = false;
   }
 
-  openNew = () => {
+  addRow = async () => {
+    await this.refreshGrid();
+
     this.item = {};
-    this.submitted = false;
-    this.dialog = true;
+    this.items.unshift(this.item);
+    this.isCreating = true;
+  }
+
+  editRow = () => {
+    this.isCreating = false;
+  }
+
+  cancelAdd = async () => {
+    await this.refreshGrid();
+    this.isCreating = false;
   }
 
   deleteSelectedItems = () => {
@@ -52,26 +67,34 @@ export class GuestListComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
+        this.loading = true;
+
         this.items = this.items.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
+
+        this.loading = false;
+
+        this.refreshGrid();
       }
     });
   }
 
-  edit = (invitation: Invitation) => {
-    this.item = { ...invitation };
-    this.dialog = true;
+  edit = (item: Guest) => {
+    this.item = { ...item };
   }
 
-  delete = async (invitation: Invitation) => {
+  delete = async (guest: Guest) => {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + invitation.code + '?',
+      message: 'Are you sure?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        if (invitation.id) {
-          await this.service.delete(invitation.id);
+        if (guest.id) {
+          this.loading = true;
+          await this.service.delete(guest.id);
+          this.loading = true;
+
           await this.refreshGrid();
           this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
@@ -79,18 +102,13 @@ export class GuestListComponent implements OnInit {
     });
   }
 
-  hideDialog() {
-    this.dialog = false;
-    this.submitted = false;
-  }
-
-  save = async () => {
-    this.submitted = true;
+  save = async (item: Guest) => {
+    this.item = item;
+    this.loading = true;
 
     if (this.item?.firstName?.trim() && this.item?.lastName?.trim()) {
       if (this.item.id) {
         await this.service.update(this.item);
-        await this.refreshGrid();
         this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
       else {
@@ -99,9 +117,10 @@ export class GuestListComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
 
-      this.items = [...this.items];
-      this.dialog = false;
       this.item = {};
     }
+
+    this.loading = true;
+    await this.refreshGrid();
   }
 }

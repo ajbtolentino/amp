@@ -4,10 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthConfigModule } from './core/auth-config.module';
-import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
-import { HomeComponent } from './features/home/home.component';
-import { ForbiddenComponent } from './shared/forbidden/forbidden.component';
-import { NavigationComponent } from './shared/navigation/navigation.component';
+import { UnauthorizedComponent } from './core/components/unauthorized/unauthorized.component';
+import { HomeComponent } from './core/components/home/home.component';
+import { ForbiddenComponent } from './core/components/forbidden/forbidden.component';
+import { NavigationComponent } from './layout/navigation/navigation.component';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { authInterceptor, autoLoginPartialRoutesGuard, LogLevel, provideAuth } from 'angular-auth-oidc-client';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -19,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule } from 'primeng/calendar';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -44,6 +45,7 @@ import { GuestService } from './core/services/guest.service';
 
 import { environment } from './../environments/environment';
 import { CommonModule } from '@angular/common';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,7 @@ import { CommonModule } from '@angular/common';
     EventListComponent,
     InvitationDetailsComponent,
     GuestListComponent,
+    MainLayoutComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -71,6 +74,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     ContextMenuModule,
     ConfirmDialogModule,
+    DataViewModule,
     DialogModule,
     DropdownModule,
     FormsModule,
@@ -107,32 +111,33 @@ import { CommonModule } from '@angular/common';
     [
       {
         path: '',
-        pathMatch: 'full',
-        redirectTo: 'home'
+        title: 'EMS',
+        component: MainLayoutComponent,
+        children: [
+          {
+            path: 'events',
+            title: 'EMS - Manage Events',
+            component: EventListComponent,
+            canActivate: [autoLoginPartialRoutesGuard],
+            children: [
+              {
+                path: ':id',
+                component: EventDetailsComponent,
+                canActivate: [autoLoginPartialRoutesGuard],
+              },
+            ]
+          },
+          {
+            path: 'guests',
+            title: 'EMS - Manage Guests',
+            component: GuestListComponent,
+            canActivate: [autoLoginPartialRoutesGuard],
+          },
+        ]
       },
       {
-        path: 'home',
-        component: HomeComponent
-      },
-      {
-        path: 'events',
-        component: EventListComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'events/:id',
-        component: EventDetailsComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'guests',
-        component: GuestListComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'invitations/:id',
+        path: 'invitation/:code',
         component: InvitationDetailsComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
       },
       {
         path: 'forbidden',

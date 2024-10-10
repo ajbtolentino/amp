@@ -43,8 +43,14 @@ export class EventDetailsComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.eventId = this.route.snapshot.paramMap.get('id')?.toString();
-    this.refreshGrid();
+    this.route.paramMap.subscribe(data => {
+      const eventId = data.get("id");
+
+      if (eventId) {
+        this.eventId = eventId;
+        this.refreshGrid();
+      }
+    });
   }
 
   refreshGrid = async () => {

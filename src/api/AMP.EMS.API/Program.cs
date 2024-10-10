@@ -90,7 +90,8 @@ app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<EMSDbContext>();
-    dataContext.Database.Migrate();
+    if (dataContext.Database.GetPendingMigrations().Any())
+        dataContext.Database.Migrate();
 }
 
 //Add Middleware

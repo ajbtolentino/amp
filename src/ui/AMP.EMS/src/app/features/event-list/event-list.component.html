@@ -1,22 +1,19 @@
-<p-toast />
-
 <p-table #dt [value]="items" [columns]="columns" [rows]="10" [paginator]="true" [loading]="loading"
     [pEditableRow]="event" [globalFilterFields]="['name','description']" editMode="row" [(selection)]="selectedItems"
-    [rowHover]="true" dataKey="id">
+    [rowHover]="true" dataKey="id" responsiveLayout="stack" [breakpoint]="'1000px'"
+    [tableStyle]="{'min-width': '50rem'}" [responsive]="true">
     <ng-template pTemplate="caption">
-        <h5>Manage Events</h5>
-        <div class="flex align-items-center justify-content-between">
-            <span class="p-input-icon-left ml-auto">
-                <i class="pi pi-search"></i>
-                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                    placeholder="Search..." />
-            </span>
-            <p-button *ngIf="!isNew" label="New" icon="pi pi-plus" pInitEditableRow (onClick)="addRow()" />
-            <p-button *ngIf="isNew" label="Save" icon="pi pi-save" pInitEditableRow (onClick)="save(event)" />
-            <p-button label="Delete" icon="pi pi-trash" (click)="deleteSelectedItems()"
-                [disabled]="!selectedItems || !selectedItems.length" />
-            <p-button icon="pi pi-external-link" label="Export" (click)="dt.exportCSV()" />
-        </div>
+        <p-button *ngIf="!isCreating" label="New" icon="pi pi-plus" pInitEditableRow (onClick)="addRow()" />
+        <p-button *ngIf="isCreating" label="Save" icon="pi pi-save" pInitEditableRow (onClick)="save(event)" />
+        <p-button *ngIf="isCreating" label="Cancel" icon="pi pi-times" pInitEditableRow (onClick)="cancelAdd()" />
+        <p-button label="Delete" icon="pi pi-trash" (click)="deleteSelectedItems()"
+            [disabled]="!selectedItems || !selectedItems.length" />
+        <p-button icon="pi pi-external-link" label="Export" (click)="dt.exportCSV()" />
+        <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Search..." />
+        </span>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
@@ -25,8 +22,6 @@
             </th>
             <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
             <th pSortableColumn="name">Description <p-sortIcon field="description"></p-sortIcon></th>
-            <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
-            <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>
             <th></th>
         </tr>
     </ng-template>
@@ -55,8 +50,6 @@
                     </ng-template>
                 </p-cellEditor>
             </td>
-            <td>{{item.dateCreated}}</td>
-            <td>{{item.dateUpdated}}</td>
             <td>
                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
                     (click)="editRow()" class="p-button-rounded p-button-text">
@@ -66,15 +59,15 @@
                 <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-trash"
                     (click)="delete(item)" pTooltip="Delete"></button>
 
-                <button *ngIf="editing && !isNew" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                <button *ngIf="editing && !isCreating" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
                     (click)="save(item)" class="p-button-rounded p-button-text p-button-success mr-2">
                 </button>
-                <button *ngIf="editing && !isNew" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                    (click)="refreshGrid()" class="p-button-rounded p-button-text p-button-danger">
+                <button *ngIf="editing && !isCreating" pButton pRipple type="button" pCancelEditableRow
+                    icon="pi pi-times" (click)="refreshGrid()" class="p-button-rounded p-button-text p-button-danger">
                 </button>
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-confirmDialog />
+<router-outlet></router-outlet>

@@ -25,7 +25,7 @@ export class EventListComponent implements OnInit {
 
   loading: boolean = true;
 
-  isNew: boolean = false;
+  isCreating: boolean = false;
 
   constructor(private eventService: EventService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
@@ -53,11 +53,16 @@ export class EventListComponent implements OnInit {
 
     this.event = {};
     this.items.unshift(this.event);
-    this.isNew = true;
+    this.isCreating = true;
   }
 
   editRow = () => {
-    this.isNew = false;
+    this.isCreating = false;
+  }
+
+  cancelAdd = async () => {
+    await this.refreshGrid();
+    this.isCreating = false;
   }
 
   deleteSelectedItems = async () => {
@@ -123,6 +128,6 @@ export class EventListComponent implements OnInit {
     }
 
     await this.refreshGrid();
-    this.isNew = false;
+    this.isCreating = false;
   }
 }
