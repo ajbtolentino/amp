@@ -64,6 +64,7 @@ namespace AMP.EMS.API.Controllers
         }
 
         [HttpPut]
+        [Route("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] InvitationData data)
         {
             var entity = await this.entityRepository.Get(id);

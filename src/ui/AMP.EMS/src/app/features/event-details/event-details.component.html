@@ -1,8 +1,8 @@
 <h5>Invitations</h5>
 
-<p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['name','code']" [pEditableRow]="item"
-    [loading]="loading" [(selection)]="selectedItems" [rowHover]="true" dataKey="id" editMode="row"
-    responsiveLayout="stack" [breakpoint]="'960px'">
+<p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName', 'lastName','code']"
+    [pEditableRow]="item" [loading]="loading" [(selection)]="selectedItems" [rowHover]="true" dataKey="id"
+    editMode="row" responsiveLayout="stack" [breakpoint]="'960px'">
     <ng-template pTemplate="caption">
         <p-button *ngIf="!isNew" label="New" icon="pi pi-plus" pInitEditableRow (onClick)="addRow()" />
         <p-button *ngIf="isNew" label="Save" icon="pi pi-save" pInitEditableRow (onClick)="save(item)" />
@@ -20,7 +20,7 @@
             <th>
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="name">Guest<p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="[guest.firstName, guest.lastName]">Guest<p-sortIcon field="name"></p-sortIcon></th>
             <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
             <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
             <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>

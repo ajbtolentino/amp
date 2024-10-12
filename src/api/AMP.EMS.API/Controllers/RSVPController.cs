@@ -6,6 +6,8 @@ using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -13,7 +15,7 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class RSVPController(IUnitOfWork unitOfWork) : ApiBaseController<RSVP, Guid>(unitOfWork)
     {
-        public record RSVPData(Guid InvitationId, RSVPResponse Response, string? PhoneNumber);
+        public record RSVPData(Guid InvitationId, [JsonConverter(typeof(StringEnumConverter))] RSVPResponse Response, string? PhoneNumber);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RSVPData data)

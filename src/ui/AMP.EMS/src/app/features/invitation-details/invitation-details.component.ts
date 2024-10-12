@@ -49,6 +49,7 @@ export class InvitationDetailsComponent implements OnInit {
     if (response) {
       this.invitation = response.data;
       this.rsvp.invitationId = this.invitation?.id;
+      this.rsvp.phoneNumber = "123";
     }
   }
 }

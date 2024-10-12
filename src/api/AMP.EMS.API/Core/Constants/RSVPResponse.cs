@@ -1,7 +1,11 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace AMP.EMS.API.Core.Constants;
 
+[JsonConverter(typeof(StringEnumConverter))]
 public enum RSVPResponse
 {
-    ACCEPT = 1,
-    DECLINE = 2
+    DECLINE,
+    ACCEPT
 }
