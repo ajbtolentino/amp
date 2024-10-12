@@ -26,6 +26,7 @@ jobs:
         with:
           files: './src/api/AMP.EMS.API/appsettings*.json'
         env:
+          ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
           Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
           Serilog.WriteTo.0.Args.serverUrl: ${{vars.SEQ_URL}}
 

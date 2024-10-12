@@ -6,11 +6,28 @@ import { Event } from '../../core/models/event';
 
 import { EventService } from '../../core/services/event.service';
 import { Column } from '../../core/models/column';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { EditableRow, TableModule } from 'primeng/table';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
-  styleUrl: './event-list.component.scss'
+  styleUrl: './event-list.component.scss',
+  imports: [
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    DropdownModule,
+    RouterModule,
+    InputTextModule,
+    CommonModule
+  ]
 })
 export class EventListComponent implements OnInit {
   dialog: boolean = false;

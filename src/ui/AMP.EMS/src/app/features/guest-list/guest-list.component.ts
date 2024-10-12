@@ -7,11 +7,26 @@ import { Invitation } from '../../core/models/invitation';
 
 import { Guest } from '../../core/models/guest';
 import { GuestService } from '../../core/services/guest.service';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-guest-list',
   templateUrl: './guest-list.component.html',
-  styleUrl: './guest-list.component.scss'
+  styleUrl: './guest-list.component.scss',
+  imports: [
+    TableModule,
+    ButtonModule,
+    DropdownModule,
+    FormsModule,
+    InputTextModule,
+    CommonModule
+  ]
 })
 export class GuestListComponent implements OnInit {
   eventId: string | undefined;

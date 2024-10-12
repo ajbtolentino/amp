@@ -1,13 +1,21 @@
-import { Component, inject, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
-import { EventTypes, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
+import { Component, inject, OnInit } from '@angular/core';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MenuItem } from 'primeng/api';
-import { MenuModule } from 'primeng/menu';
 import "primeicons/primeicons.css";
+import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.scss'
+  styleUrl: './navigation.component.scss',
+  imports: [
+    MenubarModule,
+    ButtonModule,
+    CommonModule
+  ]
 })
 
 export class NavigationComponent implements OnInit {

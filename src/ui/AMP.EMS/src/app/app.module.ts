@@ -49,16 +49,6 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 
 @NgModule({
   declarations: [
-    AppComponent,
-    UnauthorizedComponent,
-    HomeComponent,
-    ForbiddenComponent,
-    NavigationComponent,
-    EventDetailsComponent,
-    EventListComponent,
-    InvitationDetailsComponent,
-    GuestListComponent,
-    MainLayoutComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
@@ -156,6 +146,6 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
     GuestService,
     MessageService,
     ConfirmationService,],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
 export class AppModule { }

@@ -10,11 +10,26 @@ import { Event } from '../../core/models/event';
 
 import { GuestService } from '../../core/services/guest.service';
 import { EventService } from '../../core/services/event.service';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
+  standalone: true,
   selector: 'app-event-details',
   templateUrl: './event-details.component.html',
-  styleUrl: './event-details.component.scss'
+  styleUrl: './event-details.component.scss',
+  imports: [
+    TableModule,
+    ButtonModule,
+    DropdownModule,
+    FormsModule,
+    InputTextModule,
+    CommonModule
+  ]
 })
 export class EventDetailsComponent implements OnInit {
   guestCollection: Guest[] | undefined;

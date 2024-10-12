@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
+  standalone: true,
   selector: 'app-forbidden',
   templateUrl: './forbidden.component.html',
   styleUrl: './forbidden.component.scss'
