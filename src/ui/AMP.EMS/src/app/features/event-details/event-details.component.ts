@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   standalone: true,
@@ -31,7 +32,8 @@ import { TooltipModule } from 'primeng/tooltip';
     InputTextModule,
     CommonModule,
     RouterModule,
-    TooltipModule
+    TooltipModule,
+    CheckboxModule
   ]
 })
 export class EventDetailsComponent implements OnInit {
@@ -41,8 +43,6 @@ export class EventDetailsComponent implements OnInit {
 
   event: Event | undefined;
 
-  dialog: boolean = false;
-
   items: Invitation[] = [];
 
   item: Invitation = {};
@@ -50,6 +50,8 @@ export class EventDetailsComponent implements OnInit {
   isNew: boolean = false;
 
   selectedItems: Invitation[] | null = [];
+
+  maxGuestsCollection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   loading: boolean = true;
 
@@ -124,7 +126,6 @@ export class EventDetailsComponent implements OnInit {
   edit = async (invitation: Invitation) => {
     await this.loadGuests();
     this.item = { ...invitation };
-    this.dialog = true;
   }
 
   delete = async (invitation: Invitation) => {

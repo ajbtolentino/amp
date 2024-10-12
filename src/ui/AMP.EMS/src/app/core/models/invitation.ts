@@ -6,6 +6,8 @@ export interface Invitation {
     guestId?: string;
     guest?: Guest;
     code?: string;
+    maxGuests?: number;
+    limitedView?: boolean;
     dateCreated?: Date;
     dateUpdated?: Date;
 }

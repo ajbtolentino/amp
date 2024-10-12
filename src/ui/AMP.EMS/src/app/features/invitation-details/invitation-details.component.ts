@@ -24,6 +24,8 @@ export class InvitationDetailsComponent implements OnInit {
 
   response: string | undefined;
 
+  showDetails: boolean = false;
+
   constructor(private invitationService: InvitationService,
     private rsvpService: RsvpService, private route: ActivatedRoute) {
     this.route.paramMap.subscribe(data => {
@@ -49,7 +51,7 @@ export class InvitationDetailsComponent implements OnInit {
     if (response) {
       this.invitation = response.data;
       this.rsvp.invitationId = this.invitation?.id;
-      this.rsvp.phoneNumber = "123";
+      this.showDetails = !this.invitation?.limitedView;
     }
   }
 }

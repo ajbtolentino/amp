@@ -7,6 +7,8 @@ public class Invitation : BaseEntity<Guid>
     public required Guid GuestId { get; set; }
     public required Guid EventId { get; set; }
     public required string Code { get; set; }
+    public required int MaxGuests { get; set; }
+    public required bool LimitedView { get; set; }
 
     public Event? Event { get; set; }
     public Guest? Guest { get; set; }

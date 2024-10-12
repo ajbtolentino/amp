@@ -1,14 +1,22 @@
 <div class="card flex justify-content-center align-items-center">
     <p-card class="vertical-align-middle" [style]="{ 'width': '300px', 'border-radius': '0px' }">
         <ng-template pTemplate="title">
-            Event Name
-        </ng-template>
-        <ng-template pTemplate="subtitle">
-            We have reserved 2 seats for you. Please enter your names and by dd-mm-yyyy
-            View RSVP
+            Invitation
         </ng-template>
         <ng-template pTemplate="content">
-            Wedding
+            Front Page
+        </ng-template>
+    </p-card>
+</div>
+
+<div class="card flex justify-content-center align-items-center" *ngIf="showDetails">
+    <p-card class="vertical-align-middle" [style]="{ 'width': '300px', 'border-radius': '0px' }">
+        <ng-template pTemplate="title">
+            Invitation Details
+        </ng-template>
+
+        <ng-template pTemplate="content">
+            Entourage
         </ng-template>
     </p-card>
 </div>
@@ -19,7 +27,8 @@
             Hello, {{invitation?.guest?.firstName}} {{invitation?.guest?.lastName}}
         </ng-template>
         <ng-template pTemplate="subtitle">
-            We have reserved 2 seats for you. Please enter your names and by dd-mm-yyyy
+            We have reserved <u><b>{{invitation?.maxGuests}}</b></u> seats for you. Please enter your names and by
+            dd-mm-yyyy
         </ng-template>
         <ng-template pTemplate="content">
             <div class="card flex justify-content-center">

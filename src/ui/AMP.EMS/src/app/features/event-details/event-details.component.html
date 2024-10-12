@@ -20,8 +20,10 @@
             <th>
                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th pSortableColumn="[guest.firstName, guest.lastName]">Guest<p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="firstName">Guest<p-sortIcon field="firstName"></p-sortIcon></th>
             <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
+            <th pSortableColumn="maxGuests">Max Guests<p-sortIcon field="maxGuests"></p-sortIcon></th>
+            <th pSortableColumn="limitedView">Limited View<p-sortIcon field="limitedView"></p-sortIcon></th>
             <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
             <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>
             <th></th>
@@ -60,6 +62,34 @@
                     </ng-template>
                     <ng-template pTemplate="output">
                         {{item.code}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-dropdown #maxGuestsSelection [options]="maxGuestsCollection" [(ngModel)]="item.maxGuests"
+                            appendTo="body">
+                            <ng-template let-maxGuestsSelection pTemplate="selectedItem">
+                                {{maxGuestsSelection}}
+                            </ng-template>
+                            <ng-template let-maxGuestsSelection pTemplate="item">
+                                {{maxGuestsSelection}}
+                            </ng-template>
+                        </p-dropdown>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.maxGuests}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-checkbox [(ngModel)]="item.limitedView" [binary]="true" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        <p-checkbox [(ngModel)]="item.limitedView" [binary]="true" [readonly]="true" />
                     </ng-template>
                 </p-cellEditor>
             </td>

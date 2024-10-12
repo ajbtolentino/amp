@@ -13,7 +13,7 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class InvitationController(IUnitOfWork unitOfWork) : ApiBaseController<Invitation, Guid>(unitOfWork)
     {
-        public record InvitationData(string Code, Guid EventId, Guid GuestId);
+        public record InvitationData(string Code, Guid EventId, Guid GuestId, int MaxGuests, bool LimitedView);
 
         // [HttpGet]
         // [Route("{id}")]
@@ -59,6 +59,8 @@ namespace AMP.EMS.API.Controllers
                 Code = data.Code,
                 EventId = data.EventId,
                 GuestId = data.GuestId,
+                MaxGuests = data.MaxGuests,
+                LimitedView = data.LimitedView,
                 CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
             });
         }
@@ -74,7 +76,9 @@ namespace AMP.EMS.API.Controllers
             entity.Code = data.Code;
             entity.EventId = data.EventId;
             entity.GuestId = data.GuestId;
+            entity.MaxGuests = data.MaxGuests;
             entity.DateUpdated = DateTime.Now;
+            entity.LimitedView = data.LimitedView;
             entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
             return await base.Put(entity);
