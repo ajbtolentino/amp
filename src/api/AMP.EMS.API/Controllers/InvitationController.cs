@@ -15,19 +15,31 @@ namespace AMP.EMS.API.Controllers
     {
         public record InvitationData(string Code, Guid EventId, Guid GuestId);
 
+        // [HttpGet]
+        // [Route("{id}")]
+        // [AllowAnonymous]
+        // public new async Task<IActionResult> Get(Guid id)
+        // {
+        //     var invitation = await this.entityRepository.Get(id);
+
+        //     return Ok(new OkResponse<Invitation>(string.Empty) { Data = invitation });
+        // }
+
         [HttpGet]
-        [Route("{id}")]
+        [Route("{code}/[action]")]
         [AllowAnonymous]
-        public new async Task<IActionResult> Get(Guid id)
+        public IActionResult RSVP(string code)
         {
-            var invitation = await this.entityRepository.Get(id);
+            var invitation = unitOfWork.Repository<Invitation>().GetAll().Include(_ => _.Guest).FirstOrDefault(_ => _.Code == code);
+
+            if (invitation == null) return BadRequest();
 
             return Ok(new OkResponse<Invitation>(string.Empty) { Data = invitation });
         }
 
         [HttpGet]
-        [Route("{eventId}/details")]
-        public IActionResult GetAll(Guid? eventId)
+        [Route("{eventId}/[action]")]
+        public IActionResult Details(Guid? eventId)
         {
             if (!eventId.HasValue)
                 return base.GetAll();
@@ -52,7 +64,6 @@ namespace AMP.EMS.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] InvitationData data)
         {
             var entity = await this.entityRepository.Get(id);

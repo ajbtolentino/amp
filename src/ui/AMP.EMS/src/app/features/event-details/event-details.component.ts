@@ -3,7 +3,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Invitation } from '../../core/models/invitation';
 import { InvitationService } from '../../core/services/invitation.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { Guest } from '../../core/models/guest';
 import { Event } from '../../core/models/event';
@@ -16,6 +16,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   standalone: true,
@@ -28,7 +29,9 @@ import { InputTextModule } from 'primeng/inputtext';
     DropdownModule,
     FormsModule,
     InputTextModule,
-    CommonModule
+    CommonModule,
+    RouterModule,
+    TooltipModule
   ]
 })
 export class EventDetailsComponent implements OnInit {

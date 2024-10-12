@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   standalone: true,
@@ -26,7 +27,8 @@ import { CommonModule } from '@angular/common';
     DropdownModule,
     RouterModule,
     InputTextModule,
-    CommonModule
+    CommonModule,
+    TooltipModule
   ]
 })
 export class EventListComponent implements OnInit {

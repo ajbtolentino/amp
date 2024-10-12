@@ -67,8 +67,10 @@
             <td>{{item.dateUpdated}}</td>
             <td>
                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                    (click)="editRow()" class="p-button-rounded p-button-text">
+                    (click)="editRow()" class="p-button-rounded p-button-text" pTooltip="Edit">
                 </button>
+                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-envelope"
+                    routerLink="/invitation/{{item.code}}" pTooltip="Manage Invitations"></button>
                 <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-trash"
                     (click)="delete(item)" pTooltip="Delete"></button>
 

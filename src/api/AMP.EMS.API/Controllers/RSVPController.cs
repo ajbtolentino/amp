@@ -2,6 +2,7 @@ using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Constants;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,12 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class RSVPController(IUnitOfWork unitOfWork) : ApiBaseController<RSVP, Guid>(unitOfWork)
     {
-        public record RSVPData(string Code, RSVPResponse Response, string PhoneNumber);
+        public record RSVPData(Guid InvitationId, RSVPResponse Response, string? PhoneNumber);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RSVPData data)
         {
-            var invitation = unitOfWork.Repository<Invitation>().GetAll().FirstOrDefault(_ => _.Code == data.Code);
+            var invitation = await unitOfWork.Repository<Invitation>().Get(data.InvitationId);
 
             if (invitation == null) return BadRequest();
 
@@ -27,6 +28,7 @@ namespace AMP.EMS.API.Controllers
             {
                 InvitationId = invitation.Id,
                 Response = data.Response,
+                PhoneNumber = data.PhoneNumber ?? string.Empty,
                 CreatedBy = invitation.GuestId.ToString()
             });
         }

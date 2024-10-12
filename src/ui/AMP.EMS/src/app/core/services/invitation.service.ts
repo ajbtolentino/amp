@@ -18,4 +18,8 @@ export class InvitationService extends BaseService {
     delete = async (id: string) => {
         return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/invitation/${id}`, { headers: this.headers }));
     }
+
+    rsvp = async (code: string) => {
+        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/invitation/${code}/rsvp`, { headers: this.headers }));
+    }
 }

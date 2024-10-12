@@ -1,6 +1,3 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { AppModule } from './app/app.module';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -18,9 +15,14 @@ import { GuestListComponent } from './app/features/guest-list/guest-list.compone
 import { InvitationDetailsComponent } from './app/features/invitation-details/invitation-details.component';
 import { MainLayoutComponent } from './app/layout/main-layout/main-layout.component';
 import { environment } from './environments/environment';
+import { InvitationLayoutComponent } from './app/layout/invitation-layout/invitation-layout.component';
+import { RsvpService } from './app/core/services/rsvp.service';
+import { importProvidersFrom } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 bootstrapApplication(AppComponent, {
   providers: [
+    importProvidersFrom([BrowserAnimationsModule]),
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideAuth({
       config: {
@@ -48,7 +50,7 @@ bootstrapApplication(AppComponent, {
           children: [
             {
               path: 'events',
-              title: 'EMS - Manage Events',
+              title: 'Manage Events',
               component: EventListComponent,
               canActivate: [autoLoginPartialRoutesGuard],
               children: [
@@ -61,15 +63,29 @@ bootstrapApplication(AppComponent, {
             },
             {
               path: 'guests',
-              title: 'EMS - Manage Guests',
+              title: 'Manage Guests',
               component: GuestListComponent,
               canActivate: [autoLoginPartialRoutesGuard],
             },
           ]
         },
         {
-          path: 'invitation/:code',
-          component: InvitationDetailsComponent,
+          path: '',
+          title: 'Invitation',
+          component: InvitationLayoutComponent,
+          children: [
+            {
+              path: 'invitation',
+              title: 'RSVP',
+              children: [
+                {
+                  path: ':code',
+                  title: 'Invitation',
+                  component: InvitationDetailsComponent
+                }
+              ]
+            }
+          ]
         },
         {
           path: 'forbidden',
@@ -80,6 +96,7 @@ bootstrapApplication(AppComponent, {
           path: 'unauthorized',
           component: UnauthorizedComponent
         },
+        { path: '**', redirectTo: '' }
       ],
       withEnabledBlockingInitialNavigation()
     ),
@@ -87,11 +104,7 @@ bootstrapApplication(AppComponent, {
     InvitationService,
     GuestService,
     MessageService,
-    ConfirmationService
+    ConfirmationService,
+    RsvpService
   ]
 }).catch(err => console.error(err));
-
-// platformBrowserDynamic().bootstrapModule(AppModule, {
-//   ngZoneEventCoalescing: true
-// })
-//   .catch(err => console.error(err));
