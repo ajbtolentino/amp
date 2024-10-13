@@ -29,6 +29,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
     ],
     imports: [
         BrowserModule,
+        BreadcrumbModule,
         FormsModule,
         HttpClientModule,
         BrowserAnimationsModule,

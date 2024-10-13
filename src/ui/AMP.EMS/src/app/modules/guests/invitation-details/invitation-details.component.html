@@ -1,53 +1,40 @@
-<div class="card flex justify-content-center align-items-center">
-    <p-card class="vertical-align-middle" [style]="{ 'width': '300px', 'border-radius': '0px' }">
-        <ng-template pTemplate="title">
+<div *ngIf="invitation">
+    <div
+        class="fadein-card flex align-items-center justify-content-center my-3 fadeinup animation-duration-1000 animation-delay-200 animation-ease-in-out animation-iteration-1">
+        <div class="flex w-24rem shadow-8 surface-card text-center h-24rem align-items-center justify-content-center">
             Invitation
-        </ng-template>
-        <ng-template pTemplate="content">
-            Front Page
-        </ng-template>
-    </p-card>
-</div>
+        </div>
+    </div>
 
-<div class="card flex justify-content-center align-items-center" *ngIf="showDetails">
-    <p-card class="vertical-align-middle" [style]="{ 'width': '300px', 'border-radius': '0px' }">
-        <ng-template pTemplate="title">
-            Invitation Details
-        </ng-template>
+    <div *ngIf="showDetails"
+        class="fadein-card flex align-items-center justify-content-center my-3 fadeinup animation-duration-1000 animation-delay-500 animation-ease-in-out animation-iteration-1">
+        <div class="flex w-24rem shadow-8 surface-card text-center h-24rem align-items-center justify-content-center">
+            Entourage Details
+        </div>
+    </div>
 
-        <ng-template pTemplate="content">
-            Entourage
-        </ng-template>
-    </p-card>
-</div>
-
-<div class="card flex justify-content-center align-items-center height-max-content">
-    <p-card class="vertical-align-middle" [style]="{ 'width': '300px', 'border-radius': '0px' }">
-        <ng-template pTemplate="title">
-            Hello, {{invitation?.guest?.firstName}} {{invitation?.guest?.lastName}}
-        </ng-template>
-        <ng-template pTemplate="subtitle">
-            We have reserved <u><b>{{invitation?.maxGuests}}</b></u> seats for you. Please enter your names and by
-            dd-mm-yyyy
-        </ng-template>
-        <ng-template pTemplate="content">
-            <div class="card flex justify-content-center">
-                <div class="flex flex-column gap-3">
-                    <div class="flex">
-                        <p-radioButton [(ngModel)]="rsvp.response" value="ACCEPT" />
-                        <label>Joyfully Accept</label>
-                    </div>
-                    <div class="flex">
-                        <p-radioButton [(ngModel)]="rsvp.response" value="DECLINE" />
-                        <label>Regretfully Decline</label>
-                    </div>
+    <div
+        class="fadein-card flex align-items-center justify-content-center my-3 fadeinup animation-duration-1000 animation-delay-1000 animation-ease-in-out animation-iteration-1">
+        <div
+            class="flex flex-column w-24rem shadow-8 surface-card text-center h-24rem align-items-center justify-content-center">
+            <div class="flex ">RSVP</div>
+            <div class="p-3">
+                Hello, {{invitation?.guest?.firstName}} {{invitation?.guest?.lastName}}. We have reserved
+                <u><b>{{invitation?.maxGuests}}</b></u> seats for you. Please enter your names and submit by dd-mm-yyyy
+            </div>
+            <div class="grid">
+                <div class="col-6">
+                    <p-radioButton [(ngModel)]="rsvp.response" value="ACCEPT" />
+                    <label>Joyfully Accept</label>
+                </div>
+                <div class="col-6">
+                    <p-radioButton [(ngModel)]="rsvp.response" value="DECLINE" />
+                    <label>Regretfully Decline</label>
                 </div>
             </div>
-        </ng-template>
-        <ng-template pTemplate="footer">
-            <div class="flex">
-                <p-button label="Send Response" (onClick)="sendResponse()" />
+            <div>
+                <p-button label=" Send Response" (onClick)="sendResponse()" />
             </div>
-        </ng-template>
-    </p-card>
+        </div>
+    </div>
 </div>

@@ -1,16 +1,17 @@
-import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { LayoutService } from "./service/app.layout.service";
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppTopBarComponent } from './app.topbar.component';
 import { MenuItem } from 'primeng/api';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
 
 @Component({
     selector: 'app-layout',
     templateUrl: './app.layout.component.html',
 })
-export class AppLayoutComponent implements OnDestroy {
+export class AppLayoutComponent implements OnDestroy, OnInit {
 
     overlayMenuOpenSubscription: Subscription;
 
@@ -18,13 +19,19 @@ export class AppLayoutComponent implements OnDestroy {
 
     profileMenuOutsideClickListener: any;
 
-    breadcrumbItems: MenuItem[] = [{ label: "Test" }];
+    breadcrumbItems: MenuItem[] = [];
 
     @ViewChild(AppSidebarComponent) appSidebar!: AppSidebarComponent;
 
     @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
 
-    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
+    ngOnInit(): void {
+        this.router.events
+            .pipe(filter(event => event instanceof NavigationEnd))
+            .subscribe(() => this.breadcrumbItems = this.createBreadcrumbs(this.activatedRoute.root));
+    }
+
+    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router, private activatedRoute: ActivatedRoute) {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
             if (!this.menuOutsideClickListener) {
                 this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
@@ -58,6 +65,30 @@ export class AppLayoutComponent implements OnDestroy {
                 this.hideMenu();
                 this.hideProfileMenu();
             });
+    }
+
+    private createBreadcrumbs = (route: ActivatedRoute, url: string = '', breadcrumbs: MenuItem[] = []): MenuItem[] => {
+        const children: ActivatedRoute[] = route.children;
+
+        if (!children.length) {
+            return breadcrumbs;
+        }
+
+        for (const child of children) {
+            const routeURL: string = child.snapshot.url.map(segment => segment.path).join('/');
+            if (routeURL !== '') {
+                url += `/${routeURL}`;
+            }
+
+            const label = child.snapshot.data["breadcrumb"];
+            if (label) {
+                breadcrumbs.push({ label, url });
+            }
+
+            return this.createBreadcrumbs(child, url, breadcrumbs);
+        }
+
+        return [];
     }
 
     hideMenu() {
@@ -122,3 +153,4 @@ export class AppLayoutComponent implements OnDestroy {
         }
     }
 }
+

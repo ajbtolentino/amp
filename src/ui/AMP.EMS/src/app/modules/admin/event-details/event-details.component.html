@@ -120,11 +120,13 @@
                                     icon="pi pi-pencil" (click)="editRow()"
                                     class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
                                 </button>
-                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-info mr-2"
-                                    icon="pi pi-expand" routerLink="/invitation/{{item.code}}"
-                                    pTooltip="View Invitation"></button>
-                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning"
+                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning mr-2"
                                     icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
+
+                                <a *ngIf="!editing" rel="noreferrer noopener" target="_blank"
+                                    routerLink="/invitation/{{item.code}}" pButton pRipple label="View Invitation"
+                                    class="p-button-text"></a>
+
 
                                 <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
                                     icon="pi pi-check" (click)="save(item)"

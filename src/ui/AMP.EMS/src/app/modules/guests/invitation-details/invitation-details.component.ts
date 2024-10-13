@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InvitationService } from '../../../core/services/invitation.service';
 import { Invitation } from '../../../core/models/invitation';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Rsvp } from '../../../core/models/rsvp';
 import { RsvpService } from '../../../core/services/rsvp.service';
 

@@ -30,11 +30,12 @@ import { EmptyLayoutComponent } from '../../layout/empty-layout/empty-layout.com
                 path: ':code',
                 title: 'Invitation',
                 component: InvitationDetailsComponent
-              }
+              },
+              { path: '**', redirectTo: '/notfound' },
             ]
           }
         ]
-      }
+      },
     ])
   ]
 })

@@ -16,6 +16,7 @@ import { GuestListComponent } from './guest-list/guest-list.component';
 import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { AppLayoutComponent } from '../../layout/app.layout.component';
 import { CalendarModule } from 'primeng/calendar';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CalendarModule } from 'primeng/calendar';
     RouterModule,
     TableModule,
     TooltipModule,
+    RippleModule,
     ToolbarModule,
     RouterModule.forChild([
       {
@@ -45,17 +47,26 @@ import { CalendarModule } from 'primeng/calendar';
           {
             path: 'events',
             title: 'Manage Events',
+            data: {
+              breadcrumb: 'Events'
+            },
             component: EventListComponent,
             canActivate: [autoLoginPartialRoutesGuard],
           },
           {
             path: 'event-types',
             title: 'Manage Events Types',
+            data: {
+              breadcrumb: 'Event Types'
+            },
             component: EventTypesComponent,
             canActivate: [autoLoginPartialRoutesGuard],
           },
           {
             path: 'events/:id',
+            data: {
+              breadcrumb: 'Event'
+            },
             component: EventDetailsComponent,
             canActivate: [autoLoginPartialRoutesGuard],
           },
