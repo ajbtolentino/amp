@@ -3,42 +3,51 @@
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
-html {
-    font-size: 18px;
-}
+$gutter: 1rem; //for primeflex grid system
+@import "assets/layout/styles/layout/layout.scss";
 
-.flex {
-    display: flex;
-}
+/* PrimeNG */
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
 
-.justify-content-center {
-    justify-content: center;
-}
 
-.align-items-center {
-    align-items: center;
-}
+// html {
+//     font-size: 18px;
+// }
 
-.vertical-align-middle {
-    vertical-align: middle;
-}
+// .flex {
+//     display: flex;
+// }
 
-.height-max-content {
-    height: 100vh;
-}
+// .justify-content-center {
+//     justify-content: center;
+// }
 
-.flex-column {
-    flex-direction: column;
-}
+// .align-items-center {
+//     align-items: center;
+// }
 
-.gap-1 {
-    gap: .25rem
-}
+// .vertical-align-middle {
+//     vertical-align: middle;
+// }
 
-.gap-2 {
-    gap: .5rem
-}
+// .height-max-content {
+//     height: 100vh;
+// }
 
-.gap-3 {
-    gap: 1rem
-}
+// .flex-column {
+//     flex-direction: column;
+// }
+
+// .gap-1 {
+//     gap: .25rem
+// }
+
+// .gap-2 {
+//     gap: .5rem
+// }
+
+// .gap-3 {
+//     gap: 1rem
+// }

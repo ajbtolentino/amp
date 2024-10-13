@@ -9,20 +9,23 @@ import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/ro
 import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { ForbiddenComponent } from './app/core/components/forbidden/forbidden.component';
 import { UnauthorizedComponent } from './app/core/components/unauthorized/unauthorized.component';
-import { EventDetailsComponent } from './app/features/event-details/event-details.component';
-import { EventListComponent } from './app/features/event-list/event-list.component';
-import { GuestListComponent } from './app/features/guest-list/guest-list.component';
-import { InvitationDetailsComponent } from './app/features/invitation-details/invitation-details.component';
-import { MainLayoutComponent } from './app/layout/main-layout/main-layout.component';
+import { EventDetailsComponent } from './app/modules/event-details/event-details.component';
+import { EventListComponent } from './app/modules/event-list/event-list.component';
+import { GuestListComponent } from './app/modules/guest-list/guest-list.component';
+import { InvitationDetailsComponent } from './app/modules/invitation-details/invitation-details.component';
 import { environment } from './environments/environment';
 import { InvitationLayoutComponent } from './app/layout/invitation-layout/invitation-layout.component';
 import { RsvpService } from './app/core/services/rsvp.service';
 import { importProvidersFrom } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppLayoutComponent } from './app/layout/app.layout.component';
+import { LayoutService } from './app/layout/service/app.layout.service';
+import { AppLayoutModule } from './app/layout/app.layout.module';
+import { AppConfigModule } from './app/layout/config/config.module';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom([BrowserAnimationsModule]),
+    importProvidersFrom([BrowserAnimationsModule, AppLayoutModule,]),
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideAuth({
       config: {
@@ -46,20 +49,18 @@ bootstrapApplication(AppComponent, {
         {
           path: '',
           title: 'EMS',
-          component: MainLayoutComponent,
+          component: AppLayoutComponent,
           children: [
             {
               path: 'events',
               title: 'Manage Events',
               component: EventListComponent,
               canActivate: [autoLoginPartialRoutesGuard],
-              children: [
-                {
-                  path: ':id',
-                  component: EventDetailsComponent,
-                  canActivate: [autoLoginPartialRoutesGuard],
-                },
-              ]
+            },
+            {
+              path: 'events/:id',
+              component: EventDetailsComponent,
+              canActivate: [autoLoginPartialRoutesGuard],
             },
             {
               path: 'guests',
@@ -105,6 +106,7 @@ bootstrapApplication(AppComponent, {
     GuestService,
     MessageService,
     ConfirmationService,
-    RsvpService
+    RsvpService,
+    LayoutService
   ]
 }).catch(err => console.error(err));

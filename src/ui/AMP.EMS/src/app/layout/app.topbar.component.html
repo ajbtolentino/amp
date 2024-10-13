@@ -1,0 +1,22 @@
+<div class="layout-topbar">
+    <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu"
+        [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button class="p-button p-button-secondary" *ngIf="!isAuthenticated" (click)="login()">
+            <i class="pi pi-sign-in mr-2"></i>
+            <span>Login</span>
+        </button>
+        <button class="p-button p-button-secondary" *ngIf="isAuthenticated" (click)="logout()">
+            <i class="pi pi-sign-out mr-2"></i>
+            <span>Logout</span>
+        </button>
+    </div>
+</div>
