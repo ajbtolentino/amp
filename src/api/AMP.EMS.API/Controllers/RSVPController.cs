@@ -1,10 +1,6 @@
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Constants;
 using AMP.EMS.API.Core.Entities;
-using AMP.Infrastructure.Responses;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -30,8 +26,7 @@ namespace AMP.EMS.API.Controllers
             {
                 InvitationId = invitation.Id,
                 Response = data.Response,
-                PhoneNumber = data.PhoneNumber ?? string.Empty,
-                CreatedBy = invitation.GuestId.ToString()
+                PhoneNumber = data.PhoneNumber ?? string.Empty
             });
         }
     }

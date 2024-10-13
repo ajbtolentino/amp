@@ -7,25 +7,19 @@ import { InvitationService } from './app/core/services/invitation.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
-import { ForbiddenComponent } from './app/core/components/forbidden/forbidden.component';
-import { UnauthorizedComponent } from './app/core/components/unauthorized/unauthorized.component';
-import { EventDetailsComponent } from './app/modules/event-details/event-details.component';
-import { EventListComponent } from './app/modules/event-list/event-list.component';
-import { GuestListComponent } from './app/modules/guest-list/guest-list.component';
-import { InvitationDetailsComponent } from './app/modules/invitation-details/invitation-details.component';
+import { UnauthorizedComponent } from './app/pages/unauthorized/unauthorized.component';
 import { environment } from './environments/environment';
-import { InvitationLayoutComponent } from './app/layout/invitation-layout/invitation-layout.component';
 import { RsvpService } from './app/core/services/rsvp.service';
 import { importProvidersFrom } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppLayoutComponent } from './app/layout/app.layout.component';
-import { LayoutService } from './app/layout/service/app.layout.service';
 import { AppLayoutModule } from './app/layout/app.layout.module';
-import { AppConfigModule } from './app/layout/config/config.module';
+import { EventTypeService } from './app/core/services/event-type.service';
+import { AdminModule } from './app/modules/admin/admin.module';
+import { NotfoundComponent } from './app/pages/notfound/notfound.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom([BrowserAnimationsModule, AppLayoutModule,]),
+    importProvidersFrom([BrowserAnimationsModule, AppLayoutModule, AdminModule]),
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideAuth({
       config: {
@@ -49,55 +43,19 @@ bootstrapApplication(AppComponent, {
         {
           path: '',
           title: 'EMS',
-          component: AppLayoutComponent,
-          children: [
-            {
-              path: 'events',
-              title: 'Manage Events',
-              component: EventListComponent,
-              canActivate: [autoLoginPartialRoutesGuard],
-            },
-            {
-              path: 'events/:id',
-              component: EventDetailsComponent,
-              canActivate: [autoLoginPartialRoutesGuard],
-            },
-            {
-              path: 'guests',
-              title: 'Manage Guests',
-              component: GuestListComponent,
-              canActivate: [autoLoginPartialRoutesGuard],
-            },
-          ]
+          loadChildren: () => import('./app/modules/admin/admin.module').then(m => m.AdminModule)
         },
         {
           path: '',
           title: 'Invitation',
-          component: InvitationLayoutComponent,
-          children: [
-            {
-              path: 'invitation',
-              title: 'RSVP',
-              children: [
-                {
-                  path: ':code',
-                  title: 'Invitation',
-                  component: InvitationDetailsComponent
-                }
-              ]
-            }
-          ]
-        },
-        {
-          path: 'forbidden',
-          component: ForbiddenComponent,
-          canActivate: [autoLoginPartialRoutesGuard],
+          loadChildren: () => import('./app/modules/guests/guests.module').then(m => m.GuestModule)
         },
         {
           path: 'unauthorized',
           component: UnauthorizedComponent
         },
-        { path: '**', redirectTo: '' }
+        { path: 'notfound', component: NotfoundComponent },
+        { path: '**', redirectTo: '/notfound' },
       ],
       withEnabledBlockingInitialNavigation()
     ),
@@ -107,6 +65,6 @@ bootstrapApplication(AppComponent, {
     MessageService,
     ConfirmationService,
     RsvpService,
-    LayoutService
+    EventTypeService
   ]
 }).catch(err => console.error(err));

@@ -1,8 +1,6 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-menu',
@@ -21,6 +19,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
                     { label: 'Events', icon: 'pi pi-fw pi-calendar', routerLink: ['/events'] },
+                    { label: 'Event Types', icon: 'pi pi-fw pi-cog', routerLink: ['/event-types'] },
                     { label: 'Guests', icon: 'pi pi-fw pi-users', routerLink: ['/guests'] },
                 ]
             }

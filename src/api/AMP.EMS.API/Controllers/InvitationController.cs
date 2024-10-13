@@ -3,7 +3,6 @@ using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,8 +59,7 @@ namespace AMP.EMS.API.Controllers
                 EventId = data.EventId,
                 GuestId = data.GuestId,
                 MaxGuests = data.MaxGuests,
-                LimitedView = data.LimitedView,
-                CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty
+                LimitedView = data.LimitedView
             });
         }
 
@@ -79,7 +77,6 @@ namespace AMP.EMS.API.Controllers
             entity.MaxGuests = data.MaxGuests;
             entity.DateUpdated = DateTime.Now;
             entity.LimitedView = data.LimitedView;
-            entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
             return await base.Put(entity);
         }

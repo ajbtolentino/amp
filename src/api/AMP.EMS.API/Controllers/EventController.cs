@@ -1,9 +1,9 @@
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -11,12 +11,14 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventController(IUnitOfWork unitOfWork) : ApiBaseController<Event, Guid>(unitOfWork)
     {
-        public record EventData(string Name, string Description);
+        public record EventData(string Title, Guid EventTypeId, string? Description, DateTime StartDate, DateTime EndDate);
 
         [HttpGet]
         public new IActionResult GetAll()
         {
-            return base.GetAll();
+            var entities = this.entityRepository.GetAll().Include(_ => _.EventType).AsNoTracking();
+
+            return Ok(new OkResponse<IEnumerable<Event>>(string.Empty) { Data = entities });
         }
 
         [HttpPost]
@@ -24,10 +26,11 @@ namespace AMP.EMS.API.Controllers
         {
             return await base.Post(new Event
             {
-                Name = data.Name,
-                Description = data.Description,
-                DateCreated = DateTime.Now,
-                CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
+                Title = data.Title,
+                EventTypeId = data.EventTypeId,
+                Description = data.Description ?? string.Empty,
+                StartDate = data.StartDate,
+                EndDate = data.EndDate
             });
         }
 
@@ -39,10 +42,10 @@ namespace AMP.EMS.API.Controllers
 
             if (entity == null) return BadRequest();
 
-            entity.Name = data.Name;
-            entity.Description = data.Description;
-            entity.DateUpdated = DateTime.Now;
-            entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+            entity.Title = data.Title;
+            entity.Description = data.Description ?? string.Empty;
+            entity.StartDate = data.StartDate;
+            entity.EndDate = data.EndDate;
 
             return await base.Put(entity);
         }

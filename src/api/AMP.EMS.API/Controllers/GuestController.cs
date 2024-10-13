@@ -1,9 +1,6 @@
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
@@ -26,9 +23,7 @@ namespace AMP.EMS.API.Controllers
             return await base.Post(new Guest
             {
                 FirstName = data.FirstName,
-                LastName = data.LastName,
-                DateCreated = DateTime.Now,
-                CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty,
+                LastName = data.LastName
             });
         }
 
@@ -42,8 +37,6 @@ namespace AMP.EMS.API.Controllers
 
             entity.FirstName = data.FirstName;
             entity.LastName = data.LastName;
-            entity.DateUpdated = DateTime.Now;
-            entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
             return await base.Put(entity);
         }

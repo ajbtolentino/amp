@@ -1,10 +1,8 @@
-using System.Linq;
+using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.Infrastructure.Entity;
 using AMP.Infrastructure.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -40,6 +38,9 @@ namespace AMP.EMS.API.Controllers
             {
                 unitOfWork.BeginTransaction();
 
+                entity.DateCreated = DateTime.Now;
+                entity.CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
                 var newEntity = await this.entityRepository.Add(entity);
 
                 await unitOfWork.SaveChangesAsync();
@@ -61,6 +62,9 @@ namespace AMP.EMS.API.Controllers
             try
             {
                 unitOfWork.BeginTransaction();
+
+                entity.DateUpdated = DateTime.Now;
+                entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
                 var result = this.entityRepository.Update(entity);
 

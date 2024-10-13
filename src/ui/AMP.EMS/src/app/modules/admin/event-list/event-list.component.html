@@ -1,0 +1,128 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                        (click)="dt.exportCSV()"></button>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <div class="my-2">
+                        <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
+                            class="p-button-success mr-2" (click)="addRow()"></button>
+                        <button pButton pRipple *ngIf="isCreating" label="Cancel" icon="pi pi-times"
+                            class="p-button-danger mr-2" (click)="cancelAdd()"></button>
+
+                        <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
+                            class="p-button-danger" (click)="deleteSelectedItems()"
+                            [disabled]="!selectedItems || !selectedItems.length"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="items" [columns]="columns" [rows]="10" [paginator]="true" [loading]="loading"
+                [globalFilterFields]="['name','description']" editMode="row" [(selection)]="selectedItems"
+                [rowHover]="true" dataKey="id" responsiveLayout="stack" [breakpoint]="'1000px'" [responsive]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Events</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input class="w-full sm:w-auto" pInputText type="text"
+                                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="Search..." />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+                        <th pSortableColumn="eventType.name">Type <p-sortIcon field="eventType.name"></p-sortIcon></th>
+                        <th pSortableColumn="startDate">Start Date <p-sortIcon field="startDate"></p-sortIcon></th>
+                        <th pSortableColumn="endDate">End Date <p-sortIcon field="endDate"></p-sortIcon></th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item let-editing="editing">
+                    <tr [pEditableRow]="item">
+                        <td>
+                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="item.title" [required]="true" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{item.title}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-dropdown [options]="eventTypeCollection" [(ngModel)]="item.eventTypeId"
+                                        appendTo="body" [filter]="true" optionValue="id" optionLabel="name"
+                                        filterBy="name" placeholder="Select type of event">
+                                    </p-dropdown>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{item?.eventType?.name}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar [(ngModel)]="item.startDate" appendTo="body" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{item.startDate}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar [(ngModel)]="item.endDate" appendTo="body" />
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{item.endDate}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
+                                    icon="pi pi-pencil" (click)="editRow()"
+                                    class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
+                                </button>
+                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-info mr-2"
+                                    icon="pi pi-envelope" routerLink="/events/{{item.id}}"
+                                    pTooltip="Manage Invitations"></button>
+                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning"
+                                    icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
+
+                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
+                                    icon="pi pi-check" (click)="save(item)"
+                                    class="p-button-rounded p-button-text p-button-success mr-2">
+                                </button>
+                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
+                                    icon="pi pi-times" (click)="refreshGrid()"
+                                    class="p-button-rounded p-button-text p-button-danger">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
