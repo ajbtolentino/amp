@@ -1,39 +1,94 @@
-<div *ngIf="invitation">
-    <div
-        class="fadein-card flex align-items-center justify-content-center my-3 fadeinup animation-duration-1000 animation-delay-200 animation-ease-in-out animation-iteration-1">
-        <div class="flex w-24rem shadow-8 surface-card text-center h-24rem align-items-center justify-content-center">
-            Invitation
-        </div>
-    </div>
-
-    <div *ngIf="showDetails"
-        class="fadein-card flex align-items-center justify-content-center my-3 fadeinup animation-duration-1000 animation-delay-500 animation-ease-in-out animation-iteration-1">
-        <div class="flex w-24rem shadow-8 surface-card text-center h-24rem align-items-center justify-content-center">
-            Entourage Details
-        </div>
-    </div>
-
-    <div
-        class="fadein-card flex align-items-center justify-content-center my-3 fadeinup animation-duration-1000 animation-delay-1000 animation-ease-in-out animation-iteration-1">
-        <div
-            class="flex flex-column w-24rem shadow-8 surface-card text-center h-24rem align-items-center justify-content-center">
-            <div class="flex ">RSVP</div>
-            <div class="p-3">
-                Hello, {{invitation?.guest?.firstName}} {{invitation?.guest?.lastName}}. We have reserved
-                <u><b>{{invitation?.maxGuests}}</b></u> seats for you. Please enter your names and submit by dd-mm-yyyy
-            </div>
-            <div class="grid">
-                <div class="col-6">
-                    <p-radioButton [(ngModel)]="rsvp.response" value="ACCEPT" />
-                    <label>Joyfully Accept</label>
+<div *ngIf="invitation" [ngStyle]="{'padding': '30px'}">
+    <div class="invitation-card-container flex flex-column align-items-center justify-content-center">
+        <div class="invitation-card">
+            <div class="invitation-body shadow-8 front-page">
+                <div class="title">
+                    AR
                 </div>
-                <div class="col-6">
-                    <p-radioButton [(ngModel)]="rsvp.response" value="DECLINE" />
-                    <label>Regretfully Decline</label>
+                <div class="subtitle">
+                    ALLAN <span class="ampersand">&amp;</span> ROYCE
+                </div>
+                <div class="content">
+                    <div class="subheader">
+                        <div>
+                            Together with their families
+                        </div>
+                        <div>
+                            Invite you to their wedding
+                        </div>
+                    </div>
+                    <div class="date">
+                        <div>
+                            Saturday 7 June 2025
+                        </div>
+                    </div>
+                    <div class="time-venue">
+                        <div>
+                            One o'clock in the afternoon
+                        </div>
+                        <div>
+                            Madonna Del Divino Amore Parish
+                        </div>
+                        <div>
+                            Southdale Drive, Las Piñas City
+                        </div>
+                    </div>
+                    <div class="reception">
+                        <div class="label">
+                            Reception at
+                        </div>
+                        <div>
+                            Versailles Palace Alabang
+                        </div>
+                        <div>
+                            Las Piñas City
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div>
-                <p-button label=" Send Response" (onClick)="sendResponse()" />
+        </div>
+
+        <div class="invitation-card">
+            <div class="invitation-body shadow-8 p-3 entourage">
+                <div class="title">
+                    Entourage
+                </div>
+                <div class="content">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="invitation-card">
+            <div class="invitation-body shadow-8 rsvp">
+                <div class="title">
+                    RSVP
+                </div>
+                <div class="content">
+                    <div class="p-3">
+                        Hello, {{invitation?.guest?.firstName}} {{invitation?.guest?.lastName}}. We have reserved
+                        <u><b>{{invitation?.maxGuests}}</b></u> seats for you. Please enter your names and submit by
+                        dd-mm-yyyy
+                    </div>
+                    <ng-container *ngIf="invitation.maxGuests">
+                        <div *ngFor="let n of [].constructor(invitation.maxGuests)">
+                            <input class="w-full" pInputText type="text" placeholder='Guest Name' />
+                        </div>
+                    </ng-container>
+                    <div class="grid">
+                        <div class="col-6">
+                            <p-radioButton [(ngModel)]="rsvp.response" value="ACCEPT" />
+                            <label>Joyfully Accept</label>
+                        </div>
+                        <div class="col-6">
+                            <p-radioButton [(ngModel)]="rsvp.response" value="DECLINE" />
+                            <label>Regretfully Decline</label>
+                        </div>
+                    </div>
+                    <div>
+                        <p-button label=" Send Response" (onClick)="sendResponse()" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>

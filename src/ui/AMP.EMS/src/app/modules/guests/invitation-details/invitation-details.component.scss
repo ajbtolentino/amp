@@ -1,53 +1,154 @@
-/* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
-.flip-card {
-    background-color: transparent;
-    width: 300px;
-    height: 200px;
-    border: 1px solid #f1f1f1;
-    perspective: 1000px;
-    /* Remove this if you don't want the 3D effect */
+@font-face {
+    font-family: 'La Luxes';
+    src: url('../../../../assets/fonts/La\ Luxes.ttf');
 }
 
-/* This container is needed to position the front and back side */
-.flip-card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
+@font-face {
+    font-family: 'Le More Script';
+    src: url('../../../../assets/fonts/Le\ More\ Collection\ Script.ttf');
+}
+
+@font-face {
+    font-family: 'Spectral SC';
+    src: url('../../../../assets/fonts/SpectralSC-Light.ttf');
+}
+
+@media (max-width: 390px) {
+    html {
+        font-size: 18px !important;
+    }
+}
+
+.front-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    transition: transform 0.8s;
-    transform-style: preserve-3d;
+    text-transform: capitalize !important;
+
+    .title {
+        font-family: 'La Luxes';
+        font-size: clamp(8rem, 8vw, 8rem);
+        margin-bottom: clamp(2rem, 1vw, 4rem);
+    }
+
+    .subtitle {
+        font-family: 'Spectral SC';
+        font-size: clamp(1.5rem, 2vw, 3rem);
+        letter-spacing: .5vw;
+        margin-bottom: clamp(1.5rem, 1vh, 3rem);
+
+        .ampersand {
+            font-family: 'Le More Script';
+        }
+    }
+
+    .content {
+        font-family: 'Spectral SC';
+        font-size: clamp(1rem, 1vw, 2rem);
+
+        .subheader {
+            margin-bottom: clamp(2rem, 1vh, 4rem);
+        }
+
+        .date {
+            font-size: clamp(1.5rem, 2vw, 3rem);
+            letter-spacing: 5px;
+            margin-bottom: clamp(2rem, 1vh, 4rem);
+        }
+
+        .time-venue {
+            margin-bottom: clamp(2rem, 1vh, 4rem);
+        }
+
+        .reception {
+            .label {
+                font-family: 'Le More Script';
+            }
+        }
+    }
 }
 
-/* Do an horizontal flip when you move the mouse over the flip box container */
-.flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
+.entourage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .title {
+        font-family: 'Le More Script';
+        font-size: clamp(3rem, 8vw, 6rem);
+    }
+
+    .content {
+        font-family: 'Spectral SC';
+        font-size: .2rem;
+        text-transform: capitalize;
+    }
 }
 
-/* Position the front and back side */
-.flip-card-front,
-.flip-card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    -webkit-backface-visibility: hidden;
-    /* Safari */
-    backface-visibility: hidden;
+.rsvp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px;
+
+    .title {
+        font-family: 'Le More Script';
+        font-size: clamp(3rem, 8vw, 6rem);
+    }
+
+    .content {
+        font-family: 'Spectral SC';
+        font-size: clamp(1rem, 1vw, 2rem);
+        text-transform: capitalize;
+    }
 }
 
-/* Style the front side (fallback if image is missing) */
-.flip-card-front {
-    background-color: #bbb;
-    color: black;
+.invitation-card-container {
+    gap: 10vh;
+
+    @for $i from 1 through 4 {
+        .invitation-card:nth-child(#{$i}n) {
+            top: $i * 2rem;
+        }
+    }
+
+    @for $i from 1 through 4 {
+        .invitation-card:nth-child(#{$i}n) {
+            animation-name: fadeindownrotate;
+            animation-duration: .5s;
+            animation-delay: $i * 500ms;
+            transform: rotate(calc(random(2) - random(3)) * 1deg);
+        }
+    }
+
+    .invitation-card {
+        opacity: 0;
+        animation-fill-mode: forwards;
+        position: sticky;
+
+        .invitation-body {
+            background-color: white;
+            width: 30vw;
+            height: 90vh;
+            min-width: 400px;
+            min-height: 800px;
+        }
+    }
 }
 
-/* Style the back side */
-.flip-card-back {
-    background-color: dodgerblue;
-    color: white;
-    transform: rotateY(180deg);
-}
+@keyframes fadeindownrotate {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%) rotate(60deg);
+        transition: transform 0.12s cubic-bezier(0, 0, 0.2, 1), opacity 0.12s cubic-bezier(0, 0, 0.2, 1);
+    }
 
-.fadein-card {
-    opacity: 0;
-    animation-fill-mode: forwards;
+    100% {
+        opacity: 1;
+        // transform: translateY(0%);
+    }
 }
