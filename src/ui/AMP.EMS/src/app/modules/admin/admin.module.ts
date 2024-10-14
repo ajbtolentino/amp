@@ -17,6 +17,7 @@ import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { AppLayoutComponent } from '../../layout/app.layout.component';
 import { CalendarModule } from 'primeng/calendar';
 import { RippleModule } from 'primeng/ripple';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { RippleModule } from 'primeng/ripple';
     TableModule,
     TooltipModule,
     RippleModule,
+    SkeletonModule,
     ToolbarModule,
     RouterModule.forChild([
       {

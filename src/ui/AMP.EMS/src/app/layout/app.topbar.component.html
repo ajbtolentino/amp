@@ -10,13 +10,5 @@
 
     <div #topbarmenu class="layout-topbar-menu"
         [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button class="p-button p-button-secondary" *ngIf="!isAuthenticated" (click)="login()">
-            <i class="pi pi-sign-in mr-2"></i>
-            <span>Login</span>
-        </button>
-        <button class="p-button p-button-secondary" *ngIf="isAuthenticated" (click)="logout()">
-            <i class="pi pi-sign-out mr-2"></i>
-            <span>Logout</span>
-        </button>
     </div>
 </div>

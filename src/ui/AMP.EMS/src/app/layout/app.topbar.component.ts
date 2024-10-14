@@ -7,11 +7,9 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
     selector: 'app-topbar',
     templateUrl: './app.topbar.component.html'
 })
-export class AppTopBarComponent implements OnInit {
+export class AppTopBarComponent {
 
     items!: MenuItem[];
-
-    protected isAuthenticated: boolean = false;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -19,19 +17,6 @@ export class AppTopBarComponent implements OnInit {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    constructor(public layoutService: LayoutService, private oidcSecurityService: OidcSecurityService) { }
+    constructor(public layoutService: LayoutService) { }
 
-    ngOnInit() {
-        this.oidcSecurityService.isAuthenticated$.subscribe(_ => {
-            this.isAuthenticated = _.isAuthenticated;
-        });
-    }
-
-    login(): void {
-        this.oidcSecurityService.authorize();
-    }
-
-    logout(): void {
-        this.oidcSecurityService.logoff().subscribe();
-    }
 }

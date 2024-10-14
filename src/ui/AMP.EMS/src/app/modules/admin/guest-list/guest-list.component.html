@@ -3,8 +3,6 @@
         <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
-                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
-                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
                         (click)="dt.exportCSV()"></button>
                 </ng-template>
@@ -14,8 +12,6 @@
                     <div class="my-2">
                         <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
                             class="p-button-success mr-2" (click)="addRow()"></button>
-                        <button pButton pRipple *ngIf="isCreating" label="Cancel" icon="pi pi-times"
-                            class="p-button-danger mr-2" (click)="cancelAdd()"></button>
 
                         <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
                             class="p-button-danger" (click)="deleteSelectedItems()"
@@ -23,10 +19,9 @@
                     </div>
                 </ng-template>
             </p-toolbar>
-
-            <p-table #dt [value]="items" [rows]="10" [paginator]="true" [loading]="loading"
-                [globalFilterFields]="['firstName','lastName']" editMode="row" [(selection)]="selectedItems"
-                [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName','lastName']"
+                editMode="row" [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="loading"
+                [showLoader]="false">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>
@@ -37,6 +32,16 @@
                         <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
                         <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>
                         <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td></td>
+                        <td><p-skeleton /></td>
+                        <td><p-skeleton /></td>
+                        <td><p-skeleton /></td>
+                        <td><p-skeleton /></td>
+                        <td></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item let-editing="editing">

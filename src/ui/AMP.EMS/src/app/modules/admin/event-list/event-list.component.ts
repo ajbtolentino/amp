@@ -59,6 +59,7 @@ export class EventListComponent implements OnInit {
 
     if (res?.data) this.items = res.data;
 
+    this.isCreating = false;
     this.loading = false;
   }
 
