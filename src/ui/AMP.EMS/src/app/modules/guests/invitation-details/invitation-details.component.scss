@@ -25,7 +25,8 @@ div {
     text-align: center;
     text-transform: capitalize !important;
     font-family: 'Spectral SC';
-    padding: clamp(8rem, 4vh, 10rem) clamp(2rem, 2vh, 4rem);
+    font-size: clamp(.75rem, 1vw, 1.5rem);
+    padding: clamp(4rem, 4vh, 10rem) clamp(2rem, 2vh, 4rem);
 
     .title {
         font-family: 'La Luxes';
@@ -54,7 +55,7 @@ div {
 
     .subtitle {
         font-family: 'Spectral SC';
-        font-size: clamp(1.25rem, 1.5vw, 2rem);
+        font-size: clamp(.75rem, 1.25vw, 2rem);
         letter-spacing: clamp(1rem, 1vw, 4rem);
         display: flex;
         justify-content: space-around;
@@ -68,13 +69,8 @@ div {
         }
     }
 
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: clamp(1rem, 1vw, 1.5rem);
-
     .date {
-        font-size: clamp(1.25rem, 1.5vw, 2rem);
+        font-size: clamp(.75rem, 1.25vw, 2rem);
         letter-spacing: 5px;
         border-top: #A7926A .15vh solid;
         border-bottom: #A7926A .15vh solid;
@@ -127,7 +123,6 @@ div {
 
 .invitation-card-container {
     gap: 50vh;
-    padding: 5vh;
 
     @for $i from 1 through 4 {
         .invitation-card:nth-child(#{$i}n) {
@@ -151,10 +146,8 @@ div {
         .invitation-body {
             overflow: hidden;
             background-color: white;
-            width: 30vw;
-            height: 90vh;
-            min-width: 360px;
-            min-height: 600px;
+            width: clamp(330px, 75vw, 650px);
+            aspect-ratio: 1/1.9;
         }
     }
 }
