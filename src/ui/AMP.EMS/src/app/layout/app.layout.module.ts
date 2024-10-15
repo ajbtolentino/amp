@@ -17,6 +17,7 @@ import { AppFooterComponent } from './app.footer.component';
 import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { AppBreadcrumbsComponent } from './app.breadcrumbs.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         AppFooterComponent,
         AppMenuComponent,
         AppSidebarComponent,
-        AppLayoutComponent
+        AppLayoutComponent,
+        AppBreadcrumbsComponent
     ],
     imports: [
         BrowserModule,

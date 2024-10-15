@@ -28,8 +28,6 @@ export class EventListComponent implements OnInit {
 
   loading: boolean = true;
 
-  isCreating: boolean = false;
-
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
@@ -46,12 +44,6 @@ export class EventListComponent implements OnInit {
     ];
   }
 
-  loadEventTypes = async () => {
-    const response = await this.eventTypeService.getAll();
-
-    if (response?.data) this.eventTypeCollection = response.data;
-  }
-
   refreshGrid = async () => {
     this.loading = true;
 
@@ -59,29 +51,7 @@ export class EventListComponent implements OnInit {
 
     if (res?.data) this.items = res.data;
 
-    this.isCreating = false;
     this.loading = false;
-  }
-
-  addRow = async () => {
-    await this.loadEventTypes();
-    await this.refreshGrid();
-
-    this.items.unshift({});
-
-    this.table.initRowEdit(this.items[0]);
-
-    this.isCreating = true;
-  }
-
-  editRow = async () => {
-    await this.loadEventTypes();
-    this.isCreating = false;
-  }
-
-  cancelAdd = async () => {
-    await this.refreshGrid();
-    this.isCreating = false;
   }
 
   deleteSelectedItems = async () => {
@@ -147,6 +117,5 @@ export class EventListComponent implements OnInit {
     }
 
     await this.refreshGrid();
-    this.isCreating = false;
   }
 }

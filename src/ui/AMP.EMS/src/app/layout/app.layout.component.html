@@ -7,9 +7,9 @@
 
     <div class="layout-main-container">
         <div class="layout-main">
-            <div class="grid" *ngIf="breadcrumbItems?.length">
+            <div class="grid">
                 <div class="col-12">
-                    <p-breadcrumb [model]="breadcrumbItems" [home]="{icon: 'pi pi-home'}"></p-breadcrumb>
+                    <app-breadcrumbs></app-breadcrumbs>
                 </div>
             </div>
             <router-outlet></router-outlet>

@@ -1,151 +1,63 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
-                        (click)="dt.exportCSV()"></button>
-                </ng-template>
+        <div class="card">
+            <h5>Event Details</h5>
 
-                <ng-template pTemplate="right">
-                    <div class="my-2">
-                        <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
-                            class="p-button-success mr-2" (click)="addRow()"></button>
-                        <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
-                            class="p-button-danger" (click)="deleteSelectedItems()"
-                            [disabled]="!selectedItems || !selectedItems.length"></button>
-                    </div>
-                </ng-template>
-            </p-toolbar>
-            <p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName','code']"
-                [(selection)]="selectedItems" [rowHover]="true" dataKey="id" editMode="row" responsiveLayout="stack"
-                [breakpoint]="'960px'" [loading]="loading" [showLoader]="false">
-                <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Manage Event Invitation</h5>
-                        <span class="block mt-2 md:mt-0 p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input class="w-full sm:w-auto" pInputText type="text"
-                                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                placeholder="Search..." />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th pSortableColumn="guest.firstName">Guest<p-sortIcon field="guest.firstName"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
-                        <th pSortableColumn="maxGuests">Max Guests<p-sortIcon field="maxGuests"></p-sortIcon></th>
-                        <th pSortableColumn="limitedView">Limited View<p-sortIcon field="limitedView"></p-sortIcon></th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-item let-editing="editing">
-                    <tr [pEditableRow]="item">
-                        <td>
-                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-dropdown #guestSelection [options]="guestCollection" [(ngModel)]="item.guestId"
-                                        appendTo="body" [filter]="true" optionValue="id" filterBy="firstName,lastName"
-                                        placeholder="Select a Guest">
-                                        <ng-template let-guestSelection pTemplate="selectedItem">
-                                            {{guestSelection.firstName}} {{guestSelection.lastName}}
-                                        </ng-template>
-                                        <ng-template let-guestSelection pTemplate="item">
-                                            {{guestSelection.firstName}} {{guestSelection.lastName}}
-                                        </ng-template>
-                                    </p-dropdown>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{item?.guest?.firstName}} {{item?.guest?.lastName}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="item.code" />
-                                    <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-refresh"
-                                        (click)="generateCode(item, 5)" pTooltip="Generate Code"></button>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{item.code}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-dropdown #maxGuestsSelection [options]="maxGuestsCollection"
-                                        [(ngModel)]="item.maxGuests" appendTo="body">
-                                        <ng-template let-maxGuestsSelection pTemplate="selectedItem">
-                                            {{maxGuestsSelection}}
-                                        </ng-template>
-                                        <ng-template let-maxGuestsSelection pTemplate="item">
-                                            {{maxGuestsSelection}}
-                                        </ng-template>
-                                    </p-dropdown>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{item.maxGuests}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-checkbox [(ngModel)]="item.limitedView" [binary]="true" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    <span *ngIf="item.limitedView" class="pi pi-check"></span>
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <!-- <td>{{item.dateCreated}}</td>
-                        <td>{{item.dateUpdated}}</td> -->
-                        <td>
-                            <div class="flex">
-                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                                    icon="pi pi-pencil" (click)="editRow()"
-                                    class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
-                                </button>
-                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning mr-2"
-                                    icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
+            <div class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="title">Title</label>
 
-                                <a *ngIf="!editing" rel="noreferrer noopener" target="_blank"
-                                    routerLink="/invitation/{{item.code}}" pButton pRipple label="View Invitation"
-                                    class="p-button-text"></a>
+                    <input pInputText *ngIf="!loading" id="title" type="text" [(ngModel)]="event.title"
+                        [value]="event.title" />
 
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="description">Description</label>
+                    <textarea pInputText *ngIf="!loading" id="description" rows="1" type="text"
+                        [(ngModel)]="event.description" [value]="event.description"></textarea>
 
-                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                                    icon="pi pi-check" (click)="save(item)"
-                                    class="p-button-rounded p-button-text p-button-success mr-2">
-                                </button>
-                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
-                                    icon="pi pi-times" (click)="refreshGrid()"
-                                    class="p-button-rounded p-button-text p-button-danger">
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="event-type">Type</label>
+
+                    <p-dropdown *ngIf="!loading" [options]="eventTypeCollection" [(ngModel)]="event.eventTypeId"
+                        optionValue="id" optionLabel="name" placeholder="Select event type">
+                    </p-dropdown>
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="zip">Max Guests</label>
+                    <p-inputNumber *ngIf="!loading" mode="decimal" [showButtons]="true" [min]="0" [max]="500">
+                    </p-inputNumber>
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="location">Location</label>
+                    <input pInputTextarea *ngIf="!loading" id="address" />
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label htmlFor="start-date">Start Date</label>
+                    <p-calendar *ngIf="!loading" [showIcon]="true" [(ngModel)]="event.startDate"
+                        dateFormat="yy-mm-dd"></p-calendar>
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label htmlFor="end-date">End Date</label>
+                    <p-calendar *ngIf="!loading" [showIcon]="true" [(ngModel)]="event.endDate"
+                        dateFormat="yy-mm-dd"></p-calendar>
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+            </div>
+            <button pButton *ngIf="!loading" label="Submit" (click)="save()"></button>
         </div>
     </div>
 </div>

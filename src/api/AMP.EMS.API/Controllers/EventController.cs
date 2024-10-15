@@ -43,6 +43,7 @@ namespace AMP.EMS.API.Controllers
             if (entity == null) return BadRequest();
 
             entity.Title = data.Title;
+            entity.EventTypeId = data.EventTypeId;
             entity.Description = data.Description ?? string.Empty;
             entity.StartDate = data.StartDate;
             entity.EndDate = data.EndDate;
