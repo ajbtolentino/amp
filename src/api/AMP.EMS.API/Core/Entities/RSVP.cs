@@ -10,5 +10,5 @@ public class RSVP : BaseEntity<Guid>
     public RSVPResponse Response { get; set; }
     public string PhoneNumber { get; set; } = string.Empty;
 
-    public Invitation? Invitation { get; set; }
+    public EventInvitation? Invitation { get; set; }
 }

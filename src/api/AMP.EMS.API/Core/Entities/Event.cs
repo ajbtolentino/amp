@@ -10,10 +10,15 @@ public class Event : BaseEntity<Guid>
 
     public string Description { get; set; } = string.Empty;
 
+    public string Location { get; set; }
+
+    public int MaxGuests { get; set; }
+
     public required DateTime StartDate { get; set; }
 
     public required DateTime EndDate { get; set; }
 
     public EventType? EventType { get; set; }
-    public ICollection<Invitation> Invitations { get; set; } = [];
+    public ICollection<EventInvitation> Invitations { get; set; } = [];
+    public ICollection<EventGuest> Guests { get; set; } = [];
 }

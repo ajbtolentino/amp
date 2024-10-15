@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InvitationService } from '../../../core/services/invitation.service';
+import { InvitationService } from '../../../core/services/event-invitation.service';
 import { Invitation } from '../../../core/models/invitation';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Rsvp } from '../../../core/models/rsvp';

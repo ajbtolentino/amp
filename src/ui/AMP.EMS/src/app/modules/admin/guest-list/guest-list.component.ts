@@ -47,6 +47,7 @@ export class GuestListComponent implements OnInit {
     if (res?.data) this.items = res.data;
 
     this.loading = false;
+    this.isCreating = false;
   }
 
   addRow = async () => {

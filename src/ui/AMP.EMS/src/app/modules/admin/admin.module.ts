@@ -10,7 +10,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import { EventListComponent } from './event-list/event-list.component';
-import { EventTypesComponent } from './event-types/event-types.component';
+import { ConfigurationComponent } from './configuration/configuration.component';
 import { CheckboxModule } from 'primeng/checkbox';
 import { GuestListComponent } from './guest-list/guest-list.component';
 import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
@@ -22,14 +22,16 @@ import { InputTextareaModule } from "primeng/inputtextarea";
 import { EventInvitationsComponent } from './event-invitations/event-invitations.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AppBreadcrumbsComponent } from '../../layout/app.breadcrumbs.component';
+import { EventRolesComponent } from './event-roles/event-roles.component';
 
 @NgModule({
   declarations: [
     EventDetailsComponent,
     EventListComponent,
-    EventTypesComponent,
+    ConfigurationComponent,
     GuestListComponent,
-    EventInvitationsComponent
+    EventInvitationsComponent,
+    EventRolesComponent
   ],
   imports: [
     ButtonModule,
@@ -55,14 +57,14 @@ import { AppBreadcrumbsComponent } from '../../layout/app.breadcrumbs.component'
         children: [
           {
             path: 'events',
-            title: 'Manage Events',
+            title: 'Events',
             data: { breadcrumb: 'Events' },
             component: EventListComponent,
             canActivate: [autoLoginPartialRoutesGuard],
           },
           {
             path: 'event',
-            data: { breadcrumb: 'Events', },
+            data: { breadcrumb: 'Event', },
             canActivate: [autoLoginPartialRoutesGuard],
             children: [
               {
@@ -83,18 +85,38 @@ import { AppBreadcrumbsComponent } from '../../layout/app.breadcrumbs.component'
                 component: EventDetailsComponent,
               },
               {
-                path: 'invitations/:id',
-                title: 'Event Invitations',
-                data: { breadcrumb: 'Event Invitations' },
-                component: EventInvitationsComponent,
-              }
+                path: 'invitations',
+                title: 'Invitations',
+                data: { breadcrumb: null },
+                children: [
+                  {
+                    path: '',
+                    title: 'Invitations',
+                    data: { breadcrumb: null },
+                    component: EventInvitationsComponent,
+                  },
+                  {
+                    path: ':id',
+                    title: 'Invitations',
+                    data: { breadcrumb: null },
+                    component: EventInvitationsComponent,
+                  }
+                ]
+              },
+              {
+                path: 'roles',
+                title: 'Roles',
+                data: { breadcrumb: 'Roles' },
+                component: EventRolesComponent,
+                canActivate: [autoLoginPartialRoutesGuard],
+              },
             ]
           },
           {
-            path: 'event-types',
-            title: 'Manage Events Types',
-            data: { breadcrumb: 'Event Types' },
-            component: EventTypesComponent,
+            path: 'configuration',
+            title: 'Configuration',
+            data: { breadcrumb: 'Configuration' },
+            component: ConfigurationComponent,
             canActivate: [autoLoginPartialRoutesGuard],
           },
           {

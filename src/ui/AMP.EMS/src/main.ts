@@ -3,7 +3,7 @@ import { AppComponent } from './app/app.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventService } from './app/core/services/event.service';
 import { GuestService } from './app/core/services/guest.service';
-import { InvitationService } from './app/core/services/invitation.service';
+import { InvitationService } from './app/core/services/event-invitation.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';

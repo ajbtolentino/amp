@@ -29,16 +29,12 @@
                         </th>
                         <th pSortableColumn="firstName">First Name <p-sortIcon field="firstName"></p-sortIcon></th>
                         <th pSortableColumn="lastName">Last Name <p-sortIcon field="lastName"></p-sortIcon></th>
-                        <th pSortableColumn="dateCreated">Date Created<p-sortIcon field="dateCreated"></p-sortIcon></th>
-                        <th pSortableColumn="dateUpdated">Date Updated<p-sortIcon field="dateUpdated"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
                     <tr>
                         <td></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td></td>
@@ -69,8 +65,6 @@
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td>{{item.dateCreated}}</td>
-                        <td>{{item.dateUpdated}}</td>
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow

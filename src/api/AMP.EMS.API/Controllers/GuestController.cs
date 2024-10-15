@@ -5,17 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]"), Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class GuestController(IUnitOfWork unitOfWork) : ApiBaseController<Guest, Guid>(unitOfWork)
     {
         public record GuestData(string FirstName, string LastName);
-
-        [HttpGet]
-        public new IActionResult GetAll()
-        {
-            return base.GetAll();
-        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GuestData data)

@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]"), Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class EventController(IUnitOfWork unitOfWork) : ApiBaseController<Event, Guid>(unitOfWork)
     {
-        public record EventData(string Title, Guid EventTypeId, string? Description, DateTime StartDate, DateTime EndDate);
+        public record EventData(string Title, Guid EventTypeId, string? Description, string? Location, int MaxGuests, DateTime StartDate, DateTime EndDate);
 
         [HttpGet]
-        public new IActionResult GetAll()
+        public override IActionResult GetAll()
         {
             var entities = this.entityRepository.GetAll().Include(_ => _.EventType).AsNoTracking();
 
@@ -29,6 +29,8 @@ namespace AMP.EMS.API.Controllers
                 Title = data.Title,
                 EventTypeId = data.EventTypeId,
                 Description = data.Description ?? string.Empty,
+                Location = data.Location ?? string.Empty,
+                MaxGuests = data.MaxGuests,
                 StartDate = data.StartDate,
                 EndDate = data.EndDate
             });
@@ -45,6 +47,8 @@ namespace AMP.EMS.API.Controllers
             entity.Title = data.Title;
             entity.EventTypeId = data.EventTypeId;
             entity.Description = data.Description ?? string.Empty;
+            entity.Location = data.Location ?? string.Empty;
+            entity.MaxGuests = data.MaxGuests;
             entity.StartDate = data.StartDate;
             entity.EndDate = data.EndDate;
 

@@ -24,7 +24,7 @@ export class BreadcrumbService {
         });
     }
 
-    private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Array<{ label: string, url: string }> = []): Array<{ label: string, url: string }> {
+    private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Array<MenuItem> = []): Array<MenuItem> {
         const children: ActivatedRoute[] = route.children;
 
         if (!children.length) {
@@ -40,7 +40,7 @@ export class BreadcrumbService {
             const label = child.snapshot.data[BreadcrumbService.ROUTE_DATA_BREADCRUMB];
             if (label) {
                 if (child.snapshot.data['url']) url = child.snapshot.data['url'];
-                breadcrumbs.push({ label, url });
+                breadcrumbs.push({ label, url, target: '_self' });
             }
 
             return this.createBreadcrumbs(child, url, breadcrumbs);

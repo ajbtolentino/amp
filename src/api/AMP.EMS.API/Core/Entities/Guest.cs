@@ -7,6 +7,8 @@ public class Guest : BaseEntity<Guid>
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
+    public string NickName { get; set; } = string.Empty;
+    public string PhoneNumber { get; set; } = string.Empty;
 
-    public ICollection<Invitation> Invitations { get; set; } = [];
+    public ICollection<EventInvitation> Invitations { get; set; } = [];
 }

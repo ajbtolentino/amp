@@ -8,32 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]"), Authorize]
+    [Route("api/[controller]")]
     [ApiController]
-    public class InvitationController(IUnitOfWork unitOfWork) : ApiBaseController<Invitation, Guid>(unitOfWork)
+    public class EventInvitationController(IUnitOfWork unitOfWork) : ApiBaseController<EventInvitation, Guid>(unitOfWork)
     {
         public record InvitationData(string Code, Guid EventId, Guid GuestId, int MaxGuests, bool LimitedView);
-
-        // [HttpGet]
-        // [Route("{id}")]
-        // [AllowAnonymous]
-        // public new async Task<IActionResult> Get(Guid id)
-        // {
-        //     var invitation = await this.entityRepository.Get(id);
-
-        //     return Ok(new OkResponse<Invitation>(string.Empty) { Data = invitation });
-        // }
 
         [HttpGet]
         [Route("{code}/[action]")]
         [AllowAnonymous]
         public IActionResult RSVP(string code)
         {
-            var invitation = unitOfWork.Repository<Invitation>().GetAll().Include(_ => _.Guest).FirstOrDefault(_ => _.Code == code);
+            var invitation = unitOfWork.Repository<EventInvitation>().GetAll().Include(_ => _.Guest).FirstOrDefault(_ => _.Code == code);
 
             if (invitation == null) return BadRequest();
 
-            return Ok(new OkResponse<Invitation>(string.Empty) { Data = invitation });
+            return Ok(new OkResponse<EventInvitation>(string.Empty) { Data = invitation });
         }
 
         [HttpGet]
@@ -47,13 +37,13 @@ namespace AMP.EMS.API.Controllers
                                 .Where(_ => _.EventId == eventId)
                                 .Include(_ => _.Guest);
 
-            return Ok(new OkResponse<IEnumerable<Invitation>>(string.Empty) { Data = collection });
+            return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = collection });
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] InvitationData data)
         {
-            return await base.Post(new Invitation
+            return await base.Post(new EventInvitation
             {
                 Code = data.Code,
                 EventId = data.EventId,
@@ -75,7 +65,6 @@ namespace AMP.EMS.API.Controllers
             entity.EventId = data.EventId;
             entity.GuestId = data.GuestId;
             entity.MaxGuests = data.MaxGuests;
-            entity.DateUpdated = DateTime.Now;
             entity.LimitedView = data.LimitedView;
 
             return await base.Put(entity);

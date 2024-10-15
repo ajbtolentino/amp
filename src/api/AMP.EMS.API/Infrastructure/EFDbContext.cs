@@ -19,13 +19,13 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .HasForeignKey(_ => _.EventId)
             .HasPrincipalKey(_ => _.Id);
 
-        modelBuilder.Entity<Invitation>()
+        modelBuilder.Entity<EventInvitation>()
             .HasMany(_ => _.RSVPs)
             .WithOne(_ => _.Invitation)
             .HasForeignKey(_ => _.InvitationId)
             .HasPrincipalKey(_ => _.Id);
 
-        modelBuilder.Entity<Invitation>()
+        modelBuilder.Entity<EventInvitation>()
             .HasMany(_ => _.RSVPs)
             .WithOne(_ => _.Invitation)
             .HasForeignKey(_ => _.InvitationId)
@@ -41,11 +41,23 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<Guest>()
+        modelBuilder.Entity<EventGuest>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<Invitation>()
+        modelBuilder.Entity<EventRole>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<EventGuestRole>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<EventInvitation>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Guest>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
@@ -56,7 +68,7 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
 
     public DbSet<Event> Events { get; private set; }
     public DbSet<Guest> Guests { get; private set; }
-    public DbSet<Invitation> Invitations { get; private set; }
+    public DbSet<EventInvitation> Invitations { get; private set; }
     public DbSet<RSVP> RSVPs { get; private set; }
 
     public TEntity Add<TEntity, TID>(TEntity entity) where TEntity : class, IEntity<TID>

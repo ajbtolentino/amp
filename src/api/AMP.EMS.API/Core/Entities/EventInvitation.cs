@@ -2,7 +2,7 @@ using AMP.Infrastructure.Entity;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class Invitation : BaseEntity<Guid>
+public class EventInvitation : BaseEntity<Guid>
 {
     public required Guid GuestId { get; set; }
     public required Guid EventId { get; set; }

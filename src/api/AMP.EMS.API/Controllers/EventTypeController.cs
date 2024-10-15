@@ -10,12 +10,6 @@ namespace AMP.EMS.API.Controllers
     {
         public record EventTypeData(string Name, string? Description);
 
-        [HttpGet]
-        public new IActionResult GetAll()
-        {
-            return base.GetAll();
-        }
-
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EventTypeData data)
         {

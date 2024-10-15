@@ -2,11 +2,12 @@ using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.Infrastructure.Entity;
 using AMP.Infrastructure.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]"), Authorize]
     [ApiController]
     public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork) : ControllerBase
         where TEntity : BaseEntity<TKey>
@@ -15,7 +16,7 @@ namespace AMP.EMS.API.Controllers
         protected readonly IRepository<TEntity> entityRepository = unitOfWork.Repository<TEntity>();
 
         [HttpGet]
-        protected IActionResult GetAll()
+        public virtual IActionResult GetAll()
         {
             var entities = this.entityRepository.GetAll();
 
@@ -24,7 +25,7 @@ namespace AMP.EMS.API.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> Get(Guid id)
+        public virtual async Task<IActionResult> Get(Guid id)
         {
             var @event = await this.entityRepository.Get(id);
 
@@ -37,9 +38,6 @@ namespace AMP.EMS.API.Controllers
             try
             {
                 unitOfWork.BeginTransaction();
-
-                entity.DateCreated = DateTime.Now;
-                entity.CreatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
                 var newEntity = await this.entityRepository.Add(entity);
 
@@ -62,9 +60,6 @@ namespace AMP.EMS.API.Controllers
             try
             {
                 unitOfWork.BeginTransaction();
-
-                entity.DateUpdated = DateTime.Now;
-                entity.UpdatedBy = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
 
                 var result = this.entityRepository.Update(entity);
 

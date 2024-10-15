@@ -19,11 +19,11 @@ import { EventType } from '../../../core/models/event-type';
 import { EventTypeService } from '../../../core/services/event-type.service';
 
 @Component({
-  selector: 'app-event-types',
-  templateUrl: './event-types.component.html',
-  styleUrl: './event-types.component.scss',
+  selector: 'app-configuration',
+  templateUrl: './configuration.component.html',
+  styleUrl: './configuration.component.scss',
 })
-export class EventTypesComponent implements OnInit {
+export class ConfigurationComponent implements OnInit {
   items!: Event[];
 
   selectedItems!: EventType[];

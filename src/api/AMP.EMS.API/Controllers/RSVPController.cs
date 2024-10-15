@@ -16,7 +16,7 @@ namespace AMP.EMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RSVPData data)
         {
-            var invitation = await unitOfWork.Repository<Invitation>().Get(data.InvitationId);
+            var invitation = await unitOfWork.Repository<EventInvitation>().Get(data.InvitationId);
 
             if (invitation == null) return BadRequest();
 

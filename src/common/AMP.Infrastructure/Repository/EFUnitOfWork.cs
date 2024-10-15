@@ -1,12 +1,15 @@
 using AMP.Core.Repository;
+using AMP.Infrastructure.Entity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
+using System.Security.Claims;
 
 namespace AMP.Infrastructure.Repository;
 
-public class EFUnitOfWork(DbContext dbContext, IServiceProvider serviceProvider) : IUnitOfWork
+public class EFUnitOfWork(DbContext dbContext, IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider) : IUnitOfWork
 {
     public IRepository<TEntity> Repository<TEntity>() where TEntity : class => serviceProvider.GetRequiredService<EFRepository<TEntity>>();
 
@@ -16,5 +19,25 @@ public class EFUnitOfWork(DbContext dbContext, IServiceProvider serviceProvider)
 
     public async Task RollbackTransactionAsync() => await dbContext.Database.CurrentTransaction.RollbackAsync();
 
-    public async Task SaveChangesAsync() => await dbContext.SaveChangesAsync();
+    public async Task SaveChangesAsync()
+    {
+        foreach (var entry in dbContext.ChangeTracker.Entries<BaseEntity<Guid>>())
+        {
+            var claims = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedBy = claims.Value;
+                    entry.Entity.DateCreated = DateTime.Now;
+                    break;
+                case EntityState.Modified:
+                    entry.Entity.UpdatedBy = claims.Value;
+                    entry.Entity.DateUpdated = DateTime.Now;
+                    break;
+            }
+        }
+
+        await dbContext.SaveChangesAsync();
+    }
 }

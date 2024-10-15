@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Invitation } from '../../../core/models/invitation';
-import { InvitationService } from '../../../core/services/invitation.service';
+import { InvitationService } from '../../../core/services/event-invitation.service';
 import { ActivatedRoute } from '@angular/router';
 
 import { Guest } from '../../../core/models/guest';
@@ -47,10 +47,9 @@ export class EventInvitationsComponent implements OnInit {
     this.route.paramMap.subscribe(data => {
       const eventId = data.get("id");
 
-      if (eventId) {
-        this.eventId = eventId;
-        this.refreshGrid();
-      }
+      if (eventId) this.eventId = eventId;
+
+      this.refreshGrid();
     });
   }
 
@@ -61,8 +60,12 @@ export class EventInvitationsComponent implements OnInit {
       const eventResponse = await this.eventService.get(this.eventId);
       if (eventResponse?.data) this.event = eventResponse.data;
 
-      const res = await this.invitationService.getAll(this.eventId);
-      if (res?.data) this.items = res.data;
+      const eventInvitationResponse = await this.invitationService.getAll(this.eventId);
+      if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
+    }
+    else {
+      const eventInvitationResponse = await this.invitationService.getAll();
+      if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
     }
 
     this.loading = false;

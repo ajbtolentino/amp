@@ -75,6 +75,8 @@ builder.Services.AddAuthentication()
 builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<DbContext, EMSDbContext>();
 
+builder.Services.AddHttpContextAccessor();
+
 //Add Unit of Work with Decorator
 builder.Services.ConfigureUnitOfWork<EFUnitOfWork>();
 

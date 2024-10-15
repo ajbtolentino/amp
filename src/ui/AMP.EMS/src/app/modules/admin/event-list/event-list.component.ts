@@ -94,10 +94,6 @@ export class EventListComponent implements OnInit {
     });
   }
 
-  initTableEdit = () => {
-    console.log("Edit");
-  }
-
   save = async (item: Event | undefined) => {
     if (item?.title?.trim()) {
       this.loading = true;
