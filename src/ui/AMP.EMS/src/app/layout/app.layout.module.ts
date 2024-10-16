@@ -9,41 +9,43 @@ import { BadgeModule } from 'primeng/badge';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { RippleModule } from 'primeng/ripple';
-import { AppMenuComponent } from './app.menu.component';
-import { AppMenuitemComponent } from './app.menuitem.component';
 import { RouterModule } from '@angular/router';
-import { AppTopBarComponent } from './app.topbar.component';
-import { AppFooterComponent } from './app.footer.component';
-import { AppSidebarComponent } from "./app.sidebar.component";
-import { AppLayoutComponent } from "./app.layout.component";
+import { EventTopBarComponent } from './event-layout/event-topbar.component';
+import { FooterComponent } from './footer/app.footer.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { AppBreadcrumbsComponent } from './app.breadcrumbs.component';
+import { BreadcrumbsComponent } from './breadcrumbs/app.breadcrumbs.component';
+import { EventLayoutComponent } from './event-layout/event-layout.component';
+import { EventsLayoutComponent } from './events-layout/events-layout.component';
+import { EventMenuComponent } from './event-layout/event-menu.component';
+import { EventMenuitemComponent } from './event-layout/event-menuitem.component';
+import { EventSidebarComponent } from './event-layout/event-sidebar.component';
+import { EventsTopBarComponent } from './events-layout/events-topbar.component';
 
 @NgModule({
     declarations: [
-        AppMenuitemComponent,
-        AppTopBarComponent,
-        AppFooterComponent,
-        AppMenuComponent,
-        AppSidebarComponent,
-        AppLayoutComponent,
-        AppBreadcrumbsComponent
+        BreadcrumbsComponent,
+        EventTopBarComponent,
+        EventMenuComponent,
+        EventMenuitemComponent,
+        EventSidebarComponent,
+        EventsTopBarComponent,
+        EventLayoutComponent,
+        EventsLayoutComponent,
+        FooterComponent,
     ],
     imports: [
+        BadgeModule,
         BrowserModule,
         BreadcrumbModule,
+        BrowserAnimationsModule,
         FormsModule,
         HttpClientModule,
-        BrowserAnimationsModule,
         InputTextModule,
-        SidebarModule,
-        BadgeModule,
-        RadioButtonModule,
         InputSwitchModule,
+        RadioButtonModule,
+        SidebarModule,
         RippleModule,
         RouterModule,
-        BreadcrumbModule
     ],
-    exports: [AppLayoutComponent]
 })
 export class AppLayoutModule { }

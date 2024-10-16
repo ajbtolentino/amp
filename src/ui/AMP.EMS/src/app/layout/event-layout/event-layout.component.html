@@ -1,0 +1,21 @@
+<div class="layout-wrapper" [ngClass]="containerClass">
+    <app-event-topbar [eventId]="eventId"></app-event-topbar>
+
+    <div class="layout-sidebar">
+        <app-event-sidebar [eventId]="eventId"></app-event-sidebar>
+    </div>
+
+    <div class="layout-main-container">
+        <div class="layout-main">
+            <div class="grid">
+                <div class="col-12">
+                    <app-breadcrumbs></app-breadcrumbs>
+                </div>
+            </div>
+            <router-outlet></router-outlet>
+        </div>
+        <app-footer></app-footer>
+    </div>
+
+    <div class="layout-mask"></div>
+</div>

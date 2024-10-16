@@ -14,12 +14,13 @@ import { importProvidersFrom } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from './app/layout/app.layout.module';
 import { EventTypeService } from './app/core/services/event-type.service';
-import { AdminModule } from './app/modules/admin/admin.module';
+import { EventsModule } from './app/modules/events/events.module';
 import { NotfoundComponent } from './app/pages/notfound/notfound.component';
+import { EventsLayoutComponent } from './app/layout/events-layout/events-layout.component';
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom([BrowserAnimationsModule, AppLayoutModule, AdminModule]),
+    importProvidersFrom([BrowserAnimationsModule, AppLayoutModule, EventsModule]),
     provideHttpClient(withInterceptors([authInterceptor()])),
     provideAuth({
       config: {
@@ -42,8 +43,19 @@ bootstrapApplication(AppComponent, {
       [
         {
           path: '',
-          title: 'EMS',
-          loadChildren: () => import('./app/modules/admin/admin.module').then(m => m.AdminModule)
+          title: 'Events',
+          component: EventsLayoutComponent
+        },
+        {
+          path: 'events',
+          title: 'Events',
+          loadChildren: () => import('./app/modules/events/events.module').then(m => m.EventsModule)
+        },
+        {
+          path: 'event',
+          title: 'Event',
+          canActivate: [autoLoginPartialRoutesGuard],
+          loadChildren: () => import('./app/modules/event/event.module').then(m => m.EventModule)
         },
         {
           path: '',
