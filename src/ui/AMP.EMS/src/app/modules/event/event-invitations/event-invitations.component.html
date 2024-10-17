@@ -1,5 +1,16 @@
 <div class="grid">
     <div class="col-12">
+        <div class="card">
+            <p-tabView orientation="left">
+                <p-tabPanel header="Template" class="line-height-3 m-0">
+                    <ng-template appEventInvitationTemplateViewer></ng-template>
+                </p-tabPanel>
+                <p-tabPanel header="Code" class="line-height-3 m-0">
+                    <app-event-invitation-template-editor #editor [(templateCode)]="templateCode"
+                        (templateCodeChange)="onTemplateCodeChange($event)"></app-event-invitation-template-editor>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
         <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, Injector, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Invitation } from '../../../core/models/invitation';
@@ -11,11 +11,15 @@ import { Event } from '../../../core/models/event';
 import { GuestService } from '../../../core/services/guest.service';
 import { EventService } from '../../../core/services/event.service';
 import { Table } from 'primeng/table';
+import { EventInvitationTemplateViewerComponent } from './event-invitation-template-viewer.component';
+import { EventInvitationTemplateViewerDirective } from './event-invitation-template-viewer.directive';
+import { DOCUMENT } from '@angular/common';
+import { EventInvitationTemplateEditorComponent } from './event-invitation-template-editor.component';
+export type Content<T> = string | TemplateRef<T> | Type<T>;
 
 @Component({
   selector: 'app-event-invitations',
-  templateUrl: './event-invitations.component.html',
-  styleUrl: './event-invitations.component.scss'
+  templateUrl: './event-invitations.component.html'
 })
 export class EventInvitationsComponent implements OnInit {
   guestCollection: Guest[] | undefined;
@@ -34,23 +38,59 @@ export class EventInvitationsComponent implements OnInit {
 
   @ViewChild('dt') table!: Table;
 
+  @ViewChild('editor') editor!: EventInvitationTemplateEditorComponent;
+
+  @ViewChild(EventInvitationTemplateViewerDirective, { static: true }) eventInvitationViewerHost!: EventInvitationTemplateViewerDirective;
+
   loading: boolean = true;
+
+  templateCode!: string;
 
   constructor(private eventService: EventService,
     private invitationService: InvitationService,
     private guestService: GuestService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private injector: Injector,
+    @Inject(DOCUMENT) private document: Document) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.route.parent?.paramMap.subscribe(data => {
       const eventId = data.get("id");
 
       if (eventId) this.eventId = eventId;
 
+
       this.refreshGrid();
     });
+
+    this.openComponent(this.templateCode)
+  }
+
+  onTemplateCodeChange(e: any) {
+    this.openComponent(e);
+  }
+
+  openComponent<T>(content: Content<T>) {
+    const ngContent = this.createNgContent(content);
+    let options = {
+      injector: this.injector,
+      projectableNodes: ngContent
+    }
+    this.eventInvitationViewerHost.viewContainerRef.clear();
+    const factory = this.eventInvitationViewerHost.viewContainerRef.createComponent(EventInvitationTemplateViewerComponent, options);
+    factory.hostView.detectChanges();
+
+  }
+
+  createNgContent<T>(content: Content<T>) {
+    if (typeof content === 'string') {
+      const element = this.document.createElement('div');
+      element.innerHTML = content;
+      return [[element]];
+    }
+    return [[]]
   }
 
   refreshGrid = async () => {

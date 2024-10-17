@@ -21,13 +21,21 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { EventRolesComponent } from './event-roles/event-roles.component';
 import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 import { EventLayoutComponent } from '../../layout/event-layout/event-layout.component';
+import { EventInvitationTemplateEditorComponent } from './event-invitations/event-invitation-template-editor.component';
+import { EditorModule } from 'primeng/editor';
+import { EventInvitationTemplateViewerComponent } from './event-invitations/event-invitation-template-viewer.component';
+import { EventInvitationTemplateViewerDirective } from './event-invitations/event-invitation-template-viewer.directive';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [
     EventDetailsComponent,
     EventGuestsComponent,
     EventInvitationsComponent,
-    EventRolesComponent
+    EventInvitationTemplateEditorComponent,
+    EventRolesComponent,
+    EventInvitationTemplateViewerComponent,
+    EventInvitationTemplateViewerDirective,
   ],
   imports: [
     ButtonModule,
@@ -35,6 +43,7 @@ import { EventLayoutComponent } from '../../layout/event-layout/event-layout.com
     CommonModule,
     CalendarModule,
     DropdownModule,
+    EditorModule,
     FormsModule,
     InputTextModule,
     InputTextareaModule,
@@ -44,6 +53,7 @@ import { EventLayoutComponent } from '../../layout/event-layout/event-layout.com
     TooltipModule,
     RippleModule,
     SkeletonModule,
+    TabViewModule,
     ToolbarModule,
     RouterModule.forChild([
       {
