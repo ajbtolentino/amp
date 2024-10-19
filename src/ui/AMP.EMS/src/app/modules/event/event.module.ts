@@ -21,33 +21,54 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { EventRolesComponent } from './event-roles/event-roles.component';
 import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 import { EventLayoutComponent } from '../../layout/event-layout/event-layout.component';
-import { EventInvitationTemplateEditorComponent } from './event-invitations/event-invitation-template-editor.component';
 import { EditorModule } from 'primeng/editor';
-import { EventInvitationTemplateViewerComponent } from './event-invitations/event-invitation-template-viewer.component';
-import { EventInvitationTemplateViewerDirective } from './event-invitations/event-invitation-template-viewer.directive';
+import { EventInvitationRSVP, EventInvitationTemplateViewerComponent } from './event-invitation/event-invitation-template-viewer.component';
 import { TabViewModule } from 'primeng/tabview';
+import { EventGuestInvitationComponent } from './event-guest-invitation/event-guest-invitation.component';
+import { EventInvitationComponent } from './event-invitation/event-invitation.component';
+import { EventGuestInvitationsComponent } from './event-invitation/event-guest-invitations.component';
+import { Highlight, provideHighlightOptions } from 'ngx-highlightjs';
+import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
+import { CodeEditorModule } from '@ngstack/code-editor';
+import { EventGuestDetailsComponent } from './event-guests/event-guest-details.component';
+import { ChartModule } from 'primeng/chart';
+import { MenuModule } from 'primeng/menu';
 
 @NgModule({
   declarations: [
+    EventDashboardComponent,
     EventDetailsComponent,
     EventGuestsComponent,
     EventInvitationsComponent,
-    EventInvitationTemplateEditorComponent,
+    EventInvitationRSVP,
     EventRolesComponent,
     EventInvitationTemplateViewerComponent,
-    EventInvitationTemplateViewerDirective,
+    EventGuestInvitationComponent,
+    EventInvitationComponent,
+    EventGuestInvitationsComponent,
+    EventGuestDetailsComponent,
+  ],
+  providers: [
+    provideHighlightOptions({
+      coreLibraryLoader: () => import('highlight.js/lib/core'),
+      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+    })
   ],
   imports: [
     ButtonModule,
+    ChartModule,
     CheckboxModule,
     CommonModule,
     CalendarModule,
+    CodeEditorModule.forChild(),
     DropdownModule,
+    DynamicHooksComponent,
     EditorModule,
     FormsModule,
     InputTextModule,
     InputTextareaModule,
     InputNumberModule,
+    MenuModule,
     RouterModule,
     TableModule,
     TooltipModule,
@@ -55,6 +76,7 @@ import { TabViewModule } from 'primeng/tabview';
     SkeletonModule,
     TabViewModule,
     ToolbarModule,
+    Highlight,
     RouterModule.forChild([
       {
         path: '',
@@ -62,8 +84,9 @@ import { TabViewModule } from 'primeng/tabview';
         redirectTo: '/events'
       },
       {
-        path: ':id',
+        path: ':eventId',
         title: 'EMS',
+        canActivate: [autoLoginPartialRoutesGuard],
         component: EventLayoutComponent,
         children: [
           {
@@ -80,27 +103,73 @@ import { TabViewModule } from 'primeng/tabview';
           },
           {
             path: 'invitations',
-            title: 'Invitations',
-            data: { breadcrumb: null },
-            component: EventInvitationsComponent,
+            data: { breadcrumb: 'Invitations' },
+            children: [
+              {
+                path: '',
+                title: 'Invitations',
+                data: { breadcrumb: null },
+                component: EventInvitationsComponent,
+              },
+              {
+                path: 'add',
+                pathMatch: 'full',
+                title: 'Add Invitation',
+                data: { breadcrumb: null },
+                component: EventInvitationComponent,
+              }
+            ]
+          },
+          {
+            path: 'invitation',
+            children: [
+              {
+                path: ':eventInvitationId',
+                title: 'Invitation',
+                data: { breadcrumb: null },
+                component: EventInvitationComponent,
+              }
+            ]
           },
           {
             path: 'guests',
             title: 'Guests',
             data: { breadcrumb: 'Guests' },
-            component: EventGuestsComponent,
-            canActivate: [autoLoginPartialRoutesGuard],
+            children: [
+              {
+                path: '',
+                title: 'Event Guests',
+                data: { breadcrumb: null },
+                component: EventGuestsComponent,
+              },
+              {
+                path: 'add',
+                title: 'Add Guest',
+                data: { breadcrumb: null },
+                component: EventGuestDetailsComponent,
+              }
+            ]
+          },
+          {
+            path: 'guest',
+            children: [
+              {
+                path: ':eventGuestId',
+                title: 'Edit Guest',
+                data: { breadcrumb: null },
+                component: EventGuestDetailsComponent,
+              }
+            ]
           },
           {
             path: 'roles',
             title: 'Roles',
             data: { breadcrumb: 'Roles' },
             component: EventRolesComponent,
-            canActivate: [autoLoginPartialRoutesGuard],
           }
         ]
       }
-    ])
+    ]),
   ]
 })
 

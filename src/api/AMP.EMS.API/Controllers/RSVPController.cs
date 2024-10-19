@@ -11,12 +11,12 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class RSVPController(IUnitOfWork unitOfWork) : ApiBaseController<RSVP, Guid>(unitOfWork)
     {
-        public record RSVPData(Guid InvitationId, [JsonConverter(typeof(StringEnumConverter))] RSVPResponse Response, string? PhoneNumber);
+        public record RSVPData(Guid EventInvitationId, [JsonConverter(typeof(StringEnumConverter))] RSVPResponse Response, string? PhoneNumber);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] RSVPData data)
         {
-            var invitation = await unitOfWork.Repository<EventInvitation>().Get(data.InvitationId);
+            var invitation = await unitOfWork.Repository<EventGuestInvitation>().Get(data.EventInvitationId);
 
             if (invitation == null) return BadRequest();
 
@@ -24,7 +24,7 @@ namespace AMP.EMS.API.Controllers
 
             return await base.Post(new RSVP
             {
-                InvitationId = invitation.Id,
+                EventGuestInvitationId = invitation.Id,
                 Response = data.Response,
                 PhoneNumber = data.PhoneNumber ?? string.Empty
             });

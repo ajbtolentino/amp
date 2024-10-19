@@ -20,6 +20,7 @@ import { EventMenuComponent } from './event-layout/event-menu.component';
 import { EventMenuitemComponent } from './event-layout/event-menuitem.component';
 import { EventSidebarComponent } from './event-layout/event-sidebar.component';
 import { EventsTopBarComponent } from './events-layout/events-topbar.component';
+import { CodeEditorModule } from '@ngstack/code-editor';
 
 @NgModule({
     declarations: [

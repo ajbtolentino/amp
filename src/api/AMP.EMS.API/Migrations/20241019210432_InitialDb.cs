@@ -126,11 +126,10 @@ namespace AMP.EMS.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    GuestId = table.Column<Guid>(type: "TEXT", nullable: false),
                     EventId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Code = table.Column<string>(type: "TEXT", nullable: false),
-                    MaxGuests = table.Column<int>(type: "INTEGER", nullable: false),
-                    LimitedView = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    Html = table.Column<string>(type: "TEXT", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
@@ -143,12 +142,6 @@ namespace AMP.EMS.API.Migrations
                         name: "FK_Invitations_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Invitations_Guests_GuestId",
-                        column: x => x.GuestId,
-                        principalTable: "Guests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -183,11 +176,43 @@ namespace AMP.EMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EventGuestInvitation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    GuestId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventInvitationId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Code = table.Column<string>(type: "TEXT", nullable: false),
+                    MaxGuests = table.Column<int>(type: "INTEGER", nullable: false),
+                    LimitedView = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventGuestInvitation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventGuestInvitation_Guests_GuestId",
+                        column: x => x.GuestId,
+                        principalTable: "Guests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventGuestInvitation_Invitations_EventInvitationId",
+                        column: x => x.EventInvitationId,
+                        principalTable: "Invitations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RSVPs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    InvitationId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventGuestInvitationId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Response = table.Column<int>(type: "INTEGER", nullable: false),
                     PhoneNumber = table.Column<string>(type: "TEXT", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -199,9 +224,9 @@ namespace AMP.EMS.API.Migrations
                 {
                     table.PrimaryKey("PK_RSVPs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RSVPs_Invitations_InvitationId",
-                        column: x => x.InvitationId,
-                        principalTable: "Invitations",
+                        name: "FK_RSVPs_EventGuestInvitation_EventGuestInvitationId",
+                        column: x => x.EventGuestInvitationId,
+                        principalTable: "EventGuestInvitation",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -214,6 +239,16 @@ namespace AMP.EMS.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_EventGuest_GuestId",
                 table: "EventGuest",
+                column: "GuestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventGuestInvitation_EventInvitationId",
+                table: "EventGuestInvitation",
+                column: "EventInvitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventGuestInvitation_GuestId",
+                table: "EventGuestInvitation",
                 column: "GuestId");
 
             migrationBuilder.CreateIndex(
@@ -237,14 +272,9 @@ namespace AMP.EMS.API.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invitations_GuestId",
-                table: "Invitations",
-                column: "GuestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RSVPs_InvitationId",
+                name: "IX_RSVPs_EventGuestInvitationId",
                 table: "RSVPs",
-                column: "InvitationId");
+                column: "EventGuestInvitationId");
         }
 
         /// <inheritdoc />
@@ -263,13 +293,16 @@ namespace AMP.EMS.API.Migrations
                 name: "EventRole");
 
             migrationBuilder.DropTable(
+                name: "EventGuestInvitation");
+
+            migrationBuilder.DropTable(
+                name: "Guests");
+
+            migrationBuilder.DropTable(
                 name: "Invitations");
 
             migrationBuilder.DropTable(
                 name: "Events");
-
-            migrationBuilder.DropTable(
-                name: "Guests");
 
             migrationBuilder.DropTable(
                 name: "EventType");

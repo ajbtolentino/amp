@@ -1,6 +1,6 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
+        <div class="card">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
@@ -11,7 +11,7 @@
 
                     <div class="my-2">
                         <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
-                            class="p-button-success mr-2" (click)="addRow()"></button>
+                            class="p-button-success mr-2" routerLink="/event/{{eventId}}/guests/add"></button>
 
                         <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
                             class="p-button-danger" (click)="deleteSelectedItems()"
@@ -42,47 +42,25 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-item let-editing="editing">
                     <tr [pEditableRow]="item">
-                        <td>
-                            <p-tableCheckbox [value]="item"></p-tableCheckbox>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="item.firstName" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{item.firstName}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="item.lastName" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{item.lastName}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
+                        <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
+                        <td>{{item.guest.firstName}}</td>
+                        <td>{{item.guest.lastName}}</td>
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                                    icon="pi pi-pencil" (click)="editRow()"
+                                    icon="pi pi-pencil" routerLink="/event/{{eventId}}/guest/{{item.id}}"
                                     class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
                                 </button>
                                 <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning"
                                     icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
-
-                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                                    icon="pi pi-check" (click)="save(item)"
-                                    class="p-button-rounded p-button-text p-button-success mr-2">
-                                </button>
-                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
-                                    icon="pi pi-times" (click)="refreshGrid()"
-                                    class="p-button-rounded p-button-text p-button-danger">
-                                </button>
                             </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [colSpan]="4">
+                            No records found
                         </td>
                     </tr>
                 </ng-template>

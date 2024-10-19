@@ -9,7 +9,7 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class GuestController(IUnitOfWork unitOfWork) : ApiBaseController<Guest, Guid>(unitOfWork)
     {
-        public record GuestData(string FirstName, string LastName);
+        public record GuestData(string FirstName, string LastName, string? Nickname, string? PhoneNumber);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] GuestData data)
@@ -17,7 +17,9 @@ namespace AMP.EMS.API.Controllers
             return await base.Post(new Guest
             {
                 FirstName = data.FirstName,
-                LastName = data.LastName
+                LastName = data.LastName,
+                NickName = data.Nickname ?? string.Empty,
+                PhoneNumber = data.PhoneNumber ?? string.Empty
             });
         }
 
@@ -31,6 +33,8 @@ namespace AMP.EMS.API.Controllers
 
             entity.FirstName = data.FirstName;
             entity.LastName = data.LastName;
+            entity.NickName = data.Nickname ?? string.Empty;
+            entity.PhoneNumber = data.PhoneNumber ?? string.Empty;
 
             return await base.Put(entity);
         }

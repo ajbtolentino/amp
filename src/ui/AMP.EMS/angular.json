@@ -36,7 +36,13 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "./node_modules/monaco-editor/min",
+                "output": "./assets/monaco"
+              },
+              {
+                "glob": "**/*.js",
+                "input": "./node_modules/@ngstack/code-editor/workers",
+                "output": "./assets/workers"
               }
             ],
             "styles": [

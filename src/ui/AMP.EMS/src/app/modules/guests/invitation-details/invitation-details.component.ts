@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { InvitationService } from '../../../core/services/event-invitation.service';
-import { Invitation } from '../../../core/models/invitation';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Rsvp } from '../../../core/models/rsvp';
 import { RsvpService } from '../../../core/services/rsvp.service';
+import { EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
+import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
 
 @Component({
   selector: 'app-invitation-details',
@@ -11,7 +11,7 @@ import { RsvpService } from '../../../core/services/rsvp.service';
   styleUrl: './invitation-details.component.scss'
 })
 export class InvitationDetailsComponent implements OnInit {
-  invitation: Invitation | undefined;
+  eventGuestInvitation: EventGuestInvitation | undefined;
 
   rsvp: Rsvp = {};
 
@@ -19,7 +19,7 @@ export class InvitationDetailsComponent implements OnInit {
 
   showDetails: boolean = false;
 
-  constructor(private invitationService: InvitationService,
+  constructor(private eventGuestInvitationService: EventGuestInvitationService,
     private rsvpService: RsvpService, private route: ActivatedRoute) {
     this.route.paramMap.subscribe(data => {
       const code = data.get("code");
@@ -39,12 +39,12 @@ export class InvitationDetailsComponent implements OnInit {
   }
 
   loadInvitation = async (code: string) => {
-    const response = await this.invitationService.rsvp(code);
+    const response = await this.eventGuestInvitationService.rsvp(code);
 
     if (response) {
-      this.invitation = response.data;
-      this.rsvp.invitationId = this.invitation?.id;
-      this.showDetails = !this.invitation?.limitedView;
+      this.eventGuestInvitation = response.data;
+      this.rsvp.invitationId = this.eventGuestInvitation?.id;
+      this.showDetails = !this.eventGuestInvitation?.limitedView;
     }
   }
 }

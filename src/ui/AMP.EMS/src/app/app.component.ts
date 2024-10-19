@@ -5,15 +5,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  imports: [
-    ToastModule,
-    RouterOutlet,
-    ConfirmDialogModule
-  ]
 })
 export class AppComponent implements OnInit {
   title = 'AMP.EMS';

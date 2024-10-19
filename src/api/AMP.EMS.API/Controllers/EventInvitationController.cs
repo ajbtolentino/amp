@@ -12,19 +12,7 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventInvitationController(IUnitOfWork unitOfWork) : ApiBaseController<EventInvitation, Guid>(unitOfWork)
     {
-        public record InvitationData(string Code, Guid EventId, Guid GuestId, int MaxGuests, bool LimitedView);
-
-        [HttpGet]
-        [Route("{code}/[action]")]
-        [AllowAnonymous]
-        public IActionResult RSVP(string code)
-        {
-            var invitation = unitOfWork.Repository<EventInvitation>().GetAll().Include(_ => _.Guest).FirstOrDefault(_ => _.Code == code);
-
-            if (invitation == null) return BadRequest();
-
-            return Ok(new OkResponse<EventInvitation>(string.Empty) { Data = invitation });
-        }
+        public record EventInvitationData(string Name, string? Description, string? Html, Guid EventId);
 
         [HttpGet]
         [Route("{eventId}/[action]")]
@@ -34,38 +22,35 @@ namespace AMP.EMS.API.Controllers
                 return base.GetAll();
 
             var collection = base.entityRepository.GetAll().AsNoTracking()
-                                .Where(_ => _.EventId == eventId)
-                                .Include(_ => _.Guest);
+                                .Where(_ => _.EventId == eventId);
 
             return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = collection });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] InvitationData data)
+        public async Task<IActionResult> Post([FromBody] EventInvitationData data)
         {
             return await base.Post(new EventInvitation
             {
-                Code = data.Code,
                 EventId = data.EventId,
-                GuestId = data.GuestId,
-                MaxGuests = data.MaxGuests,
-                LimitedView = data.LimitedView
+                Name = data.Name,
+                Description = data.Description ?? string.Empty,
+                Html = data.Html ?? string.Empty
             });
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] InvitationData data)
+        public async Task<IActionResult> Put(Guid id, [FromBody] EventInvitationData data)
         {
             var entity = await this.entityRepository.Get(id);
 
             if (entity == null) return BadRequest();
 
-            entity.Code = data.Code;
             entity.EventId = data.EventId;
-            entity.GuestId = data.GuestId;
-            entity.MaxGuests = data.MaxGuests;
-            entity.LimitedView = data.LimitedView;
+            entity.Name = data.Name;
+            entity.Description = data.Description ?? string.Empty;
+            entity.Html = data.Html ?? string.Empty;
 
             return await base.Put(entity);
         }

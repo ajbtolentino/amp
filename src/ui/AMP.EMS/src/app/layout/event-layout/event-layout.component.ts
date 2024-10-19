@@ -51,7 +51,7 @@ export class EventLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(data => {
-      const eventId = data.get("id");
+      const eventId = data.get("eventId");
 
       if (eventId) this.eventId = eventId;
     });
@@ -101,8 +101,8 @@ export class EventLayoutComponent implements OnInit, OnDestroy {
       'layout-theme-dark': this.layoutService.config().colorScheme === 'dark',
       'layout-overlay': this.layoutService.config().menuMode === 'overlay',
       'layout-static': this.layoutService.config().menuMode === 'static',
-      // 'layout-static-inactive': this.layoutService.state.staticMenuDesktopInactive && this.layoutService.config().menuMode === 'static',
-      // 'layout-overlay-active': this.layoutService.state.overlayMenuActive,
+      'layout-static-inactive': this.layoutService.state.staticMenuDesktopInactive && this.layoutService.config().menuMode === 'static',
+      'layout-overlay-active': this.layoutService.state.overlayMenuActive,
       'layout-mobile-active': this.layoutService.state.staticMenuMobileActive,
       'p-input-filled': this.layoutService.config().inputStyle === 'filled',
       'p-ripple-disabled': !this.layoutService.config().ripple

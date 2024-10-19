@@ -1,119 +1,67 @@
-import { Component, Inject, Injector, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Invitation } from '../../../core/models/invitation';
-import { InvitationService } from '../../../core/services/event-invitation.service';
+import { EventInvitation } from '../../../core/models/event-invitation';
+import { EventInvitationService as EventInvitationService } from '../../../core/services/event-invitation.service';
 import { ActivatedRoute } from '@angular/router';
 
-import { Guest } from '../../../core/models/guest';
 import { Event } from '../../../core/models/event';
 
-import { GuestService } from '../../../core/services/guest.service';
 import { EventService } from '../../../core/services/event.service';
 import { Table } from 'primeng/table';
-import { EventInvitationTemplateViewerComponent } from './event-invitation-template-viewer.component';
-import { EventInvitationTemplateViewerDirective } from './event-invitation-template-viewer.directive';
-import { DOCUMENT } from '@angular/common';
-import { EventInvitationTemplateEditorComponent } from './event-invitation-template-editor.component';
-export type Content<T> = string | TemplateRef<T> | Type<T>;
 
 @Component({
   selector: 'app-event-invitations',
   templateUrl: './event-invitations.component.html'
 })
 export class EventInvitationsComponent implements OnInit {
-  guestCollection: Guest[] | undefined;
-
   eventId: string | undefined;
 
-  event: Event | undefined;
-
-  items: Invitation[] = [];
+  items: EventInvitation[] = [];
 
   isCreating: boolean = false;
 
-  selectedItems: Invitation[] | null = [];
+  selectedItems: EventInvitation[] | null = [];
 
   maxGuestsCollection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   @ViewChild('dt') table!: Table;
 
-  @ViewChild('editor') editor!: EventInvitationTemplateEditorComponent;
-
-  @ViewChild(EventInvitationTemplateViewerDirective, { static: true }) eventInvitationViewerHost!: EventInvitationTemplateViewerDirective;
-
-  loading: boolean = true;
+  loading: boolean = false;
 
   templateCode!: string;
 
   constructor(private eventService: EventService,
-    private invitationService: InvitationService,
-    private guestService: GuestService,
+    private eventInvitationService: EventInvitationService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private route: ActivatedRoute,
-    private injector: Injector,
-    @Inject(DOCUMENT) private document: Document) { }
+    private route: ActivatedRoute) { }
 
-  async ngOnInit() {
-    this.route.parent?.paramMap.subscribe(data => {
-      const eventId = data.get("id");
+  ngOnInit() {
+    console.log('!')
+    this.route.parent?.parent?.paramMap.subscribe(data => {
+      const eventId = data.get("eventId");
 
-      if (eventId) this.eventId = eventId;
-
-
-      this.refreshGrid();
+      if (eventId) {
+        this.eventId = eventId;
+        this.refreshGrid();
+      }
+      console.log(this.eventId);
     });
 
-    this.openComponent(this.templateCode)
-  }
-
-  onTemplateCodeChange(e: any) {
-    this.openComponent(e);
-  }
-
-  openComponent<T>(content: Content<T>) {
-    const ngContent = this.createNgContent(content);
-    let options = {
-      injector: this.injector,
-      projectableNodes: ngContent
-    }
-    this.eventInvitationViewerHost.viewContainerRef.clear();
-    const factory = this.eventInvitationViewerHost.viewContainerRef.createComponent(EventInvitationTemplateViewerComponent, options);
-    factory.hostView.detectChanges();
-
-  }
-
-  createNgContent<T>(content: Content<T>) {
-    if (typeof content === 'string') {
-      const element = this.document.createElement('div');
-      element.innerHTML = content;
-      return [[element]];
-    }
-    return [[]]
   }
 
   refreshGrid = async () => {
     this.loading = true;
 
-    if (this.eventId) {
-      const eventResponse = await this.eventService.get(this.eventId);
-      if (eventResponse?.data) this.event = eventResponse.data;
-
-      const eventInvitationResponse = await this.invitationService.getAll(this.eventId);
-      if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
-    }
-    else {
-      const eventInvitationResponse = await this.invitationService.getAll();
-      if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
-    }
+    const eventInvitationResponse = await this.eventInvitationService.getAll(this.eventId);
+    if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
 
     this.loading = false;
   }
 
   addRow = async () => {
     await this.refreshGrid();
-    await this.loadGuests();
 
     this.items.unshift({});
     this.isCreating = true;
@@ -123,7 +71,6 @@ export class EventInvitationsComponent implements OnInit {
 
   editRow = async () => {
     this.isCreating = false;
-    await this.loadGuests();
   }
 
   cancelAdd = async () => {
@@ -133,7 +80,7 @@ export class EventInvitationsComponent implements OnInit {
 
   deleteSelectedItems = () => {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected events?',
+      message: 'Are you sure you want to delete the selected invitations?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -144,70 +91,18 @@ export class EventInvitationsComponent implements OnInit {
     });
   }
 
-  loadGuests = async () => {
-    this.loading = true;
-
-    const res = await this.guestService.getAll();
-    if (res?.data) this.guestCollection = res.data;
-
-    this.loading = false;
-  }
-
-  edit = async (invitation: Invitation) => {
-    await this.loadGuests();
-  }
-
-  delete = async (invitation: Invitation) => {
+  delete = async (invitation: EventInvitation) => {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + invitation.code + '?',
+      message: 'Are you sure you want to delete?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         if (invitation.id) {
-          await this.invitationService.delete(invitation.id);
+          await this.eventInvitationService.delete(invitation.id);
           await this.refreshGrid();
           this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });
-  }
-
-  save = async (item: Invitation) => {
-    item.eventId = this.eventId;
-
-    if (item?.code?.trim() && item.guestId?.trim()) {
-      this.loading = true;
-
-
-      if (item.id) {
-        await this.invitationService.update(item);
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
-      }
-      else {
-        await this.invitationService.add(item);
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
-      }
-
-      this.loading = false;
-    }
-
-    await this.refreshGrid();
-    this.isCreating = false;
-  }
-
-  generateCode = (item: Invitation, length: number) => {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-
-    item.code = result;
   }
 }

@@ -1,17 +1,6 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <p-tabView orientation="left">
-                <p-tabPanel header="Template" class="line-height-3 m-0">
-                    <ng-template appEventInvitationTemplateViewer></ng-template>
-                </p-tabPanel>
-                <p-tabPanel header="Code" class="line-height-3 m-0">
-                    <app-event-invitation-template-editor #editor [(templateCode)]="templateCode"
-                        (templateCodeChange)="onTemplateCodeChange($event)"></app-event-invitation-template-editor>
-                </p-tabPanel>
-            </p-tabView>
-        </div>
-        <div class="card px-6 py-6">
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
@@ -21,7 +10,7 @@
                 <ng-template pTemplate="right">
                     <div class="my-2">
                         <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
-                            class="p-button-success mr-2" (click)="addRow()"></button>
+                            class="p-button-success mr-2" routerLink="/event/{{eventId}}/invitations/add"></button>
                         <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
                             class="p-button-danger" (click)="deleteSelectedItems()"
                             [disabled]="!selectedItems || !selectedItems.length"></button>
@@ -29,8 +18,7 @@
                 </ng-template>
             </p-toolbar>
             <p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName','code']"
-                [(selection)]="selectedItems" [rowHover]="true" dataKey="id" editMode="row" responsiveLayout="stack"
-                [breakpoint]="'960px'" [loading]="loading" [showLoader]="false">
+                [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="loading" [showLoader]="false">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Invitations</h5>
@@ -47,19 +35,15 @@
                         <th>
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="guest.firstName">Guest<p-sortIcon field="guest.firstName"></p-sortIcon>
+                        <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="code">Code<p-sortIcon field="code"></p-sortIcon></th>
-                        <th pSortableColumn="maxGuests">Max Guests<p-sortIcon field="maxGuests"></p-sortIcon></th>
-                        <th pSortableColumn="limitedView">Limited View<p-sortIcon field="limitedView"></p-sortIcon></th>
-                        <th></th>
+                        <th pSortableColumn="description">Description<p-sortIcon field="description"></p-sortIcon></th>
+                        <th class="p-jc-end"></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
                     <tr>
                         <td></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                     </tr>
@@ -72,87 +56,40 @@
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <p-dropdown #guestSelection [options]="guestCollection" [(ngModel)]="item.guestId"
-                                        appendTo="body" [filter]="true" optionValue="id" filterBy="firstName,lastName"
-                                        placeholder="Select a Guest">
-                                        <ng-template let-guestSelection pTemplate="selectedItem">
-                                            {{guestSelection.firstName}} {{guestSelection.lastName}}
-                                        </ng-template>
-                                        <ng-template let-guestSelection pTemplate="item">
-                                            {{guestSelection.firstName}} {{guestSelection.lastName}}
-                                        </ng-template>
-                                    </p-dropdown>
+                                    <input pInputText type="text" [(ngModel)]="item.name" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{item?.guest?.firstName}} {{item?.guest?.lastName}}
+                                    {{item?.name}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
                         <td>
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="item.code" />
-                                    <button pButton pRipple class="p-button-rounded p-button-text" icon="pi pi-refresh"
-                                        (click)="generateCode(item, 5)" pTooltip="Generate Code"></button>
+                                    <input pInputText type="text" [(ngModel)]="item.description" />
                                 </ng-template>
                                 <ng-template pTemplate="output">
-                                    {{item.code}}
+                                    {{item.description}}
                                 </ng-template>
                             </p-cellEditor>
                         </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-dropdown #maxGuestsSelection [options]="maxGuestsCollection"
-                                        [(ngModel)]="item.maxGuests" appendTo="body">
-                                        <ng-template let-maxGuestsSelection pTemplate="selectedItem">
-                                            {{maxGuestsSelection}}
-                                        </ng-template>
-                                        <ng-template let-maxGuestsSelection pTemplate="item">
-                                            {{maxGuestsSelection}}
-                                        </ng-template>
-                                    </p-dropdown>
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    {{item.maxGuests}}
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <td>
-                            <p-cellEditor>
-                                <ng-template pTemplate="input">
-                                    <p-checkbox [(ngModel)]="item.limitedView" [binary]="true" />
-                                </ng-template>
-                                <ng-template pTemplate="output">
-                                    <span *ngIf="item.limitedView" class="pi pi-check"></span>
-                                </ng-template>
-                            </p-cellEditor>
-                        </td>
-                        <!-- <td>{{item.dateCreated}}</td>
-                        <td>{{item.dateUpdated}}</td> -->
                         <td>
                             <div class="flex">
-                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                                    icon="pi pi-pencil" (click)="editRow()"
-                                    class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
+                                <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                                    routerLink="/event/{{eventId}}/invitation/{{item.id}}"
+                                    class="p-button-rounded p-button-success mr-2 p-jc-end" pTooltip="Edit">
                                 </button>
-                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning mr-2"
-                                    icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
-
-                                <a *ngIf="!editing" rel="noreferrer noopener" target="_blank"
-                                    routerLink="/invitation/{{item.code}}" pButton pRipple label="View Invitation"
-                                    class="p-button-text"></a>
-
-
-                                <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-                                    icon="pi pi-check" (click)="save(item)"
-                                    class="p-button-rounded p-button-text p-button-success mr-2">
-                                </button>
-                                <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
-                                    icon="pi pi-times" (click)="refreshGrid()"
-                                    class="p-button-rounded p-button-text p-button-danger">
-                                </button>
+                                <button *ngIf="!editing" pButton pRipple
+                                    class="p-button-rounded p-button-warning mr-2 p-jc-end" icon="pi pi-trash"
+                                    (click)="delete(item)" pTooltip="Delete"></button>
                             </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td>
+                            No records found
                         </td>
                     </tr>
                 </ng-template>

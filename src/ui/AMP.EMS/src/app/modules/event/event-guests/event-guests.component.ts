@@ -3,8 +3,8 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 
-import { Guest } from '../../../core/models/guest';
-import { GuestService } from '../../../core/services/guest.service';
+import { EventGuest } from '../../../core/models/event-guest';
+import { GuestService } from '../../../core/services/event-guest.service';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -12,11 +12,11 @@ import { Table } from 'primeng/table';
   templateUrl: './event-guests.component.html',
 })
 export class EventGuestsComponent implements OnInit {
-  eventId: string | undefined;
+  eventId!: string;
 
-  items: Guest[] = [];
+  items: EventGuest[] = [];
 
-  selectedItems: Guest[] | null = [];
+  selectedItems: EventGuest[] | null = [];
 
   isCreating: boolean = false;
 
@@ -30,34 +30,24 @@ export class EventGuestsComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.refreshGrid();
+    this.route.parent?.parent?.paramMap.subscribe(data => {
+      const eventId = data.get("eventId");
+
+      if (eventId) {
+        this.eventId = eventId;
+        this.refreshGrid();
+        console.log(this.eventId);
+      }
+    });
   }
 
   refreshGrid = async () => {
     this.loading = true;
 
-    const res = await this.service.getAll();
+    const res = await this.service.details(this.eventId);
     if (res?.data) this.items = res.data;
 
     this.loading = false;
-    this.isCreating = false;
-  }
-
-  addRow = async () => {
-    await this.refreshGrid();
-
-    this.items.unshift({});
-    this.isCreating = true;
-
-    this.table.initRowEdit(this.items[0]);
-  }
-
-  editRow = () => {
-    this.isCreating = false;
-  }
-
-  cancelAdd = async () => {
-    await this.refreshGrid();
     this.isCreating = false;
   }
 
@@ -80,11 +70,7 @@ export class EventGuestsComponent implements OnInit {
     });
   }
 
-  edit = (item: Guest) => {
-
-  }
-
-  delete = async (guest: Guest) => {
+  delete = async (guest: EventGuest) => {
     this.confirmationService.confirm({
       message: 'Are you sure?',
       header: 'Confirm',
@@ -100,24 +86,5 @@ export class EventGuestsComponent implements OnInit {
         }
       }
     });
-  }
-
-  save = async (item: Guest) => {
-    this.loading = true;
-
-    if (item?.firstName?.trim() && item?.lastName?.trim()) {
-      if (item.id) {
-        await this.service.update(item);
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
-      }
-      else {
-        await this.service.add(item);
-        await this.refreshGrid();
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
-      }
-    }
-
-    this.loading = true;
-    await this.refreshGrid();
   }
 }

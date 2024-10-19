@@ -1,8 +1,9 @@
+import { EventGuest } from "./event-guest";
 import { Guest } from "./guest";
 
-export interface Invitation {
+export interface EventGuestInvitation {
     id?: string;
-    eventId?: string;
+    eventInvitationId?: string;
     guestId?: string;
     guest?: Guest;
     code?: string;

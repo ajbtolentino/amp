@@ -26,7 +26,7 @@ export class EventDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.parent?.params.subscribe((params) => {
-      this.loadEvent(params["id"]);
+      this.loadEvent(params["eventId"]);
     });
   }
 

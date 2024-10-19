@@ -22,10 +22,12 @@ import { TabViewModule } from 'primeng/tabview';
 import { MenuModule } from 'primeng/menu';
 import { EventDetailsComponent } from '../event/event-details/event-details.component';
 import { DataViewModule } from 'primeng/dataview';
+import { DefaultComponent } from '../default/default.component';
 
 @NgModule({
   declarations: [
     EventListComponent,
+    DefaultComponent,
     AppSettingsComponent,
   ],
   imports: [
@@ -50,11 +52,12 @@ import { DataViewModule } from 'primeng/dataview';
     RouterModule.forChild([
       {
         path: 'events',
-        canActivate: [autoLoginPartialRoutesGuard],
         component: EventsLayoutComponent,
+        canActivate: [autoLoginPartialRoutesGuard],
         children: [
           {
             path: '',
+            pathMatch: 'full',
             title: 'Events',
             data: { breadcrumb: 'Events' },
             component: EventListComponent
