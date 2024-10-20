@@ -25,6 +25,7 @@
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "monaco-editor": "^0.52.0",
+    "ngx-dynamic-hooks": "^3.1.0",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.11",
