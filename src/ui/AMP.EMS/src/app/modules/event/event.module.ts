@@ -27,7 +27,6 @@ import { TabViewModule } from 'primeng/tabview';
 import { EventGuestInvitationComponent } from './event-guest-invitation/event-guest-invitation.component';
 import { EventInvitationComponent } from './event-invitation/event-invitation.component';
 import { EventGuestInvitationsComponent } from './event-invitation/event-guest-invitations.component';
-import { Highlight, provideHighlightOptions } from 'ngx-highlightjs';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventGuestDetailsComponent } from './event-guests/event-guest-details.component';
@@ -47,12 +46,6 @@ import { MenuModule } from 'primeng/menu';
     EventInvitationComponent,
     EventGuestInvitationsComponent,
     EventGuestDetailsComponent,
-  ],
-  providers: [
-    provideHighlightOptions({
-      coreLibraryLoader: () => import('highlight.js/lib/core'),
-      lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
-    })
   ],
   imports: [
     ButtonModule,
@@ -76,7 +69,6 @@ import { MenuModule } from 'primeng/menu';
     SkeletonModule,
     TabViewModule,
     ToolbarModule,
-    Highlight,
     RouterModule.forChild([
       {
         path: '',
