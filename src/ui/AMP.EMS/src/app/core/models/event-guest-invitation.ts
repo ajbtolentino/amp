@@ -1,5 +1,6 @@
 import { EventGuest } from "./event-guest";
 import { Guest } from "./guest";
+import { Rsvp } from "./rsvp";
 
 export interface EventGuestInvitation {
     id?: string;
@@ -7,8 +8,5 @@ export interface EventGuestInvitation {
     eventInvitationId?: string;
     guest?: Guest;
     code?: string;
-    maxGuests?: number;
-    limitedView?: boolean;
-    dateCreated?: Date;
-    dateUpdated?: Date;
+    rsvps?: Rsvp[];
 }

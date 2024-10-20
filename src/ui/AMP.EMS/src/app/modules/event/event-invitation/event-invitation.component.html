@@ -31,10 +31,12 @@
         <div class="card shadow-2">
             <p-tabView orientation="left">
                 <p-tabPanel header="Template" class="line-height-3 m-0">
-                    <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{invitation: {maxGuests : 2}}"
-                        [options]="{sanitize: false}"></ngx-dynamic-hooks>
+                    <div [style]="{height: '100vh !important' , overflow: 'auto'}">
+                        <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{invitation: {maxGuests : 2}}"
+                            [options]="{sanitize: false}"></ngx-dynamic-hooks>
+                    </div>
                 </p-tabPanel>
-                <p-tabPanel header="Editor" class="line-height-3 m-0 h-full">
+                <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">
                     <ngs-code-editor #codeEditor theme="vs-dark" [codeModel]="model" [options]="options"
                         (loaded)="onEditorLoaded()" (valueChanged)="onCodeChanged($event)"
                         [style]="{height: '100vh'}"></ngs-code-editor>

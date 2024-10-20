@@ -20,7 +20,7 @@ export class EventRoleService extends BaseService {
   }
 
   update = async (eventRole: EventRole) => {
-    return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/eventrole/${eventRole.id}`, event, { headers: this.headers }));
+    return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/eventrole/${eventRole.id}`, eventRole, { headers: this.headers }));
   }
 
   delete = async (id: string) => {

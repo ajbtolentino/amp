@@ -20,7 +20,8 @@ namespace AMP.EMS.API.Controllers
         public IActionResult RSVP(string code)
         {
             var invitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
-                                    .Include(_ => _.EventGuest).FirstOrDefault(_ => _.Code == code);
+                                    .Include(_ => _.EventInvitation)
+                                    .FirstOrDefault(_ => _.Code == code);
 
             if (invitation == null) return BadRequest();
 

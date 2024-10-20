@@ -25,15 +25,37 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 5rem"></th>
-                        <th pSortableColumn="firstName">First Name <p-sortIcon field="firstName"></p-sortIcon></th>
-                        <th pSortableColumn="lastName">Last Name <p-sortIcon field="lastName"></p-sortIcon></th>
-                        <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
+                        <th pSortableColumn="firstName">
+                            <div class="flex justify-content-between align-items-center">
+                                First Name
+                                <p-sortIcon field="firstName"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="lastName">
+                            <div class="flex justify-content-between align-items-center">
+                                Last Name
+                                <p-sortIcon field="lastName"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="role">
+                            <div class="flex justify-content-between align-items-center">
+                                Role
+                                <p-sortIcon field="role"></p-sortIcon>
+                            </div>
+                        </th>
+                        <th pSortableColumn="responded">
+                            <div class="flex justify-content-between align-items-center">
+                                Responded
+                                <p-sortIcon field="responded"></p-sortIcon>
+                            </div>
+                        </th>
                         <th></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
                     <tr>
                         <td></td>
+                        <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
@@ -53,6 +75,9 @@
                             <span *ngFor='let eventGuestRole of item.eventGuestRoles'>
                                 {{eventGuestRole.eventRole.name}}
                             </span>
+                        </td>
+                        <td class="text-center">
+                            <i *ngIf="hasResponsed(item)" class="pi true-icon pi-check-circle text-green-500"></i>
                         </td>
                         <td>
                             <div class="flex">
@@ -74,6 +99,7 @@
                     <tr>
                         <th>Invitation</th>
                         <th>Code</th>
+                        <th>Response</th>
                         <th>Link</th>
                     </tr>
                 </ng-template>
@@ -84,6 +110,9 @@
                         </td>
                         <td>
                             {{eventGuestInvitation.code}}
+                        </td>
+                        <td>
+                            <span class="invitation-badge status-accepted">Accepted</span>
                         </td>
                         <td>
                             <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"

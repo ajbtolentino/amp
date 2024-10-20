@@ -87,7 +87,7 @@ import { DefaultComponent } from './modules/default/default.component';
                 loadChildren: () => import('../app/modules/event/event.module').then(m => m.EventModule)
             },
             {
-                path: '',
+                path: 'invitation',
                 title: 'Invitation',
                 loadChildren: () => import('../app/modules/guests/guests.module').then(m => m.GuestModule)
             },

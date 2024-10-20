@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Rsvp } from '../../../core/models/rsvp';
 import { RsvpService } from '../../../core/services/rsvp.service';
 import { EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
-import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
+import { EventInvitation } from '../../../core/models/event-invitation';
 
 @Component({
   selector: 'app-invitation-details',
@@ -11,13 +11,11 @@ import { EventGuestInvitation } from '../../../core/models/event-guest-invitatio
   styleUrl: './invitation-details.component.scss'
 })
 export class InvitationDetailsComponent implements OnInit {
-  eventGuestInvitation: EventGuestInvitation | undefined;
+  eventInvitation: EventInvitation | undefined;
 
   rsvp: Rsvp = {};
 
   response: string | undefined;
-
-  showDetails: boolean = false;
 
   constructor(private eventGuestInvitationService: EventGuestInvitationService,
     private rsvpService: RsvpService, private route: ActivatedRoute) {
@@ -42,9 +40,8 @@ export class InvitationDetailsComponent implements OnInit {
     const response = await this.eventGuestInvitationService.rsvp(code);
 
     if (response) {
-      this.eventGuestInvitation = response.data;
-      this.rsvp.invitationId = this.eventGuestInvitation?.id;
-      this.showDetails = !this.eventGuestInvitation?.limitedView;
+      this.eventInvitation = response.data.eventInvitation;
+      this.rsvp.invitationId = this.eventInvitation?.id;
     }
   }
 }

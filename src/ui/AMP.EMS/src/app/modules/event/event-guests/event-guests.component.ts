@@ -11,6 +11,7 @@ import { EventService } from '../../../core/services/event.service';
 @Component({
   selector: 'app-event-guests',
   templateUrl: './event-guests.component.html',
+  styleUrl: './event-guests.component.scss'
 })
 export class EventGuestsComponent implements OnInit {
   eventId!: string;
@@ -51,6 +52,10 @@ export class EventGuestsComponent implements OnInit {
 
     this.loading = false;
     this.isCreating = false;
+  }
+
+  hasResponsed = (item: EventGuest) => {
+    return item.eventGuestInvitations?.filter(_ => _.rsvps).length || false;
   }
 
   deleteSelectedItems = () => {
