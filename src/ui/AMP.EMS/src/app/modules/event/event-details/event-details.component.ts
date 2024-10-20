@@ -8,8 +8,7 @@ import { EventType } from '../../../core/models/event-type';
 
 @Component({
   selector: 'app-event-details',
-  templateUrl: './event-details.component.html',
-  styleUrl: './event-details.component.scss',
+  templateUrl: './event-details.component.html'
 })
 export class EventDetailsComponent implements OnInit {
   loading: boolean = true;
@@ -20,7 +19,10 @@ export class EventDetailsComponent implements OnInit {
 
   date: Date | undefined;
 
-  constructor(private eventService: EventService, private eventTypeService: EventTypeService, private router: Router, private route: ActivatedRoute) {
+  constructor(private eventService: EventService,
+    private eventTypeService: EventTypeService,
+    private router: Router,
+    private route: ActivatedRoute) {
 
   }
 
@@ -66,6 +68,8 @@ export class EventDetailsComponent implements OnInit {
       }
     }
 
-    this.router.navigate(["events"]);
+    if (!this.event.id) {
+      this.router.navigate(["events"]);
+    }
   }
 }

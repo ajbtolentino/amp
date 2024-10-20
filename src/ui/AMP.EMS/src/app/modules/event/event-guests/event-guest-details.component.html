@@ -1,3 +1,14 @@
+<p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+    </ng-template>
+    <ng-template pTemplate="right">
+        <div class="my-2">
+            <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                (click)="save()"></button>
+        </div>
+    </ng-template>
+</p-toolbar>
+
 <div class="grid">
     <div class="col-12">
         <div class="card">
@@ -7,7 +18,7 @@
                 <div class="field col-12 md:col-6">
                     <label htmlFor="firstName">First Name</label>
                     <input pInputText *ngIf="!loading" id="title" type="text" [(ngModel)]="eventGuest.guest!.firstName"
-                        [value]="eventGuest.guest?.firstName" />
+                        [value]="eventGuest.guest!.firstName" />
 
                     <p-skeleton *ngIf="loading"></p-skeleton>
                 </div>
@@ -32,8 +43,22 @@
 
                     <p-skeleton *ngIf="loading"></p-skeleton>
                 </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="lastName">Role</label>
+                    <p-multiSelect *ngIf="!loading" optionLabel="role" placeholder="Select Role" [options]="eventRoles"
+                        optionLabel="name" optionValue="id" [(ngModel)]="selectedEventRoles" />
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="lastName">Invitations</label>
+                    <p-multiSelect *ngIf="!loading" optionLabel="invitations" placeholder="Select Invitations"
+                        [options]="eventInvitations" optionValue="id" optionLabel="name"
+                        [(ngModel)]="selectedEventInvitations" />
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
             </div>
-            <button pButton *ngIf="!loading" label="Submit" (click)="save()"></button>
         </div>
     </div>
 </div>

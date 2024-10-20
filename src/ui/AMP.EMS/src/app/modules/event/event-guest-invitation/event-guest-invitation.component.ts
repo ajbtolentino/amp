@@ -7,7 +7,7 @@ import { EventInvitation } from '../../../core/models/event-invitation';
 import { EventGuest } from '../../../core/models/event-guest';
 import { EventInvitationService } from '../../../core/services/event-invitation.service';
 import { EventService } from '../../../core/services/event.service';
-import { GuestService } from '../../../core/services/event-guest.service';
+import { EventGuestService } from '../../../core/services/event-guest.service';
 import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
 import { EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
 
@@ -40,7 +40,7 @@ export class EventGuestInvitationComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private eventGuestInvitationService: EventGuestInvitationService,
-    private guestService: GuestService,
+    private guestService: EventGuestService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,

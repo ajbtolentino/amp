@@ -12,6 +12,18 @@ export class EventService extends BaseService {
         return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
     }
 
+    getRoles = async (id: string) => {
+        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/roles`, { headers: this.headers }));
+    }
+
+    getInvitations = async (id: string) => {
+        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/invitations`, { headers: this.headers }));
+    }
+
+    getGuests = async (id: string) => {
+        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/guests`, { headers: this.headers }));
+    }
+
     getAll = async () => {
         return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event`, { headers: this.headers }));
     }

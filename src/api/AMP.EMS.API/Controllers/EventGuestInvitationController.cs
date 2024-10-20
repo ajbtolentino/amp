@@ -19,7 +19,8 @@ namespace AMP.EMS.API.Controllers
         [AllowAnonymous]
         public IActionResult RSVP(string code)
         {
-            var invitation = unitOfWork.Repository<EventGuestInvitation>().GetAll().Include(_ => _.Guest).FirstOrDefault(_ => _.Code == code);
+            var invitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                                    .Include(_ => _.EventGuest).FirstOrDefault(_ => _.Code == code);
 
             if (invitation == null) return BadRequest();
 
@@ -35,7 +36,7 @@ namespace AMP.EMS.API.Controllers
 
             var collection = base.entityRepository.GetAll().AsNoTracking()
                                 .Where(_ => _.EventInvitationId == eventInvitationId)
-                                .Include(_ => _.Guest);
+                                .Include(_ => _.EventGuest);
 
             return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = collection });
         }
@@ -47,9 +48,7 @@ namespace AMP.EMS.API.Controllers
             {
                 Code = data.Code,
                 EventInvitationId = data.EventInvitationId,
-                GuestId = data.GuestId,
-                MaxGuests = data.MaxGuests,
-                LimitedView = data.LimitedView
+                EventGuestId = data.GuestId
             });
         }
 
@@ -63,9 +62,7 @@ namespace AMP.EMS.API.Controllers
 
             entity.Code = data.Code;
             entity.EventInvitationId = data.EventInvitationId;
-            entity.GuestId = data.GuestId;
-            entity.MaxGuests = data.MaxGuests;
-            entity.LimitedView = data.LimitedView;
+            entity.EventGuestId = data.GuestId;
 
             return await base.Put(entity);
         }

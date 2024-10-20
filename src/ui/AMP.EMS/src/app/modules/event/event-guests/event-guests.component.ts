@@ -4,8 +4,9 @@ import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 
 import { EventGuest } from '../../../core/models/event-guest';
-import { GuestService } from '../../../core/services/event-guest.service';
+import { EventGuestService } from '../../../core/services/event-guest.service';
 import { Table } from 'primeng/table';
+import { EventService } from '../../../core/services/event.service';
 
 @Component({
   selector: 'app-event-guests',
@@ -24,7 +25,8 @@ export class EventGuestsComponent implements OnInit {
 
   @ViewChild('dt') table!: Table;
 
-  constructor(private service: GuestService,
+  constructor(private eventService: EventService,
+    private eventGuestService: EventGuestService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
@@ -44,7 +46,7 @@ export class EventGuestsComponent implements OnInit {
   refreshGrid = async () => {
     this.loading = true;
 
-    const res = await this.service.details(this.eventId);
+    const res = await this.eventService.getGuests(this.eventId);
     if (res?.data) this.items = res.data;
 
     this.loading = false;
@@ -78,7 +80,7 @@ export class EventGuestsComponent implements OnInit {
       accept: async () => {
         if (guest.id) {
           this.loading = true;
-          await this.service.delete(guest.id);
+          await this.eventGuestService.delete(guest.id);
           this.loading = true;
 
           await this.refreshGrid();

@@ -15,7 +15,7 @@ import { Table } from 'primeng/table';
   templateUrl: './event-invitations.component.html'
 })
 export class EventInvitationsComponent implements OnInit {
-  eventId: string | undefined;
+  eventId!: string;
 
   items: EventInvitation[] = [];
 
@@ -54,7 +54,7 @@ export class EventInvitationsComponent implements OnInit {
   refreshGrid = async () => {
     this.loading = true;
 
-    const eventInvitationResponse = await this.eventInvitationService.getAll(this.eventId);
+    const eventInvitationResponse = await this.eventService.getInvitations(this.eventId);
     if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
 
     this.loading = false;

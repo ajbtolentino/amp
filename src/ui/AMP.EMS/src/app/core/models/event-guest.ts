@@ -1,5 +1,9 @@
 import { Guest } from "./guest";
 import { Event } from "./event";
+import { EventGuestInvitation } from "./event-guest-invitation";
+import { EventGuestRole } from "./event-guest-role";
+import { EventRole } from "./event-role";
+import { EventInvitation } from "./event-invitation";
 
 export interface EventGuest {
     id?: string;
@@ -7,4 +11,6 @@ export interface EventGuest {
     guestId?: string;
     guest?: Guest;
     event?: Event;
+    eventGuestRoles?: EventGuestRole[];
+    eventGuestInvitations?: EventGuestInvitation[];
 }

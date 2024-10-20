@@ -3,8 +3,8 @@ import { Guest } from "./guest";
 
 export interface EventGuestInvitation {
     id?: string;
-    eventInvitationId?: string;
     guestId?: string;
+    eventInvitationId?: string;
     guest?: Guest;
     code?: string;
     maxGuests?: number;

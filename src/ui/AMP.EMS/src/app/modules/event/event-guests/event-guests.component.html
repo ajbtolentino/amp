@@ -1,34 +1,33 @@
+<p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+        <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+            (click)="dt.exportCSV()"></button>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+
+        <div class="my-2">
+            <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                routerLink="/event/{{eventId}}/guests/add"></button>
+
+            <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash" class="p-button-danger"
+                (click)="deleteSelectedItems()" [disabled]="!selectedItems || !selectedItems.length"></button>
+        </div>
+    </ng-template>
+</p-toolbar>
+
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
-                        (click)="dt.exportCSV()"></button>
-                </ng-template>
-
-                <ng-template pTemplate="right">
-
-                    <div class="my-2">
-                        <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
-                            class="p-button-success mr-2" routerLink="/event/{{eventId}}/guests/add"></button>
-
-                        <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
-                            class="p-button-danger" (click)="deleteSelectedItems()"
-                            [disabled]="!selectedItems || !selectedItems.length"></button>
-                    </div>
-                </ng-template>
-            </p-toolbar>
             <p-table #dt [value]="items" [rows]="10" [paginator]="true" [globalFilterFields]="['firstName','lastName']"
                 editMode="row" [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="loading"
                 [showLoader]="false">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
+                        <th style="width: 5rem"></th>
                         <th pSortableColumn="firstName">First Name <p-sortIcon field="firstName"></p-sortIcon></th>
                         <th pSortableColumn="lastName">Last Name <p-sortIcon field="lastName"></p-sortIcon></th>
+                        <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
                         <th></th>
                     </tr>
                 </ng-template>
@@ -37,14 +36,24 @@
                         <td></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
+                        <td><p-skeleton /></td>
+                        <td><p-skeleton /></td>
                         <td></td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-item let-editing="editing">
+                <ng-template pTemplate="body" let-item let-editing="editing" let-expanded="expanded">
                     <tr [pEditableRow]="item">
-                        <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
+                        <td>
+                            <p-button type="button" pRipple [pRowToggler]="item" [text]="true" [rounded]="true"
+                                [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                        </td>
                         <td>{{item.guest.firstName}}</td>
                         <td>{{item.guest.lastName}}</td>
+                        <td>
+                            <span *ngFor='let eventGuestRole of item.eventGuestRoles'>
+                                {{eventGuestRole.eventRole.name}}
+                            </span>
+                        </td>
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
@@ -57,13 +66,52 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="emptymessage" let-columns>
+                <ng-template pTemplate="rowexpansion" let-eventGuest>
                     <tr>
-                        <td [colSpan]="4">
-                            No records found
+                        <td colspan="7">
+                            <p-table [value]="eventGuest.eventGuestInvitations" dataKey="id">
+                                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Invitation</th>
+                        <th>Code</th>
+                        <th>Link</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-eventGuestInvitation>
+                    <tr>
+                        <td>
+                            {{eventGuestInvitation.eventInvitation.name}}
+                        </td>
+                        <td>
+                            {{eventGuestInvitation.code}}
+                        </td>
+                        <td>
+                            <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
+                                class="p-button-rounded p-button-text"></a>
+                            <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-rounded p-button-text" target="_blank"
+                                routerLink="/invitation/{{eventGuestInvitation.code}}"></a>
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [colSpan]="4">
+                            No invitations found
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </td>
+            </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [colSpan]="4">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
             </p-table>
         </div>
     </div>

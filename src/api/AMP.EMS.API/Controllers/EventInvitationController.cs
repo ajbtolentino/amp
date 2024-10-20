@@ -14,19 +14,6 @@ namespace AMP.EMS.API.Controllers
     {
         public record EventInvitationData(string Name, string? Description, string? Html, Guid EventId);
 
-        [HttpGet]
-        [Route("{eventId}/[action]")]
-        public IActionResult Details(Guid? eventId)
-        {
-            if (!eventId.HasValue)
-                return base.GetAll();
-
-            var collection = base.entityRepository.GetAll().AsNoTracking()
-                                .Where(_ => _.EventId == eventId);
-
-            return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = collection });
-        }
-
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EventInvitationData data)
         {

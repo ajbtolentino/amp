@@ -2,7 +2,7 @@ import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from '../app/app.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventService } from '../app/core/services/event.service';
-import { GuestService } from './core/services/event-guest.service';
+import { EventGuestService } from './core/services/event-guest.service';
 import { EventInvitationService as EventInvitationService } from '../app/core/services/event-invitation.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, RouterModule, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
@@ -103,7 +103,7 @@ import { DefaultComponent } from './modules/default/default.component';
         EventService,
         EventInvitationService,
         EventGuestInvitationService,
-        GuestService,
+        EventGuestService,
         MessageService,
         ConfirmationService,
         RsvpService,

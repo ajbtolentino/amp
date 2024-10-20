@@ -10,5 +10,5 @@ public class Guest : BaseEntity<Guid>
     public string NickName { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
 
-    public ICollection<EventGuestInvitation> Invitations { get; set; } = [];
+    public ICollection<EventGuest> EventGuests { get; set; } = [];
 }

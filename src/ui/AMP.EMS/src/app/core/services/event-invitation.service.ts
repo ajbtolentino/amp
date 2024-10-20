@@ -3,9 +3,7 @@ import { EventInvitation } from '../models/event-invitation';
 import { BaseService } from './base.service';
 
 export class EventInvitationService extends BaseService {
-    getAll = async (eventId: string | undefined | null = null) => {
-        if (eventId) return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventinvitation/${eventId}/details`, { headers: this.headers }));
-
+    getAll = async () => {
         return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventinvitation`, { headers: this.headers }));
     }
 

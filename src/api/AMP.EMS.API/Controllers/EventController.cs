@@ -21,6 +21,53 @@ namespace AMP.EMS.API.Controllers
             return Ok(new OkResponse<IEnumerable<Event>>(string.Empty) { Data = entities });
         }
 
+        [HttpGet]
+        [Route("{eventId}/roles")]
+        public IActionResult GetRoles(Guid? eventId)
+        {
+            if (!eventId.HasValue)
+                return base.GetAll();
+
+            var collection = base.unitOfWork.Repository<EventRole>()
+                                .GetAll().AsNoTracking()
+                                .Where(_ => _.EventId == eventId);
+
+            return Ok(new OkResponse<IEnumerable<EventRole>>(string.Empty) { Data = collection });
+        }
+
+        [HttpGet]
+        [Route("{eventId}/guests")]
+        public IActionResult GetGuests(Guid? eventId)
+        {
+            if (!eventId.HasValue)
+                return base.GetAll();
+
+            var collection = base.unitOfWork.Repository<EventGuest>()
+                                .GetAll().AsNoTracking()
+                                .Include(_ => _.Guest)
+                                .Include(_ => _.EventGuestInvitations)
+                                    .ThenInclude(_ => _.EventInvitation)
+                                .Include(_ => _.EventGuestRoles)
+                                    .ThenInclude(_ => _.EventRole)
+                                .Where(_ => _.EventId == eventId);
+
+            return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = collection });
+        }
+
+        [HttpGet]
+        [Route("{eventId}/invitations")]
+        public IActionResult GetInvitations(Guid? eventId)
+        {
+            if (!eventId.HasValue)
+                return base.GetAll();
+
+            var collection = base.unitOfWork.Repository<EventInvitation>()
+                                .GetAll().AsNoTracking()
+                                .Where(_ => _.EventId == eventId);
+
+            return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = collection });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EventData data)
         {

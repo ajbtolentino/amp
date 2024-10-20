@@ -18,7 +18,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { InputTextareaModule } from "primeng/inputtextarea";
 import { EventInvitationsComponent } from './event-invitations/event-invitations.component';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { EventRolesComponent } from './event-roles/event-roles.component';
 import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 import { EventLayoutComponent } from '../../layout/event-layout/event-layout.component';
 import { EditorModule } from 'primeng/editor';
@@ -32,6 +31,8 @@ import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventGuestDetailsComponent } from './event-guests/event-guest-details.component';
 import { ChartModule } from 'primeng/chart';
 import { MenuModule } from 'primeng/menu';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { EventRolesComponent } from './event-details/event-roles.component';
 
 @NgModule({
   declarations: [
@@ -40,12 +41,12 @@ import { MenuModule } from 'primeng/menu';
     EventGuestsComponent,
     EventInvitationsComponent,
     EventInvitationRSVP,
-    EventRolesComponent,
     EventInvitationTemplateViewerComponent,
     EventGuestInvitationComponent,
     EventInvitationComponent,
     EventGuestInvitationsComponent,
     EventGuestDetailsComponent,
+    EventRolesComponent
   ],
   imports: [
     ButtonModule,
@@ -62,6 +63,7 @@ import { MenuModule } from 'primeng/menu';
     InputTextareaModule,
     InputNumberModule,
     MenuModule,
+    MultiSelectModule,
     RouterModule,
     TableModule,
     TooltipModule,
@@ -152,12 +154,6 @@ import { MenuModule } from 'primeng/menu';
                 component: EventGuestDetailsComponent,
               }
             ]
-          },
-          {
-            path: 'roles',
-            title: 'Roles',
-            data: { breadcrumb: 'Roles' },
-            component: EventRolesComponent,
           }
         ]
       }

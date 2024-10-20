@@ -1,63 +1,93 @@
+<p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+    </ng-template>
+    <ng-template pTemplate="right">
+        <div class="my-2">
+            <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                (click)="save()"></button>
+        </div>
+    </ng-template>
+</p-toolbar>
+
 <div class="grid">
     <div class="col-12">
         <div class="card">
             <h5>Event Details</h5>
 
-            <div class="p-fluid p-formgrid grid">
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="title">Title</label>
+            <p-tabView orientation="left">
+                <p-tabPanel header="Event Details" class="line-height-3 m-0 p-0">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="title">Title</label>
 
-                    <input pInputText *ngIf="!loading" id="title" type="text" [(ngModel)]="event.title"
-                        [value]="event.title" />
+                            <input pInputText *ngIf="!loading" id="title" type="text" [(ngModel)]="event.title"
+                                [value]="event.title" />
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="description">Description</label>
-                    <textarea pInputText *ngIf="!loading" id="description" rows="1" type="text"
-                        [(ngModel)]="event.description" [value]="event.description"></textarea>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="description">Description</label>
+                            <textarea pInputText *ngIf="!loading" id="description" rows="1" type="text"
+                                [(ngModel)]="event.description" [value]="event.description"></textarea>
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="event-type">Type</label>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="event-type">Type</label>
 
-                    <p-dropdown *ngIf="!loading" [options]="eventTypeCollection" [(ngModel)]="event.eventTypeId"
-                        optionValue="id" optionLabel="name" placeholder="Select event type">
-                    </p-dropdown>
+                            <p-dropdown *ngIf="!loading" [options]="eventTypeCollection" [(ngModel)]="event.eventTypeId"
+                                optionValue="id" optionLabel="name" placeholder="Select event type">
+                            </p-dropdown>
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="zip">Max Guests</label>
-                    <p-inputNumber *ngIf="!loading" mode="decimal" [showButtons]="true" [min]="0" [max]="500">
-                    </p-inputNumber>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="zip">Max Guests</label>
+                            <p-inputNumber *ngIf="!loading" mode="decimal" [showButtons]="true" [min]="0" [max]="500">
+                            </p-inputNumber>
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
 
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="location">Location</label>
-                    <input pInputTextarea *ngIf="!loading" id="address" />
+                        <div class="field col-12 md:col-6">
+                            <label htmlFor="location">Location</label>
+                            <input pInputTextarea *ngIf="!loading" id="address" />
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label htmlFor="start-date">Start Date</label>
-                    <p-calendar *ngIf="!loading" [showIcon]="true" [(ngModel)]="event.startDate"
-                        dateFormat="yy-mm-dd"></p-calendar>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label htmlFor="start-date">Start Date</label>
+                            <p-calendar *ngIf="!loading" [showIcon]="true" [(ngModel)]="event.startDate"
+                                dateFormat="yy-mm-dd"></p-calendar>
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label htmlFor="end-date">End Date</label>
-                    <p-calendar *ngIf="!loading" [showIcon]="true" [(ngModel)]="event.endDate"
-                        dateFormat="yy-mm-dd"></p-calendar>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
+                        <div class="field col-12 md:col-3">
+                            <label htmlFor="end-date">End Date</label>
+                            <p-calendar *ngIf="!loading" [showIcon]="true" [(ngModel)]="event.endDate"
+                                dateFormat="yy-mm-dd"></p-calendar>
 
-                    <p-skeleton *ngIf="loading"></p-skeleton>
-                </div>
-            </div>
-            <button pButton *ngIf="!loading" label="Submit" (click)="save()"></button>
+                            <p-skeleton *ngIf="loading"></p-skeleton>
+                        </div>
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel header="Roles" class="line-height-3 p-0 m-0" *ngIf="event.id">
+                    <app-event-roles></app-event-roles>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+
+        <div class="card" *ngIf="event.id">
+            <h5>Home Page</h5>
+
+            <p-tabView orientation="left">
+                <p-tabPanel header="Preview" class="line-height-3 m-0">
+
+                </p-tabPanel>
+                <p-tabPanel header="Editor" class="line-height-3 m-0 h-full">
+
+                </p-tabPanel>
+            </p-tabView>
         </div>
     </div>
-</div>

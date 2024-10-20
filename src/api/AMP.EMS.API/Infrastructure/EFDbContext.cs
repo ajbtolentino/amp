@@ -19,6 +19,36 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .HasForeignKey(_ => _.EventId)
             .HasPrincipalKey(_ => _.Id);
 
+        modelBuilder.Entity<Event>()
+            .HasMany(_ => _.Guests)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<Event>()
+            .HasMany(_ => _.Invitations)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<Guest>()
+            .HasMany(_ => _.EventGuests)
+            .WithOne(_ => _.Guest)
+            .HasForeignKey(_ => _.GuestId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<EventGuest>()
+            .HasMany(_ => _.EventGuestRoles)
+            .WithOne(_ => _.EventGuest)
+            .HasForeignKey(_ => _.EventGuestId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<EventGuest>()
+            .HasMany(_ => _.EventGuestInvitations)
+            .WithOne(_ => _.EventGuest)
+            .HasForeignKey(_ => _.EventGuestId)
+            .HasPrincipalKey(_ => _.Id);
+
         modelBuilder.Entity<EventInvitation>()
             .HasMany(_ => _.EventGuestInvitations)
             .WithOne(_ => _.EventInvitation)
@@ -29,12 +59,6 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .HasMany(_ => _.RSVPs)
             .WithOne(_ => _.EventGuestInvitation)
             .HasForeignKey(_ => _.EventGuestInvitationId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<Guest>()
-            .HasMany(_ => _.Invitations)
-            .WithOne(_ => _.Guest)
-            .HasForeignKey(_ => _.GuestId)
             .HasPrincipalKey(_ => _.Id);
 
         modelBuilder.Entity<Event>()

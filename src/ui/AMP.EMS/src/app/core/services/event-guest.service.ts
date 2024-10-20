@@ -3,11 +3,7 @@ import { EventGuest } from '../models/event-guest';
 
 import { BaseService } from './base.service';
 
-export class GuestService extends BaseService {
-    details = async (eventId: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventguest/${eventId}/details`, { headers: this.headers }));
-    }
-
+export class EventGuestService extends BaseService {
     get = async (id: string) => {
         return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventguest/${id}`, { headers: this.headers }));
     }
@@ -16,12 +12,24 @@ export class GuestService extends BaseService {
         return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventguest`, { headers: this.headers }));
     }
 
-    add = async (eventGuest: EventGuest) => {
-        return await lastValueFrom(this.http.post<any>(`${this.API_URL}/api/eventguest`, eventGuest, { headers: this.headers }));
+    add = async (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]) => {
+        return await lastValueFrom(this.http.post<any>(`${this.API_URL}/api/eventguest`, {
+            eventId: eventGuest.eventId,
+            guest: eventGuest.guest,
+            guestId: eventGuest.guestId,
+            eventRoleIds: eventRoleIds,
+            eventInvitationIds: eventInvitationIds
+        }, { headers: this.headers }));
     }
 
-    update = async (invitation: EventGuest) => {
-        return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/eventguest/${invitation.id}`, invitation, { headers: this.headers }));
+    update = async (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]) => {
+        return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/eventguest/${eventGuest.id}`, {
+            eventId: eventGuest.eventId,
+            guest: eventGuest.guest,
+            guestId: eventGuest.guestId,
+            eventRoleIds: eventRoleIds,
+            eventInvitationIds: eventInvitationIds
+        }, { headers: this.headers }));
     }
 
     delete = async (id: string) => {

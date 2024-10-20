@@ -89,6 +89,9 @@ namespace AMP.EMS.API.Migrations
                     b.Property<Guid>("GuestId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("MaxGuests")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT");
 
@@ -121,26 +124,20 @@ namespace AMP.EMS.API.Migrations
                     b.Property<DateTime?>("DateUpdated")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("EventGuestId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("EventInvitationId")
                         .HasColumnType("TEXT");
-
-                    b.Property<Guid>("GuestId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("LimitedView")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MaxGuests")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventInvitationId");
+                    b.HasIndex("EventGuestId");
 
-                    b.HasIndex("GuestId");
+                    b.HasIndex("EventInvitationId");
 
                     b.ToTable("EventGuestInvitation");
                 });
@@ -240,6 +237,9 @@ namespace AMP.EMS.API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -248,6 +248,8 @@ namespace AMP.EMS.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EventId");
 
                     b.ToTable("EventRole");
                 });
@@ -380,7 +382,7 @@ namespace AMP.EMS.API.Migrations
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Guest", "Guest")
-                        .WithMany()
+                        .WithMany("EventGuests")
                         .HasForeignKey("GuestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -392,27 +394,27 @@ namespace AMP.EMS.API.Migrations
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventGuestInvitation", b =>
                 {
+                    b.HasOne("AMP.EMS.API.Core.Entities.EventGuest", "EventGuest")
+                        .WithMany("EventGuestInvitations")
+                        .HasForeignKey("EventGuestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AMP.EMS.API.Core.Entities.EventInvitation", "EventInvitation")
                         .WithMany("EventGuestInvitations")
                         .HasForeignKey("EventInvitationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AMP.EMS.API.Core.Entities.Guest", "Guest")
-                        .WithMany("Invitations")
-                        .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("EventGuest");
 
                     b.Navigation("EventInvitation");
-
-                    b.Navigation("Guest");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventGuestRole", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.EventGuest", "EventGuest")
-                        .WithMany()
+                        .WithMany("EventGuestRoles")
                         .HasForeignKey("EventGuestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -439,6 +441,17 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("Event");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventRole", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.RSVP", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.EventGuestInvitation", "EventGuestInvitation")
@@ -457,6 +470,13 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("Invitations");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventGuest", b =>
+                {
+                    b.Navigation("EventGuestInvitations");
+
+                    b.Navigation("EventGuestRoles");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventGuestInvitation", b =>
                 {
                     b.Navigation("RSVPs");
@@ -469,7 +489,7 @@ namespace AMP.EMS.API.Migrations
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Guest", b =>
                 {
-                    b.Navigation("Invitations");
+                    b.Navigation("EventGuests");
                 });
 #pragma warning restore 612, 618
         }

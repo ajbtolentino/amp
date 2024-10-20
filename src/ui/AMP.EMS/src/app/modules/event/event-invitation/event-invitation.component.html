@@ -1,19 +1,19 @@
+<p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+        <button *ngIf="eventInvitation.html" pButton pRipple label="View Sample" icon="pi pi-upload"
+            class="p-button-help"></button>
+    </ng-template>
+    <ng-template pTemplate="right">
+        <div class="my-2">
+            <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                (click)="save()"></button>
+        </div>
+    </ng-template>
+</p-toolbar>
+
 <div class="grid">
     <div class="col-12 ">
         <div class="card shadow-2">
-            <p-toolbar styleClass="mb-4">
-                <ng-template pTemplate="left">
-                    <button *ngIf="eventInvitation.html" pButton pRipple label="View Sample" icon="pi pi-upload"
-                        class="p-button-help"></button>
-                </ng-template>
-                <ng-template pTemplate="right">
-                    <div class="my-2">
-                        <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
-                            (click)="save()"></button>
-                    </div>
-                </ng-template>
-            </p-toolbar>
-
             <h5>Event Invitation Details</h5>
 
             <div class="p-fluid p-formgrid grid">
@@ -26,7 +26,9 @@
                     <input pInputText id="description" type="text" [(ngModel)]="eventInvitation.description" />
                 </div>
             </div>
+        </div>
 
+        <div class="card shadow-2">
             <p-tabView orientation="left">
                 <p-tabPanel header="Template" class="line-height-3 m-0">
                     <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{invitation: {maxGuests : 2}}"
@@ -39,7 +41,5 @@
                 </p-tabPanel>
             </p-tabView>
         </div>
-
-
     </div>
 </div>
