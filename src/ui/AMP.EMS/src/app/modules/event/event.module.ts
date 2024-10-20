@@ -21,7 +21,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 import { EventLayoutComponent } from '../../layout/event-layout/event-layout.component';
 import { EditorModule } from 'primeng/editor';
-import { EventInvitationRSVP, EventInvitationTemplateViewerComponent } from './event-invitation/event-invitation-template-viewer.component';
+import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './event-invitation/event-guest-invitation-rsvp.component';
 import { TabViewModule } from 'primeng/tabview';
 import { EventGuestInvitationComponent } from './event-guest-invitation/event-guest-invitation.component';
 import { EventInvitationComponent } from './event-invitation/event-invitation.component';
@@ -40,8 +40,8 @@ import { EventRolesComponent } from './event-details/event-roles.component';
     EventDetailsComponent,
     EventGuestsComponent,
     EventInvitationsComponent,
-    EventInvitationRSVP,
-    EventInvitationTemplateViewerComponent,
+    EventGuestInvitationRSVPFormComponent,
+    EventGuestInvitationRSVPLabelComponent,
     EventGuestInvitationComponent,
     EventInvitationComponent,
     EventGuestInvitationsComponent,

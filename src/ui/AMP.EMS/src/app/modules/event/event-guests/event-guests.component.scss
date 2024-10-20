@@ -6,7 +6,22 @@
     font-size: 12px;
     letter-spacing: .3px;
 
-    &.status-accepted {
+    &.status-missing-invitation {
+        background: #FEEDAF;
+        color: #8A5340;
+    }
+
+    &.status-awaiting-response {
+        background: #ECCFFF;
+        color: #694382;
+    }
+
+    &.status-responded {
+        background: #B3E5FC;
+        color: #23547B;
+    }
+
+    &.status-ACCEPT {
         background: #C8E6C9 !important;
         color: #256029 !important;
     }
@@ -16,7 +31,7 @@
         color: #23547B;
     }
 
-    &.status-declined {
+    &.status-DECLINE {
         background: #FFCDD2;
         color: #C63737;
     }

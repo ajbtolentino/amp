@@ -44,9 +44,9 @@
                     <p-skeleton *ngIf="loading"></p-skeleton>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label htmlFor="lastName">Role</label>
-                    <p-multiSelect *ngIf="!loading" optionLabel="role" placeholder="Select Role" [options]="eventRoles"
-                        optionLabel="name" optionValue="id" [(ngModel)]="selectedEventRoles" />
+                    <label htmlFor="maxGuests">Max # of Guests</label>
+                    <input pInputText *ngIf="!loading" id="maxGuests" rows="1" type="text"
+                        [(ngModel)]="eventGuest.maxGuests" [value]="eventGuest.maxGuests" />
 
                     <p-skeleton *ngIf="loading"></p-skeleton>
                 </div>
@@ -55,6 +55,13 @@
                     <p-multiSelect *ngIf="!loading" optionLabel="invitations" placeholder="Select Invitations"
                         [options]="eventInvitations" optionValue="id" optionLabel="name"
                         [(ngModel)]="selectedEventInvitations" />
+
+                    <p-skeleton *ngIf="loading"></p-skeleton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label htmlFor="lastName">Role</label>
+                    <p-multiSelect *ngIf="!loading" optionLabel="role" placeholder="Select Role" [options]="eventRoles"
+                        optionLabel="name" optionValue="id" [(ngModel)]="selectedEventRoles" />
 
                     <p-skeleton *ngIf="loading"></p-skeleton>
                 </div>

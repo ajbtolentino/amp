@@ -28,11 +28,11 @@ public class EFUnitOfWork(DbContext dbContext, IHttpContextAccessor httpContextA
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedBy = claims.Value;
+                    entry.Entity.CreatedBy = claims?.Value ?? string.Empty;
                     entry.Entity.DateCreated = DateTime.Now;
                     break;
                 case EntityState.Modified:
-                    entry.Entity.UpdatedBy = claims.Value;
+                    entry.Entity.UpdatedBy = claims?.Value ?? string.Empty;
                     entry.Entity.DateUpdated = DateTime.Now;
                     break;
             }

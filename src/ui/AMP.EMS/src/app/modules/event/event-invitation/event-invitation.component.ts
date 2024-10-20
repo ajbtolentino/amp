@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { EventInvitation } from '../../../core/models/event-invitation';
 import { EventInvitationService } from '../../../core/services/event-invitation.service';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
+import { EventGuestInvitationRSVP } from '../../../core/models/event-guest-invitation-rsvp';
 
 @Component({
   selector: 'app-event-invitation',
@@ -93,5 +94,13 @@ export class EventInvitationComponent implements OnInit {
 
       this.router.navigate([`/event/${this.eventId}/invitations`]);
     }
+  }
+
+  onRsvpGuestChange(i: number, name: string) {
+    console.log(name);
+  }
+
+  onRsvpSubmit = () => {
+    alert('Response Submitted!');
   }
 }

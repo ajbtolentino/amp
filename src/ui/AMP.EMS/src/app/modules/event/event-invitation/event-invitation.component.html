@@ -32,8 +32,11 @@
             <p-tabView orientation="left">
                 <p-tabPanel header="Template" class="line-height-3 m-0">
                     <div [style]="{height: '100vh !important' , overflow: 'auto'}">
-                        <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{invitation: {maxGuests : 2}}"
-                            [options]="{sanitize: false}"></ngx-dynamic-hooks>
+                        <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{
+                            onSubmit: onRsvpSubmit,
+                            eventGuestInvitation: {
+                                eventGuest: {guest: { firstName: 'First Name', lastName: 'Last Name'},maxGuests: 3
+                                }}}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">

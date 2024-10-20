@@ -1,2 +1,3 @@
-<ngx-dynamic-hooks [content]="eventInvitation?.html" [context]="{invitation: {maxGuests : 2}}"
+<ngx-dynamic-hooks [content]="eventGuestInvitation?.eventInvitation?.html"
+    [context]="{eventGuestInvitation: eventGuestInvitation, onSubmit: onSubmit}"
     [options]="{sanitize: false}"></ngx-dynamic-hooks>

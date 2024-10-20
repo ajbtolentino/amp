@@ -23,6 +23,9 @@ namespace AMP.EMS.API.Controllers
                                     .Include(_ => _.Guest)
                                     .Include(_ => _.EventGuestInvitations)
                                         .ThenInclude(_ => _.EventInvitation)
+                                    .Include(_ => _.EventGuestInvitations)
+                                        .ThenInclude(_ => _.EventGuestInvitationRSVPs)
+                                        .ThenInclude(_ => _.EventGuestInvitationRSVPItems)
                                     .Include(_ => _.EventGuestRoles)
                                         .ThenInclude(_ => _.EventRole)
                                     .FirstOrDefaultAsync();
@@ -142,8 +145,12 @@ namespace AMP.EMS.API.Controllers
 
                     var eventGuest = await this.entityRepository.Get(id);
 
+                    eventGuest.MaxGuests = request.MaxGuests ?? 0;
+
                     this.UpdateEventGuestInvitations(eventGuest, request.EventInvitationIds ?? []);
                     this.UpdateEventGuestRoles(eventGuest, request.EventRoleIds ?? []);
+
+                    this.entityRepository.Update(eventGuest);
 
                     await this.unitOfWork.SaveChangesAsync();
                     await this.unitOfWork.CommitTransactionAsync();

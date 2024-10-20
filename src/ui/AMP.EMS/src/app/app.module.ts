@@ -1,16 +1,15 @@
-import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from '../app/app.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventService } from '../app/core/services/event.service';
 import { EventGuestService } from './core/services/event-guest.service';
 import { EventInvitationService as EventInvitationService } from '../app/core/services/event-invitation.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter, RouterModule, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { environment } from '../environments/environment';
 import { RsvpService } from '../app/core/services/rsvp.service';
-import { Compiler, Component, importProvidersFrom, Input, NgModule, ɵcompileComponent } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from '../app/layout/app.layout.module';
 import { EventTypeService } from '../app/core/services/event-type.service';
@@ -18,8 +17,7 @@ import { EventsModule } from '../app/modules/events/events.module';
 import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
 import { EventsLayoutComponent } from '../app/layout/events-layout/events-layout.component';
 import { EventGuestInvitationService } from '../app/core/services/event-guest-invitation.service';
-import { } from '@angular/compiler';
-import { EventInvitationRSVP, EventInvitationTemplateViewerComponent } from '../app/modules/event/event-invitation/event-invitation-template-viewer.component';
+import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './modules/event/event-invitation/event-guest-invitation-rsvp.component';
 import { provideDynamicHooks } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
 
@@ -57,7 +55,7 @@ import { DefaultComponent } from './modules/default/default.component';
         },
     }),
     provideDynamicHooks({
-        parsers: [EventInvitationTemplateViewerComponent, EventInvitationRSVP],
+        parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent],
         options: {
             sanitize: false
         }

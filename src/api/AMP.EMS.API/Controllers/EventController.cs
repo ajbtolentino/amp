@@ -47,6 +47,8 @@ namespace AMP.EMS.API.Controllers
                                 .Include(_ => _.Guest)
                                 .Include(_ => _.EventGuestInvitations)
                                     .ThenInclude(_ => _.EventInvitation)
+                                .Include(_ => _.EventGuestInvitations)
+                                    .ThenInclude(_ => _.EventGuestInvitationRSVPs.OrderByDescending(__ => __.DateCreated).Take(1))
                                 .Include(_ => _.EventGuestRoles)
                                     .ThenInclude(_ => _.EventRole)
                                 .Where(_ => _.EventId == eventId);

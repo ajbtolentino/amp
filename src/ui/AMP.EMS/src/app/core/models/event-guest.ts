@@ -11,6 +11,7 @@ export interface EventGuest {
     guestId?: string;
     guest?: Guest;
     event?: Event;
+    maxGuests?: number;
     eventGuestRoles?: EventGuestRole[];
     eventGuestInvitations?: EventGuestInvitation[];
 }

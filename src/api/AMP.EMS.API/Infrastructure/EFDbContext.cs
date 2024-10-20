@@ -56,9 +56,15 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .HasPrincipalKey(_ => _.Id);
 
         modelBuilder.Entity<EventGuestInvitation>()
-            .HasMany(_ => _.RSVPs)
+            .HasMany(_ => _.EventGuestInvitationRSVPs)
             .WithOne(_ => _.EventGuestInvitation)
             .HasForeignKey(_ => _.EventGuestInvitationId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<EventGuestInvitationRSVP>()
+            .HasMany(_ => _.EventGuestInvitationRSVPItems)
+            .WithOne(_ => _.EventGuestInvitationRSVP)
+            .HasForeignKey(_ => _.EventGuestInvitationRSVPId)
             .HasPrincipalKey(_ => _.Id);
 
         modelBuilder.Entity<Event>()
@@ -89,7 +95,11 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<RSVP>()
+        modelBuilder.Entity<EventGuestInvitationRSVP>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<EventGuestInvitationRSVPItem>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
     }
@@ -97,7 +107,7 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
     public DbSet<Event> Events { get; private set; }
     public DbSet<Guest> Guests { get; private set; }
     public DbSet<EventInvitation> Invitations { get; private set; }
-    public DbSet<RSVP> RSVPs { get; private set; }
+    public DbSet<EventGuestInvitationRSVP> RSVPs { get; private set; }
 
     public TEntity Add<TEntity, TID>(TEntity entity) where TEntity : class, IEntity<TID>
     {

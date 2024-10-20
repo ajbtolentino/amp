@@ -11,5 +11,5 @@ public class EventGuestInvitation : BaseEntity<Guid>
 
     public EventGuest? EventGuest { get; set; }
     public EventInvitation? EventInvitation { get; set; }
-    public ICollection<RSVP> RSVPs { get; set; } = [];
+    public ICollection<EventGuestInvitationRSVP> EventGuestInvitationRSVPs { get; set; } = [];
 }

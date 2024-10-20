@@ -17,6 +17,7 @@ export class EventGuestService extends BaseService {
             eventId: eventGuest.eventId,
             guest: eventGuest.guest,
             guestId: eventGuest.guestId,
+            maxGuests: eventGuest.maxGuests,
             eventRoleIds: eventRoleIds,
             eventInvitationIds: eventInvitationIds
         }, { headers: this.headers }));
@@ -27,6 +28,7 @@ export class EventGuestService extends BaseService {
             eventId: eventGuest.eventId,
             guest: eventGuest.guest,
             guestId: eventGuest.guestId,
+            maxGuests: eventGuest.maxGuests,
             eventRoleIds: eventRoleIds,
             eventInvitationIds: eventInvitationIds
         }, { headers: this.headers }));

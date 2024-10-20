@@ -39,7 +39,6 @@ export class EventGuestsComponent implements OnInit {
       if (eventId) {
         this.eventId = eventId;
         this.refreshGrid();
-        console.log(this.eventId);
       }
     });
   }
@@ -54,8 +53,8 @@ export class EventGuestsComponent implements OnInit {
     this.isCreating = false;
   }
 
-  hasResponsed = (item: EventGuest) => {
-    return item.eventGuestInvitations?.filter(_ => _.rsvps).length || false;
+  hasResponded = (item: EventGuest) => {
+    return item.eventGuestInvitations?.filter(_ => _.eventGuestInvitationRSVPs?.length).length || false;
   }
 
   deleteSelectedItems = () => {

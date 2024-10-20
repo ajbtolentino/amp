@@ -237,6 +237,29 @@ namespace AMP.EMS.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EventGuestInvitationRSVPItem",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventGuestInvitationRSVPId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    GuestName = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventGuestInvitationRSVPItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventGuestInvitationRSVPItem_RSVPs_EventGuestInvitationRSVPId",
+                        column: x => x.EventGuestInvitationRSVPId,
+                        principalTable: "RSVPs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_EventGuest_EventId",
                 table: "EventGuest",
@@ -256,6 +279,11 @@ namespace AMP.EMS.API.Migrations
                 name: "IX_EventGuestInvitation_EventInvitationId",
                 table: "EventGuestInvitation",
                 column: "EventInvitationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventGuestInvitationRSVPItem_EventGuestInvitationRSVPId",
+                table: "EventGuestInvitationRSVPItem",
+                column: "EventGuestInvitationRSVPId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventGuestRole_EventGuestId",
@@ -291,6 +319,9 @@ namespace AMP.EMS.API.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "EventGuestInvitationRSVPItem");
+
             migrationBuilder.DropTable(
                 name: "EventGuestRole");
 
