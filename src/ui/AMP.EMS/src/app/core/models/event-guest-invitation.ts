@@ -7,6 +7,7 @@ export interface EventGuestInvitation {
     guestId?: string;
     eventInvitationId?: string;
     guest?: Guest;
+    maxGuests?: number;
     code?: string;
     rsvps?: Rsvp[];
 }
