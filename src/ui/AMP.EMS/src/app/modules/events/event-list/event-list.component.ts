@@ -9,6 +9,7 @@ import { Column } from '../../../core/models/column';
 import { Table } from 'primeng/table';
 import { EventType } from '../../../core/models/event-type';
 import { EventTypeService } from '../../../core/services/event-type.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-event-list',
@@ -18,7 +19,7 @@ import { EventTypeService } from '../../../core/services/event-type.service';
 export class EventListComponent implements OnInit {
   dialog: boolean = false;
 
-  events: Event[] = [];
+  events$: Observable<Event[]> = new Observable<Event[]>();
 
   selectedItems: Event[] | null = [];
 
@@ -32,7 +33,6 @@ export class EventListComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private eventTypeService: EventTypeService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
@@ -47,9 +47,13 @@ export class EventListComponent implements OnInit {
   refreshGrid = async () => {
     this.loading = true;
 
-    const res = await this.eventService.getAll();
+    this.events$ = this.eventService.getAll();
 
-    if (res?.data) this.events = res.data;
+    this.events$.subscribe({
+      next: value => console.log(value),
+      error: err => console.error('Observable emitted an error: ' + err),
+      complete: () => console.log('Observable emitted the complete notification')
+    });
 
     this.loading = false;
   }
@@ -68,8 +72,6 @@ export class EventListComponent implements OnInit {
         this.selectedItems = null;
 
         this.loading = false;
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
     });
   }
@@ -87,8 +89,6 @@ export class EventListComponent implements OnInit {
           await this.refreshGrid();
 
           this.loading = false;
-
-          this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });
@@ -101,12 +101,10 @@ export class EventListComponent implements OnInit {
       if (item.id) {
         await this.eventService.update(item);
         await this.refreshGrid();
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Event Updated', life: 3000 });
       }
       else {
         await this.eventService.add(item);
         await this.refreshGrid();
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Event Created', life: 3000 });
       }
 
       this.loading = false;

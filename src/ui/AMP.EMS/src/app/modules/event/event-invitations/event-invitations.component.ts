@@ -4,9 +4,6 @@ import { MessageService } from 'primeng/api';
 import { EventInvitation } from '../../../core/models/event-invitation';
 import { EventInvitationService as EventInvitationService } from '../../../core/services/event-invitation.service';
 import { ActivatedRoute } from '@angular/router';
-
-import { Event } from '../../../core/models/event';
-
 import { EventService } from '../../../core/services/event.service';
 import { Table } from 'primeng/table';
 
@@ -33,7 +30,6 @@ export class EventInvitationsComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private eventInvitationService: EventInvitationService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -86,7 +82,6 @@ export class EventInvitationsComponent implements OnInit {
       accept: () => {
         this.items = this.items.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
     });
   }
@@ -100,7 +95,6 @@ export class EventInvitationsComponent implements OnInit {
         if (invitation.id) {
           await this.eventInvitationService.delete(invitation.id);
           await this.refreshGrid();
-          this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });

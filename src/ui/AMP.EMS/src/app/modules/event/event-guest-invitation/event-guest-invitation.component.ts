@@ -1,11 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { EventInvitation } from '../../../core/models/event-invitation';
 import { EventGuest } from '../../../core/models/event-guest';
-import { EventInvitationService } from '../../../core/services/event-invitation.service';
 import { EventService } from '../../../core/services/event.service';
 import { EventGuestService } from '../../../core/services/event-guest.service';
 import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
@@ -41,10 +39,8 @@ export class EventGuestInvitationComponent implements OnInit {
   constructor(private eventService: EventService,
     private eventGuestInvitationService: EventGuestInvitationService,
     private guestService: EventGuestService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
-    private injector: Injector,
     @Inject(DOCUMENT) private document: Document) { }
 
   async ngOnInit() {
@@ -56,36 +52,7 @@ export class EventGuestInvitationComponent implements OnInit {
 
       this.refreshGrid();
     });
-
-    // this.openComponent(this.templateCode)
   }
-
-  // onTemplateCodeChange(e: any) {
-  //   this.openComponent(e);
-  // }
-
-  // openComponent<T>(content: Content<T>) {
-  //   const ngContent = this.createNgContent(content);
-  //   let options = {
-  //     injector: this.injector,
-  //     projectableNodes: ngContent,
-  //   }
-  //   this.eventInvitationViewerHost.viewContainerRef.clear();
-  //   const factory = this.eventInvitationViewerHost.viewContainerRef.createComponent(EventInvitationTemplateViewerComponent, {
-
-  //   });
-  //   factory.hostView.detectChanges();
-
-  // }
-
-  // createNgContent<T>(content: Content<T>) {
-  //   if (typeof content === 'string') {
-  //     const element = this.document.createElement('div');
-  //     element.innerHTML = content;
-  //     return [[element]];
-  //   }
-  //   return [[]]
-  // }
 
   refreshGrid = async () => {
     this.loading = true;
@@ -133,7 +100,6 @@ export class EventGuestInvitationComponent implements OnInit {
       accept: () => {
         this.items = this.items.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
     });
   }
@@ -160,7 +126,6 @@ export class EventGuestInvitationComponent implements OnInit {
         if (invitation.id) {
           await this.eventGuestInvitationService.delete(invitation.id);
           await this.refreshGrid();
-          this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });
@@ -174,13 +139,9 @@ export class EventGuestInvitationComponent implements OnInit {
 
       if (item.id) {
         await this.eventGuestInvitationService.update(item);
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
       }
       else {
         await this.eventGuestInvitationService.add(item);
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
       }
 
       this.loading = false;

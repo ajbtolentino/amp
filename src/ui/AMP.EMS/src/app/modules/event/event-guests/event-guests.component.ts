@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 
 import { EventGuest } from '../../../core/models/event-guest';
@@ -28,7 +27,6 @@ export class EventGuestsComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private eventGuestService: EventGuestService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -67,7 +65,6 @@ export class EventGuestsComponent implements OnInit {
 
         this.items = this.items.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
 
         this.loading = false;
 
@@ -88,7 +85,6 @@ export class EventGuestsComponent implements OnInit {
           this.loading = true;
 
           await this.refreshGrid();
-          this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });

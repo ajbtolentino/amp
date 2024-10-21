@@ -25,6 +25,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { ToastModule } from 'primeng/toast';
 import { DefaultComponent } from './modules/default/default.component';
+import { responseInterceptor } from './core/interceptors/response.interceptor';
 
 @NgModule({
     imports: [
@@ -36,68 +37,69 @@ import { DefaultComponent } from './modules/default/default.component';
         ConfirmDialogModule,
         CodeEditorModule.forRoot(),
     ],
-    providers: [provideHttpClient(withInterceptors([authInterceptor()])),
-    provideAuth({
-        config: {
-            triggerAuthorizationResultEvent: true,
-            forbiddenRoute: '/forbidden',
-            unauthorizedRoute: '/unauthorized',
-            logLevel: LogLevel.Debug,
-            historyCleanupOff: false,
-            authority: environment.IDP_AUTHORITY_HTTPS_URL,
-            redirectUrl: window.location.origin,
-            postLogoutRedirectUri: window.location.origin,
-            clientId: environment.EMS_SPA_CLIENTID,
-            scope: environment.EMS_SPA_CLIENTSCOPE,
-            responseType: 'code',
-            silentRenew: true,
-            useRefreshToken: true,
-        },
-    }),
-    provideDynamicHooks({
-        parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent],
-        options: {
-            sanitize: false
-        }
-    }),
-    provideRouter(
-        [
-            {
-                path: '',
-                pathMatch: 'full',
-                component: EventsLayoutComponent,
-                children: [
-                    {
-                        path: '',
-                        component: DefaultComponent
-                    }
-                ]
+    providers: [
+        provideHttpClient(withInterceptors([authInterceptor(), responseInterceptor])),
+        provideAuth({
+            config: {
+                triggerAuthorizationResultEvent: true,
+                forbiddenRoute: '/forbidden',
+                unauthorizedRoute: '/unauthorized',
+                logLevel: LogLevel.Debug,
+                historyCleanupOff: false,
+                authority: environment.IDP_AUTHORITY_HTTPS_URL,
+                redirectUrl: window.location.origin,
+                postLogoutRedirectUri: window.location.origin,
+                clientId: environment.EMS_SPA_CLIENTID,
+                scope: environment.EMS_SPA_CLIENTSCOPE,
+                responseType: 'code',
+                silentRenew: true,
+                useRefreshToken: true,
             },
-            {
-                path: '',
-                title: 'Events',
-                loadChildren: () => import('../app/modules/events/events.module').then(m => m.EventsModule)
-            },
-            {
-                path: 'event',
-                title: 'Event',
-                canActivate: [autoLoginPartialRoutesGuard],
-                loadChildren: () => import('../app/modules/event/event.module').then(m => m.EventModule)
-            },
-            {
-                path: 'invitation',
-                title: 'Invitation',
-                loadChildren: () => import('../app/modules/guests/guests.module').then(m => m.GuestModule)
-            },
-            {
-                path: 'unauthorized',
-                component: UnauthorizedComponent
-            },
-            { path: 'notfound', component: NotfoundComponent },
-            { path: '**', redirectTo: '/notfound' },
-        ],
-        withEnabledBlockingInitialNavigation()
-    ),
+        }),
+        provideDynamicHooks({
+            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent],
+            options: {
+                sanitize: false
+            }
+        }),
+        provideRouter(
+            [
+                {
+                    path: '',
+                    pathMatch: 'full',
+                    component: EventsLayoutComponent,
+                    children: [
+                        {
+                            path: '',
+                            component: DefaultComponent
+                        }
+                    ]
+                },
+                {
+                    path: '',
+                    title: 'Events',
+                    loadChildren: () => import('../app/modules/events/events.module').then(m => m.EventsModule)
+                },
+                {
+                    path: 'event',
+                    title: 'Event',
+                    canActivate: [autoLoginPartialRoutesGuard],
+                    loadChildren: () => import('../app/modules/event/event.module').then(m => m.EventModule)
+                },
+                {
+                    path: 'invitation',
+                    title: 'Invitation',
+                    loadChildren: () => import('../app/modules/guests/guests.module').then(m => m.GuestModule)
+                },
+                {
+                    path: 'unauthorized',
+                    component: UnauthorizedComponent
+                },
+                { path: 'notfound', component: NotfoundComponent },
+                { path: '**', redirectTo: '/notfound' },
+            ],
+            withEnabledBlockingInitialNavigation()
+        ),
         EventService,
         EventInvitationService,
         EventGuestInvitationService,

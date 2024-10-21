@@ -29,7 +29,6 @@ export class AppSettingsComponent implements OnInit {
   @ViewChild('dt') table!: Table;
 
   constructor(private eventTypeService: EventTypeService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
@@ -87,8 +86,6 @@ export class AppSettingsComponent implements OnInit {
         await this.refreshGrid();
 
         this.loading = false;
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
     });
   }
@@ -106,8 +103,6 @@ export class AppSettingsComponent implements OnInit {
           await this.refreshGrid();
 
           this.loading = false;
-
-          this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });
@@ -124,12 +119,10 @@ export class AppSettingsComponent implements OnInit {
       if (item.id) {
         await this.eventTypeService.update(item);
         await this.refreshGrid();
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
       else {
         await this.eventTypeService.add(item);
         await this.refreshGrid();
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
 
       this.loading = false;

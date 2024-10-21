@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, EventType } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Column } from '../../../core/models/column';
 import { EventRole } from '../../../core/models/event-role';
@@ -31,7 +31,6 @@ export class EventRolesComponent {
 
   constructor(private eventService: EventService,
     private eventRoleService: EventRoleService,
-    private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -98,8 +97,6 @@ export class EventRolesComponent {
         await this.refreshGrid();
 
         this.loading = false;
-
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
     });
   }
@@ -117,8 +114,6 @@ export class EventRolesComponent {
           await this.refreshGrid();
 
           this.loading = false;
-
-          this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
         }
       }
     });
@@ -135,11 +130,9 @@ export class EventRolesComponent {
 
       if (item.id) {
         await this.eventRoleService.update(item);
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
       else {
         await this.eventRoleService.add(item);
-        this.messageService.add({ severity: 'success', summary: 'Successful', life: 3000 });
       }
 
       this.loading = false;

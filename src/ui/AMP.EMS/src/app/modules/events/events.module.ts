@@ -23,6 +23,7 @@ import { MenuModule } from 'primeng/menu';
 import { EventDetailsComponent } from '../event/event-details/event-details.component';
 import { DataViewModule } from 'primeng/dataview';
 import { DefaultComponent } from '../default/default.component';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [

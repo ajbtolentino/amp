@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { Event } from '../models/event';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, map, Observable } from 'rxjs';
 
 import { BaseService } from './base.service';
 
@@ -24,8 +24,8 @@ export class EventService extends BaseService {
         return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/guests`, { headers: this.headers }));
     }
 
-    getAll = async () => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event`, { headers: this.headers }));
+    getAll = (): Observable<Event[]> => {
+        return this.http.get<{ data: Event[] }>(`${this.API_URL}/api/event`, { headers: this.headers }).pipe(map((res) => res.data || []));
     }
 
     add = async (event: Event) => {
