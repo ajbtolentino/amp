@@ -6,6 +6,7 @@ import { EventInvitationService as EventInvitationService } from '../../../core/
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../../core/services/event.service';
 import { Table } from 'primeng/table';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-event-invitations',
@@ -14,7 +15,7 @@ import { Table } from 'primeng/table';
 export class EventInvitationsComponent implements OnInit {
   eventId!: string;
 
-  items: EventInvitation[] = [];
+  eventInvitations$: Observable<EventInvitation[]> = new Observable<EventInvitation[]>();
 
   isCreating: boolean = false;
 
@@ -34,7 +35,6 @@ export class EventInvitationsComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log('!')
     this.route.parent?.parent?.paramMap.subscribe(data => {
       const eventId = data.get("eventId");
 
@@ -42,7 +42,6 @@ export class EventInvitationsComponent implements OnInit {
         this.eventId = eventId;
         this.refreshGrid();
       }
-      console.log(this.eventId);
     });
 
   }
@@ -50,8 +49,7 @@ export class EventInvitationsComponent implements OnInit {
   refreshGrid = async () => {
     this.loading = true;
 
-    const eventInvitationResponse = await this.eventService.getInvitations(this.eventId);
-    if (eventInvitationResponse?.data) this.items = eventInvitationResponse.data;
+    this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
 
     this.loading = false;
   }
@@ -59,10 +57,10 @@ export class EventInvitationsComponent implements OnInit {
   addRow = async () => {
     await this.refreshGrid();
 
-    this.items.unshift({});
+    // this.eventInvitations$.unshift({});
     this.isCreating = true;
 
-    this.table.initRowEdit(this.items[0]);
+    // this.table.initRowEdit(this.eventInvitations$[0]);
   }
 
   editRow = async () => {
@@ -80,7 +78,7 @@ export class EventInvitationsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.items = this.items.filter(val => !this.selectedItems?.includes(val));
+        // this.eventInvitations$ = this.eventInvitations$.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
       }
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventGuest } from '../../../core/models/event-guest';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
@@ -8,26 +8,20 @@ import { EventRole } from '../../../core/models/event-role';
 import { EventService } from '../../../core/services/event.service';
 import { EventInvitationService } from '../../../core/services/event-invitation.service';
 import { EventInvitation } from '../../../core/models/event-invitation';
+import { firstValueFrom, from, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-event-guest-details',
   templateUrl: './event-guest-details.component.html',
   styles: ``
 })
-export class EventGuestDetailsComponent implements OnInit {
+export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   eventId!: string;
 
-  eventGuest: EventGuest = {
-    guest: { firstName: '', lastName: '', nickName: '', phoneNumber: '' },
-    event: {},
-    eventGuestInvitations: [],
-    eventGuestRoles: []
-  };
-
-  loading: boolean = false;
-
-  eventRoles: EventRole[] = [];
-  eventInvitations: EventInvitation[] = [];
+  eventGuest$: Observable<EventGuest> = new Observable<EventGuest>();
+  eventRoles$: Observable<EventRole[]> = new Observable<EventRole[]>();
+  eventInvitations$: Observable<EventInvitation[]> = new Observable<EventInvitation[]>();
+  submitEventGuest$: Subject<{ eventGuest: EventGuest, invitationIds: string[], roleIds: string[] }> = new Subject<{ eventGuest: EventGuest, invitationIds: string[], roleIds: string[] }>();
 
   selectedEventRoles: string[] = [];
   selectedEventInvitations: string[] = [];
@@ -38,63 +32,45 @@ export class EventGuestDetailsComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.parent?.parent?.paramMap.subscribe(data => {
-      const eventId = data.get("eventId");
-
-      if (eventId) {
-        this.eventId = eventId;
-        this.eventGuest.eventId = this.eventId;
-        if (this.eventId) this.loadArray();
-      }
-    });
-
-    this.route.paramMap.subscribe(data => {
-      const eventGuestId = data.get("eventGuestId");
-
-      if (eventGuestId) this.loadEventGuest(eventGuestId);
-    });
+    this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
+    this.loadArray();
+    this.loadEventGuest();
   }
 
-  loadArray = async () => {
-    this.loading = true;
+  loadEventGuest = () => {
+    const eventGuestId = this.route.snapshot.paramMap.get('eventGuestId');
 
-    var eventRoleResponse = await this.eventService.getRoles(this.eventId);
-    if (eventRoleResponse?.data) this.eventRoles = eventRoleResponse.data;
-
-    var eventInvitationResponse = await this.eventService.getInvitations(this.eventId);
-    if (eventInvitationResponse?.data) this.eventInvitations = eventInvitationResponse.data;
-
-    this.loading = false;
-  }
-
-  loadEventGuest = async (eventGuestId: string) => {
-    this.loading = true;
-
-    var response = await this.eventGuestService.get(eventGuestId);
-    if (response?.data) {
-      this.eventGuest = response.data;
-      this.selectedEventRoles = this.eventGuest.eventGuestRoles?.map(_ => _.eventRoleId || '') || [];
-      this.selectedEventInvitations = this.eventGuest.eventGuestInvitations?.map<string>(_ => _.eventInvitationId || '') || [];
+    if (eventGuestId) {
+      this.eventGuest$ = this.eventGuestService.get(eventGuestId || '').pipe(map(eventGuest => {
+        this.selectedEventInvitations = eventGuest.eventGuestInvitations?.map(_ => _.eventInvitationId || '').filter(_ => _) || [];
+        this.selectedEventRoles = eventGuest.eventGuestRoles?.map(_ => _.eventRoleId || '').filter(_ => _) || [];
+        return eventGuest;
+      }));
     }
-
-    this.loading = false;
+    else {
+      this.eventGuest$ = of<EventGuest>({ eventId: this.eventId, guest: {} });
+    }
   }
 
-  save = async () => {
-    this.loading = true;
+  loadArray = () => {
+    this.eventRoles$ = this.eventService.getRoles(this.eventId);
+    this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
+  }
 
-    if (this.eventGuest.guest?.firstName?.trim() && this.eventGuest?.guest?.lastName?.trim()) {
+  save = (eventGuest: EventGuest) => {
+    if (eventGuest.guest?.firstName?.trim() && eventGuest.guest?.lastName?.trim())
+      if (eventGuest.guestId)
+        firstValueFrom(this.eventGuestService.update(eventGuest, this.selectedEventRoles, this.selectedEventInvitations)).then(() => this.redirect());
+      else
+        firstValueFrom(this.eventGuestService.add(eventGuest, this.selectedEventRoles, this.selectedEventInvitations)).then(() => this.redirect());
+  }
 
-      if (this.eventGuest.id) {
-        await this.eventGuestService.update(this.eventGuest, this.selectedEventRoles, this.selectedEventInvitations);
-      }
-      else {
-        await this.eventGuestService.add(this.eventGuest, this.selectedEventRoles, this.selectedEventInvitations);
-      }
-    }
-
-    this.loading = false;
-
+  redirect = () => {
     this.router.navigate([`/event/${this.eventId}/guests`]);
   }
+
+  ngOnDestroy(): void {
+
+  }
 }
+

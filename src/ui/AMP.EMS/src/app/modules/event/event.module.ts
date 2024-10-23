@@ -10,7 +10,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 import { EventDetailsComponent } from './event-details/event-details.component';
 import { CheckboxModule } from 'primeng/checkbox';
-import { EventGuestsComponent } from './event-guests/event-guests.component';
+import { EventGuestsComponent } from './event-guests/event-guest-list.component';
 import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { CalendarModule } from 'primeng/calendar';
 import { RippleModule } from 'primeng/ripple';
@@ -23,9 +23,8 @@ import { EventLayoutComponent } from '../../layout/event-layout/event-layout.com
 import { EditorModule } from 'primeng/editor';
 import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './event-invitation/event-guest-invitation-rsvp.component';
 import { TabViewModule } from 'primeng/tabview';
-import { EventGuestInvitationComponent } from './event-guest-invitation/event-guest-invitation.component';
+import { EventGuestInvitationComponent as EventGuestInvitationsComponent } from './event-guests/event-guest-invitations.component';
 import { EventInvitationComponent } from './event-invitation/event-invitation.component';
-import { EventGuestInvitationsComponent } from './event-invitation/event-guest-invitations.component';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventGuestDetailsComponent } from './event-guests/event-guest-details.component';
@@ -33,6 +32,8 @@ import { ChartModule } from 'primeng/chart';
 import { MenuModule } from 'primeng/menu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { EventRolesComponent } from './event-details/event-roles.component';
+import { WithStatusPipe } from '../../core/pipes/with-status';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -42,13 +43,14 @@ import { EventRolesComponent } from './event-details/event-roles.component';
     EventInvitationsComponent,
     EventGuestInvitationRSVPFormComponent,
     EventGuestInvitationRSVPLabelComponent,
-    EventGuestInvitationComponent,
+    EventGuestInvitationsComponent,
     EventInvitationComponent,
     EventGuestInvitationsComponent,
     EventGuestDetailsComponent,
     EventRolesComponent
   ],
   imports: [
+    SharedModule,
     ButtonModule,
     ChartModule,
     CheckboxModule,
@@ -157,7 +159,7 @@ import { EventRolesComponent } from './event-details/event-roles.component';
           }
         ]
       }
-    ]),
+    ])
   ]
 })
 

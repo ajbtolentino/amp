@@ -4,6 +4,7 @@ import { EventService } from '../../../core/services/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventTypeService } from '../../../core/services/event-type.service';
 import { EventType } from '../../../core/models/event-type';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class EventDetailsComponent implements OnInit {
 
   event: Event = {};
 
-  eventTypeCollection: EventType[] = [];
+  eventTypes$: Observable<EventType[]> = new Observable<EventType[]>();
 
   date: Date | undefined;
 
@@ -53,9 +54,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   loadEventTypes = async () => {
-    const response = await this.eventTypeService.getAll();
-
-    if (response?.data) this.eventTypeCollection = response.data;
+    this.eventTypes$ = this.eventTypeService.getAll();
   }
 
   save = async () => {

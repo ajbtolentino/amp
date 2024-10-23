@@ -24,12 +24,17 @@ export class EventGuestInvitationRSVPLabelComponent {
           <div>
             <label for="accept" class="accept-label">{{acceptLabel}}</label>
             <input id="accept" type="radio" [(ngModel)]="eventGuestInvitationRSVP.response" value="ACCEPT"/>
+            <!-- <p-radioButton name="accept" [(ngModel)]="eventGuestInvitationRSVP.response" value="ACCEPT">Accept</p-radioButton> -->
           </div>
-          <label for="decline" class="decline-label">{{declineLabel}}</label>
-          <input id="decline" type="radio" [(ngModel)]="eventGuestInvitationRSVP.response" value="DECLINE" />
+          <div>
+            <label for="decline" class="decline-label">{{declineLabel}}</label>
+            <input id="decline" type="radio" [(ngModel)]="eventGuestInvitationRSVP.response" value="DECLINE" />
+            <!-- <p-radioButton name="decline" [(ngModel)]="eventGuestInvitationRSVP.response"  value="DECLINE">Decline</p-radioButton> -->
+          </div>
       </div>
       <div class="button-container">
-        <button class="submit-button" [ngClass]="submitButtonClass" (click)="onSendResponseClick()">Send Response</button>
+        <!-- <button class="submit-button" [ngClass]="submitButtonClass" (click)="onSendResponseClick()">Send Response</button> -->
+        <p-button severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()">Send Response</p-button>
       </div>
     </div>
 `
@@ -38,7 +43,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Input() eventGuestInvitation!: EventGuestInvitation;
   @Input() acceptLabel: string = 'Accept';
   @Input() declineLabel: string = 'Decline';
-  @Input() submitButtonClass: string = "p-button";
+  @Input() submitButtonClass: string = "";
   @Output() onResponseChange: EventEmitter<any> = new EventEmitter();
   @Output() onSubmit: EventEmitter<any> = new EventEmitter();
 

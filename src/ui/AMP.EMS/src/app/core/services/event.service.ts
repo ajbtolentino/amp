@@ -5,42 +5,45 @@ import { Event } from '../models/event';
 import { lastValueFrom, map, Observable } from 'rxjs';
 
 import { BaseService } from './base.service';
+import { EventGuest } from '../models/event-guest';
+import { EventInvitation } from '../models/event-invitation';
+import { EventRole } from '../models/event-role';
 
 @Injectable()
 export class EventService extends BaseService {
     get = async (id: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
+        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
     }
 
-    getRoles = async (id: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/roles`, { headers: this.headers }));
+    getRoles = (id: string): Observable<EventRole[]> => {
+        return this.httpGet<EventRole[]>(`api/event/${id}/roles`);
     }
 
-    getInvitations = async (id: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/invitations`, { headers: this.headers }));
+    getInvitations = (id: string): Observable<EventInvitation[]> => {
+        return this.httpGet<EventInvitation[]>(`api/event/${id}/invitations`);
     }
 
-    getGuests = async (id: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/event/${id}/guests`, { headers: this.headers }));
+    getGuests = (id: string): Observable<EventGuest[]> => {
+        return this.httpGet<EventGuest[]>(`api/event/${id}/guests`);
     }
 
     getAll = (): Observable<Event[]> => {
-        return this.http.get<{ data: Event[] }>(`${this.API_URL}/api/event`, { headers: this.headers }).pipe(map((res) => res.data || []));
+        return this.httpGet<EventGuest[]>(`api/event/`);
     }
 
     add = async (event: Event) => {
-        return await lastValueFrom(this.http.post<any>(`${this.API_URL}/api/event`, event, { headers: this.headers }));
+        return await lastValueFrom(this.httpClient.post<any>(`${this.API_URL}/api/event`, event, { headers: this.headers }));
     }
 
     update = async (event: Event) => {
-        return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/event/${event.id}`, event, { headers: this.headers }));
+        return await lastValueFrom(this.httpClient.put<any>(`${this.API_URL}/api/event/${event.id}`, event, { headers: this.headers }));
     }
 
     delete = async (id: string) => {
-        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
+        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
     }
 
     deleteSelected = async (ids: string[]) => {
-        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/event`, { headers: this.headers, body: ids }));
+        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/event`, { headers: this.headers, body: ids }));
     }
 }

@@ -6,16 +6,17 @@ import { EventGuest } from '../../../core/models/event-guest';
 import { EventGuestService } from '../../../core/services/event-guest.service';
 import { Table } from 'primeng/table';
 import { EventService } from '../../../core/services/event.service';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-event-guests',
-  templateUrl: './event-guests.component.html',
-  styleUrl: './event-guests.component.scss'
+  templateUrl: './event-guest-list.component.html',
+  styleUrl: './event-guest-list.component.scss',
 })
 export class EventGuestsComponent implements OnInit {
   eventId!: string;
 
-  items: EventGuest[] = [];
+  eventGuests$: Observable<EventGuest[]> = new Observable<EventGuest[]>();
 
   selectedItems: EventGuest[] | null = [];
 
@@ -44,8 +45,7 @@ export class EventGuestsComponent implements OnInit {
   refreshGrid = async () => {
     this.loading = true;
 
-    const res = await this.eventService.getGuests(this.eventId);
-    if (res?.data) this.items = res.data;
+    this.eventGuests$ = this.eventService.getGuests(this.eventId);
 
     this.loading = false;
     this.isCreating = false;
@@ -63,7 +63,7 @@ export class EventGuestsComponent implements OnInit {
       accept: () => {
         this.loading = true;
 
-        this.items = this.items.filter(val => !this.selectedItems?.includes(val));
+        // this.eventGuests$ = this.eventGuests$.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
 
         this.loading = false;
@@ -73,7 +73,7 @@ export class EventGuestsComponent implements OnInit {
     });
   }
 
-  delete = async (guest: EventGuest) => {
+  delete = (guest: EventGuest) => {
     this.confirmationService.confirm({
       message: 'Are you sure?',
       header: 'Confirm',
@@ -81,7 +81,7 @@ export class EventGuestsComponent implements OnInit {
       accept: async () => {
         if (guest.id) {
           this.loading = true;
-          await this.eventGuestService.delete(guest.id);
+          firstValueFrom(await this.eventGuestService.delete(guest.id));
           this.loading = true;
 
           await this.refreshGrid();

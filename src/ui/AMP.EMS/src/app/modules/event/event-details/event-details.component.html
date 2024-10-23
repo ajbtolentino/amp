@@ -32,11 +32,12 @@
 
                             <p-skeleton *ngIf="loading"></p-skeleton>
                         </div>
-                        <div class="field col-12 md:col-6">
+                        <div class="field col-12 md:col-6" *ngIf="eventTypes$ | withStatus | async as eventTypes">
                             <label htmlFor="event-type">Type</label>
 
-                            <p-dropdown *ngIf="!loading" [options]="eventTypeCollection" [(ngModel)]="event.eventTypeId"
-                                optionValue="id" optionLabel="name" placeholder="Select event type">
+                            <p-dropdown *ngIf="!eventTypes.loading" [options]="eventTypes.value"
+                                [(ngModel)]="event.eventTypeId" optionValue="id" optionLabel="name"
+                                placeholder="Select event type">
                             </p-dropdown>
 
                             <p-skeleton *ngIf="loading"></p-skeleton>

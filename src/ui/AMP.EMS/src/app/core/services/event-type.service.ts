@@ -2,33 +2,34 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { Event } from '../models/event';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
 import { BaseService } from './base.service';
+import { EventType } from '../models/event-type';
 
 @Injectable()
 export class EventTypeService extends BaseService {
-    get = async (id: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventtype/${id}`, { headers: this.headers }));
+    get = (id: string): Observable<EventType> => {
+        return this.httpGet<EventType>(`api/eventtype/${id}`);
     }
 
-    getAll = async () => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventtype`, { headers: this.headers }));
+    getAll = (options?: any): Observable<EventType[]> => {
+        return this.httpGet<EventType[]>(`api/eventtype`, options);
     }
 
-    add = async (event: Event) => {
-        return await lastValueFrom(this.http.post<any>(`${this.API_URL}/api/eventtype`, event, { headers: this.headers }));
+    add = (event: Event): Observable<Event> => {
+        return this.httpPost<Event>(`api/eventtype`, event);
     }
 
-    update = async (event: Event) => {
-        return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/eventtype/${event.id}`, event, { headers: this.headers }));
+    update = (event: Event): Observable<Event> => {
+        return this.httpPut<Event>(`api/eventtype/${event.id}`, event);
     }
 
-    delete = async (id: string) => {
-        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/eventtype/${id}`, { headers: this.headers }));
+    delete = (id: string): Observable<Event> => {
+        return this.httpDelete<Event>(`api/eventtype/${id}`);
     }
 
-    deleteSelected = async (ids: string[]) => {
-        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/eventtype`, { headers: this.headers, body: ids }));
+    deleteSelected = (ids: string[]) => {
+        return this.httpDelete(`api/eventtype`, { body: ids });
     }
 }

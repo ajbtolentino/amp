@@ -9,7 +9,7 @@ import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } f
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { environment } from '../environments/environment';
 import { RsvpService } from '../app/core/services/rsvp.service';
-import { NgModule } from '@angular/core';
+import { forwardRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from '../app/layout/app.layout.module';
 import { EventTypeService } from '../app/core/services/event-type.service';
@@ -26,9 +26,15 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { DefaultComponent } from './modules/default/default.component';
 import { responseInterceptor } from './core/interceptors/response.interceptor';
+import { Button } from 'primeng/button';
+import { RADIO_VALUE_ACCESSOR, RadioButton } from 'primeng/radiobutton';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { WithStatusPipe } from './core/pipes/with-status';
+import { SharedModule } from './modules/shared.module';
 
 @NgModule({
     imports: [
+        SharedModule,
         BrowserAnimationsModule,
         AppLayoutModule,
         EventsModule,
@@ -57,7 +63,7 @@ import { responseInterceptor } from './core/interceptors/response.interceptor';
             },
         }),
         provideDynamicHooks({
-            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent],
+            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, Button, RadioButton],
             options: {
                 sanitize: false
             }

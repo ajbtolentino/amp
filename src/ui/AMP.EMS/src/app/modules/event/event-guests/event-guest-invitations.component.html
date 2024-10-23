@@ -1,0 +1,60 @@
+<div class="grid" *ngIf="eventGuest$ | withStatus | async as eventGuest">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <!-- <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                        (click)="dt.exportCSV()"></button> -->
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <div class="my-2">
+                        <!-- <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
+                            class="p-button-success mr-2" (click)="addRow()"></button>
+                        <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
+                            class="p-button-danger" (click)="deleteSelectedItems()"
+                            [disabled]="!selectedItems || !selectedItems.length"></button> -->
+                    </div>
+                </ng-template>
+            </p-toolbar>
+            <p-table [value]="eventGuest.value!.eventGuestInvitations!" dataKey="id">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Invitation</th>
+                        <th>Code</th>
+                        <th>Response</th>
+                        <th>Link</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-eventGuestInvitation>
+                    <tr>
+                        <td>
+                            {{eventGuestInvitation.eventInvitation.name}}
+                        </td>
+                        <td>
+                            {{eventGuestInvitation.code}}
+                        </td>
+                        <td>
+                            <span
+                                [class]="'invitation-badge status-' +eventGuestInvitation.eventGuestInvitationRSVPs[0]?.response">{{eventGuestInvitation.eventGuestInvitationRSVPs[0]?.response}}</span>
+                        </td>
+                        <td>
+                            <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
+                                class="p-button-rounded p-button-text"></a>
+                            <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
+                                class="p-button-rounded p-button-text" target="_blank"
+                                routerLink="/invitation/{{eventGuestInvitation.code}}"></a>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [colSpan]="4">
+                            No invitations found
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

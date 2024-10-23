@@ -24,6 +24,8 @@ import { EventDetailsComponent } from '../event/event-details/event-details.comp
 import { DataViewModule } from 'primeng/dataview';
 import { DefaultComponent } from '../default/default.component';
 import { MessageService } from 'primeng/api';
+import { WithStatusPipe } from '../../core/pipes/with-status';
+import { SharedModule } from '../shared.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,7 @@ import { MessageService } from 'primeng/api';
     AppSettingsComponent,
   ],
   imports: [
+    SharedModule,
     ButtonModule,
     CheckboxModule,
     CommonModule,

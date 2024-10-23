@@ -96,10 +96,6 @@ export class EventInvitationComponent implements OnInit {
     }
   }
 
-  onRsvpGuestChange(i: number, name: string) {
-    console.log(name);
-  }
-
   onRsvpSubmit = () => {
     alert('Response Submitted!');
   }

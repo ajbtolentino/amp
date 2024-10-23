@@ -6,6 +6,7 @@ import { Column } from '../../../core/models/column';
 import { EventRole } from '../../../core/models/event-role';
 import { EventRoleService } from '../../../core/services/event-role.service';
 import { EventService } from '../../../core/services/event.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-event-roles',
@@ -15,11 +16,7 @@ import { EventService } from '../../../core/services/event.service';
 export class EventRolesComponent {
   eventId!: string;
 
-  items!: EventRole[];
-
-  selectedItems!: EventType[];
-
-  eventTypeCollection!: EventType[];
+  eventRoles$: Observable<EventRole[]> = new Observable<EventRole[]>();
 
   columns!: Column[];
 
@@ -41,7 +38,6 @@ export class EventRolesComponent {
       if (eventId) {
         this.eventId = eventId;
         this.refreshGrid();
-        console.log(this.eventId);
       }
     });
 
@@ -51,27 +47,14 @@ export class EventRolesComponent {
     ];
   }
 
-  loadEventTypes = async () => {
-    this.eventTypeCollection = await this.eventRoleService.getAll();
+  refreshGrid = () => {
+    this.eventRoles$ = this.eventService.getRoles(this.eventId);
   }
 
-  refreshGrid = async () => {
-    this.loading = true;
+  addRow = (eventRoles: EventRole[]) => {
+    eventRoles.unshift({});
 
-    const res = await this.eventService.getRoles(this.eventId);
-
-    if (res?.data) this.items = res.data;
-
-    this.loading = false;
-  }
-
-  addRow = async () => {
-    await this.loadEventTypes();
-    await this.refreshGrid();
-
-    this.items.unshift({});
-
-    this.table.initRowEdit(this.items[0]);
+    this.table.initRowEdit(eventRoles[0]);
 
     this.isCreating = true;
   }
@@ -81,7 +64,7 @@ export class EventRolesComponent {
   }
 
   cancelAdd = async () => {
-    await this.refreshGrid();
+    this.refreshGrid();
     this.isCreating = false;
   }
 
@@ -120,7 +103,6 @@ export class EventRolesComponent {
   }
 
   initTableEdit = () => {
-    console.log("Edit");
   }
 
   save = async (item: EventRole | undefined) => {
@@ -137,10 +119,10 @@ export class EventRolesComponent {
 
       this.loading = false;
 
-      await this.refreshGrid();
+      this.refreshGrid();
     }
 
-    await this.refreshGrid();
+    this.refreshGrid();
     this.isCreating = false;
   }
 }

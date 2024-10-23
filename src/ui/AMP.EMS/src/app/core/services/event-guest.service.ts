@@ -1,40 +1,37 @@
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { EventGuest } from '../models/event-guest';
 
 import { BaseService } from './base.service';
 
 export class EventGuestService extends BaseService {
-    get = async (id: string) => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventguest/${id}`, { headers: this.headers }));
+    get = (id: string): Observable<EventGuest> => {
+        return this.httpGet(`api/eventguest/${id}`);
     }
 
     getAll = async () => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/eventguest`, { headers: this.headers }));
+        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventguest`, { headers: this.headers }));
     }
 
-    add = async (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]) => {
-        return await lastValueFrom(this.http.post<any>(`${this.API_URL}/api/eventguest`, {
+    add = (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]): Observable<EventGuest> => {
+        return this.httpPost(`api/eventguest`, {
             eventId: eventGuest.eventId,
             guest: eventGuest.guest,
             guestId: eventGuest.guestId,
             maxGuests: eventGuest.maxGuests,
             eventRoleIds: eventRoleIds,
             eventInvitationIds: eventInvitationIds
-        }, { headers: this.headers }));
+        });
     }
 
-    update = async (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]) => {
-        return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/eventguest/${eventGuest.id}`, {
-            eventId: eventGuest.eventId,
-            guest: eventGuest.guest,
-            guestId: eventGuest.guestId,
-            maxGuests: eventGuest.maxGuests,
+    update = (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]): Observable<EventGuest> => {
+        return this.httpPut(`api/eventguest/${eventGuest.id}`, {
+            ...eventGuest,
             eventRoleIds: eventRoleIds,
             eventInvitationIds: eventInvitationIds
-        }, { headers: this.headers }));
+        });
     }
 
-    delete = async (id: string) => {
-        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/eventguest/${id}`, { headers: this.headers }));
+    delete = (id: string) : Observable<EventGuest> => {
+        return this.httpDelete<EventGuest>(`api/eventguest/${id}`);
     }
 }
