@@ -1,3 +1,6 @@
-<ngx-dynamic-hooks [content]="eventGuestInvitation?.eventInvitation?.html"
-    [context]="{eventGuestInvitation: eventGuestInvitation, onSubmit: onSubmit}"
-    [options]="{sanitize: false}"></ngx-dynamic-hooks>
+<ng-container *ngIf="guestInvitation$ | withStatus | async as guestInvitation">
+    <ngx-dynamic-hooks [content]="guestInvitation.value?.eventInvitation?.html" [context]="{
+        guest: guestInvitation.value?.guest,
+            eventGuestInvitation: guestInvitation.value?.eventGuestInvitation,
+            onSubmit: onSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
+</ng-container>

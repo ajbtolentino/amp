@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 
-import { EventGuest } from '../../../core/models/event-guest';
-import { EventGuestService } from '../../../core/services/event-guest.service';
 import { Table } from 'primeng/table';
 import { EventService } from '../../../core/services/event.service';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, take } from 'rxjs';
+import { Guest } from '../../../core/models/guest';
+import { GuestService } from '../../../core/services/guest.service';
 
 @Component({
   selector: 'app-event-guests',
@@ -16,9 +16,9 @@ import { firstValueFrom, Observable } from 'rxjs';
 export class EventGuestsComponent implements OnInit {
   eventId!: string;
 
-  eventGuests$: Observable<EventGuest[]> = new Observable<EventGuest[]>();
+  guests$: Observable<Guest[]> = new Observable<Guest[]>();
 
-  selectedItems: EventGuest[] | null = [];
+  selectedItems: Guest[] | null = [];
 
   isCreating: boolean = false;
 
@@ -27,7 +27,7 @@ export class EventGuestsComponent implements OnInit {
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
-    private eventGuestService: EventGuestService,
+    private guestService: GuestService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -45,14 +45,18 @@ export class EventGuestsComponent implements OnInit {
   refreshGrid = async () => {
     this.loading = true;
 
-    this.eventGuests$ = this.eventService.getGuests(this.eventId);
+    this.guests$ = this.eventService.getGuests(this.eventId);
 
     this.loading = false;
     this.isCreating = false;
   }
 
-  hasResponded = (item: EventGuest) => {
-    return item.eventGuestInvitations?.filter(_ => _.eventGuestInvitationRSVPs?.length).length || false;
+  hasResponded = (item: Guest) => {
+    return false;
+  }
+
+  getGuestDetails = (guestId: string): Observable<Guest> => {
+    return this.guestService.get(guestId).pipe(take(1));
   }
 
   deleteSelectedItems = () => {
@@ -73,7 +77,7 @@ export class EventGuestsComponent implements OnInit {
     });
   }
 
-  delete = (guest: EventGuest) => {
+  delete = (guest: Guest) => {
     this.confirmationService.confirm({
       message: 'Are you sure?',
       header: 'Confirm',
@@ -81,7 +85,7 @@ export class EventGuestsComponent implements OnInit {
       accept: async () => {
         if (guest.id) {
           this.loading = true;
-          firstValueFrom(await this.eventGuestService.delete(guest.id));
+          firstValueFrom(await this.guestService.delete(guest.id));
           this.loading = true;
 
           await this.refreshGrid();

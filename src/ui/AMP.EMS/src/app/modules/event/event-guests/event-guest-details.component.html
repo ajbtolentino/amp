@@ -51,24 +51,25 @@
                     <div class="field col-12 md:col-6">
                         <label htmlFor="maxGuests">Max # of Guests</label>
                         <input pInputText *ngIf="!eventGuest.loading" id="maxGuests" rows="1" type="text"
-                            [(ngModel)]="eventGuest.value!.maxGuests" [value]="eventGuest.value?.maxGuests" />
+                            [(ngModel)]="eventGuest.value!.eventGuest!.maxGuests"
+                            [value]="eventGuest.value?.eventGuest?.maxGuests" />
 
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6"
                         *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
                         <label htmlFor="lastName">Invitations</label>
-                        <p-multiSelect *ngIf="!eventInvitations.loading" optionLabel="name" optionValue="id"
-                            placeholder="Select Invitations" [options]="eventInvitations.value"
-                            [loading]="eventInvitations.loading" optionLabel="name"
-                            [(ngModel)]="selectedEventInvitations" />
+                        <p-multiSelect *ngIf="!eventInvitations.loading" optionLabel="name"
+                            optionValue="eventInvitationId" placeholder="Select Invitations"
+                            [options]="eventInvitations.value" [loading]="eventInvitations.loading" optionLabel="name"
+                            [(ngModel)]="eventGuest.value!.eventGuest.eventInvitations" />
                         <p-skeleton *ngIf="eventInvitations.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
                         <label htmlFor="lastName">Role</label>
                         <p-multiSelect *ngIf="!eventRoles.loading" placeholder="Select Role"
                             [options]="eventRoles.value" optionLabel="name" optionValue="id"
-                            [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoles" />
+                            [loading]="eventRoles.loading" [(ngModel)]="eventGuest.value!.eventGuest.eventGuestRoles" />
 
                         <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>
                     </div>

@@ -49,12 +49,6 @@ export class EventListComponent implements OnInit {
 
     this.events$ = this.eventService.getAll();
 
-    this.events$.subscribe({
-      next: value => console.log(value),
-      error: err => console.error('Observable emitted an error: ' + err),
-      complete: () => console.log('Observable emitted the complete notification')
-    });
-
     this.loading = false;
   }
 

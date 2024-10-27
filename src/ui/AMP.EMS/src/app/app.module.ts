@@ -1,14 +1,12 @@
 import { AppComponent } from '../app/app.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventService } from '../app/core/services/event.service';
-import { EventGuestService } from './core/services/event-guest.service';
-import { EventInvitationService as EventInvitationService } from '../app/core/services/event-invitation.service';
+import { EventInvitationService as EventInvitationService } from './core/services/event-invitation.service';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { environment } from '../environments/environment';
-import { RsvpService } from '../app/core/services/rsvp.service';
 import { forwardRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppLayoutModule } from '../app/layout/app.layout.module';
@@ -16,7 +14,6 @@ import { EventTypeService } from '../app/core/services/event-type.service';
 import { EventsModule } from '../app/modules/events/events.module';
 import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
 import { EventsLayoutComponent } from '../app/layout/events-layout/events-layout.component';
-import { EventGuestInvitationService } from '../app/core/services/event-guest-invitation.service';
 import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './modules/event/event-invitation/event-guest-invitation-rsvp.component';
 import { provideDynamicHooks } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
@@ -25,12 +22,15 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { ToastModule } from 'primeng/toast';
 import { DefaultComponent } from './modules/default/default.component';
-import { responseInterceptor } from './core/interceptors/response.interceptor';
+import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
 import { Button } from 'primeng/button';
 import { RADIO_VALUE_ACCESSOR, RadioButton } from 'primeng/radiobutton';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { WithStatusPipe } from './core/pipes/with-status';
 import { SharedModule } from './modules/shared.module';
+import { EventGuestService } from './core/services/event-guest.service';
+import { EventGuestInvitationService } from './core/services/event-guest-invitation.service';
+import { RsvpService } from './core/services/rsvp.service';
 
 @NgModule({
     imports: [
@@ -44,7 +44,7 @@ import { SharedModule } from './modules/shared.module';
         CodeEditorModule.forRoot(),
     ],
     providers: [
-        provideHttpClient(withInterceptors([authInterceptor(), responseInterceptor])),
+        provideHttpClient(withInterceptors([authInterceptor(), apiResponseInterceptor])),
         provideAuth({
             config: {
                 triggerAuthorizationResultEvent: true,
@@ -107,13 +107,13 @@ import { SharedModule } from './modules/shared.module';
             withEnabledBlockingInitialNavigation()
         ),
         EventService,
-        EventInvitationService,
-        EventGuestInvitationService,
         EventGuestService,
+        EventGuestInvitationService,
+        EventInvitationService,
         MessageService,
         ConfirmationService,
         RsvpService,
-        EventTypeService,
+        EventTypeService
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]

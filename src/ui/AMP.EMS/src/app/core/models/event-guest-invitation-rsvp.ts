@@ -1,12 +1,7 @@
-export interface EventGuestInvitationRSVP {
+export interface EventGuestInvitationRsvp {
     id?: string;
     eventGuestInvitationId?: string;
-    eventGuestInvitationRSVPItems?: EventGuestInvitationRSVPItem[];
+    guestNames?: string[];
     phoneNumber?: string;
     response?: 'ACCEPT' | 'DECLINE'
-}
-
-export interface EventGuestInvitationRSVPItem {
-    id?: string;
-    name?: string;
 }

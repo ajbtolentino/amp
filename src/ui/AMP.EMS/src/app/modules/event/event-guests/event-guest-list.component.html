@@ -1,9 +1,9 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card" *ngIf="eventGuests$ | withStatus | async as e">
-            <p-table #dt [value]="e.value!" [rows]="10" [paginator]="true"
+        <div class="card" *ngIf="guests$ | withStatus | async as guests">
+            <p-table #dt [value]="guests.value!" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['firstName','lastName']" editMode="row" [(selection)]="selectedItems"
-                [rowHover]="true" dataKey="id" [loading]="e.loading" [showLoader]="false">
+                [rowHover]="true" dataKey="id" [loading]="guests.loading" [showLoader]="false">
                 <ng-template pTemplate="caption">
                     <div class="flex flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <div>
@@ -45,6 +45,12 @@
                                 <p-sortIcon field="lastName"></p-sortIcon>
                             </div>
                         </th>
+                        <th pSortableColumn="maxGuests">
+                            <div class="flex justify-content-between align-items-center">
+                                Max Guests
+                                <p-sortIcon field="maxGuests"></p-sortIcon>
+                            </div>
+                        </th>
                         <th pSortableColumn="role">
                             <div class="flex justify-content-between align-items-center">
                                 Role
@@ -67,17 +73,19 @@
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
+                        <td><p-skeleton /></td>
                         <td></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item let-editing="editing" let-expanded="expanded">
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
-                        <td>{{item.guest.firstName}}</td>
-                        <td>{{item.guest.lastName}}</td>
+                        <td>{{item.firstName}}</td>
+                        <td>{{item.lastName}}</td>
+                        <td>{{item.maxGuests}}</td>
                         <td>
                             <span *ngFor='let eventGuestRole of item.eventGuestRoles'>
-                                {{eventGuestRole.eventRole.name}}
+                                {{eventGuestRole.name}}
                             </span>
                         </td>
                         <td class="text-center">
@@ -92,7 +100,7 @@
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                                    icon="pi pi-pencil" routerLink="/event/{{eventId}}/guest/{{item.id}}"
+                                    icon="pi pi-pencil" routerLink="/event/{{eventId}}/guest/{{item.eventGuestId}}"
                                     class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
                                 </button>
                                 <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning"

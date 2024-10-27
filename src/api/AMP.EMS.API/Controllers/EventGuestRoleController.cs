@@ -9,30 +9,32 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventGuestRoleController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestRole, Guid>(unitOfWork)
     {
-        public record EventGuestRoleData(Guid EventGuestId, Guid EventRoleId);
+        public record EventGuestRoleRequest(Guid EventId, string Name, string Description);
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EventGuestRoleData data)
+        public async Task<IActionResult> Post([FromBody] EventGuestRoleRequest request)
         {
             return await base.Post(new EventGuestRole
             {
-                EventGuestId = data.EventGuestId,
-                EventRoleId = data.EventRoleId
+                EventId = request.EventId,
+                Name = request.Name,
+                Description = request.Description
             });
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] EventGuestRoleData data)
+        public async Task<IActionResult> Put(Guid id, [FromBody] EventGuestRoleRequest request)
         {
-            var entity = await this.entityRepository.Get(id);
+            var eventGuestRole = await this.entityRepository.Get(id);
 
-            if (entity == null) return BadRequest();
+            ArgumentNullException.ThrowIfNull(eventGuestRole);
 
-            entity.EventGuestId = data.EventGuestId;
-            entity.EventRoleId = data.EventRoleId;
+            eventGuestRole.EventId = request.EventId;
+            eventGuestRole.Name = request.Name;
+            eventGuestRole.Description = request.Description;
 
-            return await base.Put(entity);
+            return await base.Put(eventGuestRole);
         }
     }
 }

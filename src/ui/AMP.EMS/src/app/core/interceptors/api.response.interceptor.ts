@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/api';
 import { catchError, tap, throwError } from 'rxjs';
 
 
-export const responseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next) => {
+export const apiResponseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next) => {
   const messageService: MessageService = inject(MessageService);
 
   const notify = (message: string, success: boolean) => {

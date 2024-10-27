@@ -1,6 +1,8 @@
 using AMP.Core.Entity;
 using AMP.EMS.API.Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MongoDB.EntityFrameworkCore.Extensions;
 
 namespace AMP.EMS.API.Infrastructure;
 
@@ -14,100 +16,46 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Event>()
-            .HasMany(_ => _.Invitations)
-            .WithOne(_ => _.Event)
-            .HasForeignKey(_ => _.EventId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<Event>()
-            .HasMany(_ => _.Guests)
-            .WithOne(_ => _.Event)
-            .HasForeignKey(_ => _.EventId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<Event>()
-            .HasMany(_ => _.Invitations)
-            .WithOne(_ => _.Event)
-            .HasForeignKey(_ => _.EventId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<Guest>()
-            .HasMany(_ => _.EventGuests)
-            .WithOne(_ => _.Guest)
-            .HasForeignKey(_ => _.GuestId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<EventGuest>()
-            .HasMany(_ => _.EventGuestRoles)
-            .WithOne(_ => _.EventGuest)
-            .HasForeignKey(_ => _.EventGuestId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<EventGuest>()
-            .HasMany(_ => _.EventGuestInvitations)
-            .WithOne(_ => _.EventGuest)
-            .HasForeignKey(_ => _.EventGuestId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<EventInvitation>()
-            .HasMany(_ => _.EventGuestInvitations)
-            .WithOne(_ => _.EventInvitation)
-            .HasForeignKey(_ => _.EventInvitationId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<EventGuestInvitation>()
-            .HasMany(_ => _.EventGuestInvitationRSVPs)
-            .WithOne(_ => _.EventGuestInvitation)
-            .HasForeignKey(_ => _.EventGuestInvitationId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<EventGuestInvitationRSVP>()
-            .HasMany(_ => _.EventGuestInvitationRSVPItems)
-            .WithOne(_ => _.EventGuestInvitationRSVP)
-            .HasForeignKey(_ => _.EventGuestInvitationRSVPId)
-            .HasPrincipalKey(_ => _.Id);
-
-        modelBuilder.Entity<Event>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
-
+        
+        modelBuilder.Entity<EventGuest>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
         modelBuilder.Entity<EventGuestInvitation>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<EventGuest>()
+        
+        modelBuilder.Entity<EventGuestInvitationRsvp>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<EventRole>()
-            .Property(p => p.Id)
-            .ValueGeneratedOnAdd();
-
+        
         modelBuilder.Entity<EventGuestRole>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
-
+        
         modelBuilder.Entity<EventInvitation>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
+        modelBuilder.Entity<EventType>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
         modelBuilder.Entity<Guest>()
-            .Property(p => p.Id)
-            .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<EventGuestInvitationRSVP>()
-            .Property(p => p.Id)
-            .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<EventGuestInvitationRSVPItem>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
     }
 
     public DbSet<Event> Events { get; private set; }
+    public DbSet<EventGuest> EventGuests { get; private set; }
+    public DbSet<EventGuestRole> EventGuestRoles { get; private set; }
+    public DbSet<EventGuestInvitation> EventGuestInvitations { get; private set; }
+    public DbSet<EventGuestInvitationRsvp> EventGuestInvitationsRsvps { get; private set; }
+    public DbSet<EventInvitation> EventInvitations { get; private set; }
+    public DbSet<EventType> EventTypes { get; private set; }
     public DbSet<Guest> Guests { get; private set; }
-    public DbSet<EventInvitation> Invitations { get; private set; }
-    public DbSet<EventGuestInvitationRSVP> RSVPs { get; private set; }
 
     public TEntity Add<TEntity, TID>(TEntity entity) where TEntity : class, IEntity<TID>
     {

@@ -31,17 +31,10 @@
                         <th>
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="name">
-                            Name
-                            <p-sortIcon field="name"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="description">
-                            Description
-                            <p-sortIcon field="description"></p-sortIcon>
-                        </th>
-                        <th>Total Guests</th>
-                        <th>Accepted</th>
-                        <th>Declined</th>
+                        <th>Name</th>
+                        <th>Recipients</th>
+                        <th>Confirmed / Declined</th>
+                        <th>Alloted Guests / Total Guests</th>
                         <th class="p-jc-end"></th>
                     </tr>
                 </ng-template>
@@ -52,21 +45,19 @@
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item let-editing="editing">
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                         <td>{{item?.name}}</td>
-                        <td>{{item.description}}</td>
-                        <td>100</td>
-                        <td>100</td>
-                        <td>100</td>
+                        <td>{{getTotalRecipients(item)}}</td>
+                        <td>{{ getTotalConfirmed(item) }} / {{ getTotalDeclined(item) }}</td>
+                        <td>{{ getTotalCapacity(item) }} / {{getTotalGuests(item)}}</td>
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
-                                    routerLink="/event/{{eventId}}/invitation/{{item.id}}"
+                                    routerLink="/event/{{eventId}}/invitation/{{item.eventInvitationId}}"
                                     class="p-button-rounded p-button-success mr-2 p-jc-end" pTooltip="Edit">
                                 </button>
                                 <button *ngIf="!editing" pButton pRipple
@@ -78,7 +69,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
-                        <td [colSpan]="4">
+                        <td [colSpan]="7">
                             No records found
                         </td>
                     </tr>

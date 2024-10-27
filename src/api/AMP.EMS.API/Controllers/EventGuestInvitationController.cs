@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.EMS.API.Helpers;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,63 +13,78 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventGuestInvitationController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestInvitation, Guid>(unitOfWork)
     {
-        public record EventGuestInvitationData(string Code, Guid EventInvitationId, Guid GuestId, int MaxGuests, bool LimitedView);
+        public record EventGuestInvitationRequest(Guid EventInvitationId, Guid GuestId, string? Code, int MaxGuests);
+
+        private record RsvpResponse(Guest Guest, EventGuestInvitation EventGuestInvitation, EventInvitation EventInvitation);
 
         [HttpGet]
         [Route("{code}/[action]")]
         [AllowAnonymous]
-        public IActionResult RSVP(string code)
+        public async Task<IActionResult> Rsvp(string code)
         {
-            var invitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
-                                    .Include(_ => _.EventGuest)
-                                        .ThenInclude(_ => _.Guest)
-                                    .Include(_ => _.EventInvitation)
-                                    .Include(_ => _.EventGuestInvitationRSVPs)
-                                    .FirstOrDefault(_ => _.Code == code);
+            var eventGuestInvitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                .FirstOrDefault(guestInvitation => guestInvitation.Code == code);
 
-            if (invitation == null) return BadRequest();
+            ArgumentNullException.ThrowIfNull(eventGuestInvitation);
+            
+            var eventGuest = await unitOfWork.Repository<EventGuest>().GetAll().AsNoTracking().FirstOrDefaultAsync(eventGuest => eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId));
+            
+            ArgumentNullException.ThrowIfNull(eventGuest);
+            
+            var guest = await unitOfWork.Repository<Guest>().GetAll().AsNoTracking().FirstOrDefaultAsync(guest => guest.Id == eventGuest.GuestId);
+            
+            ArgumentNullException.ThrowIfNull(guest);
+            
+            var eventInvitation = await unitOfWork.Repository<EventInvitation>().GetAll()
+                .FirstOrDefaultAsync(invitation => invitation.Id == eventGuestInvitation.EventInvitationId);
 
-            return Ok(new OkResponse<EventGuestInvitation>(string.Empty) { Data = invitation });
+            ArgumentNullException.ThrowIfNull(eventInvitation);
+            
+            return Ok(new OkResponse<RsvpResponse>(string.Empty){Data = new RsvpResponse(guest, eventGuestInvitation, eventInvitation)});
         }
 
         [HttpGet]
         [Route("{eventInvitationId}/[action]")]
         public IActionResult Details(Guid? eventInvitationId)
         {
-            if (!eventInvitationId.HasValue)
-                return base.GetAll();
+            // if (!eventInvitationId.HasValue)
+            //     return base.GetAll();
+            //
+            // var collection = base.entityRepository.GetAll().AsNoTracking()
+            //                     .Where(_ => _.EventInvitationId == eventInvitationId)
+            //                     .Include(_ => _.EventGuest);
+            //
+            // return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = collection });
 
-            var collection = base.entityRepository.GetAll().AsNoTracking()
-                                .Where(_ => _.EventInvitationId == eventInvitationId)
-                                .Include(_ => _.EventGuest);
-
-            return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = collection });
+            return Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EventGuestInvitationData data)
+        public async Task<IActionResult> Post([FromBody] EventGuestInvitationRequest request)
         {
-            return await base.Post(new EventGuestInvitation
+            return await base.Post(new EventGuestInvitation()
             {
-                Code = data.Code,
-                EventInvitationId = data.EventInvitationId,
-                EventGuestId = data.GuestId
+                EventInvitationId = request.EventInvitationId,
+                Code = InvitationHelper.GenerateCode(),
+                MaxGuests = request.MaxGuests
             });
         }
 
         [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] EventGuestInvitationData data)
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] EventGuestInvitationRequest request)
         {
-            var entity = await this.entityRepository.Get(id);
+            var guestInvitation = await this.entityRepository.Get(id);
 
-            if (entity == null) return BadRequest();
+            ArgumentNullException.ThrowIfNull((guestInvitation));
 
-            entity.Code = data.Code;
-            entity.EventInvitationId = data.EventInvitationId;
-            entity.EventGuestId = data.GuestId;
-
-            return await base.Put(entity);
+            if(!string.IsNullOrEmpty(request.Code))
+                guestInvitation.Code = request.Code;
+                
+            guestInvitation.EventInvitationId = request.EventInvitationId;
+            guestInvitation.MaxGuests = request.MaxGuests;
+            
+            return await base.Put(guestInvitation);
         }
     }
 }

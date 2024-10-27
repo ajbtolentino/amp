@@ -1,9 +1,9 @@
-import { lastValueFrom } from 'rxjs';
-import { BaseService } from './base.service';
-import { EventGuestInvitationRSVP } from '../models/event-guest-invitation-rsvp';
+import { lastValueFrom, Observable } from 'rxjs';
+import { BaseApiService } from './base.api.service';
+import { EventGuestInvitationRsvp } from '../models/event-guest-invitation-rsvp';
 
-export class RsvpService extends BaseService {
-    add = async (rsvp: EventGuestInvitationRSVP) => {
-        return await lastValueFrom(this.httpClient.post<any>(`${this.API_URL}/api/rsvp`, rsvp, { headers: this.headers }));
+export class RsvpService extends BaseApiService {
+    add = (rsvp: EventGuestInvitationRsvp): Observable<EventGuestInvitationRsvp> => {
+        return this.httpPost(`api/rsvp`, rsvp);
     }
 }

@@ -6,7 +6,7 @@ import { map, Observable } from "rxjs";
 import { EMSResponse } from "../models/ems-response";
 
 @Injectable()
-export class BaseService {
+export class BaseApiService {
     headers: HttpHeaders | undefined;
 
     protected API_URL = environment.EMS_SPA_APIURL;

@@ -1,8 +1,11 @@
 using AMP.Infrastructure.Entity;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class Event : BaseEntity<Guid>
+public class Event : FullAuditableEntity<Guid>
 {
     public required string Title { get; set; }
 
@@ -17,8 +20,4 @@ public class Event : BaseEntity<Guid>
     public required DateTime StartDate { get; set; }
 
     public required DateTime EndDate { get; set; }
-
-    public EventType? EventType { get; set; }
-    public ICollection<EventInvitation> Invitations { get; set; } = [];
-    public ICollection<EventGuest> Guests { get; set; } = [];
 }

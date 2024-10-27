@@ -1,14 +1,15 @@
-using System;
+using AMP.EMS.API.Core.Constants;
 using AMP.Infrastructure.Entity;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class Guest : BaseEntity<Guid>
+public class Guest : FullAuditableEntity<Guid>
 {
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public string NickName { get; set; } = string.Empty;
     public string PhoneNumber { get; set; } = string.Empty;
-
-    public ICollection<EventGuest> EventGuests { get; set; } = [];
 }
+
+
+

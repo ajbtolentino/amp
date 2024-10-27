@@ -1,4 +1,4 @@
-<div class="grid" *ngIf="eventGuest$ | withStatus | async as eventGuest">
+<div class="grid" *ngIf="guest$ | withStatus | async as eventGuest">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
             <!-- <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
@@ -21,7 +21,7 @@
                 <th>Invitation</th>
                 <th>Code</th>
                 <th>Response</th>
-                <th>Link</th>
+                <th>Link</th>s
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-eventGuestInvitation>

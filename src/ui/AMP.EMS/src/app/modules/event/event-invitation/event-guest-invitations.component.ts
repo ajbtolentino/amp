@@ -3,14 +3,13 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { EventGuest } from '../../../core/models/event-guest';
 import { EventService } from '../../../core/services/event.service';
-import { EventGuestService } from '../../../core/services/event-guest.service';
 import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
-import { EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
 import { Observable } from 'rxjs';
 import { Event } from '../../../core/models/event';
 import { EventInvitation } from '../../../core/models/event-invitation';
+import { Guest } from '../../../core/models/guest';
+import { GuestService } from '../../../core/services/guest.service';
 
 @Component({
   selector: 'app-event-guest-invitations',
@@ -19,7 +18,7 @@ import { EventInvitation } from '../../../core/models/event-invitation';
 })
 export class EventGuestInvitationComponent implements OnInit {
   eventId!: string;
-  eventGuest$: Observable<EventGuest> = new Observable<EventGuest>();
+  guest$: Observable<Guest> = new Observable<Guest>();
   eventGuestInvitations: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
   eventInvitationId: Observable<EventInvitation> = new Observable<EventInvitation>();
 
@@ -35,9 +34,7 @@ export class EventGuestInvitationComponent implements OnInit {
 
   templateCode!: string;
 
-  constructor(private eventService: EventService,
-    private eventGuestInvitationService: EventGuestInvitationService,
-    private eventGuestService: EventGuestService,
+  constructor(private guestService: GuestService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     @Inject(DOCUMENT) private document: Document) { }
@@ -45,7 +42,7 @@ export class EventGuestInvitationComponent implements OnInit {
   async ngOnInit() {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
 
-    const eventGuestId = this.route.snapshot.paramMap.get('eventGuestId') || '';
-    this.eventGuest$ = this.eventGuestService.get(eventGuestId);
+    const guestId = this.route.snapshot.paramMap.get('guestId') || '';
+    this.guest$ = this.guestService.get(guestId);
   }
 }

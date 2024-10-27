@@ -1,31 +1,17 @@
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { EventInvitation } from '../models/event-invitation';
-import { BaseService } from './base.service';
+import { BaseApiService } from './base.api.service';
+import { Guest } from '../models/guest';
+import { EventGuestInvitation } from '../models/event-guest-invitation';
 
-export class EventGuestInvitationService extends BaseService {
-    getAll = async (eventId: string | undefined | null = null) => {
-        if (eventId) return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventguestinvitation/${eventId}/details`, { headers: this.headers }));
+export interface GuestInvitationResponse {
+    guest: Guest;
+    eventGuestInvitation: EventGuestInvitation;
+    eventInvitation: EventInvitation;
+}
 
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventguestinvitation`, { headers: this.headers }));
-    }
-
-    get = async (eventInvitationId: string | undefined | null = null) => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventguestinvitation/${eventInvitationId}`, { headers: this.headers }));
-    }
-
-    add = async (invitation: EventInvitation) => {
-        return await lastValueFrom(this.httpClient.post<any>(`${this.API_URL}/api/eventguestinvitation`, invitation, { headers: this.headers }));
-    }
-
-    update = async (invitation: EventInvitation) => {
-        return await lastValueFrom(this.httpClient.put<any>(`${this.API_URL}/api/eventguestinvitation/${invitation.id}`, invitation, { headers: this.headers }));
-    }
-
-    delete = async (id: string) => {
-        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/eventguestinvitation/${id}`, { headers: this.headers }));
-    }
-
-    rsvp = async (code: string) => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventguestinvitation/${code}/rsvp`, { headers: this.headers }));
+export class EventGuestInvitationService extends BaseApiService {
+    rsvp = (code: string): Observable<GuestInvitationResponse> => {
+        return this.httpGet(`api/eventguestinvitation/${code}/rsvp`);
     }
 }

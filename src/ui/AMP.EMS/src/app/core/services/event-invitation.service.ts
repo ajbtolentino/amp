@@ -1,14 +1,18 @@
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 import { EventInvitation } from '../models/event-invitation';
-import { BaseService } from './base.service';
+import { BaseApiService } from './base.api.service';
+import { Injectable } from '@angular/core';
 
-export class EventInvitationService extends BaseService {
+@Injectable({
+    providedIn: 'root'
+})
+export class EventInvitationService extends BaseApiService {
     getAll = async () => {
         return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventinvitation`, { headers: this.headers }));
     }
 
-    get = async (eventInvitationId: string | undefined | null = null) => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventinvitation/${eventInvitationId}`, { headers: this.headers }));
+    get = async (id: string | undefined | null = null) => {
+        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventinvitation/${id}`, { headers: this.headers }));
     }
 
     add = async (invitation: EventInvitation) => {

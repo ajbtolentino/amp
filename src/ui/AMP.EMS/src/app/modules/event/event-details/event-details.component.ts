@@ -43,8 +43,6 @@ export class EventDetailsComponent implements OnInit {
         this.event = response.data;
         this.event.startDate = new Date(response.data.startDate);
         this.event.endDate = new Date(response.data.endDate);
-
-        console.log(this.event);
       }
     }
 

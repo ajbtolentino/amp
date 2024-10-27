@@ -32,7 +32,6 @@ import { ChartModule } from 'primeng/chart';
 import { MenuModule } from 'primeng/menu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { EventRolesComponent } from './event-details/event-roles.component';
-import { WithStatusPipe } from '../../core/pipes/with-status';
 import { SharedModule } from '../shared.module';
 
 @NgModule({

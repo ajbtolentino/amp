@@ -1,6 +1,8 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -21,17 +23,17 @@ namespace AMP.EMS.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] EventTypeData data)
         {
-            var entity = await this.entityRepository.Get(id);
+            var eventType = await this.entityRepository.Get(id);
 
-            if (entity == null) return BadRequest();
+            ArgumentNullException.ThrowIfNull(eventType);
 
-            entity.Name = data.Name;
-            entity.Description = data.Description ?? string.Empty;
+            eventType.Name = data.Name;
+            eventType.Description = data.Description ?? string.Empty;
 
-            return await base.Put(entity);
+            return await base.Put(eventType);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace AMP.EMS.API.Controllers
     public class EventInvitationController(IUnitOfWork unitOfWork) : ApiBaseController<EventInvitation, Guid>(unitOfWork)
     {
         public record EventInvitationData(string Name, string? Description, string? Html, Guid EventId);
-
+        
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EventInvitationData data)
         {
@@ -27,19 +27,19 @@ namespace AMP.EMS.API.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:guid}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] EventInvitationData data)
         {
-            var entity = await this.entityRepository.Get(id);
+            var eventInvitation = await this.entityRepository.Get(id);
 
-            if (entity == null) return BadRequest();
+            ArgumentNullException.ThrowIfNull(eventInvitation);
 
-            entity.EventId = data.EventId;
-            entity.Name = data.Name;
-            entity.Description = data.Description ?? string.Empty;
-            entity.Html = data.Html ?? string.Empty;
+            eventInvitation.EventId = data.EventId;
+            eventInvitation.Name = data.Name;
+            eventInvitation.Description = data.Description ?? string.Empty;
+            eventInvitation.Html = data.Html ?? string.Empty;
 
-            return await base.Put(entity);
+            return await base.Put(eventInvitation);
         }
     }
 }

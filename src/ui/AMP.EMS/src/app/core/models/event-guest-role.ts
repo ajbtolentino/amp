@@ -1,7 +1,8 @@
 export interface EventGuestRole {
     id?: string;
-    eventGuestId?: string;
-    eventRoleId?: string;
+    eventId?: string;
+    name?: string;
+    description?: string;
     dateCreated?: Date;
     dateUpdated?: Date;
 }

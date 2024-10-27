@@ -1,4 +1,4 @@
-<div class="grid" *ngIf="eventGuest$ | withStatus | async as eventGuest">
+<div class="grid" *ngIf="guest$ | withStatus | async as eventGuest">
     <div class="col-12">
         <div class="card">
             <p-toolbar styleClass="mb-4">
@@ -17,7 +17,7 @@
                     </div>
                 </ng-template>
             </p-toolbar>
-            <p-table [value]="eventGuest.value!.eventGuestInvitations!" dataKey="id">
+            <p-table [value]="eventGuest.value!.guestInvitations!" dataKey="id">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Invitation</th>

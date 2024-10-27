@@ -11,51 +11,38 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RSVPController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestInvitationRSVP, Guid>(unitOfWork)
+    public class RsvpController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork)
     {
-        public record RSVPItemData(string? Name);
-        public record RSVPData(Guid EventGuestInvitationId, [JsonConverter(typeof(StringEnumConverter))] RSVPResponse Response, string? PhoneNumber, IEnumerable<RSVPItemData>? EventGuestInvitationRSVPItems);
-
+        public record RsvpRequest(Guid EventGuestInvitationId, [JsonConverter(typeof(StringEnumConverter))] Core.Constants.RsvpResponse Response, string? PhoneNumber, IEnumerable<string>? GuestNames);
+        
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] RSVPData request)
+        public async Task<IActionResult> Post([FromBody] RsvpRequest request)
         {
-            var eventGuestInvitation = await unitOfWork.Repository<EventGuestInvitation>().Get(request.EventGuestInvitationId);
+            var guestInvitation = await unitOfWork.Repository<EventGuestInvitation>().Get(request.EventGuestInvitationId);
 
-            if (eventGuestInvitation == null) return BadRequest();
-
-            if (!Enum.GetValues<RSVPResponse>().Contains(request.Response)) return BadRequest();
+            ArgumentNullException.ThrowIfNull(guestInvitation);
 
             try
             {
-                this.unitOfWork.BeginTransaction();
-
-                var rsvpEntity = await this.unitOfWork.Repository<EventGuestInvitationRSVP>().Add(new EventGuestInvitationRSVP
+                unitOfWork.BeginTransaction();
+                
+                var rsvpEntity = await this.unitOfWork.Repository<EventGuestInvitationRsvp>().Add(new EventGuestInvitationRsvp()
                 {
-                    EventGuestInvitationId = eventGuestInvitation.Id,
                     Response = request.Response,
-                    PhoneNumber = request.PhoneNumber ?? string.Empty
+                    GuestNames = request.GuestNames?.ToList() ?? []
                 });
 
-                foreach (var item in request.EventGuestInvitationRSVPItems)
-                {
-                    if (string.IsNullOrEmpty(item.Name)) continue;
+                guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity.Id);
 
-                    await this.unitOfWork.Repository<EventGuestInvitationRSVPItem>().Add(new EventGuestInvitationRSVPItem
-                    {
-                        EventGuestInvitationRSVPId = rsvpEntity.Id,
-                        GuestName = item.Name
-                    });
-                }
+                await unitOfWork.SaveChangesAsync();
+                await unitOfWork.CommitTransactionAsync();
 
-                await this.unitOfWork.SaveChangesAsync();
-                await this.unitOfWork.CommitTransactionAsync();
-
-                return Ok(new OkResponse<EventGuestInvitationRSVP>(string.Empty) { Data = rsvpEntity });
+                return Ok(new OkResponse<EventGuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
             }
             catch
             {
-                await this.unitOfWork.RollbackTransactionAsync();
+                await unitOfWork.RollbackTransactionAsync();
             }
 
             return BadRequest();

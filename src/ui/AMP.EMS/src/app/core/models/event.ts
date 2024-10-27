@@ -1,3 +1,4 @@
+import { EventGuestRole } from "./event-guest-role";
 import { EventType } from "./event-type";
 
 export interface Event {
@@ -7,7 +8,6 @@ export interface Event {
     eventType?: EventType;
     startDate?: Date;
     endDate?: Date;
+    eventRoles?: EventGuestRole[];
     description?: string;
-    dateCreated?: Date;
-    dateUpdated?: Date;
 }

@@ -1,15 +1,8 @@
-import { EventGuest } from "./event-guest";
-import { Guest } from "./guest";
-import { EventGuestInvitationRSVP } from "./event-guest-invitation-rsvp";
-import { EventInvitation } from "./event-invitation";
+import { EventGuestInvitationRsvp } from "./event-guest-invitation-rsvp";
 
 export interface EventGuestInvitation {
-    id?: string;
-    guestId?: string;
-    eventInvitationId?: string;
-    eventGuest?: EventGuest;
+    invitationId?: string;
     maxGuests?: number;
     code?: string;
-    eventInvitation?: EventInvitation;
-    eventGuestInvitationRSVPs?: EventGuestInvitationRSVP[];
+    eventGuestInvitationRsvps?: EventGuestInvitationRsvp[];
 }

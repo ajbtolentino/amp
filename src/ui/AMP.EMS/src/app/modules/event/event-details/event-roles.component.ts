@@ -3,10 +3,10 @@ import { ActivatedRoute, EventType } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Column } from '../../../core/models/column';
-import { EventRole } from '../../../core/models/event-role';
-import { EventRoleService } from '../../../core/services/event-role.service';
+import { EventGuestRole } from '../../../core/models/event-guest-role';
 import { EventService } from '../../../core/services/event.service';
-import { Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
+import { EventGuestRoleService } from '../../../core/services/event-guest-role.service';
 
 @Component({
   selector: 'app-event-roles',
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 export class EventRolesComponent {
   eventId!: string;
 
-  eventRoles$: Observable<EventRole[]> = new Observable<EventRole[]>();
+  eventRoles$: Observable<EventGuestRole[]> = new Observable<EventGuestRole[]>();
 
   columns!: Column[];
 
@@ -27,7 +27,7 @@ export class EventRolesComponent {
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
-    private eventRoleService: EventRoleService,
+    private eventGuestRoleService: EventGuestRoleService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -51,7 +51,7 @@ export class EventRolesComponent {
     this.eventRoles$ = this.eventService.getRoles(this.eventId);
   }
 
-  addRow = (eventRoles: EventRole[]) => {
+  addRow = (eventRoles: EventGuestRole[]) => {
     eventRoles.unshift({});
 
     this.table.initRowEdit(eventRoles[0]);
@@ -76,15 +76,14 @@ export class EventRolesComponent {
       accept: async () => {
         this.loading = true;
 
-        await this.eventRoleService.deleteSelected([]);
-        await this.refreshGrid();
+        this.refreshGrid();
 
         this.loading = false;
       }
     });
   }
 
-  delete = async (itemToDelete: EventRole) => {
+  delete = async (itemToDelete: EventGuestRole) => {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete ' + itemToDelete.name + '?',
       header: 'Confirm',
@@ -93,8 +92,8 @@ export class EventRolesComponent {
         if (itemToDelete.id) {
           this.loading = true;
 
-          await this.eventRoleService.delete(itemToDelete.id);
-          await this.refreshGrid();
+          await this.eventGuestRoleService.delete(itemToDelete.id);
+          this.refreshGrid();
 
           this.loading = false;
         }
@@ -105,16 +104,16 @@ export class EventRolesComponent {
   initTableEdit = () => {
   }
 
-  save = async (item: EventRole | undefined) => {
+  save = async (item: EventGuestRole) => {
     if (item?.name?.trim()) {
       this.loading = true;
-      item.eventId = this.eventId;
 
       if (item.id) {
-        await this.eventRoleService.update(item);
+        await lastValueFrom(this.eventGuestRoleService.update(item));
       }
       else {
-        await this.eventRoleService.add(item);
+        item.eventId = this.eventId;
+        await lastValueFrom(this.eventGuestRoleService.add(item));
       }
 
       this.loading = false;

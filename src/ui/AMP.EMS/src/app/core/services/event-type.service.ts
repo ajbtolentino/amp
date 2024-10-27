@@ -4,11 +4,13 @@ import { inject, Injectable } from '@angular/core';
 import { Event } from '../models/event';
 import { lastValueFrom, Observable } from 'rxjs';
 
-import { BaseService } from './base.service';
+import { BaseApiService } from './base.api.service';
 import { EventType } from '../models/event-type';
 
-@Injectable()
-export class EventTypeService extends BaseService {
+@Injectable({
+    providedIn: 'root'
+})
+export class EventTypeService extends BaseApiService {
     get = (id: string): Observable<EventType> => {
         return this.httpGet<EventType>(`api/eventtype/${id}`);
     }

@@ -1,9 +1,14 @@
+using System.Collections;
+using System.Net.Http.Headers;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.EMS.API.Models;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -11,97 +16,191 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventController(IUnitOfWork unitOfWork) : ApiBaseController<Event, Guid>(unitOfWork)
     {
-        public record EventData(string Title, Guid EventTypeId, string? Description, string? Location, int MaxGuests, DateTime StartDate, DateTime EndDate);
+        public record EventRequest(string Title, Guid EventTypeId, string? Description, string? Location, int MaxGuests, DateTime StartDate, DateTime EndDate);
 
         [HttpGet]
-        public override IActionResult GetAll()
+        [Route("{eventId:guid}/roles")]
+        public IActionResult GetRoles(Guid eventId)
         {
-            var entities = this.entityRepository.GetAll().Include(_ => _.EventType).AsNoTracking();
+            var eventGuestRoles = base.unitOfWork.Repository<EventGuestRole>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
 
-            return Ok(new OkResponse<IEnumerable<Event>>(string.Empty) { Data = entities });
+            return Ok(new OkResponse<IEnumerable<EventGuestRole>>(string.Empty) { Data = eventGuestRoles });
         }
 
         [HttpGet]
-        [Route("{eventId}/roles")]
-        public IActionResult GetRoles(Guid? eventId)
+        [Route("{eventId:guid}/guests")]
+        public async Task<IActionResult> GetGuests(Guid eventId)
         {
-            if (!eventId.HasValue)
-                return base.GetAll();
+            var eventGuests = await this.unitOfWork.Repository<EventGuest>().GetAll().Where(eventGuest => eventGuest.EventId == eventId)
+                .AsNoTracking().ToListAsync();
 
-            var collection = base.unitOfWork.Repository<EventRole>()
-                                .GetAll().AsNoTracking()
-                                .Where(_ => _.EventId == eventId);
+            var eventGuestRoles =
+                await unitOfWork.Repository<EventGuestRole>().GetAll().Where(eventGuestRole => eventGuestRole.EventId == eventId).ToListAsync();
 
-            return Ok(new OkResponse<IEnumerable<EventRole>>(string.Empty) { Data = collection });
+            var model = MapEventGuestModel(eventGuests, eventGuestRoles);
+
+            return Ok(new OkResponse<IAsyncEnumerable<EventGuestModel>>(string.Empty) { Data = model });
         }
-
+        
         [HttpGet]
-        [Route("{eventId}/guests")]
-        public IActionResult GetGuests(Guid? eventId)
+        [Route("{eventId:guid}/invitations")]
+        public async Task<IActionResult> GetInvitations(Guid eventId)
         {
-            if (!eventId.HasValue)
-                return base.GetAll();
+            var eventGuests = await unitOfWork.Repository<EventGuest>()
+                .GetAll().AsNoTracking()
+                .Where(eventGuest => eventGuest.EventId == eventId).ToListAsync();
 
-            var collection = base.unitOfWork.Repository<EventGuest>()
+            var eventInvitationIds = eventGuests.SelectMany(eventGuest => eventGuest.EventInvitations);
+            var eventGuestInvitationIds = eventGuests.SelectMany(eventGuest => eventGuest.EventGuestInvitations);
+            
+            var eventInvitations = await unitOfWork.Repository<EventInvitation>()
                                 .GetAll().AsNoTracking()
-                                .Include(_ => _.Guest)
-                                .Include(_ => _.EventGuestInvitations)
-                                    .ThenInclude(_ => _.EventInvitation)
-                                .Include(_ => _.EventGuestInvitations)
-                                    .ThenInclude(_ => _.EventGuestInvitationRSVPs.OrderByDescending(__ => __.DateCreated).Take(1))
-                                .Include(_ => _.EventGuestRoles)
-                                    .ThenInclude(_ => _.EventRole)
-                                .Where(_ => _.EventId == eventId);
+                                .Where(eventInvitation => eventInvitation.EventId == eventId).ToListAsync();
 
-            return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = collection });
-        }
+            var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll().AsNoTracking()
+                .Where(eventGuestInvitation => eventInvitationIds.Contains(eventGuestInvitation.EventInvitationId) && 
+                                               eventGuestInvitationIds.Contains(eventGuestInvitation.Id)).ToListAsync();
 
-        [HttpGet]
-        [Route("{eventId}/invitations")]
-        public IActionResult GetInvitations(Guid? eventId)
-        {
-            if (!eventId.HasValue)
-                return base.GetAll();
+            var eventGuestInvitationRsvpIds = eventGuestInvitations.SelectMany(e => e.EventGuestInvitationRsvps);
 
-            var collection = base.unitOfWork.Repository<EventInvitation>()
-                                .GetAll().AsNoTracking()
-                                .Where(_ => _.EventId == eventId);
+            var eventGuestInvitationRsvps = await unitOfWork.Repository<EventGuestInvitationRsvp>().GetAll().AsNoTracking()
+                .Where(eventGuestInvitationRsvp => eventGuestInvitationRsvpIds.Contains(eventGuestInvitationRsvp.Id)).ToListAsync();
 
-            return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = collection });
+            var model = eventInvitations.Select(eventInvitation => new EventInvitationModel
+            {
+                Name = eventInvitation.Name,
+                Description = eventInvitation.Description,
+                EventInvitationId = eventInvitation.Id,
+                EventGuestInvitations = eventGuestInvitations.Select(eventGuestInvitation => new EventGuestInvitationModel
+                {
+                    EventGuestInvitationId = eventGuestInvitation.Id,
+                    MaxGuests = eventGuestInvitation.MaxGuests,
+                    Code=eventGuestInvitation.Code,
+                    Rsvps = MapEventGuestInvitationRsvps(eventGuestInvitation, eventGuestInvitationRsvps)
+                })
+            });
+            
+            return Ok(new OkResponse<IEnumerable<EventInvitationModel>>(string.Empty) { Data = model });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EventData data)
+        public async Task<IActionResult> Post([FromBody] EventRequest request)
         {
             return await base.Post(new Event
             {
-                Title = data.Title,
-                EventTypeId = data.EventTypeId,
-                Description = data.Description ?? string.Empty,
-                Location = data.Location ?? string.Empty,
-                MaxGuests = data.MaxGuests,
-                StartDate = data.StartDate,
-                EndDate = data.EndDate
+                Title = request.Title,
+                EventTypeId = request.EventTypeId,
+                Description = request.Description ?? string.Empty,
+                Location = request.Location ?? string.Empty,
+                MaxGuests = request.MaxGuests,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate
             });
         }
 
         [HttpPut]
-        [Route("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] EventData data)
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Put(Guid id, [FromBody] EventRequest request)
         {
-            var entity = await this.entityRepository.Get(id);
+            var @event = await this.entityRepository.Get(id);
 
-            if (entity == null) return BadRequest();
+            ArgumentNullException.ThrowIfNull(@event);
 
-            entity.Title = data.Title;
-            entity.EventTypeId = data.EventTypeId;
-            entity.Description = data.Description ?? string.Empty;
-            entity.Location = data.Location ?? string.Empty;
-            entity.MaxGuests = data.MaxGuests;
-            entity.StartDate = data.StartDate;
-            entity.EndDate = data.EndDate;
+            @event.Title = request.Title;
+            @event.EventTypeId = request.EventTypeId;
+            @event.Description = request.Description ?? string.Empty;
+            @event.Location = request.Location ?? string.Empty;
+            @event.MaxGuests = request.MaxGuests;
+            @event.StartDate = request.StartDate;
+            @event.EndDate = request.EndDate;
 
-            return await base.Put(entity);
+            return await base.Put(@event);
         }
+
+        private async IAsyncEnumerable<EventGuestModel> MapEventGuestModel(IEnumerable<EventGuest> eventGuests,
+            IEnumerable<EventGuestRole> eventGuestRoles)
+        {
+            var guests = await unitOfWork.Repository<Guest>()
+                .GetAll().AsNoTracking()
+                .Where(guest => eventGuests.Any(eventGuest => eventGuest.GuestId == guest.Id)).ToListAsync();
+
+            var eventInvitationIds = eventGuests.SelectMany(eventGuest => eventGuest.EventInvitations);
+            var eventGuestInvitationIds = eventGuests.SelectMany(eventGuest => eventGuest.EventGuestInvitations);
+            
+            var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                .Where(eventGuestInvitation => eventInvitationIds.Contains(eventGuestInvitation.EventInvitationId)).ToListAsync();
+
+            var eventGuestInvitationRsvps = await unitOfWork.Repository<EventGuestInvitationRsvp>().GetAll()
+                .Where(eventGuestInvitationRsvp => eventGuestInvitationIds.Contains(eventGuestInvitationRsvp.Id)).ToListAsync();
+            
+            foreach (var eventGuest in eventGuests)
+            {
+                var guest = guests.FirstOrDefault(guest => guest.Id == eventGuest.GuestId);
+                
+                yield return new EventGuestModel()
+                {
+                    EventId = eventGuest.EventId,
+                    EventGuestId = eventGuest.Id,
+                    GuestId = guest.Id,
+                    FirstName = guest.FirstName,
+                    LastName = guest.LastName,
+                    MaxGuests = eventGuest.MaxGuests,
+                    EventGuestRoles = MapEventGuestRoleModel(eventGuest, eventGuestRoles).ToList(),
+                    EventGuestInvitations = MapEventGuestInvitationModel(eventGuest, eventGuestInvitations, eventGuestInvitationRsvps)
+                };
+            }
+        }
+
+        private static IEnumerable<EventGuestRoleModel> MapEventGuestRoleModel(EventGuest eventGuest,
+            IEnumerable<EventGuestRole> eventGuestRoles)
+        {
+            return eventGuestRoles.Where(eventGuestRole => eventGuest.EventGuestRoles.Contains(eventGuestRole.Id))
+                .Select(eventGuestRole => new EventGuestRoleModel
+                {
+                    Id = eventGuestRole.Id,
+                    Name = eventGuestRole.Name
+                });
+        }
+
+        private static IEnumerable<EventGuestInvitationModel> MapEventGuestInvitationModel(EventGuest eventGuest,
+            IEnumerable<EventGuestInvitation> eventGuestInvitations,
+            IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationsRsvps)
+        {
+            return eventGuestInvitations.Where(eventGuestInvitation =>
+                    eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId))
+                .Select(eventGuestInvitation => new EventGuestInvitationModel
+                {
+                    EventGuestInvitationId = eventGuestInvitation.Id,
+                    MaxGuests = eventGuestInvitation.MaxGuests,
+                    Code = eventGuestInvitation.Code,
+                    Rsvps = MapEventGuestInvitationRsvpModel(eventGuestInvitation, eventGuestInvitationsRsvps)
+                });
+        }
+
+        private static IEnumerable<EventGuestInvitationRsvpModel> MapEventGuestInvitationRsvpModel(
+            EventGuestInvitation eventGuestInvitation,
+            IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
+        {
+            return eventGuestInvitationRsvps
+                .Where(rsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(rsvp.Id))
+                .Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel
+                {
+                    EventGuestInvitationRsvpId = eventGuestInvitationRsvp.Id,
+                    Response = eventGuestInvitationRsvp.Response,
+                    DateCreated = eventGuestInvitationRsvp.DateCreated
+                });
+        }
+        
+        private static IEnumerable<EventGuestInvitationRsvpModel> MapEventGuestInvitationRsvps(EventGuestInvitation eventGuestInvitation, IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
+        {
+            return eventGuestInvitationRsvps.Where(rsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(rsvp.Id)).Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel
+            {
+                EventGuestInvitationRsvpId = eventGuestInvitation.Id,
+                Response = eventGuestInvitationRsvp.Response,
+                DateCreated = eventGuestInvitationRsvp.DateCreated,
+                GuestNames = eventGuestInvitationRsvp.GuestNames
+            });
+        }
+
     }
 }

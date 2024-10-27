@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '../../../core/services/event.service';
 import { Table } from 'primeng/table';
 import { Observable } from 'rxjs';
+import { EventInvitationInfo } from '../../../core/models/event-invitation-info';
 
 @Component({
   selector: 'app-event-invitations',
@@ -82,6 +83,57 @@ export class EventInvitationsComponent implements OnInit {
         this.selectedItems = null;
       }
     });
+  }
+
+  getTotalRecipients = (eventInvitationInfo: EventInvitationInfo): number => {
+    return eventInvitationInfo.eventGuestInvitations?.length || 0;
+  }
+
+  getTotalCapacity = (eventInvitationInfo: EventInvitationInfo): number => {
+    return eventInvitationInfo.eventGuestInvitations?.reduce((a, b) => a + (b.maxGuests ?? 0), 0) || 0;
+  }
+
+  getTotalGuests = (eventInvitationInfo: EventInvitationInfo): number => {
+    let total = 0;
+
+    for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
+      for (let eventGuestInvitationRsvpInfo of eventGuestInvitations.rsvps || []) {
+        if (eventGuestInvitationRsvpInfo.response === "ACCEPT") {
+          for (let name of eventGuestInvitationRsvpInfo.guestNames || []) {
+            if (name) total++;
+          }
+        }
+      }
+    }
+    return total
+  }
+
+  getTotalConfirmed = (eventInvitationInfo: EventInvitationInfo): number => {
+    let total = 0;
+
+    for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
+      for (let eventGuestInvitationRsvpInfo of eventGuestInvitations.rsvps || []) {
+        if (eventGuestInvitationRsvpInfo.response === "ACCEPT") {
+          total++;
+        }
+      }
+    }
+
+    return total;
+  }
+
+  getTotalDeclined = (eventInvitationInfo: EventInvitationInfo): number => {
+    let total = 0;
+
+    for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
+      for (let eventGuestInvitationRsvpInfo of eventGuestInvitations.rsvps || []) {
+        if (eventGuestInvitationRsvpInfo.response === "DECLINE") {
+          total++;
+        }
+      }
+    }
+
+    return total;
   }
 
   delete = async (invitation: EventInvitation) => {

@@ -4,6 +4,7 @@ using AMP.Infrastructure.Entity;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {
@@ -16,9 +17,9 @@ namespace AMP.EMS.API.Controllers
         protected readonly IRepository<TEntity> entityRepository = unitOfWork.Repository<TEntity>();
 
         [HttpGet]
-        public virtual IActionResult GetAll()
+        public virtual async Task<IActionResult> GetAll()
         {
-            var entities = this.entityRepository.GetAll();
+            var entities = await this.entityRepository.GetAll().AsNoTracking().ToListAsync();
 
             return Ok(new OkResponse<IEnumerable<TEntity>>(string.Empty) { Data = entities });
         }

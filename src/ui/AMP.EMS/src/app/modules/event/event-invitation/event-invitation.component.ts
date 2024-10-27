@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/api';
 import { EventInvitation } from '../../../core/models/event-invitation';
 import { EventInvitationService } from '../../../core/services/event-invitation.service';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
-import { EventGuestInvitationRSVP } from '../../../core/models/event-guest-invitation-rsvp';
+import { EventGuestInvitationRsvp } from '../../../core/models/event-guest-invitation-rsvp';
 
 @Component({
   selector: 'app-event-invitation',

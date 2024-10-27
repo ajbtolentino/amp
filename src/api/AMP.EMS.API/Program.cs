@@ -7,6 +7,11 @@ using AMP.Infrastructure.Extensions;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.HttpLogging;
 using System.Text.Json.Serialization;
+using AMP.Infrastructure.Enums;
+using MongoDB.Bson.Serialization;
+using AMP.Infrastructure.Entity;
+using AMP.EMS.API.Core.Entities;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,8 +77,7 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<DbContext, EMSDbContext>();
+builder.Services.AddDbContext<EMSDbContext>(config);
 
 builder.Services.AddHttpContextAccessor();
 
@@ -91,13 +95,7 @@ app.UseRequestLogging();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-// migrate any database changes on startup (includes initial db creation)
-using (var scope = app.Services.CreateScope())
-{
-    var dataContext = scope.ServiceProvider.GetRequiredService<EMSDbContext>();
-    if (dataContext.Database.GetPendingMigrations().Any())
-        dataContext.Database.Migrate();
-}
+app.Services.Migrate<EMSDbContext>(config);
 
 //Add Middleware
 app.UseMiddleware<RequestPipelineMiddleware>();

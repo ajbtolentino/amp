@@ -29,6 +29,7 @@ jobs:
           ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
           Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
           Serilog.WriteTo.0.Args.serverUrl: ${{vars.SEQ_URL}}
+          DatabaseConfiguration.Type: ${{secrets.EMS_API_DB_TYPE}}
 
       - name: Restore dependencies
         run: dotnet restore
