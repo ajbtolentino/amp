@@ -11,7 +11,7 @@ describe('template spec', () => {
 
   it('login', () => {
     // cy.visit('/')
-    // cy.loginToApplication('admin', 'P@assw0rd.123')
+    // cy.loginToApplication('', '')
     // cy.get('[label="Logout"]').should('be.visible')
     //cy.log('passed')
   })
