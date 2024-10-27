@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 
-import { Table } from 'primeng/table';
 import { EventService } from '../../../core/services/event.service';
-import { firstValueFrom, Observable, take } from 'rxjs';
+import { firstValueFrom, lastValueFrom, Observable, take } from 'rxjs';
 import { Guest } from '../../../core/models/guest';
 import { GuestService } from '../../../core/services/guest.service';
+import { EventGuestService } from '../../../core/services/event-guest.service';
 
 @Component({
   selector: 'app-event-guests',
@@ -20,14 +20,8 @@ export class EventGuestsComponent implements OnInit {
 
   selectedItems: Guest[] | null = [];
 
-  isCreating: boolean = false;
-
-  loading: boolean = true;
-
-  @ViewChild('dt') table!: Table;
-
   constructor(private eventService: EventService,
-    private guestService: GuestService,
+    private eventGuestService: EventGuestService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -42,13 +36,8 @@ export class EventGuestsComponent implements OnInit {
     });
   }
 
-  refreshGrid = async () => {
-    this.loading = true;
-
+  refreshGrid = () => {
     this.guests$ = this.eventService.getGuests(this.eventId);
-
-    this.loading = false;
-    this.isCreating = false;
   }
 
   hasResponded = (item: any) => {
@@ -61,30 +50,25 @@ export class EventGuestsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.loading = true;
-
         // this.eventGuests$ = this.eventGuests$.filter(val => !this.selectedItems?.includes(val));
         this.selectedItems = null;
-
-        this.loading = false;
 
         this.refreshGrid();
       }
     });
   }
 
-  delete = (guest: Guest) => {
+  delete = (eventGuest: any) => {
+    console.log(eventGuest);
     this.confirmationService.confirm({
-      message: 'Are you sure?',
+      message: `Are you sure you want to delete ${eventGuest.firstName} ${eventGuest.lastName}?`,
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        if (guest.id) {
-          this.loading = true;
-          firstValueFrom(await this.guestService.delete(guest.id));
-          this.loading = true;
+        if (eventGuest.eventGuestId) {
+          await lastValueFrom(this.eventGuestService.delete(eventGuest.eventGuestId));
 
-          await this.refreshGrid();
+          this.refreshGrid();
         }
       }
     });

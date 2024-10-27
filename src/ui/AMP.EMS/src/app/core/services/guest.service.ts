@@ -39,8 +39,8 @@ export class GuestService extends BaseApiService {
     });
   }
 
-  delete = async (id: string) => {
-    return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/guest/${id}`, { headers: this.headers }));
+  delete = (id: string): Observable<Guest> => {
+    return this.httpDelete(`api/guest/${id}`);
   }
 
   deleteSelected = async (ids: string[]) => {

@@ -1,9 +1,10 @@
 <div class="grid">
     <div class="col-12">
         <div class="card" *ngIf="guests$ | withStatus | async as guests">
+            {{guests | json}}
             <p-table #dt [value]="guests.value!" [rows]="10" [paginator]="true"
                 [globalFilterFields]="['firstName','lastName']" editMode="row" [(selection)]="selectedItems"
-                [rowHover]="true" dataKey="id" [loading]="guests.loading" [showLoader]="false">
+                [rowHover]="true" dataKey="id" [loading]="guests.value" [showLoader]="false">
                 <ng-template pTemplate="caption">
                     <div class="flex flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <div>
@@ -16,15 +17,12 @@
                         </div>
 
                         <div>
-                            <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
-                                class="p-button-success mr-2" routerLink="/event/{{eventId}}/guests/add"></button>
+                            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                routerLink="/event/{{eventId}}/guests/add"></button>
 
-                            <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
-                                class="p-button-danger" (click)="deleteSelectedItems()"
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedItems()"
                                 [disabled]="!selectedItems || !selectedItems.length"></button>
-
-                            <!-- <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
-            (click)="dt.exportCSV()"></button> -->
                         </div>
                     </div>
                 </ng-template>
@@ -64,18 +62,7 @@
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate=" loadingbody">
-                    <tr>
-                        <td></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td></td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-item let-editing="editing" let-expanded="expanded">
+                <ng-template pTemplate="body" let-item>
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                         <td>{{item.firstName}}</td>
@@ -98,21 +85,34 @@
                         </td>
                         <td>
                             <div class="flex">
-                                <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-                                    icon="pi pi-pencil" routerLink="/event/{{eventId}}/guest/{{item.eventGuestId}}"
+                                <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                                    routerLink="/event/{{eventId}}/guest/{{item.eventGuestId}}"
                                     class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
                                 </button>
-                                <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning"
-                                    icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
+                                <button pButton pRipple class="p-button-rounded p-button-warning" icon="pi pi-trash"
+                                    (click)="delete(item)" pTooltip="Delete"></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
+
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
                         <td [colSpan]="7">
                             No records found
                         </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td></td>
+                        <td><p-skeleton></p-skeleton></td>
+                        <td><p-skeleton></p-skeleton></td>
+                        <td><p-skeleton></p-skeleton></td>
+                        <td><p-skeleton></p-skeleton></td>
+                        <td><p-skeleton></p-skeleton></td>
+                        <td></td>
                     </tr>
                 </ng-template>
             </p-table>
