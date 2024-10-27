@@ -1,13 +1,16 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from "../service/app.layout.service";
-import { ActivatedRoute } from '@angular/router';
+import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { lastValueFrom, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-event-topbar',
     templateUrl: './event-topbar.component.html'
 })
-export class EventTopBarComponent {
+export class EventTopBarComponent implements OnInit {
+    auth$: Observable<LoginResponse> = new Observable<LoginResponse>();
+
     items!: MenuItem[];
 
     @Input() eventId!: string;
@@ -18,5 +21,19 @@ export class EventTopBarComponent {
 
     @ViewChild('topbarmenu') menu!: ElementRef;
 
-    constructor(public layoutService: LayoutService, private route: ActivatedRoute) { }
+    constructor(public layoutService: LayoutService, private oidcSecurityService: OidcSecurityService) { }
+
+    menuItems: MenuItem[] = [];
+
+    ngOnInit(): void {
+        this.auth$ = this.oidcSecurityService.checkAuth();
+    }
+
+    login = async () => {
+        this.oidcSecurityService.authorize();
+    }
+
+    logout = async () => {
+        await lastValueFrom(this.oidcSecurityService.logoff());
+    }
 }

@@ -1,15 +1,17 @@
-import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { filter, Observable, Subscription } from 'rxjs';
 import { LayoutService } from "../service/app.layout.service";
 import { EventTopBarComponent } from '../event-layout/event-topbar.component';
+import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-events-layout',
   templateUrl: './events-layout.component.html',
   styles: ``
 })
-export class EventsLayoutComponent implements OnDestroy {
+export class EventsLayoutComponent implements OnInit, OnDestroy {
+  auth$: Observable<LoginResponse> = new Observable<LoginResponse>();
 
   overlayMenuOpenSubscription: Subscription;
 
@@ -19,7 +21,7 @@ export class EventsLayoutComponent implements OnDestroy {
 
   @ViewChild(EventTopBarComponent) appTopbar!: EventTopBarComponent;
 
-  constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
+  constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router, private oidcSecurityService: OidcSecurityService) {
 
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
       if (!this.profileMenuOutsideClickListener) {
@@ -43,6 +45,10 @@ export class EventsLayoutComponent implements OnDestroy {
         this.hideMenu();
         this.hideProfileMenu();
       });
+  }
+
+  ngOnInit(): void {
+    this.auth$ = this.oidcSecurityService.checkAuth();
   }
 
   hideMenu() {

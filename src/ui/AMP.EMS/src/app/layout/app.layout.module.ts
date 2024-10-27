@@ -20,7 +20,11 @@ import { EventMenuComponent } from './event-layout/event-menu.component';
 import { EventMenuitemComponent } from './event-layout/event-menuitem.component';
 import { EventSidebarComponent } from './event-layout/event-sidebar.component';
 import { EventsTopBarComponent } from './events-layout/events-topbar.component';
-import { CodeEditorModule } from '@ngstack/code-editor';
+import { SharedModule } from '../modules/shared.module';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { UnauthorizedComponent } from "../pages/unauthorized/unauthorized.component";
+import { MenubarModule } from 'primeng/menubar';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
     declarations: [
@@ -35,18 +39,23 @@ import { CodeEditorModule } from '@ngstack/code-editor';
         FooterComponent,
     ],
     imports: [
+        SharedModule,
+        ProgressSpinnerModule,
         BadgeModule,
         BrowserModule,
         BreadcrumbModule,
         BrowserAnimationsModule,
+        ButtonModule,
         FormsModule,
         HttpClientModule,
         InputTextModule,
         InputSwitchModule,
+        MenubarModule,
         RadioButtonModule,
         SidebarModule,
         RippleModule,
         RouterModule,
+        UnauthorizedComponent
     ],
 })
 export class AppLayoutModule { }

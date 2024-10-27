@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { LayoutService } from '../service/app.layout.service';
-import { MenuService } from '../menu/app.menu.service';
+import { EventMenuService } from '../event-layout/event-menu.service';
 
 @Component({
     selector: 'app-config',
@@ -13,7 +13,7 @@ export class AppConfigComponent {
 
     constructor(
         public layoutService: LayoutService,
-        public menuService: MenuService
+        public menuService: EventMenuService
     ) { }
 
     get visible(): boolean {
