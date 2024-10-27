@@ -34,7 +34,7 @@
                         <th>Name</th>
                         <th>Recipients</th>
                         <th>Confirmed / Declined</th>
-                        <th>Alloted Guests / Total Guests</th>
+                        <th>Guests (Actual / Capacity)</th>
                         <th class="p-jc-end"></th>
                     </tr>
                 </ng-template>
@@ -51,9 +51,12 @@
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                         <td>{{item?.name}}</td>
-                        <td>{{getTotalRecipients(item)}}</td>
-                        <td>{{ getTotalConfirmed(item) }} / {{ getTotalDeclined(item) }}</td>
-                        <td>{{ getTotalCapacity(item) }} / {{getTotalGuests(item)}}</td>
+                        <td pTooltip="Total recipients who received the invite">{{getTotalRecipients(item)}}</td>
+                        <td pTooltip="Recipients who confirmed vs. declined the invitation">{{getTotalConfirmed(item) }}
+                            / {{ getTotalDeclined(item) }}</td>
+                        <td
+                            pTooltip="The accumulated total of actual guests that will be going to the event vs total alloted capacity/max number of guests">
+                            {{getActualGuests(item)}} / {{ getTotalCapacity(item) }}</td>
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"

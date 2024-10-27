@@ -130,8 +130,10 @@ namespace AMP.EMS.API.Controllers
             var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll()
                 .Where(eventGuestInvitation => eventInvitationIds.Contains(eventGuestInvitation.EventInvitationId)).ToListAsync();
 
+            var eventGuestInvitationRsvpIds = eventGuestInvitations.SelectMany(rsvp => rsvp.EventGuestInvitationRsvps);
+            
             var eventGuestInvitationRsvps = await unitOfWork.Repository<EventGuestInvitationRsvp>().GetAll()
-                .Where(eventGuestInvitationRsvp => eventGuestInvitationIds.Contains(eventGuestInvitationRsvp.Id)).ToListAsync();
+                .Where(eventGuestInvitationRsvp => eventGuestInvitationRsvpIds.Contains(eventGuestInvitationRsvp.Id)).ToListAsync();
             
             foreach (var eventGuest in eventGuests)
             {
@@ -182,7 +184,6 @@ namespace AMP.EMS.API.Controllers
             IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
         {
             return eventGuestInvitationRsvps
-                .Where(rsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(rsvp.Id))
                 .Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel
                 {
                     EventGuestInvitationRsvpId = eventGuestInvitationRsvp.Id,
@@ -193,7 +194,8 @@ namespace AMP.EMS.API.Controllers
         
         private static IEnumerable<EventGuestInvitationRsvpModel> MapEventGuestInvitationRsvps(EventGuestInvitation eventGuestInvitation, IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
         {
-            return eventGuestInvitationRsvps.Where(rsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(rsvp.Id)).Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel
+            return eventGuestInvitationRsvps.Where(rsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(rsvp.Id)).
+                OrderByDescending(rsvp => rsvp.DateCreated).Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel
             {
                 EventGuestInvitationRsvpId = eventGuestInvitation.Id,
                 Response = eventGuestInvitationRsvp.Response,

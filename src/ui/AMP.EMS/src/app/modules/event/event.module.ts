@@ -21,9 +21,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 import { EventLayoutComponent } from '../../layout/event-layout/event-layout.component';
 import { EditorModule } from 'primeng/editor';
-import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './event-invitation/event-guest-invitation-rsvp.component';
+import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './event-guest-invitation/event-guest-invitation-rsvp.component';
 import { TabViewModule } from 'primeng/tabview';
-import { EventGuestInvitationComponent as EventGuestInvitationsComponent } from './event-guests/event-guest-invitations.component';
 import { EventInvitationComponent } from './event-invitation/event-invitation.component';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
@@ -33,18 +32,18 @@ import { MenuModule } from 'primeng/menu';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { EventRolesComponent } from './event-details/event-roles.component';
 import { SharedModule } from '../shared.module';
+import { EventGuestInvitationsComponent } from './event-guest-invitation/event-guest-invitations.component';
 
 @NgModule({
   declarations: [
     EventDashboardComponent,
     EventDetailsComponent,
     EventGuestsComponent,
+    EventGuestInvitationsComponent,
     EventInvitationsComponent,
     EventGuestInvitationRSVPFormComponent,
     EventGuestInvitationRSVPLabelComponent,
-    EventGuestInvitationsComponent,
     EventInvitationComponent,
-    EventGuestInvitationsComponent,
     EventGuestDetailsComponent,
     EventRolesComponent
   ],

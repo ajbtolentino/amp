@@ -4,19 +4,19 @@ import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { EventService } from '../../../core/services/event.service';
+import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
 import { Observable } from 'rxjs';
 import { Event } from '../../../core/models/event';
 import { EventInvitation } from '../../../core/models/event-invitation';
-import { GuestService } from '../../../core/services/guest.service';
-import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
 import { Guest } from '../../../core/models/guest';
+import { GuestService } from '../../../core/services/guest.service';
 
 @Component({
   selector: 'app-event-guest-invitations',
   templateUrl: './event-guest-invitations.component.html',
   styles: ``
 })
-export class EventGuestInvitationComponent implements OnInit {
+export class EventGuestInvitationsComponent implements OnInit {
   eventId!: string;
   guest$: Observable<Guest> = new Observable<Guest>();
   eventGuestInvitations: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
@@ -34,8 +34,7 @@ export class EventGuestInvitationComponent implements OnInit {
 
   templateCode!: string;
 
-  constructor(private eventService: EventService,
-    private guestService: GuestService,
+  constructor(private guestService: GuestService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     @Inject(DOCUMENT) private document: Document) { }
@@ -44,6 +43,5 @@ export class EventGuestInvitationComponent implements OnInit {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
 
     const guestId = this.route.snapshot.paramMap.get('guestId') || '';
-    this.guest$ = this.guestService.get(guestId);
   }
 }

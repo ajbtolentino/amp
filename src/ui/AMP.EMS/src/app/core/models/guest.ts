@@ -8,7 +8,7 @@ export interface Guest {
     nickName?: string;
     maxGuests?: number;
     eventRoles?: string[];
-    guestInvitations?: EventGuestInvitation[];
+    eventGuestInvitations?: EventGuestInvitation[];
     phoneNumber?: string;
     dateCreated?: Date;
     dateUpdated?: Date;

@@ -126,10 +126,14 @@ namespace AMP.EMS.API.Controllers
         private async Task UpdateEventGuestInvitations(EventGuest eventGuest, IEnumerable<Guid> eventInvitationIds)
         {
             eventGuest.EventInvitations = [];
-            
-            var eventGuestInvitations = unitOfWork.Repository<EventGuestInvitation>()
-                .GetAll().AsNoTracking().Where(eventGuestInvitation => eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id));
-            var newEventInvitationIds = eventInvitationIds.Except(eventGuestInvitations.Select(_ => _.EventInvitationId));
+
+            var existingEventInvitations = await unitOfWork.Repository<EventGuestInvitation>()
+                .GetAll().AsNoTracking().Where(eventGuestInvitation =>
+                    eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
+                .Select(eventGuestInvitation => eventGuestInvitation.EventInvitationId)
+                .ToListAsync();
+
+            var newEventInvitationIds = eventInvitationIds.Except(existingEventInvitations);
 
             foreach (var eventInvitationId in newEventInvitationIds)
             {

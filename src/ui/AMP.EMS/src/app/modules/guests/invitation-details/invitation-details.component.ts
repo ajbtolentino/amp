@@ -24,6 +24,7 @@ export class InvitationDetailsComponent {
   }
 
   onSubmit = async (rsvp: EventGuestInvitationRsvp) => {
-    this.rsvpService.add(rsvp);
+    console.log(rsvp);
+    await lastValueFrom(this.rsvpService.add(rsvp));
   }
 }

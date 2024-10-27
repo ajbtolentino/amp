@@ -93,44 +93,37 @@ export class EventInvitationsComponent implements OnInit {
     return eventInvitationInfo.eventGuestInvitations?.reduce((a, b) => a + (b.maxGuests ?? 0), 0) || 0;
   }
 
-  getTotalGuests = (eventInvitationInfo: EventInvitationInfo): number => {
+  getTotalConfirmed = (eventInvitationInfo: EventInvitationInfo): number => {
     let total = 0;
 
     for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
-      for (let eventGuestInvitationRsvpInfo of eventGuestInvitations.rsvps || []) {
-        if (eventGuestInvitationRsvpInfo.response === "ACCEPT") {
-          for (let name of eventGuestInvitationRsvpInfo.guestNames || []) {
-            if (name) total++;
-          }
+      if (eventGuestInvitations?.rsvps?.length && eventGuestInvitations?.rsvps[0].response === "ACCEPT")
+        total++;
+    }
+
+    return total;
+  }
+
+
+  getActualGuests = (eventInvitationInfo: EventInvitationInfo): number => {
+    let total = 0;
+
+    for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
+      if (eventGuestInvitations.rsvps?.length && eventGuestInvitations.rsvps[0].response === "ACCEPT") {
+        for (let name of eventGuestInvitations.rsvps[0].guestNames || []) {
+          if (name) total++;
         }
       }
     }
     return total
   }
 
-  getTotalConfirmed = (eventInvitationInfo: EventInvitationInfo): number => {
-    let total = 0;
-
-    for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
-      for (let eventGuestInvitationRsvpInfo of eventGuestInvitations.rsvps || []) {
-        if (eventGuestInvitationRsvpInfo.response === "ACCEPT") {
-          total++;
-        }
-      }
-    }
-
-    return total;
-  }
-
   getTotalDeclined = (eventInvitationInfo: EventInvitationInfo): number => {
     let total = 0;
 
     for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
-      for (let eventGuestInvitationRsvpInfo of eventGuestInvitations.rsvps || []) {
-        if (eventGuestInvitationRsvpInfo.response === "DECLINE") {
-          total++;
-        }
-      }
+      if (eventGuestInvitations?.rsvps?.length && eventGuestInvitations?.rsvps[0].response === "DECLINE")
+        total++;
     }
 
     return total;

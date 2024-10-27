@@ -59,15 +59,17 @@
                     <div class="field col-12 md:col-6"
                         *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
                         <label htmlFor="lastName">Invitations</label>
-                        <p-multiSelect *ngIf="!eventInvitations.loading" optionLabel="name"
+                        <p-multiSelect *ngIf="!eventInvitations.loading && !eventGuest.loading" optionLabel="name"
                             optionValue="eventInvitationId" placeholder="Select Invitations"
-                            [options]="eventInvitations.value" [loading]="eventInvitations.loading" optionLabel="name"
+                            [options]="eventInvitations.value"
+                            [loading]="eventInvitations.loading  && eventGuest.loading" optionLabel="name"
                             [(ngModel)]="eventGuest.value!.eventGuest.eventInvitations" />
+
                         <p-skeleton *ngIf="eventInvitations.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
                         <label htmlFor="lastName">Role</label>
-                        <p-multiSelect *ngIf="!eventRoles.loading" placeholder="Select Role"
+                        <p-multiSelect *ngIf="!eventRoles.loading && !eventGuest.loading" placeholder="Select Role"
                             [options]="eventRoles.value" optionLabel="name" optionValue="id"
                             [loading]="eventRoles.loading" [(ngModel)]="eventGuest.value!.eventGuest.eventGuestRoles" />
 

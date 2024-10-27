@@ -14,7 +14,7 @@ import { EventTypeService } from '../app/core/services/event-type.service';
 import { EventsModule } from '../app/modules/events/events.module';
 import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
 import { EventsLayoutComponent } from '../app/layout/events-layout/events-layout.component';
-import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './modules/event/event-invitation/event-guest-invitation-rsvp.component';
+import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './modules/event/event-guest-invitation/event-guest-invitation-rsvp.component';
 import { provideDynamicHooks } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
 

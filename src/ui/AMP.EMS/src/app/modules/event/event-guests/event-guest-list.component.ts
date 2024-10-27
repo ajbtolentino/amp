@@ -51,12 +51,8 @@ export class EventGuestsComponent implements OnInit {
     this.isCreating = false;
   }
 
-  hasResponded = (item: Guest) => {
-    return false;
-  }
-
-  getGuestDetails = (guestId: string): Observable<Guest> => {
-    return this.guestService.get(guestId).pipe(take(1));
+  hasResponded = (item: any) => {
+    return item.eventGuestInvitations?.filter((_: any) => _.rsvps?.length ?? false).length ?? false;
   }
 
   deleteSelectedItems = () => {
