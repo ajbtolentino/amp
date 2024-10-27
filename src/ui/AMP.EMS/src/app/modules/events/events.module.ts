@@ -24,6 +24,7 @@ import { EventDetailsComponent } from '../event/event-details/event-details.comp
 import { DataViewModule } from 'primeng/dataview';
 import { DefaultComponent } from '../default/default.component';
 import { SharedModule } from '../shared.module';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { SharedModule } from '../shared.module';
     CheckboxModule,
     CommonModule,
     CalendarModule,
+    DividerModule,
     DataViewModule,
     DropdownModule,
     FormsModule,

@@ -1,8 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -12,11 +8,6 @@ import { ToastModule } from 'primeng/toast';
 export class AppComponent implements OnInit {
   title = 'AMP.EMS';
 
-  private readonly oidcSecurityService = inject(OidcSecurityService);
-
   ngOnInit(): void {
-    this.oidcSecurityService
-      .checkAuth()
-      .subscribe();
   }
 }

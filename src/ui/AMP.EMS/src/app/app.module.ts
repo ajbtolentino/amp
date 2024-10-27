@@ -31,12 +31,14 @@ import { SharedModule } from './modules/shared.module';
 import { EventGuestService } from './core/services/event-guest.service';
 import { EventGuestInvitationService } from './core/services/event-guest-invitation.service';
 import { RsvpService } from './core/services/rsvp.service';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
     imports: [
         SharedModule,
         BrowserAnimationsModule,
         AppLayoutModule,
+        DividerModule,
         EventsModule,
         ToastModule,
         RouterOutlet,
@@ -73,7 +75,6 @@ import { RsvpService } from './core/services/rsvp.service';
                 {
                     path: '',
                     pathMatch: 'full',
-                    component: EventsLayoutComponent,
                     children: [
                         {
                             path: '',

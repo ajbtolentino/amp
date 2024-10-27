@@ -1,10 +1,8 @@
 import { Input, OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { LayoutService } from '../service/app.layout.service';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { MenuItem } from 'primeng/api';
-import { ActivatedRoute, ActivationEnd, NavigationEnd, Router } from '@angular/router';
-import { filter, map } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-event-menu',
@@ -14,8 +12,6 @@ export class EventMenuComponent implements OnInit {
     model: MenuItem[] = [];
 
     @Input() eventId!: string;
-
-    protected isAuthenticated: boolean = false;
 
     constructor(public layoutService: LayoutService,
         private route: ActivatedRoute) { }
