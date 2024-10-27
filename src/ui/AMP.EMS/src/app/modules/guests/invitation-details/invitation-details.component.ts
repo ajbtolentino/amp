@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventGuestInvitationRsvp } from '../../../core/models/event-guest-invitation-rsvp';
 import { GuestService } from '../../../core/services/guest.service';
 import { lastValueFrom, Observable } from 'rxjs';
-import { GuestInvitationResponse, EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
+import { EventGuestInvitationResponse, EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
 import { RsvpService } from '../../../core/services/rsvp.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { RsvpService } from '../../../core/services/rsvp.service';
   styleUrl: './invitation-details.component.scss'
 })
 export class InvitationDetailsComponent {
-  guestInvitation$: Observable<GuestInvitationResponse> = new Observable<GuestInvitationResponse>();
+  guestInvitation$: Observable<EventGuestInvitationResponse> = new Observable<EventGuestInvitationResponse>();
 
   constructor(private guestInvitationService: EventGuestInvitationService,
     private rsvpService: RsvpService, private route: ActivatedRoute) {

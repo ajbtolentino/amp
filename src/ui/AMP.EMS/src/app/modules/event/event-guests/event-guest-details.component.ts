@@ -4,27 +4,28 @@ import { MessageService, ConfirmationService } from 'primeng/api';
 import { EventGuestRole } from '../../../core/models/event-guest-role';
 import { EventService } from '../../../core/services/event.service';
 import { EventInvitation } from '../../../core/models/event-invitation';
-import { firstValueFrom, from, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { firstValueFrom, from, lastValueFrom, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { GuestService } from '../../../core/services/guest.service';
 import { Guest } from '../../../core/models/guest';
 import { EventGuestService } from '../../../core/services/event-guest.service';
 import { EventGuest } from '../../../core/models/event-guest';
+import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
+import { EventGuestInvitationResponse, EventGuestInvitationService } from '../../../core/services/event-guest-invitation.service';
+import { EventGuestInvitationInfo, EventInvitationInfo } from '../../../core/models/event-invitation-info';
 
 @Component({
   selector: 'app-event-guest-details',
   templateUrl: './event-guest-details.component.html',
-  styles: ``
+  styleUrl: `./event-guest-list.component.scss`
 })
 export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   eventId!: string;
 
   eventGuest$: Observable<{ guest: Guest, eventGuest: EventGuest }> = new Observable<{ guest: Guest, eventGuest: EventGuest }>();
+  eventGuestInvitations$: Observable<EventInvitationInfo[]> = new Observable<EventInvitationInfo[]>();
+
   eventRoles$: Observable<EventGuestRole[]> = new Observable<EventGuestRole[]>();
   eventInvitations$: Observable<EventInvitation[]> = new Observable<EventInvitation[]>();
-  submitEventGuest$: Subject<{ eventGuest: Guest, invitationIds: string[], roleIds: string[] }> = new Subject<{ eventGuest: Guest, invitationIds: string[], roleIds: string[] }>();
-
-  selectedEventRoles: string[] = [];
-  selectedEventInvitations: string[] = [];
 
   constructor(private eventService: EventService,
     private eventGuestService: EventGuestService,
@@ -43,9 +44,10 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
     if (eventGuestId) {
       this.eventGuest$ = this.eventGuestService.get(eventGuestId || '').pipe(map(response => {
         if (!response.eventGuest.eventGuestRoles?.length) response.eventGuest.eventGuestRoles = [];
-        if (!response.eventGuest.eventGuestRoles?.length) response.eventGuest.eventInvitations = [];
+        if (!response.eventGuest.eventInvitations?.length) response.eventGuest.eventInvitations = [];
         return response;
       }));
+      this.eventGuestInvitations$ = this.eventGuestService.getInvitations(eventGuestId);
     }
     else {
       this.eventGuest$ = of<{ eventGuest: EventGuest, guest: Guest }>({ eventGuest: { eventId: this.eventId }, guest: {} });
@@ -57,16 +59,22 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
     this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
   }
 
-  save = (item: { guest: Guest, eventGuest: EventGuest }) => {
+  save = async (item: { guest: Guest, eventGuest: EventGuest }) => {
     if (item?.guest?.firstName?.trim() && item?.guest?.lastName?.trim())
-      if (item.eventGuest.id)
-        firstValueFrom(this.eventGuestService.update(item.eventGuest, item.guest)).then(() => this.redirect());
-      else
-        firstValueFrom(this.eventGuestService.add(item.eventGuest, item.guest)).then(() => this.redirect());
+      if (item.eventGuest.id) {
+        await lastValueFrom(this.eventGuestService.update(item.eventGuest, item.guest));
+        this.loadEventGuest();
+      }
+      else {
+        const response = await lastValueFrom(this.eventGuestService.add(item.eventGuest, item.guest));
+        this.redirect(response);
+
+      }
   }
 
-  redirect = () => {
-    this.router.navigate([`/event/${this.eventId}/guests`]);
+  redirect = (item: any) => {
+    console.log(item);
+    this.router.navigate([`/event/${this.eventId}/guest/${item.id}`]);
   }
 
   ngOnDestroy(): void {

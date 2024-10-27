@@ -33,7 +33,7 @@
                         </th>
                         <th>Name</th>
                         <th>Recipients</th>
-                        <th>Confirmed / Declined</th>
+                        <th>Accepted / Declined</th>
                         <th>Guests (Actual / Capacity)</th>
                         <th class="p-jc-end"></th>
                     </tr>
@@ -51,11 +51,11 @@
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                         <td>{{item?.name}}</td>
-                        <td pTooltip="Total recipients who received the invite">{{getTotalRecipients(item)}}</td>
-                        <td pTooltip="Recipients who confirmed vs. declined the invitation">{{getTotalConfirmed(item) }}
+                        <td pTooltip="# of guests who received your invitation">{{getTotalRecipients(item)}}</td>
+                        <td pTooltip="# of guests who responded with either ACCEPT or DECLINE from your invitation">
+                            {{getTotalAccepted(item) }}
                             / {{ getTotalDeclined(item) }}</td>
-                        <td
-                            pTooltip="The accumulated total of actual guests that will be going to the event vs total alloted capacity/max number of guests">
+                        <td pTooltip="Actual Guests vs Capacity">
                             {{getActualGuests(item)}} / {{ getTotalCapacity(item) }}</td>
                         <td>
                             <div class="flex">

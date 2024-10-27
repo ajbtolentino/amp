@@ -1,6 +1,7 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.EMS.API.Helpers;
+using AMP.EMS.API.Models;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,54 @@ namespace AMP.EMS.API.Controllers
             ArgumentNullException.ThrowIfNull(guest);
 
             return Ok(new OkResponse<EventGuestResponse>(string.Empty) { Data = new EventGuestResponse(eventGuest, guest) });
+        }
+
+        [HttpGet]
+        [Route("{id:guid}/invitations")]
+        public async Task<IActionResult> GetInvitations(Guid id)
+        {
+            var eventGuest = await this.entityRepository.GetAll().FirstOrDefaultAsync(_ => _.Id == id);
+            
+            ArgumentNullException.ThrowIfNull(eventGuest);
+            
+            var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                .Where(eventGuestInvitation =>
+                    eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId) && eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
+                .ToListAsync();
+
+            var eventGuestInvitationRsvps = await unitOfWork.Repository<EventGuestInvitationRsvp>().GetAll()
+                .Where(eventGuestInvitationRsvp => eventGuestInvitations.Any(eventGuestInvitation => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id)))
+                .ToListAsync();
+            
+            var eventInvitations = await unitOfWork.Repository<EventInvitation>().GetAll()
+                .Where(eventInvitation => eventGuest.EventInvitations.Contains(eventInvitation.Id)).ToListAsync();
+
+            var model = eventInvitations.Select(eventInvitation => new EventInvitationModel()
+            {
+                EventInvitationId = eventInvitation.Id,
+                Description = eventInvitation.Description,
+                Name = eventInvitation.Name,
+                EventGuestInvitations = eventGuestInvitations.Where(eventGuestInvitation =>
+                        eventGuestInvitation.EventInvitationId == eventInvitation.Id)
+                    .Select(eventGuestInvitation =>
+                        new EventGuestInvitationModel()
+                        {
+                            MaxGuests = eventGuestInvitation.MaxGuests,
+                            Code = eventGuestInvitation.Code,
+                            EventGuestInvitationId = eventGuestInvitation.Id,
+                            Rsvps = eventGuestInvitationRsvps.Where(eventGuestInvitationRsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id))
+                                .OrderByDescending(eventGuestInvitationRsvp => eventGuestInvitationRsvp.DateCreated)
+                                .Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel()
+                                {
+                                    Response = eventGuestInvitationRsvp.Response,
+                                    GuestNames = eventGuestInvitationRsvp.GuestNames,
+                                    DateCreated = eventGuestInvitationRsvp.DateCreated,
+                                    EventGuestInvitationRsvpId = eventGuestInvitationRsvp.Id,
+                                })
+                        })
+            });
+                
+            return Ok(new OkResponse<IEnumerable<EventInvitationModel>>(string.Empty) { Data = model });
         }
 
         [HttpPost]

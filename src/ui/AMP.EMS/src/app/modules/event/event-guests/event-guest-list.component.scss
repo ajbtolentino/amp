@@ -12,23 +12,18 @@
     }
 
     &.status-awaiting-response {
-        background: #ECCFFF;
-        color: #694382;
+        background: #B3E5FC;
+        color: #23547B;
     }
 
     &.status-responded {
-        background: #B3E5FC;
-        color: #23547B;
+        background: #C8E6C9;
+        color: #256029;
     }
 
     &.status-ACCEPT {
         background: #C8E6C9 !important;
         color: #256029 !important;
-    }
-
-    &.status-.no-response {
-        background: #B3E5FC;
-        color: #23547B;
     }
 
     &.status-DECLINE {

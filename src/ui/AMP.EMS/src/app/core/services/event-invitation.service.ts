@@ -2,6 +2,7 @@ import { lastValueFrom, Observable } from 'rxjs';
 import { EventInvitation } from '../models/event-invitation';
 import { BaseApiService } from './base.api.service';
 import { Injectable } from '@angular/core';
+import { Guest } from '../models/guest';
 
 @Injectable({
     providedIn: 'root'
@@ -11,8 +12,12 @@ export class EventInvitationService extends BaseApiService {
         return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventinvitation`, { headers: this.headers }));
     }
 
-    get = async (id: string | undefined | null = null) => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventinvitation/${id}`, { headers: this.headers }));
+    get = (id: string): Observable<EventInvitation> => {
+        return this.httpGet(`api/eventinvitation/${id}`);
+    }
+
+    getGuests = (id: string): Observable<Guest[]> => {
+        return this.httpGet(`api/eventinvitation/${id}/guests`);
     }
 
     add = async (invitation: EventInvitation) => {

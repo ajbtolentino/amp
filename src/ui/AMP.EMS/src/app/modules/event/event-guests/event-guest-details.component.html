@@ -56,6 +56,14 @@
 
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
+                    <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
+                        <label htmlFor="lastName">Role</label>
+                        <p-multiSelect *ngIf="!eventRoles.loading && !eventGuest.loading" placeholder="Select Role"
+                            [options]="eventRoles.value" optionLabel="name" optionValue="id"
+                            [loading]="eventRoles.loading" [(ngModel)]="eventGuest.value!.eventGuest.eventGuestRoles" />
+
+                        <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>
+                    </div>
                     <div class="field col-12 md:col-6"
                         *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
                         <label htmlFor="lastName">Invitations</label>
@@ -67,15 +75,49 @@
 
                         <p-skeleton *ngIf="eventInvitations.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
-                        <label htmlFor="lastName">Role</label>
-                        <p-multiSelect *ngIf="!eventRoles.loading && !eventGuest.loading" placeholder="Select Role"
-                            [options]="eventRoles.value" optionLabel="name" optionValue="id"
-                            [loading]="eventRoles.loading" [(ngModel)]="eventGuest.value!.eventGuest.eventGuestRoles" />
-
-                        <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>
-                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="eventGuest?.value?.eventGuest?.id">
+            <div class="card" *ngIf="eventGuestInvitations$ | withStatus | async as eventInvitations">
+                <h5>RSVP</h5>
+                <p-table [value]="eventInvitations!.value!" dataKey="id" [loading]="eventInvitations.loading">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Invitation</th>
+                            <th>Response</th>
+                            <th>Link</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-eventGuestInvitation>
+                        <tr>
+                            <td>
+                                {{eventGuestInvitation.name}}
+                            </td>
+                            <td>
+                                <span *ngIf="!eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response"
+                                    class="invitation-badge status-no-response">None</span>
+                                <span *ngIf="eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response"
+                                    [class]="'invitation-badge status-' +eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response">{{eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response}}</span>
+                            </td>
+                            <td>
+                                <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
+                                    class="p-button-rounded p-button-text"></a>
+                                <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
+                                    class="p-button-rounded p-button-text" target="_blank"
+                                    routerLink="/invitation/{{eventGuestInvitation.eventGuestInvitations[0].code}}"></a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [colSpan]="3">
+                                No invitations found
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </div>
         </div>
     </div>

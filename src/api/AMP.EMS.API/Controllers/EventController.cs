@@ -71,16 +71,34 @@ namespace AMP.EMS.API.Controllers
                 Name = eventInvitation.Name,
                 Description = eventInvitation.Description,
                 EventInvitationId = eventInvitation.Id,
-                EventGuestInvitations = eventGuestInvitations.Select(eventGuestInvitation => new EventGuestInvitationModel
-                {
-                    EventGuestInvitationId = eventGuestInvitation.Id,
-                    MaxGuests = eventGuestInvitation.MaxGuests,
-                    Code=eventGuestInvitation.Code,
-                    Rsvps = MapEventGuestInvitationRsvps(eventGuestInvitation, eventGuestInvitationRsvps)
-                })
+                EventGuestInvitations = MapEventGuestInvitations(eventInvitation, eventGuests, eventGuestInvitations, eventGuestInvitationRsvps)
             });
             
             return Ok(new OkResponse<IEnumerable<EventInvitationModel>>(string.Empty) { Data = model });
+        }
+
+        private IEnumerable<EventGuestInvitationModel> MapEventGuestInvitations(EventInvitation eventInvitation, IEnumerable<EventGuest> eventGuests,
+            IEnumerable<EventGuestInvitation> eventGuestInvitations, IEnumerable<EventGuestInvitationRsvp > eventGuestInvitationRsvps)
+        {
+            foreach (var eventGuest in eventGuests)
+            {
+                foreach (var eventGuestInvitationId in eventGuest.EventGuestInvitations)
+                {
+                    var eventGuestInvitation = eventGuestInvitations.FirstOrDefault(eventGuestInvitation => eventInvitation.Id == eventGuestInvitation.EventInvitationId 
+                        && eventGuestInvitationId == eventGuestInvitation.Id);
+                    
+                    if(eventGuestInvitation == null) continue;
+                    if(!eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId)) continue;
+                    
+                    yield return new EventGuestInvitationModel
+                    {
+                        EventGuestInvitationId = eventGuestInvitation.Id,
+                        MaxGuests = eventGuestInvitation.MaxGuests,
+                        Code = eventGuestInvitation.Code,
+                        Rsvps = MapEventGuestInvitationRsvps(eventGuestInvitation, eventGuestInvitationRsvps)
+                    };
+                }
+            }
         }
 
         [HttpPost]
@@ -125,7 +143,6 @@ namespace AMP.EMS.API.Controllers
                 .Where(guest => eventGuests.Any(eventGuest => eventGuest.GuestId == guest.Id)).ToListAsync();
 
             var eventInvitationIds = eventGuests.SelectMany(eventGuest => eventGuest.EventInvitations);
-            var eventGuestInvitationIds = eventGuests.SelectMany(eventGuest => eventGuest.EventGuestInvitations);
             
             var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll()
                 .Where(eventGuestInvitation => eventInvitationIds.Contains(eventGuestInvitation.EventInvitationId)).ToListAsync();
@@ -169,7 +186,8 @@ namespace AMP.EMS.API.Controllers
             IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationsRsvps)
         {
             return eventGuestInvitations.Where(eventGuestInvitation =>
-                    eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId))
+                    eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId) &&
+                    eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
                 .Select(eventGuestInvitation => new EventGuestInvitationModel
                 {
                     EventGuestInvitationId = eventGuestInvitation.Id,
@@ -183,7 +201,7 @@ namespace AMP.EMS.API.Controllers
             EventGuestInvitation eventGuestInvitation,
             IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
         {
-            return eventGuestInvitationRsvps
+            return eventGuestInvitationRsvps.Where(eventGuestInvitationRsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id))
                 .Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel
                 {
                     EventGuestInvitationRsvpId = eventGuestInvitationRsvp.Id,

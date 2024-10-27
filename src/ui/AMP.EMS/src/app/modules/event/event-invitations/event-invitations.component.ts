@@ -93,7 +93,7 @@ export class EventInvitationsComponent implements OnInit {
     return eventInvitationInfo.eventGuestInvitations?.reduce((a, b) => a + (b.maxGuests ?? 0), 0) || 0;
   }
 
-  getTotalConfirmed = (eventInvitationInfo: EventInvitationInfo): number => {
+  getTotalAccepted = (eventInvitationInfo: EventInvitationInfo): number => {
     let total = 0;
 
     for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {

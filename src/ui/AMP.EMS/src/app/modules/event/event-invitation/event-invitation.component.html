@@ -14,7 +14,7 @@
 <div class="grid">
     <div class="col-12 ">
         <div class="card shadow-2">
-            <h5>Event Invitation Details</h5>
+            <h5>Invitation Details</h5>
 
             <div class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-6">
@@ -25,6 +25,61 @@
                     <label htmlFor="description">Description</label>
                     <input pInputText id="description" type="text" [(ngModel)]="eventInvitation.description" />
                 </div>
+
+                <ng-container *ngIf="eventInvitation.id">
+                    <div class="col-12" *ngIf="eventGuests | withStatus | async as eventGuests">
+                        <h5>Guests</h5>
+                        <p-table [value]="eventGuests!.value!" dataKey="id" [loading]="eventGuests.loading"
+                            [showLoader]="false">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Max Guests</th>
+                                    <th>Response</th>
+                                    <th>Link</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-eventGuest>
+                                <tr>
+                                    <td>
+                                        {{eventGuest.firstName}} {{eventGuest.lastName}}
+                                    </td>
+                                    <td>
+                                        {{eventGuest.eventGuestInvitations[0].maxGuests}}
+                                    </td>
+                                    <td>
+                                        <span *ngIf="eventGuest.eventGuestInvitations[0]?.rsvps?.length"
+                                            [class]="'invitation-badge status-' +eventGuest.eventGuestInvitations[0].rsvps[0]?.response">{{eventGuest.eventGuestInvitations[0].rsvps[0]?.response}}</span>
+                                        <span *ngIf="!eventGuest.eventGuestInvitations[0]?.rsvps?.length"
+                                            class="invitation-badge status-new">New</span>
+                                    </td>
+                                    <td>
+                                        <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
+                                            class="p-button-rounded p-button-text"></a>
+                                        <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
+                                            class="p-button-rounded p-button-text" target="_blank"
+                                            routerLink="/invitation/{{eventGuest.eventGuestInvitations[0].code}}"></a>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td><p-skeleton></p-skeleton></td>
+                                    <td><p-skeleton></p-skeleton></td>
+                                    <td><p-skeleton></p-skeleton></td>
+                                    <td><p-skeleton></p-skeleton></td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [colSpan]="3">
+                                        No guests found
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </ng-container>
             </div>
         </div>
 
@@ -33,10 +88,9 @@
                 <p-tabPanel header="Template" class="line-height-3 m-0">
                     <div [style]="{height: '100vh !important' , overflow: 'auto'}">
                         <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{
-                            onSubmit: onRsvpSubmit,
-                            eventGuestInvitation: {
-                                eventGuest: {guest: { firstName: 'First Name', lastName: 'Last Name'},maxGuests: 3
-                                }}}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
+                                guest: { firstName: 'First Name', lastName: 'Last Name'},
+                                eventGuestInvitation: { maxGuests: 3},
+                                onSubmit: onRsvpSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">

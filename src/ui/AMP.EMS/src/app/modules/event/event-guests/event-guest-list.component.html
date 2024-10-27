@@ -51,22 +51,20 @@
                                 <p-sortIcon field="maxGuests"></p-sortIcon>
                             </div>
                         </th>
-                        <th pSortableColumn="role">
-                            <div class="flex justify-content-between align-items-center">
+                        <th>
+                            <div class="flex justify-content-center">
                                 Role
-                                <p-sortIcon field="role"></p-sortIcon>
                             </div>
                         </th>
-                        <th pSortableColumn="responded">
-                            <div class="flex justify-content-between align-items-center">
+                        <th>
+                            <div class="flex justify-content-center">
                                 Status
-                                <p-sortIcon field="responded"></p-sortIcon>
                             </div>
                         </th>
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="loadingbody">
+                <ng-template pTemplate=" loadingbody">
                     <tr>
                         <td></td>
                         <td><p-skeleton /></td>
@@ -110,16 +108,9 @@
                         </td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="rowexpansion" let-eventGuest>
-                    <tr>
-                        <td colspan="7">
-
-                        </td>
-                    </tr>
-                </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
-                        <td [colSpan]="4">
+                        <td [colSpan]="7">
                             No records found
                         </td>
                     </tr>

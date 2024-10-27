@@ -27,11 +27,11 @@ namespace AMP.EMS.API.Controllers
 
             ArgumentNullException.ThrowIfNull(eventGuestInvitation);
             
-            var eventGuest = await unitOfWork.Repository<EventGuest>().GetAll().AsNoTracking().FirstOrDefaultAsync(eventGuest => eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId));
+            var eventGuest = await unitOfWork.Repository<EventGuest>().GetAll().AsNoTracking().FirstOrDefaultAsync(eventGuest => eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id));
             
             ArgumentNullException.ThrowIfNull(eventGuest);
             
-            var guest = await unitOfWork.Repository<Guest>().GetAll().AsNoTracking().FirstOrDefaultAsync(guest => guest.Id == eventGuest.GuestId);
+            var guest = await unitOfWork.Repository<Guest>().GetAll().AsNoTracking().FirstOrDefaultAsync(g => g.Id == eventGuest.GuestId);
             
             ArgumentNullException.ThrowIfNull(guest);
             
