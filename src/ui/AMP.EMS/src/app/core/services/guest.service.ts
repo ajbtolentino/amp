@@ -1,22 +1,49 @@
-import { lastValueFrom } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { Guest } from '../models/guest';
+import { lastValueFrom, Observable } from 'rxjs';
+import { BaseApiService } from './base.api.service';
+import { EventGuestInvitationRsvp } from '../models/event-guest-invitation-rsvp';
+import { EventGuestInvitation } from '../models/event-guest-invitation';
 
-import { BaseService } from './base.service';
+@Injectable({
+  providedIn: 'root'
+})
+export class GuestService extends BaseApiService {
+  get = (id: string): Observable<{ guest: Guest, guestInvitations: EventGuestInvitation[] }> => {
+    return this.httpGet<{ guest: Guest, guestInvitations: EventGuestInvitation[] }>(`api/guest/${id}`);
+  }
 
-export class GuestService extends BaseService {
-    getAll = async () => {
-        return await lastValueFrom(this.http.get<any>(`${this.API_URL}/api/guest`, { headers: this.headers }));
-    }
+  getAll = (): Observable<Guest[]> => {
+    return this.httpGet<Guest[]>(`api/guest/`);
+  }
 
-    add = async (invitation: Guest) => {
-        return await lastValueFrom(this.http.post<any>(`${this.API_URL}/api/guest`, invitation, { headers: this.headers }));
-    }
+  add = (guest: Guest, eventRoleIds: string[], invitationIds: string[]): Observable<Guest> => {
+    return this.httpPost<Guest>(`api/guest`, {
+      eventId: guest.eventId,
+      ...guest,
+      eventRoleIds: eventRoleIds,
+      invitationIds: invitationIds
+    });
+  }
 
-    update = async (invitation: Guest) => {
-        return await lastValueFrom(this.http.put<any>(`${this.API_URL}/api/guest/${invitation.id}`, invitation, { headers: this.headers }));
-    }
+  rsvp = (id: string, eventInvitationId: string, rsvp: EventGuestInvitationRsvp): Observable<EventGuestInvitationRsvp> => {
+    return this.httpPost(`api/guest/${id}/rsvp/${eventInvitationId}`, rsvp);
+  }
 
-    delete = async (id: string) => {
-        return await lastValueFrom(this.http.delete<any>(`${this.API_URL}/api/guest/${id}`, { headers: this.headers }));
-    }
+  update = (guest: Guest, eventRoleIds: string[], invitationIds: string[]): Observable<Guest> => {
+    return this.httpPut(`api/guest/${guest.id}`, {
+      eventId: guest.eventId,
+      ...guest,
+      eventRoleIds: eventRoleIds,
+      invitationIds: invitationIds
+    });
+  }
+
+  delete = (id: string): Observable<Guest> => {
+    return this.httpDelete(`api/guest/${id}`);
+  }
+
+  deleteSelected = async (ids: string[]) => {
+    return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/guest`, { headers: this.headers, body: ids }));
+  }
 }

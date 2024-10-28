@@ -1,12 +1,13 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: UI Workflow
+name: UI Build Deploy
 
 on:
   push:
     paths: 
       - 'src/ui/AMP.EMS/**'
+      - '.github/workflows/ui_workfow.yml'
   workflow_dispatch:
 
 jobs:
@@ -32,6 +33,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
+    - name: Make envfile
+      uses: SpicyPizza/create-envfile@v2.0
+      with:
+        envkey_IDP_AUTHORITY_HTTPS_URL: ${{ vars.IDP_AUTHORITY_HTTPS_URL }}
+        envkey_EMS_SPA_APIURL: ${{ vars.EMS_SPA_APIURL }}
+        envkey_EMS_SPA_CLIENTID: ${{ vars.EMS_SPA_CLIENTID }}
+        envkey_EMS_SPA_CLIENTSCOPE: ${{ vars.EMS_SPA_CLIENTSCOPE }}
+        directory: ./src/ui/AMP.EMS/
+        file_name: .env
     - run: npm install
       working-directory: ./src/ui/AMP.EMS
     - run: npm run build -prod

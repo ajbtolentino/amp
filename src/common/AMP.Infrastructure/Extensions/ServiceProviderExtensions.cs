@@ -1,7 +1,18 @@
+using System.Reflection;
+using System.Web;
 using AMP.Core.Repository;
+using AMP.Infrastructure.Configurations;
 using AMP.Infrastructure.Decorators;
+using AMP.Infrastructure.Entity;
+using AMP.Infrastructure.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Driver;
 
 namespace AMP.Infrastructure.Extensions;
 
@@ -19,5 +30,43 @@ public static class ServiceProviderExtensions
 
             return new UnitOfWorkDecorator(unitOfWork, logger);
         });
+    }
+
+    public static IServiceCollection AddDbContext<TDbContext>(this IServiceCollection services, IConfigurationManager configurationManager)
+        where TDbContext : DbContext
+    {
+        var dbType = configurationManager.GetValue<DatabaseType>($"{nameof(DatabaseConfiguration)}:{nameof(DatabaseConfiguration.Type)}");
+        var connectionString = configurationManager.GetConnectionString("DefaultConnection")!;
+        
+        switch (dbType)
+        {
+            case DatabaseType.Sqlite:
+                services.AddDbContext<TDbContext>(options => options.UseSqlite(connectionString));
+                break;
+            case DatabaseType.MongoDb:
+                BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+                var client = new MongoClient(connectionString);
+                services.AddDbContext<TDbContext>(options => options.UseMongoDB(client, client.Settings.ApplicationName));
+
+                break;
+        }
+
+        services.AddScoped<DbContext, TDbContext>();
+
+        return services;
+    }
+
+    public static void Migrate<TDbContext>(this IServiceProvider serviceProvider, IConfigurationManager configurationManager) where TDbContext : DbContext
+    {
+        var dbType = configurationManager.GetValue<DatabaseType>($"{nameof(DatabaseConfiguration)}:{nameof(DatabaseConfiguration.Type)}");
+
+        if (dbType != DatabaseType.MongoDb)
+        {
+            using var scope = serviceProvider.CreateScope();
+            var dataContext = scope.ServiceProvider.GetRequiredService<TDbContext>();
+
+            if (dataContext.Database.GetPendingMigrations().Any())
+                dataContext.Database.Migrate();
+        }
     }
 }

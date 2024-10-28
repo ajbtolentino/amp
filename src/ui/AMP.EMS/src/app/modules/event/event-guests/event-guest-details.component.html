@@ -1,0 +1,124 @@
+<ng-container *ngIf="eventGuest$ | withStatus | async as eventGuest">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    (click)="save(eventGuest.value!)"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <h5>Guest Details</h5>
+
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="firstName">First Name</label>
+                        <input pInputText *ngIf="!eventGuest.loading" id="title" type="text"
+                            [(ngModel)]="eventGuest.value?.guest!.firstName"
+                            [value]="eventGuest.value?.guest?.firstName" />
+
+                        <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="lastName">Last Name</label>
+                        <input pInputText *ngIf="!eventGuest.loading" id="lastName" rows="1" type="text"
+                            [(ngModel)]="eventGuest.value?.guest!.lastName"
+                            [value]="eventGuest.value?.guest?.lastName" />
+
+                        <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="lastName">Nickname</label>
+                        <input pInputText *ngIf="!eventGuest.loading" id="nickName" rows="1" type="text"
+                            [(ngModel)]="eventGuest.value?.guest!.nickName"
+                            [value]="eventGuest.value?.guest!.nickName" />
+
+                        <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="lastName">Phone Number</label>
+                        <input pInputText *ngIf="!eventGuest.loading" id="phoneNumber" rows="1" type="text"
+                            [(ngModel)]="eventGuest.value?.guest!.phoneNumber"
+                            [value]="eventGuest.value?.guest!.phoneNumber" />
+
+                        <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="maxGuests">Max # of Guests</label>
+                        <input pInputText *ngIf="!eventGuest.loading" id="maxGuests" rows="1" type="text"
+                            [(ngModel)]="eventGuest.value!.eventGuest!.maxGuests"
+                            [value]="eventGuest.value?.eventGuest?.maxGuests" />
+
+                        <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
+                        <label htmlFor="lastName">Role</label>
+                        <p-multiSelect *ngIf="!eventRoles.loading && !eventGuest.loading" placeholder="Select Role"
+                            [options]="eventRoles.value" optionLabel="name" optionValue="id"
+                            [loading]="eventRoles.loading" [(ngModel)]="eventGuest.value!.eventGuest.eventGuestRoles" />
+
+                        <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6"
+                        *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
+                        <label htmlFor="lastName">Invitations</label>
+                        <p-multiSelect *ngIf="!eventInvitations.loading && !eventGuest.loading" optionLabel="name"
+                            optionValue="eventInvitationId" placeholder="Select Invitations"
+                            [options]="eventInvitations.value"
+                            [loading]="eventInvitations.loading  && eventGuest.loading" optionLabel="name"
+                            [(ngModel)]="eventGuest.value!.eventGuest.eventInvitations" />
+
+                        <p-skeleton *ngIf="eventInvitations.loading"></p-skeleton>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" *ngIf="eventGuest?.value?.eventGuest?.id">
+            <div class="card" *ngIf="eventGuestInvitations$ | withStatus | async as eventInvitations">
+                <h5>RSVP</h5>
+                <p-table [value]="eventInvitations!.value!" dataKey="id" [loading]="eventInvitations.loading">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Invitation</th>
+                            <th>Response</th>
+                            <th>Link</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-eventGuestInvitation>
+                        <tr>
+                            <td>
+                                {{eventGuestInvitation.name}}
+                            </td>
+                            <td>
+                                <span *ngIf="!eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response"
+                                    class="invitation-badge status-no-response">None</span>
+                                <span *ngIf="eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response"
+                                    [class]="'invitation-badge status-' +eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response">{{eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response}}</span>
+                            </td>
+                            <td>
+                                <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
+                                    class="p-button-rounded p-button-text"></a>
+                                <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
+                                    class="p-button-rounded p-button-text" target="_blank"
+                                    routerLink="/invitation/{{eventGuestInvitation.eventGuestInvitations[0].code}}"></a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [colSpan]="3">
+                                No invitations found
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</ng-container>

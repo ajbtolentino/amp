@@ -7,6 +7,11 @@ using AMP.Infrastructure.Extensions;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.HttpLogging;
 using System.Text.Json.Serialization;
+using AMP.Infrastructure.Enums;
+using MongoDB.Bson.Serialization;
+using AMP.Infrastructure.Entity;
+using AMP.EMS.API.Core.Entities;
+using MongoDB.Bson;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +38,10 @@ builder.Services.AddCors();
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>
-   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+{
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -69,8 +77,9 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EMSDbContext>(options => options.UseSqlite(config.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<DbContext, EMSDbContext>();
+builder.Services.AddDbContext<EMSDbContext>(config);
+
+builder.Services.AddHttpContextAccessor();
 
 //Add Unit of Work with Decorator
 builder.Services.ConfigureUnitOfWork<EFUnitOfWork>();
@@ -86,12 +95,7 @@ app.UseRequestLogging();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-// migrate any database changes on startup (includes initial db creation)
-using (var scope = app.Services.CreateScope())
-{
-    var dataContext = scope.ServiceProvider.GetRequiredService<EMSDbContext>();
-    dataContext.Database.Migrate();
-}
+app.Services.Migrate<EMSDbContext>(config);
 
 //Add Middleware
 app.UseMiddleware<RequestPipelineMiddleware>();

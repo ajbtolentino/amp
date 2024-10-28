@@ -1,154 +1,120 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AuthConfigModule } from './core/auth-config.module';
-import { UnauthorizedComponent } from './shared/unauthorized/unauthorized.component';
-import { HomeComponent } from './features/home/home.component';
-import { ForbiddenComponent } from './shared/forbidden/forbidden.component';
-import { NavigationComponent } from './shared/navigation/navigation.component';
-import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { authInterceptor, autoLoginPartialRoutesGuard, LogLevel, provideAuth } from 'angular-auth-oidc-client';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-
-import { AvatarModule } from 'primeng/avatar';
-import { AvatarGroupModule } from 'primeng/avatargroup';
-import { ButtonModule } from 'primeng/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CalendarModule } from 'primeng/calendar';
-import { ContextMenuModule } from 'primeng/contextmenu';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { MenubarModule } from 'primeng/menubar';
-import { MenuModule } from 'primeng/menu';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { ToastModule } from 'primeng/toast';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
-
+import { AppComponent } from '../app/app.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { EventService } from './core/services/event.service';
-import { FormsModule } from '@angular/forms';
-import { EventDetailsComponent } from './features/event-details/event-details.component';
-import { EventListComponent } from './features/event-list/event-list.component';
-import { InvitationDetailsComponent } from './features/invitation-details/invitation-details.component';
-import { InvitationService } from './core/services/invitation.service';
-import { GuestListComponent } from './features/guest-list/guest-list.component';
-import { GuestService } from './core/services/guest.service';
+import { EventService } from '../app/core/services/event.service';
+import { EventInvitationService as EventInvitationService } from './core/services/event-invitation.service';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
+import { environment } from '../environments/environment';
+import { forwardRef, NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppLayoutModule } from '../app/layout/app.layout.module';
+import { EventTypeService } from '../app/core/services/event-type.service';
+import { EventsModule } from '../app/modules/events/events.module';
+import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
+import { EventsLayoutComponent } from '../app/layout/events-layout/events-layout.component';
+import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './modules/event/event-guest-invitation/event-guest-invitation-rsvp.component';
+import { provideDynamicHooks } from 'ngx-dynamic-hooks';
+import { CodeEditorModule } from '@ngstack/code-editor';
 
-import { environment } from './../environments/environment';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+import { ToastModule } from 'primeng/toast';
+import { DefaultComponent } from './modules/default/default.component';
+import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
+import { Button } from 'primeng/button';
+import { RadioButton } from 'primeng/radiobutton';
+import { SharedModule } from './modules/shared.module';
+import { EventGuestService } from './core/services/event-guest.service';
+import { EventGuestInvitationService } from './core/services/event-guest-invitation.service';
+import { RsvpService } from './core/services/rsvp.service';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    UnauthorizedComponent,
-    HomeComponent,
-    ForbiddenComponent,
-    NavigationComponent,
-    EventDetailsComponent,
-    EventListComponent,
-    InvitationDetailsComponent,
-    GuestListComponent,
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  imports: [
-    AvatarModule,
-    AvatarGroupModule,
-    AppRoutingModule,
-    AuthConfigModule,
-    ButtonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    CalendarModule,
-    ContextMenuModule,
-    ConfirmDialogModule,
-    DialogModule,
-    DropdownModule,
-    FormsModule,
-    InputTextModule,
-    InputNumberModule,
-    MenubarModule,
-    MenuModule,
-    MultiSelectModule,
-    ProgressBarModule,
-    RadioButtonModule,
-    TableModule,
-    ToastModule,
-    ToolbarModule
-  ],
-  providers: [provideHttpClient(withInterceptors([authInterceptor()])),
-  provideAuth({
-    config: {
-      triggerAuthorizationResultEvent: true,
-      forbiddenRoute: '/forbidden',
-      unauthorizedRoute: '/unauthorized',
-      logLevel: LogLevel.Debug,
-      historyCleanupOff: false,
-      authority: environment.IDP_AUTHORITY_HTTPS_URL,
-      redirectUrl: window.location.origin,
-      postLogoutRedirectUri: window.location.origin,
-      clientId: environment.EMS_SPA_CLIENTID,
-      scope: environment.EMS_SPA_CLIENTSCOPE,
-      responseType: 'code',
-      silentRenew: true,
-      useRefreshToken: true,
-    },
-  }),
-  provideRouter(
-    [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'home'
-      },
-      {
-        path: 'home',
-        component: HomeComponent
-      },
-      {
-        path: 'events',
-        component: EventListComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'events/:id',
-        component: EventDetailsComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'guests',
-        component: GuestListComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'invitations/:id',
-        component: InvitationDetailsComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'forbidden',
-        component: ForbiddenComponent,
-        canActivate: [autoLoginPartialRoutesGuard],
-      },
-      {
-        path: 'unauthorized',
-        component: UnauthorizedComponent
-      },
+    imports: [
+        SharedModule,
+        BrowserAnimationsModule,
+        AppLayoutModule,
+        DividerModule,
+        EventsModule,
+        ToastModule,
+        RouterOutlet,
+        ConfirmDialogModule,
+        CodeEditorModule.forRoot(),
     ],
-    withEnabledBlockingInitialNavigation()
-  ),
-    EventService,
-    InvitationService,
-    GuestService,
-    MessageService,
-    ConfirmationService,],
-  bootstrap: [AppComponent]
+    providers: [
+        provideHttpClient(withInterceptors([authInterceptor(), apiResponseInterceptor])),
+        provideAuth({
+            config: {
+                triggerAuthorizationResultEvent: true,
+                forbiddenRoute: '/forbidden',
+                unauthorizedRoute: '/unauthorized',
+                logLevel: LogLevel.Debug,
+                historyCleanupOff: false,
+                authority: environment.IDP_AUTHORITY_HTTPS_URL,
+                redirectUrl: window.location.origin,
+                postLogoutRedirectUri: window.location.origin,
+                clientId: environment.EMS_SPA_CLIENTID,
+                scope: environment.EMS_SPA_CLIENTSCOPE,
+                responseType: 'code',
+                silentRenew: true,
+                useRefreshToken: true,
+            },
+        }),
+        provideDynamicHooks({
+            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, Button, RadioButton],
+            options: {
+                sanitize: false
+            }
+        }),
+        provideRouter(
+            [
+                {
+                    path: '',
+                    pathMatch: 'full',
+                    children: [
+                        {
+                            path: '',
+                            component: DefaultComponent
+                        }
+                    ]
+                },
+                {
+                    path: '',
+                    title: 'Events',
+                    loadChildren: () => import('../app/modules/events/events.module').then(m => m.EventsModule)
+                },
+                {
+                    path: 'event',
+                    title: 'Event',
+                    canActivate: [autoLoginPartialRoutesGuard],
+                    loadChildren: () => import('../app/modules/event/event.module').then(m => m.EventModule)
+                },
+                {
+                    path: 'invitation',
+                    title: 'Invitation',
+                    loadChildren: () => import('../app/modules/guests/guests.module').then(m => m.GuestModule)
+                },
+                {
+                    path: 'unauthorized',
+                    component: UnauthorizedComponent
+                },
+                { path: 'notfound', component: NotfoundComponent },
+                { path: '**', redirectTo: '/notfound' },
+            ],
+            withEnabledBlockingInitialNavigation()
+        ),
+        EventService,
+        EventGuestService,
+        EventGuestInvitationService,
+        EventInvitationService,
+        MessageService,
+        ConfirmationService,
+        RsvpService,
+        EventTypeService
+    ],
+    declarations: [AppComponent],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

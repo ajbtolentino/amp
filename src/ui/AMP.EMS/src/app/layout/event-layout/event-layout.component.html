@@ -1,0 +1,26 @@
+<div class="layout-wrapper" [ngClass]="containerClass" *ngIf="auth$ | withStatus | async as auth">
+    <app-event-topbar [eventId]="eventId"></app-event-topbar>
+
+    <div class="layout-sidebar">
+        <app-event-sidebar [eventId]="eventId"></app-event-sidebar>
+    </div>
+
+    <div class="layout-main-container">
+        <div class="layout-main" *ngIf="!auth.loading && auth.value?.isAuthenticated">
+            <div class="grid">
+                <div class="col-12">
+                    <app-breadcrumbs></app-breadcrumbs>
+                </div>
+            </div>
+            <router-outlet></router-outlet>
+        </div>
+        <div class="flex w-full h-full justify-content-center align-items-center" *ngIf="auth.loading">
+            <p-progressSpinner ariaLabel="loading" />
+        </div>
+        <app-footer></app-footer>
+    </div>
+
+    <app-unauthorized *ngIf="!auth.value?.isAuthenticated"></app-unauthorized>
+
+    <div class="layout-mask"></div>
+</div>

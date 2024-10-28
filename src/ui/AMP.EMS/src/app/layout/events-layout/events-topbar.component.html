@@ -1,0 +1,34 @@
+<div class="layout-topbar" *ngIf="auth$ | withStatus | async as auth">
+    <a class="layout-topbar-logo" routerLink="">
+        <span>EMS</span>
+    </a>
+
+    <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button"
+        (click)="layoutService.showProfileSidebar()">
+        <i class="pi pi-ellipsis-v"></i>
+    </button>
+
+    <div #topbarmenu class="layout-topbar-menu"
+        [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
+        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Events"
+            [routerLink]="'/events'">
+            <i class="pi pi-calendar"></i>
+            <span>Events</span>
+        </button>
+        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Edit Event"
+            routerLink="/events/settings">
+            <i class="pi pi-cog"></i>
+            <span>Edit Event</span>
+        </button>
+        <button *ngIf="auth.value?.isAuthenticated" (click)="logout()" class="p-link layout-topbar-button"
+            pTooltip="Logout">
+            <i class="pi pi-sign-out"></i>
+            <span>Logout</span>
+        </button>
+        <button *ngIf="!auth.value?.isAuthenticated" (click)="login()" class="p-link layout-topbar-button"
+            pTooltip="Login">
+            <i class="pi pi-sign-in"></i>
+            <span>Login</span>
+        </button>
+    </div>
+</div>

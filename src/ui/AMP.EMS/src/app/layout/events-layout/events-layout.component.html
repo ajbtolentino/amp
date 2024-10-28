@@ -1,0 +1,17 @@
+<div class="layout-wrapper" [ngClass]="containerClass" class="layout-static-inactive"
+    *ngIf="auth$ | withStatus | async as auth">
+    <app-events-topbar></app-events-topbar>
+
+    <div class="layout-main-container">
+        <div class="layout-main" *ngIf="!auth.loading && auth.value?.isAuthenticated">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="flex w-full h-full justify-content-center align-items-center" *ngIf="auth.loading">
+            <p-progressSpinner ariaLabel="loading" />
+        </div>
+    </div>
+
+    <app-unauthorized *ngIf="!auth.value?.isAuthenticated"></app-unauthorized>
+
+    <div class="layout-mask"></div>
+</div>
