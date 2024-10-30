@@ -14,7 +14,7 @@
                     <button *ngIf="isAuthenticated.value?.isAuthenticated" pButton pRipple label="Logout"
                         (click)="logout()" [loading]="isAuthenticated.loading!"
                         class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
-                    <button pButton pRipple label="Register"
+                    <button *ngIf="!isAuthenticated.value?.isAuthenticated" pButton pRipple label="Register"
                         class="p-button-rounded border-none ml-5 font-light line-height-2 bg-blue-500 text-white"></button>
                 </div>
             </div>

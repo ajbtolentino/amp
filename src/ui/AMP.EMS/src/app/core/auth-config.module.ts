@@ -1,21 +1,25 @@
 import { NgModule } from '@angular/core';
-import { AuthModule } from 'angular-auth-oidc-client';
+import { AuthModule, LogLevel } from 'angular-auth-oidc-client';
+import { environment } from '../../environments/environment';
 
 
 @NgModule({
     imports: [AuthModule.forRoot({
         config: {
-              authority: 'https://localhost:5443/',
-              redirectUrl: window.location.origin,
-              postLogoutRedirectUri: window.location.origin,
-              clientId: 'please-enter-clientId',
-              scope: 'please-enter-scopes', // 'openid profile offline_access ' + your scopes
-              responseType: 'code',
-              silentRenew: true,
-              useRefreshToken: true,
-              renewTimeBeforeTokenExpiresInSeconds: 30,
-          }
-      })],
+            forbiddenRoute: '/forbidden',
+            unauthorizedRoute: '/unauthorized',
+            logLevel: LogLevel.Debug,
+            authority: environment.IDP_AUTHORITY_HTTPS_URL,
+            redirectUrl: window.location.origin,
+            postLogoutRedirectUri: window.location.origin,
+            clientId: environment.EMS_SPA_CLIENTID,
+            scope: environment.EMS_SPA_CLIENTSCOPE,
+            responseType: 'code',
+            silentRenew: true,
+            useRefreshToken: true,
+            silentRenewUrl: environment.IDP_AUTHORITY_HTTPS_URL + "/connect/token"
+        },
+    })],
     exports: [AuthModule],
 })
-export class AuthConfigModule {}
+export class AuthConfigModule { }

@@ -1,10 +1,13 @@
 import { lastValueFrom, Observable } from 'rxjs';
 import { EventGuest } from '../models/event-guest';
-
 import { BaseApiService } from './base.api.service';
 import { Guest } from '../models/guest';
-import { EventGuestInvitationInfo, EventInvitationInfo } from '../models/event-invitation-info';
+import { EventInvitationInfo } from '../models/event-invitation-info';
+import { Injectable } from '@angular/core';
 
+@Injectable({
+    providedIn: 'root'
+})
 export class EventGuestService extends BaseApiService {
     get = (id: string): Observable<{ eventGuest: EventGuest, guest: Guest }> => {
         return this.httpGet(`api/eventguest/${id}`);

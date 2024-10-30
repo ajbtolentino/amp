@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { Component, OnInit, Signal } from '@angular/core';
+import { AuthenticatedResult, LoginResponse, OidcClientNotification, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
 import { lastValueFrom, Observable } from 'rxjs';
 
 @Component({
@@ -8,13 +8,13 @@ import { lastValueFrom, Observable } from 'rxjs';
   styles: ``
 })
 export class DefaultComponent implements OnInit {
-  isAuthenticated$: Observable<LoginResponse> = new Observable<LoginResponse>();
+  isAuthenticated$: Observable<AuthenticatedResult> = new Observable<AuthenticatedResult>();
 
   constructor(private oidcSecurityService: OidcSecurityService) {
   }
 
   ngOnInit(): void {
-    this.isAuthenticated$ = this.oidcSecurityService.checkAuth();
+    this.isAuthenticated$ = this.oidcSecurityService.isAuthenticated$;
   }
 
   login = () => {
