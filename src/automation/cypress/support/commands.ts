@@ -40,7 +40,6 @@ Cypress.Commands.add("login", (username: string, password: string) => {
                 cy.get("form").then(val => {
                     let redirectUrl = val.get(0).getElementsByTagName('input').namedItem('ReturnUrl')?.value;
                     let requestVerificationToken = val.get(0).getElementsByTagName('input').namedItem('__RequestVerificationToken')?.value;
-                    console.log(redirectUrl)
                     cy.request({
                         method: "POST",
                         url: `${Cypress.env('authUrl')}/Account/Login?RedirectUrl=${redirectUrl}`,
@@ -57,7 +56,6 @@ Cypress.Commands.add("login", (username: string, password: string) => {
                         },
                     },).then(response => {
                         const redirects = response?.redirects || [];
-                        console.log(response);
                         cy.visit(redirects[1].replace("302: ", ""));
                     })
                 });
