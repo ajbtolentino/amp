@@ -27,57 +27,40 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 Cypress.Commands.add("login", (username: string, password: string) => {
+
     cy.session(
         `login-${username}`,
         () => {
-            const log = Cypress.log({
-                displayName: "LOGIN",
-                message: [`🔐 Authenticating | ${username}`],
-                autoEnd: false,
-            });
-
-            log.snapshot("before");
-
             cy.visit("/");
             cy.contains("Login").click();
+
             cy.wait(3000);
 
-            const args = { username, password };
-
-            cy.origin("https://localhost:5443", { args }, ({ username, password }) => {
-                cy.get("#Username").type(username);
-                cy.get("#Password").type(password);
-                cy.get("form").submit();
-
+            cy.origin(Cypress.env('authUrl'), { args: { username, password } }, ({ username, password }) => {
+                cy.get("form").then(val => {
+                    let redirectUrl = val.get(0).getElementsByTagName('input').namedItem('ReturnUrl')?.value;
+                    let requestVerificationToken = val.get(0).getElementsByTagName('input').namedItem('__RequestVerificationToken')?.value;
+                    console.log(redirectUrl)
+                    cy.request({
+                        method: "POST",
+                        url: `${Cypress.env('authUrl')}/Account/Login?RedirectUrl=${redirectUrl}`,
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+                        },
+                        body: {
+                            ReturnUrl: redirectUrl,
+                            button: 'login',
+                            Username: username,
+                            Password: password,
+                            __RequestVerificationToken: requestVerificationToken
+                        },
+                    },).then(response => {
+                        const redirects = response?.redirects || [];
+                        console.log(response);
+                        cy.visit(redirects[1].replace("302: ", ""));
+                    })
+                });
             });
-
-
-            cy.wait(2000);
-
-            cy.contains("Get Started").should("be.visible");
-        },
-        {
-            validate: () => {
-                cy.window().its("cookies").invoke("getItem", "idsrv.session").should("exist");
-            },
-        }
-    );
-})
-
-Cypress.Commands.add("rewriteHeaders", () => {
-    cy.intercept("*", (req) =>
-        req.on("response", (res) => {
-            const setCookies = res.headers["set-cookie"]
-            res.headers["set-cookie"] = (
-                Array.isArray(setCookies) ? setCookies : [setCookies]
-            )
-                .filter((x) => x)
-                .map((headerContent) =>
-                    headerContent.replace(
-                        /samesite=(lax|strict)/gi,
-                        "secure; samesite=none"
-                    )
-                )
-        })
-    )
+        });
 })

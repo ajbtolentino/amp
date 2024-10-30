@@ -422,3 +422,4 @@ src/.DS_Store
 src/.DS_Store
 src/api/AMP.EMS.API/test
 .idea/
+src/automation/cypress.env.json

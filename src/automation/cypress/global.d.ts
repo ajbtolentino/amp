@@ -6,6 +6,5 @@ declare namespace Cypress {
          * Logs-in user by using UI
          */
         login(username: string, password: string): void;
-        rewriteHeaders(): void;
     }
 }
