@@ -5,7 +5,9 @@ namespace AMP.EMS.API.Core.Entities;
 
 public class EventGuestInvitationRsvp : FullAuditableEntity<Guid>
 {
+    public Guid EventGuestInvitationId { get; set; }
     public required RsvpResponse Response { get; set; }
     public string PhoneNumber { get; set; } = string.Empty;
-    public List<string> GuestNames { get; set; } = [];
+    public EventGuestInvitation? EventGuestInvitation { get; set; }
+    public ICollection<EventGuestInvitationRsvpItem> EventGuestInvitationRsvpItems { get; set; } = [];
 }

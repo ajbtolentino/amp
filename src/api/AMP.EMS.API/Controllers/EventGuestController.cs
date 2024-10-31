@@ -39,48 +39,16 @@ namespace AMP.EMS.API.Controllers
         [Route("{id:guid}/invitations")]
         public async Task<IActionResult> GetInvitations(Guid id)
         {
-            var eventGuest = await this.entityRepository.GetAll().FirstOrDefaultAsync(_ => _.Id == id);
+            var eventGuest = this.entityRepository.GetAll()
+                                        .Where(_ => _.Id == id)
+                                        .Include(_ => _.EventGuestInvitations)
+                                            .ThenInclude(_ => _.EventGuestInvitationRsvps)
+                                            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
+                                        .FirstOrDefault();
             
             ArgumentNullException.ThrowIfNull(eventGuest);
-            
-            var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll()
-                .Where(eventGuestInvitation =>
-                    eventGuest.EventInvitations.Contains(eventGuestInvitation.EventInvitationId) && eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
-                .ToListAsync();
-
-            var eventGuestInvitationRsvps = await unitOfWork.Repository<EventGuestInvitationRsvp>().GetAll()
-                .Where(eventGuestInvitationRsvp => eventGuestInvitations.Any(eventGuestInvitation => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id)))
-                .ToListAsync();
-            
-            var eventInvitations = await unitOfWork.Repository<EventInvitation>().GetAll()
-                .Where(eventInvitation => eventGuest.EventInvitations.Contains(eventInvitation.Id)).ToListAsync();
-
-            var model = eventInvitations.Select(eventInvitation => new EventInvitationModel()
-            {
-                EventInvitationId = eventInvitation.Id,
-                Description = eventInvitation.Description,
-                Name = eventInvitation.Name,
-                EventGuestInvitations = eventGuestInvitations.Where(eventGuestInvitation =>
-                        eventGuestInvitation.EventInvitationId == eventInvitation.Id)
-                    .Select(eventGuestInvitation =>
-                        new EventGuestInvitationModel()
-                        {
-                            MaxGuests = eventGuestInvitation.MaxGuests,
-                            Code = eventGuestInvitation.Code,
-                            EventGuestInvitationId = eventGuestInvitation.Id,
-                            Rsvps = eventGuestInvitationRsvps.Where(eventGuestInvitationRsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id))
-                                .OrderByDescending(eventGuestInvitationRsvp => eventGuestInvitationRsvp.DateCreated)
-                                .Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel()
-                                {
-                                    Response = eventGuestInvitationRsvp.Response,
-                                    GuestNames = eventGuestInvitationRsvp.GuestNames,
-                                    DateCreated = eventGuestInvitationRsvp.DateCreated,
-                                    EventGuestInvitationRsvpId = eventGuestInvitationRsvp.Id,
-                                })
-                        })
-            });
                 
-            return Ok(new OkResponse<IEnumerable<EventInvitationModel>>(string.Empty) { Data = model });
+            return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuest.EventGuestInvitations });
         }
 
         [HttpPost]
@@ -174,34 +142,34 @@ namespace AMP.EMS.API.Controllers
 
         private async Task UpdateEventGuestInvitations(EventGuest eventGuest, IEnumerable<Guid> eventInvitationIds)
         {
-            eventGuest.EventInvitations = [];
-
-            var existingEventInvitations = await unitOfWork.Repository<EventGuestInvitation>()
-                .GetAll().AsNoTracking().Where(eventGuestInvitation =>
-                    eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
-                .Select(eventGuestInvitation => eventGuestInvitation.EventInvitationId)
-                .ToListAsync();
-
-            var newEventInvitationIds = eventInvitationIds.Except(existingEventInvitations);
-
-            foreach (var eventInvitationId in newEventInvitationIds)
-            {
-                var eventGuestInvitation = await this.unitOfWork.Repository<EventGuestInvitation>().Add(new EventGuestInvitation
-                {
-                    Code = InvitationHelper.GenerateCode(),
-                    EventInvitationId = eventInvitationId,
-                    MaxGuests = eventGuest.MaxGuests
-                });
-                
-                eventGuest.EventGuestInvitations.Add(eventGuestInvitation.Id);    
-            }
-            
-            eventGuest.EventInvitations = eventInvitationIds.ToList();
+            // eventGuest.EventInvitations = [];
+            //
+            // var existingEventInvitations = await unitOfWork.Repository<EventGuestInvitation>()
+            //     .GetAll().AsNoTracking().Where(eventGuestInvitation =>
+            //         eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
+            //     .Select(eventGuestInvitation => eventGuestInvitation.EventInvitationId)
+            //     .ToListAsync();
+            //
+            // var newEventInvitationIds = eventInvitationIds.Except(existingEventInvitations);
+            //
+            // foreach (var eventInvitationId in newEventInvitationIds)
+            // {
+            //     var eventGuestInvitation = await this.unitOfWork.Repository<EventGuestInvitation>().Add(new EventGuestInvitation
+            //     {
+            //         Code = InvitationHelper.GenerateCode(),
+            //         EventInvitationId = eventInvitationId,
+            //         MaxGuests = eventGuest.MaxGuests
+            //     });
+            //     
+            //     eventGuest.EventGuestInvitations.Add(eventGuestInvitation.Id);    
+            // }
+            //
+            // eventGuest.EventInvitations = eventInvitationIds.ToList();
         }
 
         private static void UpdateEventGuestRoles(EventGuest eventGuest, IEnumerable<Guid> eventRoleIds)
         {
-            eventGuest.EventGuestRoles = eventRoleIds.ToList();
+            // eventGuest.EventGuestRoles = eventRoleIds.ToList();
         }
     }
 }

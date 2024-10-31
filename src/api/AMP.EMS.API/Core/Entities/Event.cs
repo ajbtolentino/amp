@@ -20,4 +20,10 @@ public class Event : FullAuditableEntity<Guid>
     public required DateTime StartDate { get; set; }
 
     public required DateTime EndDate { get; set; }
+    
+    public EventType? Type { get; set; }
+
+    public ICollection<EventInvitation> EventInvitations { get; set; } = [];
+    public ICollection<EventGuest> EventGuests { get; set; } = [];
+    public ICollection<EventRole> EventGuestRoles { get; set; } = [];
 }

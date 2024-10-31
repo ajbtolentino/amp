@@ -29,11 +29,10 @@ namespace AMP.EMS.API.Controllers
                 
                 var rsvpEntity = await this.unitOfWork.Repository<EventGuestInvitationRsvp>().Add(new EventGuestInvitationRsvp()
                 {
-                    Response = request.Response,
-                    GuestNames = request.GuestNames?.ToList() ?? []
+                    Response = request.Response
                 });
 
-                guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity.Id);
+                guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity);
 
                 await unitOfWork.SaveChangesAsync();
                 await unitOfWork.CommitTransactionAsync();

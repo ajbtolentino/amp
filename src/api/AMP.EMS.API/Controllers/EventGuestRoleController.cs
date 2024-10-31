@@ -7,14 +7,14 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventGuestRoleController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestRole, Guid>(unitOfWork)
+    public class EventGuestRoleController(IUnitOfWork unitOfWork) : ApiBaseController<EventRole, Guid>(unitOfWork)
     {
         public record EventGuestRoleRequest(Guid EventId, string Name, string Description);
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] EventGuestRoleRequest request)
         {
-            return await base.Post(new EventGuestRole
+            return await base.Post(new EventRole
             {
                 EventId = request.EventId,
                 Name = request.Name,

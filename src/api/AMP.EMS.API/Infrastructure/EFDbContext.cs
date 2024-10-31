@@ -16,6 +16,54 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Event>()
+            .HasMany(_ => _.EventInvitations)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Event>()
+            .HasMany(_ => _.EventGuests)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<Guest>()
+            .HasMany(_ => _.EventGuests)
+            .WithOne(_ => _.Guest)
+            .HasForeignKey(_ => _.GuestId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<EventGuest>()
+            .HasMany(_ => _.EventGuestRoles)
+            .WithOne(_ => _.EventGuest)
+            .HasForeignKey(_ => _.EventGuestId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<EventGuest>()
+            .HasMany(_ => _.EventGuestInvitations)
+            .WithOne(_ => _.EventGuest)
+            .HasForeignKey(_ => _.EventGuestId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<EventInvitation>()
+            .HasMany(_ => _.EventGuestInvitations)
+            .WithOne(_ => _.EventInvitation)
+            .HasForeignKey(_ => _.EventInvitationId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<EventGuestInvitation>()
+            .HasMany(_ => _.EventGuestInvitationRsvps)
+            .WithOne(_ => _.EventGuestInvitation)
+            .HasForeignKey(_ => _.EventGuestInvitationId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<EventGuestInvitationRsvp>()
+            .HasMany(_ => _.EventGuestInvitationRsvpItems)
+            .WithOne(_ => _.EventGuestInvitationRsvp)
+            .HasForeignKey(_ => _.EventGuestInvitationRsvpId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Event>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
@@ -31,6 +79,10 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
+        modelBuilder.Entity<EventGuestInvitationRsvpItem>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
         modelBuilder.Entity<EventGuestRole>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
@@ -39,6 +91,10 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
+        modelBuilder.Entity<EventRole>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
         modelBuilder.Entity<EventType>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
@@ -50,10 +106,12 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
 
     public DbSet<Event> Events { get; private set; }
     public DbSet<EventGuest> EventGuests { get; private set; }
-    public DbSet<EventGuestRole> EventGuestRoles { get; private set; }
     public DbSet<EventGuestInvitation> EventGuestInvitations { get; private set; }
-    public DbSet<EventGuestInvitationRsvp> EventGuestInvitationsRsvps { get; private set; }
+    public DbSet<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; private set; }
+    public DbSet<EventGuestInvitationRsvpItem> EventGuestInvitationsRsvpItems { get; private set; }
+    public DbSet<EventRole> EventGuestRoles { get; private set; }
     public DbSet<EventInvitation> EventInvitations { get; private set; }
+    public DbSet<EventRole> EventRoles { get; private set; }
     public DbSet<EventType> EventTypes { get; private set; }
     public DbSet<Guest> Guests { get; private set; }
 

@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.EMS.API.Helpers;
@@ -20,27 +19,18 @@ namespace AMP.EMS.API.Controllers
         [HttpGet]
         [Route("{code}/[action]")]
         [AllowAnonymous]
-        public async Task<IActionResult> Rsvp(string code)
+        public IActionResult Rsvp(string code)
         {
             var eventGuestInvitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                .Include(eventGuestInvitation => eventGuestInvitation.EventInvitation)
+                .Include(eventInvitation => eventInvitation.EventInvitation)
+                .Include(eventGuestInvitation => eventGuestInvitation.EventGuest)
+                    .ThenInclude(eventGuest => eventGuest.Guest)
                 .FirstOrDefault(guestInvitation => guestInvitation.Code == code);
 
             ArgumentNullException.ThrowIfNull(eventGuestInvitation);
-            
-            var eventGuest = await unitOfWork.Repository<EventGuest>().GetAll().AsNoTracking().FirstOrDefaultAsync(eventGuest => eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id));
-            
-            ArgumentNullException.ThrowIfNull(eventGuest);
-            
-            var guest = await unitOfWork.Repository<Guest>().GetAll().AsNoTracking().FirstOrDefaultAsync(g => g.Id == eventGuest.GuestId);
-            
-            ArgumentNullException.ThrowIfNull(guest);
-            
-            var eventInvitation = await unitOfWork.Repository<EventInvitation>().GetAll()
-                .FirstOrDefaultAsync(invitation => invitation.Id == eventGuestInvitation.EventInvitationId);
 
-            ArgumentNullException.ThrowIfNull(eventInvitation);
-            
-            return Ok(new OkResponse<RsvpResponse>(string.Empty){Data = new RsvpResponse(guest, eventGuestInvitation, eventInvitation)});
+            return Ok(new OkResponse<EventGuestInvitation>(string.Empty) { Data = eventGuestInvitation });
         }
 
         [HttpGet]

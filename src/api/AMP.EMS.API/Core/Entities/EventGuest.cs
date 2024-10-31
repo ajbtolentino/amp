@@ -8,7 +8,8 @@ public class EventGuest : FullAuditableEntity<Guid>
     public required Guid EventId { get; set; }
     public required Guid GuestId { get; set; }
     public required int MaxGuests { get; set; }
-    public List<Guid> EventGuestRoles { get; set; } = [];
-    public List<Guid> EventInvitations { get; set; } = [];
-    public List<Guid> EventGuestInvitations { get; set; } = [];
+    public Event? Event { get; set; }
+    public Guest? Guest { get; set; }
+    public ICollection<EventGuestInvitation> EventGuestInvitations { get; set; } = [];
+    public ICollection<EventGuestRole> EventGuestRoles { get; set; } = [];
 }
