@@ -14,7 +14,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
 
   return next(req).pipe(
     tap((httpEvent: HttpEvent<any>) => {
-      if (httpEvent.type === HttpEventType.Response) {
+      if (httpEvent.type === HttpEventType.Response && httpEvent.url?.includes("api")) {
         switch (req.method) {
           case "POST":
             notify(httpEvent.body?.message, httpEvent.ok);

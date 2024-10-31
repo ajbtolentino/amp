@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { AuthModule, LogLevel } from 'angular-auth-oidc-client';
+import { AbstractSecurityStorage, AuthModule, DefaultLocalStorageService, LogLevel } from 'angular-auth-oidc-client';
 import { environment } from '../../environments/environment';
 
 
@@ -20,6 +20,12 @@ import { environment } from '../../environments/environment';
             silentRenewUrl: environment.IDP_AUTHORITY_HTTPS_URL + "/connect/token"
         },
     })],
+    providers: [
+        {
+            provide: AbstractSecurityStorage,
+            useClass: DefaultLocalStorageService
+        }
+    ],
     exports: [AuthModule],
 })
 export class AuthConfigModule { }

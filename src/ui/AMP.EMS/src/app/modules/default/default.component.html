@@ -1,21 +1,27 @@
 <div class="surface-0 flex justify-content-center">
     <div id="home" class="landing-wrapper overflow-hidden"
-        *ngIf="isAuthenticated$ | withStatus | async as isAuthenticated">
+        *ngIf="{userData: userData$ | withStatus | async, isAuthenticated: isAuthenticated$ | withStatus | async, notification: notification$ | async} as auth">
         <div
             class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static mb-3">
+            <div class="align-items-center surface-0 flex-grow-1 justify-content-start hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
+                *ngIf="auth.isAuthenticated?.value?.isAuthenticated && auth.userData?.value?.userData?.name">
+                <h5 class="my-0">Welcome, {{auth.userData?.value?.userData?.name}}!</h5>
+            </div>
             <div class="align-items-center surface-0 flex-grow-1 justify-content-end hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
                 style="top:120px">
-
                 <div
                     class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
-                    <button *ngIf="!isAuthenticated.value?.isAuthenticated" pButton pRipple label="Login"
-                        (click)="login()" [loading]="isAuthenticated.loading!"
+                    <button *ngIf="!auth.isAuthenticated?.value?.isAuthenticated" pButton pRipple label="Login"
+                        (click)="login()" [loading]="auth.notification?.type === 1 || auth.notification?.type === 6"
                         class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
-                    <button *ngIf="isAuthenticated.value?.isAuthenticated" pButton pRipple label="Logout"
-                        (click)="logout()" [loading]="isAuthenticated.loading!"
+                    <button *ngIf="auth.isAuthenticated?.value?.isAuthenticated" pButton pRipple label="Logout"
+                        (click)="logout()" [loading]="auth.notification?.type === 1 || auth.notification?.type === 6"
                         class="p-button-text p-button-rounded border-none font-light line-height-2 text-blue-500"></button>
-                    <button *ngIf="!isAuthenticated.value?.isAuthenticated" pButton pRipple label="Register"
+                    <button
+                        *ngIf="!(auth.notification?.type === 1 || auth.notification?.type === 6) && !(auth.isAuthenticated?.value?.isAuthenticated && auth.userData?.value?.userData?.name)"
+                        pButton pRipple label="Register"
                         class="p-button-rounded border-none ml-5 font-light line-height-2 bg-blue-500 text-white"></button>
+
                 </div>
             </div>
         </div>

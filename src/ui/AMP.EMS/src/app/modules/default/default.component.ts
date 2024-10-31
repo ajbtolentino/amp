@@ -1,6 +1,6 @@
 import { Component, OnInit, Signal } from '@angular/core';
-import { AuthenticatedResult, LoginResponse, OidcClientNotification, OidcSecurityService, PublicEventsService } from 'angular-auth-oidc-client';
-import { lastValueFrom, Observable } from 'rxjs';
+import { AuthenticatedResult, EventTypes, LoginResponse, OidcClientNotification, OidcSecurityService, PublicEventsService, UserDataResult } from 'angular-auth-oidc-client';
+import { filter, lastValueFrom, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-default',
@@ -9,12 +9,16 @@ import { lastValueFrom, Observable } from 'rxjs';
 })
 export class DefaultComponent implements OnInit {
   isAuthenticated$: Observable<AuthenticatedResult> = new Observable<AuthenticatedResult>();
+  userData$: Observable<UserDataResult> = new Observable<UserDataResult>();
+  notification$: Observable<OidcClientNotification<any>> = new Observable<OidcClientNotification<any>>();
 
-  constructor(private oidcSecurityService: OidcSecurityService) {
+  constructor(private oidcSecurityService: OidcSecurityService, private eventService: PublicEventsService) {
   }
 
   ngOnInit(): void {
     this.isAuthenticated$ = this.oidcSecurityService.isAuthenticated$;
+    this.userData$ = this.oidcSecurityService.userData$;
+    this.notification$ = this.eventService.registerForEvents()
   }
 
   login = () => {

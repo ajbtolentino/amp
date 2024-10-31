@@ -4,7 +4,7 @@ import { EventService } from '../app/core/services/event.service';
 import { EventInvitationService as EventInvitationService } from './core/services/event-invitation.service';
 import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { authInterceptor, autoLoginPartialRoutesGuard, AuthModule, EventTypes, PublicEventsService } from 'angular-auth-oidc-client';
+import { authInterceptor, autoLoginPartialRoutesGuard, AuthModule, EventTypes, PublicEventsService, AbstractSecurityStorage, DefaultLocalStorageService } from 'angular-auth-oidc-client';
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
