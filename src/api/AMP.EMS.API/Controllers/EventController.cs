@@ -35,6 +35,7 @@ namespace AMP.EMS.API.Controllers
                                         .Where(eventGuest => eventGuest.EventId == eventId)
                                         .Include(eventGuest => eventGuest.Guest)
                                         .Include(eventGuest => eventGuest.EventGuestRoles)
+                                            .ThenInclude(eventGuestRole => eventGuestRole.EventRole)
                                         .Include(eventGuest => eventGuest.EventGuestInvitations)
                                             .ThenInclude(eventGuestInvitation => eventGuestInvitation.EventGuestInvitationRsvps)
                                             .ThenInclude(eventGuestInvitationRsvp => eventGuestInvitationRsvp.EventGuestInvitationRsvpItems)
@@ -45,9 +46,12 @@ namespace AMP.EMS.API.Controllers
         
         [HttpGet]
         [Route("{eventId:guid}/invitations")]
-        public async Task<IActionResult> GetInvitations(Guid eventId)
+        public IActionResult GetInvitations(Guid eventId)
         {
             var eventInvitations = unitOfWork.Repository<EventInvitation>().GetAll()
+                .Include(_ => _.EventGuestInvitations).ThenInclude(_ => _.EventGuestInvitationRsvps)
+                    .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
+                .Include(_ => _.EventGuestInvitations).ThenInclude(_ => _.EventGuest)
                 .Where(eventInvitation => eventInvitation.EventId == eventId)
                 .AsNoTracking();
             

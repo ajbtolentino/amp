@@ -1,8 +1,10 @@
+import { Event } from "./event";
+import { EventRole } from "./event-role";
+
 export interface EventGuestRole {
     id?: string;
-    eventId?: string;
-    name?: string;
-    description?: string;
-    dateCreated?: Date;
-    dateUpdated?: Date;
+    eventRoleId?: string;
+    eventGuestId?: string;
+    event?: Event;
+    eventRole?: EventRole;
 }

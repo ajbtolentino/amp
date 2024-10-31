@@ -14,7 +14,6 @@
         <div class="col-12">
             <div class="card">
                 <h5>Guest Details</h5>
-
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label htmlFor="firstName">First Name</label>
@@ -51,8 +50,7 @@
                     <div class="field col-12 md:col-6">
                         <label htmlFor="maxGuests">Max # of Guests</label>
                         <input pInputText *ngIf="!eventGuest.loading" id="maxGuests" rows="1" type="text"
-                            [(ngModel)]="eventGuest.value!.eventGuest!.maxGuests"
-                            [value]="eventGuest.value?.eventGuest?.maxGuests" />
+                            [(ngModel)]="eventGuest.value!.maxGuests" [value]="eventGuest.value?.maxGuests" />
 
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
@@ -60,7 +58,7 @@
                         <label htmlFor="lastName">Role</label>
                         <p-multiSelect *ngIf="!eventRoles.loading && !eventGuest.loading" placeholder="Select Role"
                             [options]="eventRoles.value" optionLabel="name" optionValue="id"
-                            [loading]="eventRoles.loading" [(ngModel)]="eventGuest.value!.eventGuest.eventGuestRoles" />
+                            [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoleIds" />
 
                         <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>
                     </div>
@@ -68,10 +66,9 @@
                         *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
                         <label htmlFor="lastName">Invitations</label>
                         <p-multiSelect *ngIf="!eventInvitations.loading && !eventGuest.loading" optionLabel="name"
-                            optionValue="eventInvitationId" placeholder="Select Invitations"
-                            [options]="eventInvitations.value"
+                            optionValue="id" placeholder="Select Invitations" [options]="eventInvitations.value"
                             [loading]="eventInvitations.loading  && eventGuest.loading" optionLabel="name"
-                            [(ngModel)]="eventGuest.value!.eventGuest.eventInvitations" />
+                            [(ngModel)]="selectedEventInvitationIds" />
 
                         <p-skeleton *ngIf="eventInvitations.loading"></p-skeleton>
                     </div>
@@ -79,10 +76,10 @@
             </div>
         </div>
 
-        <div class="col-12" *ngIf="eventGuest?.value?.eventGuest?.id">
-            <div class="card" *ngIf="eventGuestInvitations$ | withStatus | async as eventInvitations">
+        <div class="col-12" *ngIf="eventGuest?.value?.id">
+            <div class="card" *ngIf="eventGuestInvitations$ | withStatus | async as eventGuestInvitations">
                 <h5>RSVP</h5>
-                <p-table [value]="eventInvitations!.value!" dataKey="id" [loading]="eventInvitations.loading">
+                <p-table [value]="eventGuestInvitations!.value!" dataKey="id" [loading]="eventGuestInvitations.loading">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Invitation</th>
@@ -93,20 +90,20 @@
                     <ng-template pTemplate="body" let-eventGuestInvitation>
                         <tr>
                             <td>
-                                {{eventGuestInvitation.name}}
+                                {{eventGuestInvitation.eventInvitation.name}}
                             </td>
                             <td>
-                                <span *ngIf="!eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response"
+                                <span *ngIf="!eventGuestInvitation.eventGuestInvitationRsvps[0]?.response"
                                     class="invitation-badge status-no-response">None</span>
-                                <span *ngIf="eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response"
-                                    [class]="'invitation-badge status-' +eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response">{{eventGuestInvitation.eventGuestInvitations[0].rsvps[0]?.response}}</span>
+                                <span *ngIf="eventGuestInvitation.eventGuestInvitationRsvps[0]?.response"
+                                    [class]="'invitation-badge status-' +eventGuestInvitation.eventGuestInvitationRsvps[0]?.response">{{eventGuestInvitation.eventGuestInvitationRsvps[0]?.response}}</span>
                             </td>
                             <td>
                                 <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
                                     class="p-button-rounded p-button-text"></a>
                                 <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
                                     class="p-button-rounded p-button-text" target="_blank"
-                                    routerLink="/invitation/{{eventGuestInvitation.eventGuestInvitations[0].code}}"></a>
+                                    routerLink="/invitation/{{eventGuestInvitation.code}}"></a>
                             </td>
                         </tr>
                     </ng-template>

@@ -8,6 +8,7 @@ import { EventService } from '../../../core/services/event.service';
 import { Table } from 'primeng/table';
 import { Observable } from 'rxjs';
 import { EventInvitationInfo } from '../../../core/models/event-invitation-info';
+import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
 
 @Component({
   selector: 'app-event-invitations',
@@ -85,19 +86,19 @@ export class EventInvitationsComponent implements OnInit {
     });
   }
 
-  getTotalRecipients = (eventInvitationInfo: EventInvitationInfo): number => {
-    return eventInvitationInfo.eventGuestInvitations?.length || 0;
+  getTotalRecipients = (eventInvitation: EventInvitation): number => {
+    return eventInvitation.eventGuestInvitations?.length || 0;
   }
 
-  getTotalCapacity = (eventInvitationInfo: EventInvitationInfo): number => {
-    return eventInvitationInfo.eventGuestInvitations?.reduce((a, b) => a + (b.maxGuests ?? 0), 0) || 0;
+  getTotalCapacity = (eventInvitation: EventInvitation): number => {
+    return eventInvitation.eventGuestInvitations?.reduce((a, b) => a + (b.eventGuest?.maxGuests ?? 0), 0) || 0;
   }
 
-  getTotalAccepted = (eventInvitationInfo: EventInvitationInfo): number => {
+  getTotalAccepted = (eventInvitation: EventInvitation): number => {
     let total = 0;
 
-    for (let eventGuestInvitations of eventInvitationInfo.eventGuestInvitations || []) {
-      if (eventGuestInvitations?.rsvps?.length && eventGuestInvitations?.rsvps[0].response === "ACCEPT")
+    for (let eventGuestInvitation of eventInvitation.eventGuestInvitations || []) {
+      if (eventGuestInvitation.eventGuestInvitationRsvps?.length && eventGuestInvitation?.eventGuestInvitationRsvps[0].response === "ACCEPT")
         total++;
     }
 

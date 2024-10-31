@@ -11,5 +11,4 @@ public class EventInvitation : FullAuditableEntity<Guid>
     public string Html { get; set; } = string.Empty;
     public Event? Event { get; set; }
     public ICollection<EventGuestInvitation> EventGuestInvitations { get; set; } = [];
-    public ICollection<EventGuest> EventGuests { get; set; } = [];
 }

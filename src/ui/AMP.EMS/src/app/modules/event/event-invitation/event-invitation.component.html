@@ -27,10 +27,10 @@
                 </div>
 
                 <ng-container *ngIf="eventInvitation.id">
-                    <div class="col-12" *ngIf="eventGuests | withStatus | async as eventGuests">
+                    <div class="col-12" *ngIf="eventGuestInvitations$ | withStatus | async as eventGuestInvitation">
                         <h5>Guests</h5>
-                        <p-table [value]="eventGuests!.value!" dataKey="id" [loading]="eventGuests.loading"
-                            [showLoader]="false">
+                        <p-table [value]="eventGuestInvitation!.value!" dataKey="id"
+                            [loading]="eventGuestInvitation.loading" [showLoader]="false">
                             <ng-template pTemplate="header">
                                 <tr>
                                     <th>Name</th>
@@ -39,18 +39,19 @@
                                     <th>Link</th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-eventGuest>
+                            <ng-template pTemplate="body" let-eventGuestInvitation>
                                 <tr>
                                     <td>
-                                        {{eventGuest.firstName}} {{eventGuest.lastName}}
+                                        {{eventGuestInvitation.eventGuest.guest.firstName}}
+                                        {{eventGuestInvitation.eventGuest.guest.lastName}}
                                     </td>
                                     <td>
-                                        {{eventGuest.eventGuestInvitations[0].maxGuests}}
+                                        {{eventGuestInvitation.maxGuests}}
                                     </td>
                                     <td>
-                                        <span *ngIf="eventGuest.eventGuestInvitations[0]?.rsvps?.length"
-                                            [class]="'invitation-badge status-' +eventGuest.eventGuestInvitations[0].rsvps[0]?.response">{{eventGuest.eventGuestInvitations[0].rsvps[0]?.response}}</span>
-                                        <span *ngIf="!eventGuest.eventGuestInvitations[0]?.rsvps?.length"
+                                        <span *ngIf="eventGuestInvitation.eventGuestInvitationRsvps?.length"
+                                            [class]="'invitation-badge status-' +eventGuestInvitation.eventGuestInvitationRsvps[0]?.response">{{eventGuestInvitation.eventGuestInvitationRsvps[0]?.response}}</span>
+                                        <span *ngIf="!eventGuestInvitation.eventGuestInvitationRsvps[0]?.length"
                                             class="invitation-badge status-new">New</span>
                                     </td>
                                     <td>
@@ -58,7 +59,7 @@
                                             class="p-button-rounded p-button-text"></a>
                                         <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
                                             class="p-button-rounded p-button-text" target="_blank"
-                                            routerLink="/invitation/{{eventGuest.eventGuestInvitations[0].code}}"></a>
+                                            routerLink="/invitation/{{eventGuestInvitation.code}}"></a>
                                     </td>
                                 </tr>
                             </ng-template>

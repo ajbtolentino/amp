@@ -20,13 +20,14 @@ namespace AMP.EMS.API.Controllers
         [Route("{id:guid}/guests")]
         public IActionResult GetGuests(Guid id)
         {
-            var eventInvitation = this.entityRepository.GetAll().Where(_ => _.EventId == id)
-                                        .Include(_ => _.EventGuests).ThenInclude(_ => _.Guest)
-                                        .FirstOrDefault();
+            var eventGuestInvitations = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                                    .Where(_ => _.EventInvitationId == id)
+                                    .Include(_ => _.EventGuest).ThenInclude(_ => _.Guest)
+                                    .Include(_ => _.EventGuestInvitationRsvps).ThenInclude(_ => _.EventGuestInvitationRsvpItems);
 
-            ArgumentNullException.ThrowIfNull(eventInvitation);
+            ArgumentNullException.ThrowIfNull(eventGuestInvitations);
             
-            return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = eventInvitation.EventGuests});
+            return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuestInvitations});
         }
 
         [HttpPost]

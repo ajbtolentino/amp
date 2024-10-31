@@ -21,11 +21,14 @@ import { EventGuestInvitationInfo, EventInvitationInfo } from '../../../core/mod
 export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   eventId!: string;
 
-  eventGuest$: Observable<{ guest: Guest, eventGuest: EventGuest }> = new Observable<{ guest: Guest, eventGuest: EventGuest }>();
+  eventGuest$: Observable<EventGuest> = new Observable<EventGuest>();
   eventGuestInvitations$: Observable<EventInvitationInfo[]> = new Observable<EventInvitationInfo[]>();
 
   eventRoles$: Observable<EventGuestRole[]> = new Observable<EventGuestRole[]>();
   eventInvitations$: Observable<EventInvitation[]> = new Observable<EventInvitation[]>();
+
+  selectedEventInvitationIds: string[] = [];
+  selectedEventRoleIds: string[] = [];
 
   constructor(private eventService: EventService,
     private eventGuestService: EventGuestService,
@@ -43,8 +46,8 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
     if (eventGuestId) {
       this.eventGuest$ = this.eventGuestService.get(eventGuestId || '').pipe(map(response => {
-        if (!response.eventGuest.eventGuestRoles?.length) response.eventGuest.eventGuestRoles = [];
-        if (!response.eventGuest.eventInvitations?.length) response.eventGuest.eventInvitations = [];
+        if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.eventRoleId).map(_ => _.eventRoleId!);
+        if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.eventInvitationId).map(_ => _.eventInvitationId!);
         return response;
       }));
       this.eventGuestInvitations$ = this.eventGuestService.getInvitations(eventGuestId);
@@ -59,21 +62,20 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
     this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
   }
 
-  save = async (item: { guest: Guest, eventGuest: EventGuest }) => {
+  save = async (item: EventGuest) => {
     if (item?.guest?.firstName?.trim() && item?.guest?.lastName?.trim())
-      if (item.eventGuest.id) {
-        await lastValueFrom(this.eventGuestService.update(item.eventGuest, item.guest));
+      if (item.id) {
+        await lastValueFrom(this.eventGuestService.update(item, this.selectedEventRoleIds, this.selectedEventInvitationIds));
         this.loadEventGuest();
       }
       else {
-        const response = await lastValueFrom(this.eventGuestService.add(item.eventGuest, item.guest));
+        const response = await lastValueFrom(this.eventGuestService.add(item, this.selectedEventRoleIds, this.selectedEventInvitationIds));
         this.redirect(response);
 
       }
   }
 
   redirect = (item: any) => {
-    console.log(item);
     this.router.navigate([`/event/${this.eventId}/guest/${item.id}`]);
   }
 

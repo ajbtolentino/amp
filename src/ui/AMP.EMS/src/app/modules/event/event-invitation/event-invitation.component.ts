@@ -8,6 +8,7 @@ import { EventGuestInvitationRsvp } from '../../../core/models/event-guest-invit
 import { Observable } from 'rxjs';
 import { EventGuestInvitationInfo } from '../../../core/models/event-invitation-info';
 import { Guest } from '../../../core/models/guest';
+import { EventGuestInvitation } from '../../../core/models/event-guest-invitation';
 
 @Component({
   selector: 'app-event-invitation',
@@ -54,7 +55,7 @@ import { Guest } from '../../../core/models/guest';
 export class EventInvitationComponent implements OnInit {
   eventInvitation: EventInvitation = {};
   eventInvitation$: Observable<EventInvitation> = new Observable<EventInvitation>();
-  eventGuests: Observable<Guest[]> = new Observable<Guest[]>();
+  eventGuestInvitations$: Observable<EventGuestInvitation[]> = new Observable<EventGuestInvitation[]>();
 
   loading: boolean = false;
 
@@ -105,7 +106,7 @@ export class EventInvitationComponent implements OnInit {
       this.codeEditor.editor.setValue(this.eventInvitation.html || '');
     });
 
-    this.eventGuests = this.eventInvitationService.getGuests(eventInvitationId);
+    this.eventGuestInvitations$ = this.eventInvitationService.getGuests(eventInvitationId);
   }
 
   onCodeChanged(e: any) {

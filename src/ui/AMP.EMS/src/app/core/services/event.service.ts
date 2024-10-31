@@ -9,6 +9,7 @@ import { EventInvitation } from '../models/event-invitation';
 import { EventGuestRole } from '../models/event-guest-role';
 import { Guest } from '../models/guest';
 import { EventInvitationInfo } from '../models/event-invitation-info';
+import { EventGuest } from '../models/event-guest';
 
 @Injectable({
     providedIn: 'root'
@@ -22,12 +23,12 @@ export class EventService extends BaseApiService {
         return this.httpGet<EventGuestRole[]>(`api/event/${id}/roles`);
     }
 
-    getInvitations = (id: string): Observable<EventInvitationInfo[]> => {
-        return this.httpGet<EventInvitationInfo[]>(`api/event/${id}/invitations`);
+    getInvitations = (id: string): Observable<EventInvitation[]> => {
+        return this.httpGet<EventInvitation[]>(`api/event/${id}/invitations`);
     }
 
-    getGuests = (id: string): Observable<Guest[]> => {
-        return this.httpGet<Guest[]>(`api/event/${id}/guests`);
+    getGuests = (id: string): Observable<EventGuest[]> => {
+        return this.httpGet<EventGuest[]>(`api/event/${id}/guests`);
     }
 
     getAll = (): Observable<Event[]> => {

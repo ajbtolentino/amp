@@ -13,42 +13,40 @@ namespace AMP.EMS.API.Controllers
     [ApiController]
     public class EventGuestController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuest, Guid>(unitOfWork)
     {
-        public record EventGuestData(
-            Guid EventId,
-            Guid? GuestId,
-            int? MaxGuests,
-            IEnumerable<Guid>? EventGuestRoles,
-            IEnumerable<Guid>? EventInvitations);
-        public record EventGuestRequest(GuestController.GuestData? Guest, EventGuestData EventGuest);
-        public record EventGuestResponse(EventGuest EventGuest, Guest Guest);
+        public record EventGuestRequest(GuestController.GuestData? Guest, Guid EventId, Guid? GuestId, int? MaxGuests, IEnumerable<Guid>? EventRoleIds, IEnumerable<Guid>? EventInvitationIds);
         
         public override async Task<IActionResult> Get(Guid id)
         {
-            var eventGuest = await this.entityRepository.GetAll().FirstOrDefaultAsync(_ => _.Id == id);
+            var eventGuest = await this.entityRepository.GetAll()
+                                    .Where(_ => _.Id == id)
+                                    .Include(_ => _.Guest)
+                                    .Include(_ => _.EventGuestInvitations)
+                                        .ThenInclude(_ => _.EventInvitation)
+                                    .Include(_ => _.EventGuestInvitations)
+                                        .ThenInclude(_ => _.EventGuestInvitationRsvps)
+                                        .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
+                                    .Include(_ => _.EventGuestRoles)
+                                        .ThenInclude(_ => _.EventRole)
+                                    .FirstOrDefaultAsync();
             
             ArgumentNullException.ThrowIfNull(eventGuest);
             
-            var guest = await unitOfWork.Repository<Guest>().Get(eventGuest.GuestId);
-            
-            ArgumentNullException.ThrowIfNull(guest);
-
-            return Ok(new OkResponse<EventGuestResponse>(string.Empty) { Data = new EventGuestResponse(eventGuest, guest) });
+            return Ok(new OkResponse<EventGuest>(string.Empty) { Data = eventGuest });
         }
 
         [HttpGet]
         [Route("{id:guid}/invitations")]
-        public async Task<IActionResult> GetInvitations(Guid id)
+        public IActionResult GetInvitations(Guid id)
         {
-            var eventGuest = this.entityRepository.GetAll()
-                                        .Where(_ => _.Id == id)
-                                        .Include(_ => _.EventGuestInvitations)
-                                            .ThenInclude(_ => _.EventGuestInvitationRsvps)
-                                            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
-                                        .FirstOrDefault();
+            var eventGuestInvitations = this.unitOfWork.Repository<EventGuestInvitation>().GetAll()
+                                        .Where(_ => _.EventGuestId == id)
+                                        .Include(_ => _.EventInvitation)
+                                        .Include(_ => _.EventGuestInvitationRsvps)
+                                            .ThenInclude(_ => _.EventGuestInvitationRsvpItems);
             
-            ArgumentNullException.ThrowIfNull(eventGuest);
+            ArgumentNullException.ThrowIfNull(eventGuestInvitations);
                 
-            return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuest.EventGuestInvitations });
+            return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuestInvitations });
         }
 
         [HttpPost]
@@ -70,14 +68,13 @@ namespace AMP.EMS.API.Controllers
 
                     var newEventGuest = await this.entityRepository.Add(new EventGuest
                     {
-                        EventId = request.EventGuest.EventId,
+                        EventId = request.EventId,
                         GuestId = newGuest.Id,
-                        MaxGuests = request.EventGuest.MaxGuests ?? 0
+                        MaxGuests = request.MaxGuests ?? 0
                     });
 
-                    await UpdateEventGuestInvitations(newEventGuest, request.EventGuest.EventInvitations ?? []);
-
-                    UpdateEventGuestRoles(newEventGuest, request.EventGuest.EventGuestRoles ?? []);
+                    UpdateEventGuestInvitations(newEventGuest, request.EventInvitationIds ?? []);
+                    UpdateEventGuestRoles(newEventGuest, request.EventInvitationIds ?? []);
 
                     await this.unitOfWork.SaveChangesAsync();
                     await this.unitOfWork.CommitTransactionAsync();
@@ -116,10 +113,10 @@ namespace AMP.EMS.API.Controllers
 
                 this.unitOfWork.Repository<Guest>().Update(guest);
 
-                eventGuest.MaxGuests = request.EventGuest.MaxGuests ?? 0;
+                eventGuest.MaxGuests = request.MaxGuests ?? 0;
 
-                await UpdateEventGuestInvitations(eventGuest, request.EventGuest.EventInvitations ?? []);
-                UpdateEventGuestRoles(eventGuest, request.EventGuest.EventGuestRoles ?? []);
+                UpdateEventGuestInvitations(eventGuest, request.EventInvitationIds ?? []);
+                UpdateEventGuestRoles(eventGuest, request.EventRoleIds ?? []);
 
                 this.entityRepository.Update(eventGuest);
 
@@ -140,36 +137,51 @@ namespace AMP.EMS.API.Controllers
             return BadRequest();
         }
 
-        private async Task UpdateEventGuestInvitations(EventGuest eventGuest, IEnumerable<Guid> eventInvitationIds)
+        private void UpdateEventGuestInvitations(EventGuest eventGuest, IEnumerable<Guid> eventInvitationIds)
         {
-            // eventGuest.EventInvitations = [];
-            //
-            // var existingEventInvitations = await unitOfWork.Repository<EventGuestInvitation>()
-            //     .GetAll().AsNoTracking().Where(eventGuestInvitation =>
-            //         eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id))
-            //     .Select(eventGuestInvitation => eventGuestInvitation.EventInvitationId)
-            //     .ToListAsync();
-            //
-            // var newEventInvitationIds = eventInvitationIds.Except(existingEventInvitations);
-            //
-            // foreach (var eventInvitationId in newEventInvitationIds)
-            // {
-            //     var eventGuestInvitation = await this.unitOfWork.Repository<EventGuestInvitation>().Add(new EventGuestInvitation
-            //     {
-            //         Code = InvitationHelper.GenerateCode(),
-            //         EventInvitationId = eventInvitationId,
-            //         MaxGuests = eventGuest.MaxGuests
-            //     });
-            //     
-            //     eventGuest.EventGuestInvitations.Add(eventGuestInvitation.Id);    
-            // }
-            //
-            // eventGuest.EventInvitations = eventInvitationIds.ToList();
+            var eventGuestInvitations = this.unitOfWork.Repository<EventGuestInvitation>().GetAll().AsNoTracking()
+                .Where(_ => _.EventGuestId == eventGuest.Id);
+            var newEventInvitationIds =
+                eventInvitationIds.Except(eventGuestInvitations.Select(_ => _.EventInvitationId));
+            var deletedEventGuestInvitations =
+                eventGuestInvitations.Where(_ => !eventInvitationIds.Contains(_.EventInvitationId));
+
+            foreach (var eventInvitationId in newEventInvitationIds)
+            {
+                this.unitOfWork.Repository<EventGuestInvitation>().Add(new EventGuestInvitation
+                {
+                    Code = InvitationHelper.GenerateCode(),
+                    EventGuestId = eventGuest.Id,
+                    EventInvitationId = eventInvitationId
+                });
+            }
+
+            foreach (var eventGuestInvitation in deletedEventGuestInvitations)
+            {
+                this.unitOfWork.Repository<EventGuestInvitation>().Delete(eventGuestInvitation.Id);
+            }
         }
 
-        private static void UpdateEventGuestRoles(EventGuest eventGuest, IEnumerable<Guid> eventRoleIds)
+        private void UpdateEventGuestRoles(EventGuest eventGuest, IEnumerable<Guid> eventRoleIds)
         {
-            // eventGuest.EventGuestRoles = eventRoleIds.ToList();
+            var eventGuestRoles = this.unitOfWork.Repository<EventGuestRole>().GetAll().AsNoTracking()
+                .Where(_ => _.EventGuestId == eventGuest.Id);
+            var newEventRoles = eventRoleIds.Except(eventGuestRoles.Select(_ => _.EventRoleId));
+            var deletedEventGuestRoles = eventGuestRoles.Where(_ => !eventRoleIds.Contains(_.EventRoleId));
+
+            foreach (var eventRoleId in newEventRoles)
+            {
+                this.unitOfWork.Repository<EventGuestRole>().Add(new EventGuestRole
+                {
+                    EventGuestId = eventGuest.Id,
+                    EventRoleId = eventRoleId
+                });
+            }
+
+            foreach (var eventGuestRole in deletedEventGuestRoles)
+            {
+                this.unitOfWork.Repository<EventGuestRole>().Delete(eventGuestRole.Id);
+            }
         }
     }
 }

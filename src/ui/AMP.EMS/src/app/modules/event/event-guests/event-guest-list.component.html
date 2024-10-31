@@ -64,12 +64,12 @@
                 <ng-template pTemplate="body" let-item>
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
-                        <td>{{item.firstName}}</td>
-                        <td>{{item.lastName}}</td>
+                        <td>{{item.guest.firstName}}</td>
+                        <td>{{item.guest.lastName}}</td>
                         <td>{{item.maxGuests}}</td>
                         <td>
                             <span *ngFor='let eventGuestRole of item.eventGuestRoles'>
-                                {{eventGuestRole.name}}
+                                {{eventGuestRole.eventRole.name}}
                             </span>
                         </td>
                         <td class="text-center">
@@ -85,7 +85,7 @@
                         <td>
                             <div class="flex">
                                 <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                    routerLink="/event/{{eventId}}/guest/{{item.eventGuestId}}"
+                                    routerLink="/event/{{eventId}}/guest/{{item.id}}"
                                     class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
                                 </button>
                                 <button pButton pRipple class="p-button-rounded p-button-warning" icon="pi pi-trash"
