@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.EMS.API.Helpers;
@@ -11,7 +12,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventGuestController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuest, Guid>(unitOfWork)
+    public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestController> logger) : ApiBaseController<EventGuest, Guid>(unitOfWork, logger)
     {
         public record EventGuestRequest(GuestController.GuestData? Guest, Guid EventId, Guid? GuestId, int? MaxGuests, IEnumerable<Guid>? EventRoleIds, IEnumerable<Guid>? EventInvitationIds);
         
@@ -54,37 +55,38 @@ namespace AMP.EMS.API.Controllers
         {
             try
             {
-                if (request.Guest != null)
+                ArgumentNullException.ThrowIfNull(request.Guest);
+
+                unitOfWork.BeginTransaction();
+
+                var newGuest = await unitOfWork.Repository<Guest>().Add(new Guest
                 {
-                    this.unitOfWork.BeginTransaction();
+                    FirstName = request.Guest.FirstName,
+                    LastName = request.Guest.LastName,
+                    NickName = request.Guest.Nickname ?? string.Empty,
+                    PhoneNumber = request.Guest.PhoneNumber ?? string.Empty
+                });
 
-                    var newGuest = await this.unitOfWork.Repository<Guest>().Add(new Guest
-                    {
-                        FirstName = request.Guest.FirstName,
-                        LastName = request.Guest.LastName,
-                        NickName = request.Guest.Nickname ?? string.Empty,
-                        PhoneNumber = request.Guest.PhoneNumber ?? string.Empty
-                    });
+                var newEventGuest = await entityRepository.Add(new EventGuest
+                {
+                    EventId = request.EventId,
+                    GuestId = newGuest.Id,
+                    MaxGuests = request.MaxGuests ?? 0
+                });
 
-                    var newEventGuest = await this.entityRepository.Add(new EventGuest
-                    {
-                        EventId = request.EventId,
-                        GuestId = newGuest.Id,
-                        MaxGuests = request.MaxGuests ?? 0
-                    });
+                UpdateEventGuestInvitations(newEventGuest, request.EventInvitationIds ?? []);
+                UpdateEventGuestRoles(newEventGuest, request.EventInvitationIds ?? []);
 
-                    UpdateEventGuestInvitations(newEventGuest, request.EventInvitationIds ?? []);
-                    UpdateEventGuestRoles(newEventGuest, request.EventInvitationIds ?? []);
+                await this.unitOfWork.SaveChangesAsync();
+                await this.unitOfWork.CommitTransactionAsync();
 
-                    await this.unitOfWork.SaveChangesAsync();
-                    await this.unitOfWork.CommitTransactionAsync();
-
-                    return Ok(new OkResponse<EventGuest>(string.Empty) { Data = newEventGuest });
-                }
+                return Ok(new OkResponse<EventGuest>(string.Empty) { Data = newEventGuest });
             }
-            catch
+            catch (Exception ex)
             {
-                await this.unitOfWork.RollbackTransactionAsync();
+                logger.LogError(ex.Message, ex);
+                await unitOfWork.RollbackTransactionAsync();
+                return Problem(ex.Message);
             }
 
             return BadRequest();
@@ -129,12 +131,12 @@ namespace AMP.EMS.API.Controllers
 
                 return Ok(new OkResponse<EventGuest>(string.Empty) { Data = eventGuest });
             }
-            catch
+            catch (Exception ex)
             {
-                await this.unitOfWork.RollbackTransactionAsync();
+                logger.LogError(ex.Message, ex);
+                await unitOfWork.RollbackTransactionAsync();
+                return Problem(ex.Message);
             }
-
-            return BadRequest();
         }
 
         private void UpdateEventGuestInvitations(EventGuest eventGuest, IEnumerable<Guid> eventInvitationIds)

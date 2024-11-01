@@ -9,4 +9,5 @@ public class Vendor : FullAuditableEntity<Guid>
     public string ContactInformation { get; set; }
 
     public ICollection<EventVendor> EventVendors { get; set; } = [];
+    public ICollection<VendorAccount> VendorAccounts { get; set; } = [];
 }

@@ -7,7 +7,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventGuestRoleController(IUnitOfWork unitOfWork) : ApiBaseController<Role, Guid>(unitOfWork)
+    public class EventGuestRoleController(IUnitOfWork unitOfWork, ILogger<EventGuestRoleController> logger) : ApiBaseController<Role, Guid>(unitOfWork, logger)
     {
         public record EventGuestRoleRequest(Guid EventId, string Name, string Description);
 

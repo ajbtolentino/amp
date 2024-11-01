@@ -10,7 +10,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventGuestInvitationController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestInvitation, Guid>(unitOfWork)
+    public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<EventGuestInvitationController> logger) : ApiBaseController<EventGuestInvitation, Guid>(unitOfWork, logger)
     {
         public record EventGuestInvitationRequest(Guid EventInvitationId, Guid GuestId, string? Code, int MaxGuests);
 

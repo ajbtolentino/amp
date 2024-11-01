@@ -10,7 +10,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]"), Authorize]
     [ApiController]
-    public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork) : ControllerBase
+    public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork, ILogger logger) : ControllerBase
         where TEntity : BaseEntity<TKey>
     {
         protected readonly IUnitOfWork unitOfWork = unitOfWork;
@@ -49,8 +49,8 @@ namespace AMP.EMS.API.Controllers
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.Message, ex);
                 await unitOfWork.RollbackTransactionAsync();
-
                 return Problem(ex.Message);
             }
         }
@@ -71,8 +71,8 @@ namespace AMP.EMS.API.Controllers
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.Message, ex);
                 await unitOfWork.RollbackTransactionAsync();
-
                 return Problem(ex.Message);
             }
         }
@@ -94,8 +94,8 @@ namespace AMP.EMS.API.Controllers
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.Message, ex);
                 await unitOfWork.RollbackTransactionAsync();
-
                 return Problem(ex.Message);
             }
         }
@@ -119,8 +119,8 @@ namespace AMP.EMS.API.Controllers
             }
             catch (Exception ex)
             {
+                logger.LogError(ex.Message, ex);
                 await unitOfWork.RollbackTransactionAsync();
-
                 return Problem(ex.Message);
             }
         }

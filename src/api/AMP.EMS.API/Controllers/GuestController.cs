@@ -7,7 +7,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GuestController(IUnitOfWork unitOfWork) : ApiBaseController<Guest, Guid>(unitOfWork)
+    public class GuestController(IUnitOfWork unitOfWork, ILogger<GuestController> logger) : ApiBaseController<Guest, Guid>(unitOfWork, logger)
     {
         public record GuestData(string FirstName, string LastName, string? Nickname, string? PhoneNumber);
 

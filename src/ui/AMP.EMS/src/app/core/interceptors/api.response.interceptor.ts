@@ -28,8 +28,10 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
         }
       }
     }), catchError((error) => {
-      if (req.url.includes("api"))
-        messageService.add({ severity: 'error', summary: 'Error', detail: 'An error has occurred while processing your request.', life: 6000 });
+      if (req.url.includes("api")) {
+        const detail = error?.error?.title || 'An error occurred while processing your request.';
+        messageService.add({ severity: 'error', summary: 'Error', detail: detail, life: 6000 });
+      }
       return throwError(() => error);
     }));
 };

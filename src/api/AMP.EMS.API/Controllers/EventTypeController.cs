@@ -8,7 +8,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventTypeController(IUnitOfWork unitOfWork) : ApiBaseController<EventType, Guid>(unitOfWork)
+    public class EventTypeController(IUnitOfWork unitOfWork, ILogger<EventTypeController> logger) : ApiBaseController<EventType, Guid>(unitOfWork, logger)
     {
         public record EventTypeData(string Name, string? Description);
 

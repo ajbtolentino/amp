@@ -14,7 +14,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController(IUnitOfWork unitOfWork) : ApiBaseController<Event, Guid>(unitOfWork)
+    public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> logger) : ApiBaseController<Event, Guid>(unitOfWork, logger)
     {
         public record EventRequest(string Title, Guid EventTypeId, string? Description, string? Location, int MaxGuests, DateTime StartDate, DateTime EndDate);
 

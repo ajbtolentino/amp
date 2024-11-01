@@ -186,6 +186,35 @@ namespace AMP.EMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VendorAccount",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VendorId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VendorAccount", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VendorAccount_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VendorAccount_Vendors_VendorId",
+                        column: x => x.VendorId,
+                        principalTable: "Vendors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EventBudgets",
                 columns: table => new
                 {
@@ -430,24 +459,24 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("1b1a14a6-b555-4cb4-8c53-3587d778b524"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Cash", "" },
-                    { new Guid("7a998b84-67f7-4d33-b645-a4c81eef951c"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Savings", "" },
-                    { new Guid("b5642cdd-c541-4c74-9f14-c3c9f1394648"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Credit Card", "" },
-                    { new Guid("c0254f72-9173-4e19-b88f-2e0bbbadbd81"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Checking", "" }
+                    { new Guid("285d4ba2-8df5-4576-b414-7618a34dba5b"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Checking", "" },
+                    { new Guid("6c6573d7-2f01-4339-a12a-f4ca52a94b32"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Cash", "" },
+                    { new Guid("738e13a1-829d-4e44-a544-5855fff7d693"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Credit Card", "" },
+                    { new Guid("a7055a3e-a8b7-4110-8a22-f17f4d19ee7b"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Savings", "" }
                 });
 
             migrationBuilder.InsertData(
                 table: "EventTypes",
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
-                values: new object[] { new Guid("1e3c654a-dd54-47cc-beef-20eed64aaaaa"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Wedding", "" });
+                values: new object[] { new Guid("dc34120d-3165-4f7a-a657-37862402b394"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Wedding", "" });
 
             migrationBuilder.InsertData(
                 table: "TransactionTypes",
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("7b726b38-da09-4ef1-b93f-736386d93c29"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Income", "" },
-                    { new Guid("ae1a122c-8a65-4c88-8763-92e5e606d7f5"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Expense", "" }
+                    { new Guid("1cf757bf-923d-492e-80ff-f02592ae6475"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Expense", "" },
+                    { new Guid("97f76011-dcf1-46f6-ae91-ccf4fe4e9288"), "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "", "Income", "" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -534,6 +563,16 @@ namespace AMP.EMS.API.Migrations
                 name: "IX_Transactions_TransactionTypeId",
                 table: "Transactions",
                 column: "TransactionTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorAccount_AccountId",
+                table: "VendorAccount",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorAccount_VendorId",
+                table: "VendorAccount",
+                column: "VendorId");
         }
 
         /// <inheritdoc />
@@ -555,19 +594,22 @@ namespace AMP.EMS.API.Migrations
                 name: "Transactions");
 
             migrationBuilder.DropTable(
+                name: "VendorAccount");
+
+            migrationBuilder.DropTable(
                 name: "EventGuestInvitationRsvps");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Vendors");
+                name: "TransactionTypes");
 
             migrationBuilder.DropTable(
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "TransactionTypes");
+                name: "Vendors");
 
             migrationBuilder.DropTable(
                 name: "EventGuestInvitations");

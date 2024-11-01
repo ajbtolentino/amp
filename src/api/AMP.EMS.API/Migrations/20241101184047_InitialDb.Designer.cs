@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AMP.EMS.API.Migrations
 {
     [DbContext(typeof(EMSDbContext))]
-    [Migration("20241101181602_InitialDb")]
+    [Migration("20241101184047_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -89,7 +89,7 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1b1a14a6-b555-4cb4-8c53-3587d778b524"),
+                            Id = new Guid("6c6573d7-2f01-4339-a12a-f4ca52a94b32"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -98,7 +98,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("7a998b84-67f7-4d33-b645-a4c81eef951c"),
+                            Id = new Guid("a7055a3e-a8b7-4110-8a22-f17f4d19ee7b"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -107,7 +107,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("b5642cdd-c541-4c74-9f14-c3c9f1394648"),
+                            Id = new Guid("738e13a1-829d-4e44-a544-5855fff7d693"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -116,7 +116,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c0254f72-9173-4e19-b88f-2e0bbbadbd81"),
+                            Id = new Guid("285d4ba2-8df5-4576-b414-7618a34dba5b"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -480,7 +480,7 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1e3c654a-dd54-47cc-beef-20eed64aaaaa"),
+                            Id = new Guid("dc34120d-3165-4f7a-a657-37862402b394"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -686,7 +686,7 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7b726b38-da09-4ef1-b93f-736386d93c29"),
+                            Id = new Guid("97f76011-dcf1-46f6-ae91-ccf4fe4e9288"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -695,7 +695,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ae1a122c-8a65-4c88-8763-92e5e606d7f5"),
+                            Id = new Guid("1cf757bf-923d-492e-80ff-f02592ae6475"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -739,6 +739,41 @@ namespace AMP.EMS.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vendors");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VendorId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("VendorId");
+
+                    b.ToTable("VendorAccount");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Account", b =>
@@ -913,9 +948,30 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("TransactionType");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorAccount", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Account", "Account")
+                        .WithMany("VendorAccounts")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.Vendor", "Vendor")
+                        .WithMany("VendorAccounts")
+                        .HasForeignKey("VendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Vendor");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Account", b =>
                 {
                     b.Navigation("Transactions");
+
+                    b.Navigation("VendorAccounts");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.AccountType", b =>
@@ -981,6 +1037,8 @@ namespace AMP.EMS.API.Migrations
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Vendor", b =>
                 {
                     b.Navigation("EventVendors");
+
+                    b.Navigation("VendorAccounts");
                 });
 #pragma warning restore 612, 618
         }

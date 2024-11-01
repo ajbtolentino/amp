@@ -11,7 +11,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RsvpController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork)
+    public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logger) : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork, logger)
     {
         public record RsvpRequest(Guid EventGuestInvitationId, [JsonConverter(typeof(StringEnumConverter))] Core.Constants.RsvpResponse Response, string? PhoneNumber, IEnumerable<string>? GuestNames);
         
@@ -39,12 +39,12 @@ namespace AMP.EMS.API.Controllers
 
                 return Ok(new OkResponse<EventGuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
             }
-            catch
+            catch(Exception ex)
             {
+                logger.LogError(ex, ex.Message);
                 await unitOfWork.RollbackTransactionAsync();
+                throw;
             }
-
-            return BadRequest();
         }
     }
 }

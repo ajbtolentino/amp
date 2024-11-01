@@ -53,7 +53,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
       this.eventGuestInvitations$ = this.eventGuestService.getInvitations(eventGuestId);
     }
     else {
-      this.eventGuest$ = of<{ eventGuest: EventGuest, guest: Guest }>({ eventGuest: { eventId: this.eventId }, guest: {} });
+      this.eventGuest$ = of<EventGuest>({ eventId: this.eventId, guest: {} });
     }
   }
 

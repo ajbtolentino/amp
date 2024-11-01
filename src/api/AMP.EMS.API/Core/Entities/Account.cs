@@ -11,4 +11,5 @@ public class Account : FullAuditableEntity<Guid>
     // Navigation properties
     public AccountType AccountType { get; set; }
     public ICollection<Transaction> Transactions { get; set; }
+    public ICollection<VendorAccount> VendorAccounts { get; set; }
 }

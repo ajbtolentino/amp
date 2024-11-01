@@ -15,6 +15,18 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Account>()
+            .HasMany(_ => _.Transactions)
+            .WithOne(_ => _.Account)
+            .HasForeignKey(_ => _.AccountId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Account>()
+            .HasMany(_ => _.VendorAccounts)
+            .WithOne(_ => _.Account)
+            .HasForeignKey(_ => _.AccountId)
+            .HasPrincipalKey(_ => _.Id);
+        
         modelBuilder.Entity<Event>()
             .HasMany(_ => _.EventInvitations)
             .WithOne(_ => _.Event)
@@ -83,6 +95,12 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
         
         modelBuilder.Entity<Vendor>()
             .HasMany(_ => _.EventVendors)
+            .WithOne(_ => _.Vendor)
+            .HasForeignKey(_ => _.VendorId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Vendor>()
+            .HasMany(_ => _.VendorAccounts)
             .WithOne(_ => _.Vendor)
             .HasForeignKey(_ => _.VendorId)
             .HasPrincipalKey(_ => _.Id);
@@ -170,6 +188,10 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .ValueGeneratedOnAdd();
         
         modelBuilder.Entity<Vendor>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<VendorAccount>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
