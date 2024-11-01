@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, Message } from 'primeng/api';
 import { EventGuestRole } from '../../../core/models/event-guest-role';
 import { EventService } from '../../../core/services/event.service';
 import { EventInvitation } from '../../../core/models/event-invitation';
@@ -32,6 +32,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private eventService: EventService,
     private eventGuestService: EventGuestService,
+    private messageService: MessageService,
     private router: Router,
     private route: ActivatedRoute) { }
 
@@ -77,6 +78,12 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   redirect = (item: any) => {
     this.router.navigate([`/event/${this.eventId}/guest/${item.id}`]);
+  }
+
+  copyLink = (code: string) => {
+    navigator.clipboard.writeText(code);
+    console.log(`${location.host}${code}`);
+    this.messageService.add({ severity: "info", summary: "Success", detail: "Link copied!" });
   }
 
   ngOnDestroy(): void {

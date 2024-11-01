@@ -24,50 +24,15 @@ export class EventsLayoutComponent implements OnInit, OnDestroy {
   constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router, private oidcSecurityService: OidcSecurityService) {
 
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
-      if (!this.profileMenuOutsideClickListener) {
-        this.profileMenuOutsideClickListener = this.renderer.listen('document', 'click', event => {
-          const isOutsideClicked = !(this.appTopbar.menu.nativeElement.isSameNode(event.target) || this.appTopbar.menu.nativeElement.contains(event.target)
-            || this.appTopbar.topbarMenuButton.nativeElement.isSameNode(event.target) || this.appTopbar.topbarMenuButton.nativeElement.contains(event.target));
-
-          if (isOutsideClicked) {
-            this.hideProfileMenu();
-          }
-        });
-      }
-
       if (this.layoutService.state.staticMenuMobileActive) {
         this.blockBodyScroll();
       }
     });
 
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.hideMenu();
-        this.hideProfileMenu();
-      });
   }
 
   ngOnInit(): void {
     this.auth$ = this.oidcSecurityService.checkAuth();
-  }
-
-  hideMenu() {
-    this.layoutService.state.overlayMenuActive = false;
-    this.layoutService.state.staticMenuMobileActive = false;
-    this.layoutService.state.menuHoverActive = false;
-    if (this.menuOutsideClickListener) {
-      this.menuOutsideClickListener();
-      this.menuOutsideClickListener = null;
-    }
-    this.unblockBodyScroll();
-  }
-
-  hideProfileMenu() {
-    this.layoutService.state.profileSidebarVisible = false;
-    if (this.profileMenuOutsideClickListener) {
-      this.profileMenuOutsideClickListener();
-      this.profileMenuOutsideClickListener = null;
-    }
   }
 
   blockBodyScroll(): void {

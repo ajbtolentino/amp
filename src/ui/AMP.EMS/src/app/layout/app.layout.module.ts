@@ -57,5 +57,6 @@ import { ButtonModule } from 'primeng/button';
         RouterModule,
         UnauthorizedComponent
     ],
+    exports: [EventLayoutComponent]
 })
 export class AppLayoutModule { }

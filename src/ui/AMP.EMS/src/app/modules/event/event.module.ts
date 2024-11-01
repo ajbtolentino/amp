@@ -33,6 +33,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { EventRolesComponent } from './event-details/event-roles.component';
 import { SharedModule } from '../shared.module';
 import { EventGuestInvitationsComponent } from './event-guest-invitation/event-guest-invitations.component';
+import { EventTransactionsComponent } from './event-transactions/event-transactions.component';
+import { EventVendorsComponent } from './event-vendors/event-vendors.component';
+import { EventBudgetComponent } from './event-budget/event-budget.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +48,10 @@ import { EventGuestInvitationsComponent } from './event-guest-invitation/event-g
     EventGuestInvitationRSVPLabelComponent,
     EventInvitationComponent,
     EventGuestDetailsComponent,
-    EventRolesComponent
+    EventRolesComponent,
+    EventTransactionsComponent,
+    EventVendorsComponent,
+    EventBudgetComponent
   ],
   imports: [
     SharedModule,
@@ -115,6 +121,24 @@ import { EventGuestInvitationsComponent } from './event-guest-invitation/event-g
             ]
           },
           {
+            path: 'vendors',
+            title: 'Vendors',
+            data: { breadcrumb: 'Vendors' },
+            component: EventVendorsComponent
+          },
+          {
+            path: 'transactions',
+            title: 'Transactions',
+            data: { breadcrumb: 'Transactions' },
+            component: EventTransactionsComponent
+          },
+          {
+            path: 'budget',
+            title: 'Budget',
+            data: { breadcrumb: 'Budget' },
+            component: EventBudgetComponent
+          },
+          {
             path: 'invitation',
             children: [
               {
@@ -158,7 +182,8 @@ import { EventGuestInvitationsComponent } from './event-guest-invitation/event-g
         ]
       }
     ])
-  ]
+  ],
+  exports: []
 })
 
 export class EventModule { }

@@ -100,7 +100,8 @@
                             </td>
                             <td>
                                 <a pTooltip="Copy" pButton pRipple type="button" icon="pi pi-share-alt"
-                                    class="p-button-rounded p-button-text"></a>
+                                    class="p-button-rounded p-button-text"
+                                    (click)="copyLink(eventGuestInvitation.code)"></a>
                                 <a pTooltip="View" pButton pRipple type="button" icon="pi pi-eye"
                                     class="p-button-rounded p-button-text" target="_blank"
                                     routerLink="/invitation/{{eventGuestInvitation.code}}"></a>

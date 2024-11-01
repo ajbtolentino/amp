@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AMP.EMS.API.Migrations
 {
     [DbContext(typeof(EMSDbContext))]
-    [Migration("20241101184047_InitialDb")]
+    [Migration("20241101201530_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -89,7 +89,7 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6c6573d7-2f01-4339-a12a-f4ca52a94b32"),
+                            Id = new Guid("da408fdf-8d7a-4c21-a0a8-cc6a75304376"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -98,7 +98,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("a7055a3e-a8b7-4110-8a22-f17f4d19ee7b"),
+                            Id = new Guid("958c9f55-f6a9-4f49-b953-a9b73dc038c0"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -107,7 +107,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("738e13a1-829d-4e44-a544-5855fff7d693"),
+                            Id = new Guid("17999312-be17-4c39-af46-f61cd58b41a6"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -116,7 +116,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("285d4ba2-8df5-4576-b414-7618a34dba5b"),
+                            Id = new Guid("bfc595c6-aea0-4d35-b480-9d7a20f66ff4"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -480,7 +480,7 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("dc34120d-3165-4f7a-a657-37862402b394"),
+                            Id = new Guid("a98509e4-66b0-493d-bacb-78c8687692ba"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -609,13 +609,10 @@ namespace AMP.EMS.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid?>("AccountId")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("CategoryId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
@@ -686,7 +683,7 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("97f76011-dcf1-46f6-ae91-ccf4fe4e9288"),
+                            Id = new Guid("694e7b6a-ed05-4842-882e-e61d6fff8eba"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -695,7 +692,7 @@ namespace AMP.EMS.API.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1cf757bf-923d-492e-80ff-f02592ae6475"),
+                            Id = new Guid("2e025ffd-3439-4a7b-aa92-ac3c322b03be"),
                             CreatedBy = "",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "",
@@ -933,9 +930,7 @@ namespace AMP.EMS.API.Migrations
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Account", "Account")
                         .WithMany("Transactions")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountId");
 
                     b.HasOne("AMP.EMS.API.Core.Entities.TransactionType", "TransactionType")
                         .WithMany("Transactions")
