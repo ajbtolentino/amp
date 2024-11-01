@@ -5,8 +5,7 @@ using Newtonsoft.Json;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class EventType : FullAuditableEntity<Guid>
+public class EventType : Lookup
 {
-    public required string Name { get; set; }
-    public string Description { get; set; } = string.Empty;
+    public ICollection<Event> Events { get; set; } = [];
 }

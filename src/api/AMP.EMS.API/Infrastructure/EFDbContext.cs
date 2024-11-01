@@ -26,6 +26,24 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .WithOne(_ => _.Event)
             .HasForeignKey(_ => _.EventId)
             .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Event>()
+            .HasMany(_ => _.EventBudgets)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Event>()
+            .HasMany(_ => _.EventVendors)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<Event>()
+            .HasMany(_ => _.Roles)
+            .WithOne(_ => _.Event)
+            .HasForeignKey(_ => _.EventId)
+            .HasPrincipalKey(_ => _.Id);
 
         modelBuilder.Entity<Guest>()
             .HasMany(_ => _.EventGuests)
@@ -63,7 +81,43 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .HasForeignKey(_ => _.EventGuestInvitationRsvpId)
             .HasPrincipalKey(_ => _.Id);
         
+        modelBuilder.Entity<Vendor>()
+            .HasMany(_ => _.EventVendors)
+            .WithOne(_ => _.Vendor)
+            .HasForeignKey(_ => _.VendorId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<AccountType>()
+            .HasMany(_ => _.Accounts)
+            .WithOne(_ => _.AccountType)
+            .HasForeignKey(_ => _.AccountTypeId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<EventType>()
+            .HasMany(_ => _.Events)
+            .WithOne(_ => _.EventType)
+            .HasForeignKey(_ => _.EventTypeId)
+            .HasPrincipalKey(_ => _.Id);
+        
+        modelBuilder.Entity<TransactionType>()
+            .HasMany(_ => _.Transactions)
+            .WithOne(_ => _.TransactionType)
+            .HasForeignKey(_ => _.TransactionTypeId)
+            .HasPrincipalKey(_ => _.Id);
+
+        modelBuilder.Entity<Account>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<AccountType>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
         modelBuilder.Entity<Event>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<EventBudget>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
@@ -90,30 +144,55 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
         modelBuilder.Entity<EventInvitation>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
-
-        modelBuilder.Entity<Role>()
+        
+        modelBuilder.Entity<EventType>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
-        modelBuilder.Entity<EventType>()
+        modelBuilder.Entity<EventVendor>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
         modelBuilder.Entity<Guest>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<Role>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<Transaction>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<TransactionType>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<Vendor>()
+            .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
+        
+        Seed(modelBuilder);
     }
 
+    public DbSet<Account> Accounts { get; private set; }
+    public DbSet<AccountType> AccountsTypes { get; private set; }
     public DbSet<Event> Events { get; private set; }
+    public DbSet<EventBudget> EventBudgets { get; private set; }
     public DbSet<EventGuest> EventGuests { get; private set; }
     public DbSet<EventGuestInvitation> EventGuestInvitations { get; private set; }
     public DbSet<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; private set; }
     public DbSet<EventGuestInvitationRsvpItem> EventGuestInvitationsRsvpItems { get; private set; }
-    public DbSet<Role> EventGuestRoles { get; private set; }
+    public DbSet<EventGuestRole> EventGuestRoles { get; private set; }
     public DbSet<EventInvitation> EventInvitations { get; private set; }
-    public DbSet<Role> EventRoles { get; private set; }
     public DbSet<EventType> EventTypes { get; private set; }
+    public DbSet<EventVendor> EventVendors { get; private set; }
     public DbSet<Guest> Guests { get; private set; }
+    public DbSet<Role> Roles { get; private set; }
+    public DbSet<Transaction> Transactions { get; private set; }
+    public DbSet<TransactionType> TransactionTypes { get; private set; }
+    public DbSet<Vendor> Vendors { get; private set; }
 
     public TEntity Add<TEntity, TID>(TEntity entity) where TEntity : class, IEntity<TID>
     {
@@ -148,5 +227,24 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
     public TEntity Update<TEntity, TID>(TEntity entity) where TEntity : class, IEntity<TID>
     {
         return this.Set<TEntity>().Update(entity).Entity;
+    }
+
+    private static void Seed(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<EventType>().HasData(
+            new EventType() { Id = Guid.NewGuid(), Name = "Wedding" }
+        );
+
+        modelBuilder.Entity<AccountType>().HasData(
+            new AccountType() { Id = Guid.NewGuid(), Name = "Cash" },
+            new AccountType() { Id = Guid.NewGuid(), Name = "Savings" },
+            new AccountType() { Id = Guid.NewGuid(), Name = "Credit Card" },
+            new AccountType() { Id = Guid.NewGuid(), Name = "Checking" }
+        );
+
+        modelBuilder.Entity<TransactionType>().HasData(
+            new TransactionType() { Id = Guid.NewGuid(), Name = "Income" },
+            new TransactionType() { Id = Guid.NewGuid(), Name = "Expense" }
+        );
     }
 }
