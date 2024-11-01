@@ -5,8 +5,8 @@ import { Table } from 'primeng/table';
 import { Column } from '../../../core/models/column';
 import { EventService } from '../../../core/services/event.service';
 import { lastValueFrom, Observable } from 'rxjs';
-import { EventRoleService } from '../../../core/services/event-role.service';
 import { EventRole } from '../../../core/models/event-role';
+import { RoleService } from '../../../core/services/role.service';
 
 @Component({
   selector: 'app-event-roles',
@@ -27,7 +27,7 @@ export class EventRolesComponent {
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
-    private eventRoleService: EventRoleService,
+    private roleService: RoleService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -92,7 +92,7 @@ export class EventRolesComponent {
         if (itemToDelete.id) {
           this.loading = true;
 
-          await lastValueFrom(this.eventRoleService.delete(itemToDelete.id));
+          await lastValueFrom(this.roleService.delete(itemToDelete.id));
           this.refreshGrid();
 
           this.loading = false;
@@ -109,11 +109,11 @@ export class EventRolesComponent {
       this.loading = true;
 
       if (item.id) {
-        await lastValueFrom(this.eventRoleService.update(item));
+        await lastValueFrom(this.roleService.update(item));
       }
       else {
         item.eventId = this.eventId;
-        await lastValueFrom(this.eventRoleService.add(item));
+        await lastValueFrom(this.roleService.add(item));
       }
 
       this.loading = false;

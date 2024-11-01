@@ -7,28 +7,28 @@ import { EventRole } from '../models/event-role';
 @Injectable({
   providedIn: 'root'
 })
-export class EventRoleService extends BaseApiService {
+export class RoleService extends BaseApiService {
   get = (id: string): Observable<EventGuestRole> => {
-    return this.httpGet(`api/eventrole/${id}`);
+    return this.httpGet(`api/role/${id}`);
   }
 
   getAll = async () => {
-    return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventrole`, { headers: this.headers }));
+    return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/role`, { headers: this.headers }));
   }
 
   add = (eventRole: EventGuestRole): Observable<EventGuestRole> => {
-    return this.httpPost(`api/eventrole`, eventRole);
+    return this.httpPost(`api/role`, eventRole);
   }
 
   update = (eventRole: EventRole): Observable<EventRole> => {
-    return this.httpPut(`api/eventrole/${eventRole.id}`, eventRole);
+    return this.httpPut(`api/role/${eventRole.id}`, eventRole);
   }
 
   delete = (id: string): Observable<EventRole> => {
-    return this.httpDelete(`api/eventrole/${id}`);
+    return this.httpDelete(`api/role/${id}`);
   }
 
   deleteSelected = async (ids: string[]) => {
-    return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL} / api / eventrole`, { headers: this.headers, body: ids }));
+    return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/role`, { headers: this.headers, body: ids }));
   }
 }

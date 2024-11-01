@@ -91,7 +91,7 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
 
-        modelBuilder.Entity<EventRole>()
+        modelBuilder.Entity<Role>()
             .Property(p => p.Id)
             .ValueGeneratedOnAdd();
         
@@ -109,9 +109,9 @@ public class EMSDbContext(DbContextOptions<EMSDbContext> options) : DbContext(op
     public DbSet<EventGuestInvitation> EventGuestInvitations { get; private set; }
     public DbSet<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; private set; }
     public DbSet<EventGuestInvitationRsvpItem> EventGuestInvitationsRsvpItems { get; private set; }
-    public DbSet<EventRole> EventGuestRoles { get; private set; }
+    public DbSet<Role> EventGuestRoles { get; private set; }
     public DbSet<EventInvitation> EventInvitations { get; private set; }
-    public DbSet<EventRole> EventRoles { get; private set; }
+    public DbSet<Role> EventRoles { get; private set; }
     public DbSet<EventType> EventTypes { get; private set; }
     public DbSet<Guest> Guests { get; private set; }
 

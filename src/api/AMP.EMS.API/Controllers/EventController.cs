@@ -22,9 +22,9 @@ namespace AMP.EMS.API.Controllers
         [Route("{eventId:guid}/roles")]
         public IActionResult GetRoles(Guid eventId)
         {
-            var eventRoles = unitOfWork.Repository<EventRole>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
+            var eventRoles = unitOfWork.Repository<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
 
-            return Ok(new OkResponse<IEnumerable<EventRole>>(string.Empty) { Data = eventRoles });
+            return Ok(new OkResponse<IEnumerable<Role>>(string.Empty) { Data = eventRoles });
         }
 
         [HttpGet]
@@ -35,7 +35,7 @@ namespace AMP.EMS.API.Controllers
                                         .Where(eventGuest => eventGuest.EventId == eventId)
                                         .Include(eventGuest => eventGuest.Guest)
                                         .Include(eventGuest => eventGuest.EventGuestRoles)
-                                            .ThenInclude(eventGuestRole => eventGuestRole.EventRole)
+                                            .ThenInclude(eventGuestRole => eventGuestRole.Role)
                                         .Include(eventGuest => eventGuest.EventGuestInvitations)
                                             .ThenInclude(eventGuestInvitation => eventGuestInvitation.EventGuestInvitationRsvps)
                                             .ThenInclude(eventGuestInvitationRsvp => eventGuestInvitationRsvp.EventGuestInvitationRsvpItems)

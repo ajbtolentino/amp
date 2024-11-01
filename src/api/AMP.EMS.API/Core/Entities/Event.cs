@@ -25,5 +25,5 @@ public class Event : FullAuditableEntity<Guid>
 
     public ICollection<EventInvitation> EventInvitations { get; set; } = [];
     public ICollection<EventGuest> EventGuests { get; set; } = [];
-    public ICollection<EventRole> EventGuestRoles { get; set; } = [];
+    public ICollection<Role> EventGuestRoles { get; set; } = [];
 }

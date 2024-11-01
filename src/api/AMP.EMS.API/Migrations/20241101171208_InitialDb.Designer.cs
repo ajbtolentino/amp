@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AMP.EMS.API.Migrations
 {
     [DbContext(typeof(EMSDbContext))]
-    [Migration("20241031204215_InitialDb")]
+    [Migration("20241101171208_InitialDb")]
     partial class InitialDb
     {
         /// <inheritdoc />
@@ -90,9 +90,6 @@ namespace AMP.EMS.API.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("EventInvitationId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("GuestId")
                         .HasColumnType("TEXT");
 
@@ -106,8 +103,6 @@ namespace AMP.EMS.API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
-
-                    b.HasIndex("EventInvitationId");
 
                     b.HasIndex("GuestId");
 
@@ -246,7 +241,7 @@ namespace AMP.EMS.API.Migrations
                     b.Property<Guid>("EventGuestId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("EventRoleId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UpdatedBy")
@@ -257,7 +252,7 @@ namespace AMP.EMS.API.Migrations
 
                     b.HasIndex("EventGuestId");
 
-                    b.HasIndex("EventRoleId");
+                    b.HasIndex("RoleId");
 
                     b.ToTable("EventGuestRole");
                 });
@@ -302,44 +297,6 @@ namespace AMP.EMS.API.Migrations
                     b.HasIndex("EventId");
 
                     b.ToTable("EventInvitations");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventRole");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventType", b =>
@@ -416,6 +373,44 @@ namespace AMP.EMS.API.Migrations
                     b.ToTable("Guests");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Event", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.EventType", "Type")
@@ -434,10 +429,6 @@ namespace AMP.EMS.API.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventInvitation", null)
-                        .WithMany("EventGuests")
-                        .HasForeignKey("EventInvitationId");
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Guest", "Guest")
                         .WithMany("EventGuests")
@@ -499,15 +490,15 @@ namespace AMP.EMS.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventRole", "EventRole")
+                    b.HasOne("AMP.EMS.API.Core.Entities.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("EventRoleId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EventGuest");
 
-                    b.Navigation("EventRole");
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventInvitation", b =>
@@ -521,7 +512,7 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventRole", b =>
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.Role", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
                         .WithMany("EventGuestRoles")
@@ -561,8 +552,6 @@ namespace AMP.EMS.API.Migrations
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventInvitation", b =>
                 {
                     b.Navigation("EventGuestInvitations");
-
-                    b.Navigation("EventGuests");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Guest", b =>

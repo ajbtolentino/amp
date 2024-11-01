@@ -26,7 +26,7 @@ namespace AMP.EMS.API.Controllers
                                         .ThenInclude(_ => _.EventGuestInvitationRsvps)
                                         .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
                                     .Include(_ => _.EventGuestRoles)
-                                        .ThenInclude(_ => _.EventRole)
+                                        .ThenInclude(_ => _.Role)
                                     .FirstOrDefaultAsync();
             
             ArgumentNullException.ThrowIfNull(eventGuest);
@@ -166,15 +166,15 @@ namespace AMP.EMS.API.Controllers
         {
             var eventGuestRoles = this.unitOfWork.Repository<EventGuestRole>().GetAll().AsNoTracking()
                 .Where(_ => _.EventGuestId == eventGuest.Id);
-            var newEventRoles = eventRoleIds.Except(eventGuestRoles.Select(_ => _.EventRoleId));
-            var deletedEventGuestRoles = eventGuestRoles.Where(_ => !eventRoleIds.Contains(_.EventRoleId));
+            var newEventRoles = eventRoleIds.Except(eventGuestRoles.Select(_ => _.RoleId));
+            var deletedEventGuestRoles = eventGuestRoles.Where(_ => !eventRoleIds.Contains(_.RoleId));
 
             foreach (var eventRoleId in newEventRoles)
             {
                 this.unitOfWork.Repository<EventGuestRole>().Add(new EventGuestRole
                 {
                     EventGuestId = eventGuest.Id,
-                    EventRoleId = eventRoleId
+                    RoleId = eventRoleId
                 });
             }
 

@@ -39,24 +39,12 @@ export class EventService extends BaseApiService {
         return await lastValueFrom(this.httpClient.post<any>(`${this.API_URL}/api/event`, event, { headers: this.headers }));
     }
 
-    addRole = (id: string, eventRole: EventGuestRole): Observable<Event> => {
-        return this.httpPost<EventGuestRole>(`api/event/${id}`, eventRole);
-    }
-
     update = async (event: Event) => {
         return await lastValueFrom(this.httpClient.put<any>(`${this.API_URL}/api/event/${event.id}`, event, { headers: this.headers }));
     }
 
-    updateRole = (id: string, eventRole: EventGuestRole): Observable<Event> => {
-        return this.httpPut<EventGuestRole>(`api/event/${id}`, eventRole);
-    }
-
     delete = async (id: string) => {
         return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
-    }
-
-    deleteRole = (id: string, eventRoleId: string): Observable<Event> => {
-        return this.httpDelete<Event>(`api/event/${id}/eventRole/${eventRoleId}`);
     }
 
     deleteSelected = async (ids: string[]) => {

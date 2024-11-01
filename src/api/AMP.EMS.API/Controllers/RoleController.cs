@@ -7,7 +7,7 @@ namespace AMP.EMS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventRoleController(IUnitOfWork unitOfWork) : ApiBaseController<EventRole, Guid>(unitOfWork)
+    public class RoleController(IUnitOfWork unitOfWork) : ApiBaseController<Role, Guid>(unitOfWork)
     {
         public record EventRoleData(Guid EventId, string? Name, string? Description);
 
@@ -16,7 +16,7 @@ namespace AMP.EMS.API.Controllers
         {
             ArgumentException.ThrowIfNullOrEmpty(request.Name);
 
-            return await base.Post(new EventRole()
+            return await base.Post(new Role()
             {
                 EventId = request.EventId,
                 Name = request.Name,
