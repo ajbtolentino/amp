@@ -47,7 +47,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
     if (eventGuestId) {
       this.eventGuest$ = this.eventGuestService.get(eventGuestId || '').pipe(map(response => {
-        if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.eventRoleId).map(_ => _.eventRoleId!);
+        if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
         if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.eventInvitationId).map(_ => _.eventInvitationId!);
         return response;
       }));

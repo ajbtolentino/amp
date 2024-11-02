@@ -1,10 +1,11 @@
 import { Event } from "./event";
-import { EventRole } from "./event-role";
+import { EventGuest } from "./event-guest";
+import { Role } from "./role";
 
 export interface EventGuestRole {
     id?: string;
-    eventRoleId?: string;
+    roleId?: string;
     eventGuestId?: string;
-    event?: Event;
-    eventRole?: EventRole;
+    eventGuest?: EventGuest;
+    role?: Role;
 }

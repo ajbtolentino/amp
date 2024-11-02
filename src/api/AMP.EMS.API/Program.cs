@@ -1,17 +1,11 @@
+using System.Text.Json.Serialization;
 using AMP.EMS.API.Infrastructure;
+using AMP.Infrastructure.Extensions;
 using AMP.Infrastructure.Middlewares;
 using AMP.Infrastructure.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using AMP.Infrastructure.Extensions;
-using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.HttpLogging;
-using System.Text.Json.Serialization;
-using AMP.Infrastructure.Enums;
-using MongoDB.Bson.Serialization;
-using AMP.Infrastructure.Entity;
-using AMP.EMS.API.Core.Entities;
-using MongoDB.Bson;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

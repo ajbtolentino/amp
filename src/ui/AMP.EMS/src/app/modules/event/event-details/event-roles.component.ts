@@ -5,7 +5,7 @@ import { Table } from 'primeng/table';
 import { Column } from '../../../core/models/column';
 import { EventService } from '../../../core/services/event.service';
 import { lastValueFrom, Observable } from 'rxjs';
-import { EventRole } from '../../../core/models/event-role';
+import { Role } from '../../../core/models/role';
 import { RoleService } from '../../../core/services/role.service';
 
 @Component({
@@ -16,7 +16,7 @@ import { RoleService } from '../../../core/services/role.service';
 export class EventRolesComponent {
   eventId!: string;
 
-  eventRoles$: Observable<EventRole[]> = new Observable<EventRole[]>();
+  eventRoles$: Observable<Role[]> = new Observable<Role[]>();
 
   columns!: Column[];
 
@@ -51,7 +51,7 @@ export class EventRolesComponent {
     this.eventRoles$ = this.eventService.getRoles(this.eventId);
   }
 
-  addRow = (eventRoles: EventRole[]) => {
+  addRow = (eventRoles: Role[]) => {
     eventRoles.unshift({});
 
     this.table.initRowEdit(eventRoles[0]);
@@ -83,7 +83,7 @@ export class EventRolesComponent {
     });
   }
 
-  delete = async (itemToDelete: EventRole) => {
+  delete = async (itemToDelete: Role) => {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete ' + itemToDelete.name + '?',
       header: 'Confirm',
@@ -104,7 +104,7 @@ export class EventRolesComponent {
   initTableEdit = () => {
   }
 
-  save = async (item: EventRole) => {
+  save = async (item: Role) => {
     if (item?.name?.trim()) {
       this.loading = true;
 

@@ -1,4 +1,4 @@
-export interface EventRole {
+export interface Role {
     id?: string;
     eventId?: string;
     name?: string;

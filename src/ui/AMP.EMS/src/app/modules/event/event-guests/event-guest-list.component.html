@@ -67,9 +67,9 @@
                         <td>{{item.guest.firstName}}</td>
                         <td>{{item.guest.lastName}}</td>
                         <td>{{item.maxGuests}}</td>
-                        <td>
-                            <span *ngFor='let eventGuestRole of item.eventGuestRoles'>
-                                {{eventGuestRole.eventRole.name}}
+                        <td class="text-center">
+                            <span *ngFor='let eventGuestRole of item.eventGuestRoles; let i = index'>
+                                {{eventGuestRole.role.name}}<span *ngIf=" i < item.eventGuestRoles.length - 1">,</span>
                             </span>
                         </td>
                         <td class="text-center">

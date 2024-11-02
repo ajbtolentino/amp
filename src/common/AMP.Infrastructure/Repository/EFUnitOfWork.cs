@@ -38,11 +38,11 @@ public class EFUnitOfWork(DbContext dbContext, IHttpContextAccessor httpContextA
             {
                 case EntityState.Added:
                     entry.Entity.CreatedBy = claims?.Value ?? string.Empty;
-                    entry.Entity.DateCreated = DateTime.Now;
+                    entry.Entity.DateCreated = DateTime.UtcNow;
                     break;
                 case EntityState.Modified:
                     entry.Entity.UpdatedBy = claims?.Value ?? string.Empty;
-                    entry.Entity.DateUpdated = DateTime.Now;
+                    entry.Entity.DateUpdated = DateTime.UtcNow;
                     break;
             }
         }

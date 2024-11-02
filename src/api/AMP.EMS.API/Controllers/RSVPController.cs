@@ -7,44 +7,49 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace AMP.EMS.API.Controllers
+namespace AMP.EMS.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logger)
+    : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork, logger)
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logger) : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork, logger)
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Post([FromBody] RsvpRequest request)
     {
-        public record RsvpRequest(Guid EventGuestInvitationId, [JsonConverter(typeof(StringEnumConverter))] Core.Constants.RsvpResponse Response, string? PhoneNumber, IEnumerable<string>? GuestNames);
-        
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Post([FromBody] RsvpRequest request)
+        var guestInvitation = await unitOfWork.Repository<EventGuestInvitation>().Get(request.EventGuestInvitationId);
+
+        ArgumentNullException.ThrowIfNull(guestInvitation);
+
+        try
         {
-            var guestInvitation = await unitOfWork.Repository<EventGuestInvitation>().Get(request.EventGuestInvitationId);
+            unitOfWork.BeginTransaction();
 
-            ArgumentNullException.ThrowIfNull(guestInvitation);
-
-            try
+            var rsvpEntity = await unitOfWork.Repository<EventGuestInvitationRsvp>().Add(new EventGuestInvitationRsvp
             {
-                unitOfWork.BeginTransaction();
-                
-                var rsvpEntity = await this.unitOfWork.Repository<EventGuestInvitationRsvp>().Add(new EventGuestInvitationRsvp()
-                {
-                    Response = request.Response
-                });
+                Response = request.Response
+            });
 
-                guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity);
+            guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity);
 
-                await unitOfWork.SaveChangesAsync();
-                await unitOfWork.CommitTransactionAsync();
+            await unitOfWork.SaveChangesAsync();
+            await unitOfWork.CommitTransactionAsync();
 
-                return Ok(new OkResponse<EventGuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
-            }
-            catch(Exception ex)
-            {
-                logger.LogError(ex, ex.Message);
-                await unitOfWork.RollbackTransactionAsync();
-                throw;
-            }
+            return Ok(new OkResponse<EventGuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, ex.Message);
+            await unitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
         }
     }
+
+    public record RsvpRequest(
+        Guid EventGuestInvitationId,
+        [JsonConverter(typeof(StringEnumConverter))]
+        RsvpResponse Response,
+        string? PhoneNumber,
+        IEnumerable<string>? GuestNames);
 }

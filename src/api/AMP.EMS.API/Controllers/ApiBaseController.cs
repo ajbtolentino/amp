@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.Infrastructure.Entity;
 using AMP.Infrastructure.Responses;

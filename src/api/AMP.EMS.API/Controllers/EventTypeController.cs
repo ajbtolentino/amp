@@ -1,8 +1,6 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers
 {

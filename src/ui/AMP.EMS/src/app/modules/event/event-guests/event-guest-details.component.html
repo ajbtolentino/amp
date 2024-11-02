@@ -56,8 +56,8 @@
                     </div>
                     <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
                         <label htmlFor="lastName">Role</label>
-                        <p-multiSelect *ngIf="!eventRoles.loading && !eventGuest.loading" placeholder="Select Role"
-                            [options]="eventRoles.value" optionLabel="name" optionValue="id"
+                        <p-multiSelect #rolemultiselect *ngIf="!eventRoles.loading && !eventGuest.loading"
+                            placeholder="Select Role" [options]="eventRoles.value" optionLabel="name" optionValue="id"
                             [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoleIds" />
 
                         <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>

@@ -28,34 +28,73 @@ export class EventMenuComponent implements OnInit {
                             routerLink: [`/event/${this.eventId}/dashboard`]
                         },
                         {
-                            label: 'Vendors',
-                            icon: 'pi pi-fw pi-shop',
-                            routerLink: [`/event/${this.eventId}/vendors`]
+                            label: 'Vendor Management',
+                            icon: 'pi pi-fw pi-shopping-bag',
+                            items: [
+                                {
+                                    label: 'Event Vendors',
+                                    routerLink: [`/event/${this.eventId}/vendors`]
+                                },
+                                {
+                                    label: 'Find a Vendor',
+                                }
+                            ]
                         },
                         {
-                            label: 'Guests',
+                            label: 'Guest Management',
                             icon: 'pi pi-fw pi-users',
-                            routerLink: [`/event/${this.eventId}/guests`]
+                            items: [
+                                {
+                                    label: 'View Guests',
+                                    routerLink: [`/event/${this.eventId}/guests`]
+                                },
+                                {
+                                    label: 'RSVP Management',
+                                    routerLink: [`/event/${this.eventId}/guests`]
+                                }
+                            ]
                         },
                         {
-                            label: 'Invitations',
+                            label: 'Invitation Management',
                             icon: 'pi pi-fw pi-paperclip',
-                            routerLink: [`/event/${this.eventId}/invitations`]
+                            items: [
+                                {
+                                    label: 'View Invitations',
+                                    routerLink: [`/event/${this.eventId}/invitations`]
+                                },
+                                {
+                                    label: 'Track RSVP Responses',
+                                    routerLink: [`/event/${this.eventId}/invitations`]
+                                }
+                            ]
                         },
+                        {
+                            label: 'Budget Management',
+                            icon: 'pi pi-fw pi-calculator',
+                            items: [
+                                {
+                                    label: 'View Budgets',
+                                    routerLink: [`/event/${this.eventId}/budget`]
+                                },
+                                {
+                                    label: 'Expense Tracking',
+                                    routerLink: [`/event/${this.eventId}/transactions`]
+                                }
+                            ]
+                        }
                     ]
                 },
                 {
-                    label: 'Accounting',
+                    label: 'Settings',
                     items: [
                         {
-                            label: 'Transactions',
-                            icon: 'pi pi-fw pi-dollar',
-                            routerLink: [`/event/${this.eventId}/transactions`]
+                            label: 'Edit Event',
+                            icon: 'pi pi-fw pi-cog',
+                            routerLink: [`/event/${this.eventId}/edit`]
                         },
                         {
-                            label: 'Budget',
-                            icon: 'pi pi-fw pi-calculator',
-                            routerLink: [`/event/${this.eventId}/budget`]
+                            label: 'Logout',
+                            icon: 'pi pi-fw pi-sign-out',
                         },
                     ]
                 }

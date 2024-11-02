@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseApiService } from './base.api.service';
 import { lastValueFrom, Observable } from 'rxjs';
 import { EventGuestRole } from '../models/event-guest-role';
-import { EventRole } from '../models/event-role';
+import { Role } from '../models/role';
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +20,11 @@ export class RoleService extends BaseApiService {
     return this.httpPost(`api/role`, eventRole);
   }
 
-  update = (eventRole: EventRole): Observable<EventRole> => {
+  update = (eventRole: Role): Observable<Role> => {
     return this.httpPut(`api/role/${eventRole.id}`, eventRole);
   }
 
-  delete = (id: string): Observable<EventRole> => {
+  delete = (id: string): Observable<Role> => {
     return this.httpDelete(`api/role/${id}`);
   }
 

@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using AMP.EMS.API.Models;
 using AMP.Infrastructure.Responses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
