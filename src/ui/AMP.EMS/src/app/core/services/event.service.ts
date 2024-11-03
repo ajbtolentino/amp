@@ -1,15 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
-import { Event } from '../models/event';
 import { lastValueFrom, map, Observable } from 'rxjs';
 
 import { BaseApiService } from './base.api.service';
-import { EventInvitation } from '../models/event-invitation';
-import { EventGuestRole } from '../models/event-guest-role';
-import { Guest } from '../models/guest';
-import { EventInvitationInfo } from '../models/event-invitation-info';
-import { EventGuest } from '../models/event-guest';
+import { EventGuestRole, EventInvitation, EventGuest, Event } from '@shared/models';
 
 @Injectable({
     providedIn: 'root'

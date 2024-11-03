@@ -1,0 +1,1 @@
+export * from './components/event-dashboard/event-dashboard.component'

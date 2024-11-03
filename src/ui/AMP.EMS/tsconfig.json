@@ -3,6 +3,24 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@shared/*": [
+        "app/shared/*",
+        "app/shared/models"
+      ],
+      "@modules/*": [
+        "app/modules/*",
+        "app/modules/event/dashboard/*",
+        "app/modules/event/vendors/*",
+        "app/modules/event/settings/*",
+        "app/modules/event/invitations/*",
+        "app/modules/event/guest/*"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from './base.api.service';
 import { lastValueFrom, Observable } from 'rxjs';
-import { EventGuestRole } from '../models/event-guest-role';
-import { Role } from '../models/role';
+import { EventGuestRole, Role } from '@shared/models';
 
 @Injectable({
   providedIn: 'root'

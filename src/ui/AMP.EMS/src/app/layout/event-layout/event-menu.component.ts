@@ -28,45 +28,19 @@ export class EventMenuComponent implements OnInit {
                             routerLink: [`/event/${this.eventId}/dashboard`]
                         },
                         {
-                            label: 'Vendor Management',
+                            label: 'Vendors',
                             icon: 'pi pi-fw pi-shopping-bag',
-                            items: [
-                                {
-                                    label: 'Event Vendors',
-                                    routerLink: [`/event/${this.eventId}/vendors`]
-                                },
-                                {
-                                    label: 'Find a Vendor',
-                                }
-                            ]
+                            routerLink: [`/event/${this.eventId}/vendors`]
                         },
                         {
-                            label: 'Guest Management',
+                            label: 'Guests',
                             icon: 'pi pi-fw pi-users',
-                            items: [
-                                {
-                                    label: 'View Guests',
-                                    routerLink: [`/event/${this.eventId}/guests`]
-                                },
-                                {
-                                    label: 'RSVP Management',
-                                    routerLink: [`/event/${this.eventId}/guests`]
-                                }
-                            ]
+                            routerLink: [`/event/${this.eventId}/guests`]
                         },
                         {
-                            label: 'Invitation Management',
-                            icon: 'pi pi-fw pi-paperclip',
-                            items: [
-                                {
-                                    label: 'View Invitations',
-                                    routerLink: [`/event/${this.eventId}/invitations`]
-                                },
-                                {
-                                    label: 'Track RSVP Responses',
-                                    routerLink: [`/event/${this.eventId}/invitations`]
-                                }
-                            ]
+                            label: 'Invitations',
+                            icon: 'pi pi-fw pi-envelope',
+                            routerLink: [`/event/${this.eventId}/invitations`],
                         },
                         {
                             label: 'Budget Management',

@@ -1,7 +1,7 @@
 import { lastValueFrom, Observable } from 'rxjs';
 import { BaseApiService } from './base.api.service';
-import { EventGuestInvitationRsvp } from '../models/event-guest-invitation-rsvp';
 import { Injectable } from '@angular/core';
+import { EventGuestInvitationRsvp } from '@shared/models';
 
 @Injectable({
     providedIn: 'root'

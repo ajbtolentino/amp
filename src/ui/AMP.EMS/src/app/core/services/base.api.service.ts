@@ -3,7 +3,7 @@ import { environment } from "../../../environments/environment";
 import { HttpClient, HttpContext, HttpEvent, HttpHeaders, HttpParams } from "@angular/common/http";
 import { OidcSecurityService } from "angular-auth-oidc-client";
 import { map, Observable } from "rxjs";
-import { EMSResponse } from "../models/ems-response";
+import { EMSResponse } from "@shared/models";
 
 @Injectable()
 export class BaseApiService {

@@ -8,7 +8,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { EmptyLayoutComponent } from '../../layout/empty-layout/empty-layout.component';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
-import { SharedModule } from '../shared.module';
+import { SharedModule } from '@modules/shared.module';
 
 @NgModule({
   declarations: [EmptyLayoutComponent, InvitationDetailsComponent],

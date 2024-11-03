@@ -1,11 +1,9 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { Event } from '../models/event';
-import { lastValueFrom, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { BaseApiService } from './base.api.service';
-import { EventType } from '../models/event-type';
+import { Event, EventType } from '@shared/models';
 
 @Injectable({
     providedIn: 'root'

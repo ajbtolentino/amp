@@ -2,13 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
-import { Event } from '../../../core/models/event';
 
-import { Column } from '../../../core/models/column';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
-import { EventType } from '../../../core/models/event-type';
 import { EventTypeService } from '../../../core/services/event-type.service';
 import { lastValueFrom, Observable } from 'rxjs';
+import { Column, EventType } from '@shared/models';
 
 @Component({
   selector: 'app-settings',

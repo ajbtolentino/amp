@@ -1,15 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
 
-import { Event } from '../../../core/models/event';
 
 import { EventService } from '../../../core/services/event.service';
-import { Column } from '../../../core/models/column';
 import { Table } from 'primeng/table';
-import { EventType } from '../../../core/models/event-type';
 import { EventTypeService } from '../../../core/services/event-type.service';
 import { Observable } from 'rxjs';
+import { Column, Event, EventType } from '@shared/models';
 
 @Component({
   selector: 'app-event-list',

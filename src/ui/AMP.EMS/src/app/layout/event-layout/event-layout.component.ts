@@ -1,5 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { EventsLayoutComponent } from '../events-layout/events-layout.component';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Observable, Subscription, filter } from 'rxjs';
 import { LayoutService } from '../service/app.layout.service';
