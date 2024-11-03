@@ -11,8 +11,8 @@ export class EventGuestService extends BaseApiService {
         return this.httpGet(`api/eventguest/${id}`);
     }
 
-    getAll = async () => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventguest`, { headers: this.headers }));
+    getAll = (): Observable<EventGuest[]> => {
+        return this.httpGet<EventGuest[]>(`api/eventguest`);
     }
 
     getInvitations = (eventGuestId: string): Observable<EventGuestInvitation[]> => {

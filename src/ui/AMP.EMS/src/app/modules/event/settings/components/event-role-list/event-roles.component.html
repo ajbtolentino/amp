@@ -60,16 +60,16 @@
             <td>
                 <div class="flex">
                     <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                        (click)="editRow()" class="p-button-rounded p-button-success mr-2" pTooltip="Edit">
+                        (click)="editRow()" class="p-button-text p-button-success mr-2" pTooltip="Edit">
                     </button>
-                    <button *ngIf="!editing" pButton pRipple class="p-button-rounded p-button-warning"
-                        icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
+                    <button *ngIf="!editing" pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
+                        (click)="delete(item)" pTooltip="Delete"></button>
 
                     <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
-                        (click)="save(item)" class="p-button-rounded p-button-text p-button-success mr-2">
+                        (click)="save(item)" class="p-button-text p-button-text p-button-success mr-2">
                     </button>
                     <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
-                        (click)="cancelAdd()" class="p-button-rounded p-button-text p-button-danger">
+                        (click)="cancelAdd()" class="p-button-text p-button-text p-button-danger">
                     </button>
                 </div>
             </td>

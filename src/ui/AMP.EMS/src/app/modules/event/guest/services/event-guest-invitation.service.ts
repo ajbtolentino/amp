@@ -13,6 +13,18 @@ export interface EventGuestInvitationResponse {
     providedIn: 'root'
 })
 export class EventGuestInvitationService extends BaseApiService {
+    add = (eventGuestInvitation: EventGuestInvitation): Observable<EventGuestInvitation> => {
+        return this.httpPost(`api/eventguestinvitation/`, eventGuestInvitation);
+    }
+
+    update = (id: string, eventGuestInvitation: EventGuestInvitation): Observable<EventGuestInvitation> => {
+        return this.httpPut(`api/eventguestinvitation/${id}`, eventGuestInvitation);
+    }
+
+    delete = (id: string): Observable<EventGuestInvitation> => {
+        return this.httpDelete(`api/eventguestinvitation/${id}`);
+    }
+
     rsvp = (code: string): Observable<EventGuestInvitationResponse> => {
         return this.httpGet(`api/eventguestinvitation/${code}/rsvp`);
     }

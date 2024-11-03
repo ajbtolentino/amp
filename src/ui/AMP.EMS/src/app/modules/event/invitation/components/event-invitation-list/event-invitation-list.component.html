@@ -61,14 +61,14 @@
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
                                     routerLink="/event/{{eventId}}/invitations/{{item.id}}/edit"
-                                    class="p-button-rounded p-button-success mr-2 p-jc-end" pTooltip="Edit">
+                                    class="p-button-text p-button-success mr-2 p-jc-end" pTooltip="Edit">
                                 </button>
                                 <button *ngIf="!editing" pButton pRipple
                                     routerLink="/event/{{eventId}}/invitations/{{item.id}}/guests"
-                                    class="p-button-rounded p-button-info mr-2 p-jc-end" icon="pi pi-users"
+                                    class="p-button-text p-button-info mr-2 p-jc-end" icon="pi pi-users"
                                     pTooltip="Manage Guests"></button>
                                 <button *ngIf="!editing" pButton pRipple
-                                    class="p-button-rounded p-button-warning mr-2 p-jc-end" icon="pi pi-trash"
+                                    class="p-button-text p-button-warning mr-2 p-jc-end" icon="pi pi-trash"
                                     (click)="delete(item)" pTooltip="Delete"></button>
                             </div>
                         </td>

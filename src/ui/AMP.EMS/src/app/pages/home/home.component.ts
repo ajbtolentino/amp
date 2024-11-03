@@ -3,11 +3,11 @@ import { AuthenticatedResult, EventTypes, LoginResponse, OidcClientNotification,
 import { filter, lastValueFrom, Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-default',
-  templateUrl: './default.component.html',
+  selector: 'app-home',
+  templateUrl: './home.component.html',
   styles: ``
 })
-export class DefaultComponent implements OnInit {
+export class HomeComponent implements OnInit {
   isAuthenticated$: Observable<AuthenticatedResult> = new Observable<AuthenticatedResult>();
   userData$: Observable<UserDataResult> = new Observable<UserDataResult>();
   notification$: Observable<OidcClientNotification<any>> = new Observable<OidcClientNotification<any>>();

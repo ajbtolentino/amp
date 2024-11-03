@@ -31,6 +31,23 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
         return Ok(new OkResponse<EventGuest>(string.Empty) { Data = eventGuest });
     }
 
+    public override async Task<IActionResult> GetAll()
+    {
+        var eventGuests = entityRepository.GetAll()
+            .Include(_ => _.Guest)
+            .Include(_ => _.EventGuestInvitations)
+            .ThenInclude(_ => _.EventInvitation)
+            .Include(_ => _.EventGuestInvitations)
+            .ThenInclude(_ => _.EventGuestInvitationRsvps)
+            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
+            .Include(_ => _.EventGuestRoles)
+            .ThenInclude(_ => _.Role);
+
+        ArgumentNullException.ThrowIfNull(eventGuests);
+
+        return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = eventGuests });
+    }
+
     [HttpGet]
     [Route("{id:guid}/invitations")]
     public IActionResult GetInvitations(Guid id)

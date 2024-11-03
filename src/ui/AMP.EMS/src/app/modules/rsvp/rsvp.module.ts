@@ -36,4 +36,4 @@ import { SharedModule } from '@modules/shared.module';
     SharedModule
   ]
 })
-export class GuestModule { }
+export class RsvpModule { }

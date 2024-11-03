@@ -3,14 +3,13 @@ import { RouterModule } from '@angular/router';
 import { EventListComponent } from './event-list/event-list.component';
 import { AppSettingsComponent } from './settings/settings.component';
 import { EventDetailsComponent } from '../event/settings/components/event-details/event-details.component';
-import { DefaultComponent } from '../default/default.component';
+import { HomeComponent } from '../../pages/home/home.component';
 import { SharedModule } from '@modules/shared.module';
-import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
     EventListComponent,
-    DefaultComponent,
+    HomeComponent,
     AppSettingsComponent,
   ],
   imports: [

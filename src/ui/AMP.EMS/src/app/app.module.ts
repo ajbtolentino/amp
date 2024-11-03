@@ -16,7 +16,7 @@ import { provideDynamicHooks } from 'ngx-dynamic-hooks';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { DefaultComponent } from './modules/default/default.component';
+import { HomeComponent } from './pages/home/home.component';
 import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
 import { Button } from 'primeng/button';
 import { RadioButton } from 'primeng/radiobutton';
@@ -52,7 +52,7 @@ import { EventsLayoutComponent } from './layout/events-layout/events-layout.comp
                 {
                     path: '',
                     pathMatch: 'full',
-                    component: DefaultComponent
+                    component: HomeComponent
                 },
                 {
                     path: 'events',
@@ -70,7 +70,7 @@ import { EventsLayoutComponent } from './layout/events-layout/events-layout.comp
                 {
                     path: 'invitation',
                     title: 'Invitation',
-                    loadChildren: () => import('../app/modules/guests/guests.module').then(m => m.GuestModule)
+                    loadChildren: () => import('./modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
                 {
                     path: 'unauthorized',

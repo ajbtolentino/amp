@@ -20,9 +20,10 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TabViewModule } from 'primeng/tabview';
 import { EditorModule } from 'primeng/editor';
 import { DataViewModule } from 'primeng/dataview';
+import { FindItemPipe } from '@shared/pipes/find-item';
 
 @NgModule({
-  declarations: [WithStatusPipe],
+  declarations: [WithStatusPipe, FindItemPipe],
   imports: [
     CommonModule,
     ButtonModule,
@@ -48,6 +49,7 @@ import { DataViewModule } from 'primeng/dataview';
   ],
   exports: [
     WithStatusPipe,
+    FindItemPipe,
     CommonModule,
     ButtonModule,
     DataViewModule,

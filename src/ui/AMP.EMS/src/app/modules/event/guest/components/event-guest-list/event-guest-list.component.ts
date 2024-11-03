@@ -6,6 +6,7 @@ import { firstValueFrom, lastValueFrom, Observable, take } from 'rxjs';
 import { Guest } from '@shared/models/guest-model';
 import { EventService } from '@core/services/event.service';
 import { EventGuestService } from '@modules/services/event-guest.service';
+import { EventGuest } from '@shared/models';
 
 @Component({
   selector: 'app-event-guests',
@@ -57,15 +58,15 @@ export class EventGuestListComponent implements OnInit {
     });
   }
 
-  delete = (eventGuest: any) => {
+  delete = (eventGuest: EventGuest) => {
     console.log(eventGuest);
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${eventGuest.firstName} ${eventGuest.lastName}?`,
+      message: `Are you sure you want to delete ${eventGuest.guest?.firstName} ${eventGuest.guest?.lastName}?`,
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        if (eventGuest.eventGuestId) {
-          await lastValueFrom(this.eventGuestService.delete(eventGuest.eventGuestId));
+        if (eventGuest.id) {
+          await lastValueFrom(this.eventGuestService.delete(eventGuest.id));
 
           this.refreshGrid();
         }
