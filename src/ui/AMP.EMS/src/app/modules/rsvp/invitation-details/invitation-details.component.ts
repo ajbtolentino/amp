@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { lastValueFrom, Observable } from 'rxjs';
 import { RsvpService } from '../../../core/services/rsvp.service';
-import { EventGuestInvitationResponse, EventGuestInvitationService } from '@modules/event/guest';
-import { EventGuestInvitationRsvp } from '@shared/models';
+import { EventGuestInvitationService } from '@modules/event/guest';
+import { EventGuestInvitation, EventGuestInvitationRsvp } from '@shared/models';
 
 @Component({
   selector: 'app-invitation-details',
@@ -11,14 +11,14 @@ import { EventGuestInvitationRsvp } from '@shared/models';
   styleUrl: './invitation-details.component.scss'
 })
 export class InvitationDetailsComponent {
-  guestInvitation$: Observable<EventGuestInvitationResponse> = new Observable<EventGuestInvitationResponse>();
+  eventGuestInvitation$: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
 
-  constructor(private guestInvitationService: EventGuestInvitationService,
+  constructor(private eventGuestInvitationService: EventGuestInvitationService,
     private rsvpService: RsvpService, private route: ActivatedRoute) {
     this.route.paramMap.subscribe(data => {
       const code = data.get("code");
 
-      if (code) this.guestInvitation$ = this.guestInvitationService.rsvp(code);
+      if (code) this.eventGuestInvitation$ = this.eventGuestInvitationService.rsvp(code);
     });
   }
 

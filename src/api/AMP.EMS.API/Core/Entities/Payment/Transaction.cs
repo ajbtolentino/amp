@@ -12,7 +12,7 @@ public class Transaction : FullAuditableEntity<Guid>
     public DateTime TransactionDate { get; set; } = DateTime.UtcNow;
 
     // Navigation properties
-    public Account DebitAccount { get; set; }
-    public Account CreditAccount { get; set; }
-    public TransactionType TransactionType { get; set; }
+    public virtual Account DebitAccount { get; set; }
+    public virtual Account CreditAccount { get; set; }
+    public virtual TransactionType TransactionType { get; set; }
 }

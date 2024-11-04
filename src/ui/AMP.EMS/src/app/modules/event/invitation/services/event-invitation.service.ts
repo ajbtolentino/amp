@@ -7,8 +7,8 @@ import { EventInvitation, EventGuestInvitation } from '@shared/models';
     providedIn: 'root'
 })
 export class EventInvitationService extends BaseApiService {
-    getAll = async () => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/eventinvitation`, { headers: this.headers }));
+    getAll = (): Observable<EventInvitation[]> => {
+        return this.httpGet(`api/eventinvitation`);
     }
 
     get = (id: string): Observable<EventInvitation> => {
@@ -19,15 +19,15 @@ export class EventInvitationService extends BaseApiService {
         return this.httpGet(`api/eventinvitation/${id}/guests`);
     }
 
-    add = async (invitation: EventInvitation) => {
-        return await lastValueFrom(this.httpClient.post<any>(`${this.API_URL}/api/eventinvitation`, invitation, { headers: this.headers }));
+    add = (invitation: EventInvitation): Observable<EventInvitation> => {
+        return this.httpPost(`api/eventinvitation`, invitation);
     }
 
-    update = async (invitation: EventInvitation) => {
-        return await lastValueFrom(this.httpClient.put<any>(`${this.API_URL}/api/eventinvitation/${invitation.id}`, invitation, { headers: this.headers }));
+    update = (invitation: EventInvitation): Observable<EventInvitation> => {
+        return this.httpPut(`api/eventinvitation/${invitation.id}`, invitation);
     }
 
-    delete = async (id: string) => {
-        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/eventinvitation/${id}`, { headers: this.headers }));
+    delete = (id: string): Observable<EventInvitation[]> => {
+        return this.httpDelete(`api/eventinvitation/${id}`);
     }
 }

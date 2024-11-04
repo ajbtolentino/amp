@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WithStatusPipe } from '@shared/pipes/with-status';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -20,10 +19,11 @@ import { TooltipModule } from 'primeng/tooltip';
 import { TabViewModule } from 'primeng/tabview';
 import { EditorModule } from 'primeng/editor';
 import { DataViewModule } from 'primeng/dataview';
-import { FindItemPipe } from '@shared/pipes/find-item';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
 
 @NgModule({
-  declarations: [WithStatusPipe, FindItemPipe],
+  declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe],
   imports: [
     CommonModule,
     ButtonModule,
@@ -39,7 +39,7 @@ import { FindItemPipe } from '@shared/pipes/find-item';
     CheckboxModule,
     CalendarModule,
     DataViewModule,
-    DropdownModule,
+    ProgressSpinnerModule,
     TableModule,
     TooltipModule,
     RippleModule,
@@ -50,6 +50,8 @@ import { FindItemPipe } from '@shared/pipes/find-item';
   exports: [
     WithStatusPipe,
     FindItemPipe,
+    OrderByPipe,
+    FilterPipe,
     CommonModule,
     ButtonModule,
     DataViewModule,
@@ -67,6 +69,7 @@ import { FindItemPipe } from '@shared/pipes/find-item';
     DropdownModule,
     TableModule,
     TooltipModule,
+    ProgressSpinnerModule,
     RippleModule,
     SkeletonModule,
     TabViewModule,

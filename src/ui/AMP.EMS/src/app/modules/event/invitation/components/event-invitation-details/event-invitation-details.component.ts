@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventInvitationService } from '../../services/event-invitation.service';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
-import { Observable } from 'rxjs';
+import { map, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
 import { EventInvitation, EventGuestInvitation } from '@shared/models';
 
 @Component({
@@ -48,7 +48,7 @@ import { EventInvitation, EventGuestInvitation } from '@shared/models';
 }`,
 })
 export class EventInvitationDetailsComponent implements OnInit {
-  eventInvitation: EventInvitation = {};
+  eventInvitationId: string | null | undefined;
   eventInvitation$: Observable<EventInvitation> = new Observable<EventInvitation>();
 
   loading: boolean = false;
@@ -82,39 +82,34 @@ export class EventInvitationDetailsComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.parent?.parent?.paramMap.subscribe(data => {
-      const eventId = data.get("eventId");
-
-      if (eventId) this.eventId = eventId;
-    });
+    this.eventId = this.route.parent?.parent?.snapshot.paramMap.get("eventId") || '';
+    this.eventInvitationId = this.route.snapshot.paramMap.get("eventInvitationId") || '';
+    this.loadEventInvitation()
   }
 
-  onEditorLoaded() {
-    const eventInvitationId = this.route.snapshot.paramMap.get("eventInvitationId") || '';
-    if (eventInvitationId) this.loadEventInvitation(eventInvitationId);
+  loadEventInvitation = () => {
+    this.eventInvitation$ = of<EventInvitation>({ eventId: this.eventId });
+
+    if (this.eventInvitationId) {
+      this.eventInvitation$ = this.eventInvitationService.get(this.eventInvitationId).pipe(tap(eventInvitation => {
+        this.model.value = eventInvitation.html || '';
+      }));
+    }
   }
 
-  loadEventInvitation = async (eventInvitationId: string) => {
-    this.eventInvitationService.get(eventInvitationId).subscribe(response => {
-      this.eventInvitation = response;
-      this.codeEditor.editor.setValue(this.eventInvitation.html || '');
-    });
+  onValueChanged(e: any, eventInvitation: EventInvitation) {
+    eventInvitation.html = e;
   }
 
-  onCodeChanged(e: any) {
-    this.eventInvitation.html = e;
-  }
-
-  save = async () => {
-    if (this.eventInvitation?.name?.trim()) {
-      if (this.eventInvitation.id) {
-        await this.eventInvitationService.update(this.eventInvitation);
+  save = (eventInvitation: EventInvitation) => {
+    if (eventInvitation?.name?.trim()) {
+      if (eventInvitation.id) {
+        this.eventInvitation$ = this.eventInvitationService.update(eventInvitation).pipe(switchMap(() => this.eventInvitationService.get(eventInvitation.id!)));
       }
       else {
-        this.eventInvitation.eventId = this.eventId;
-        const response = await this.eventInvitationService.add(this.eventInvitation);
-        console.log(response);
-        this.redirect(response.data);
+        this.eventInvitation$ = this.eventInvitationService.add(eventInvitation).pipe(tap((eventInvitation) => {
+          this.redirect(eventInvitation);
+        }));
       }
     }
   }

@@ -3,5 +3,6 @@ export interface EventGuestInvitationRsvp {
     eventGuestInvitationId?: string;
     guestNames?: string[];
     phoneNumber?: string;
-    response?: 'ACCEPT' | 'DECLINE'
+    response?: 'ACCEPT' | 'DECLINE' | undefined;
+    dateCreated?: Date;
 }

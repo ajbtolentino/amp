@@ -6,6 +6,6 @@ public class VendorAccount : FullAuditableEntity<Guid>
 {
     public Guid VendorId { get; set; }
     public Guid AccountId { get; set; }
-    public Vendor Vendor { get; set; }
-    public Account Account { get; set; }
+    public virtual Vendor Vendor { get; set; }
+    public virtual Account Account { get; set; }
 }

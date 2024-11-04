@@ -6,6 +6,6 @@ public class EventGuestRole : FullAuditableEntity<Guid>
 {
     public Guid RoleId { get; set; }
     public Guid EventGuestId { get; set; }
-    public Role? Role { get; set; }
-    public EventGuest? EventGuest {get;set;}
+    public virtual Role? Role { get; set; }
+    public virtual EventGuest? EventGuest {get;set;}
 }

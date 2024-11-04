@@ -11,6 +11,6 @@ public class EventVendorTypeBudget : FullAuditableEntity<Guid>
     public decimal Amount { get; set; }
 
     // Navigation properties
-    public Event Event { get; set; }
-    public VendorType VendorType { get; set; }
+    public virtual Event Event { get; set; }
+    public virtual VendorType VendorType { get; set; }
 }

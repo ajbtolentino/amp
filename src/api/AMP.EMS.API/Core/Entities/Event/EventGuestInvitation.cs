@@ -8,7 +8,7 @@ public class EventGuestInvitation : FullAuditableEntity<Guid>
     public required Guid EventInvitationId { get; set; }
     public int MaxGuests { get; set; }
     public string Code { get; set; }
-    public EventGuest? EventGuest { get; set; }
-    public EventInvitation? EventInvitation { get; set; }
-    public ICollection<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; set; } = [];
+    public virtual EventGuest? EventGuest { get; set; }
+    public virtual EventInvitation? EventInvitation { get; set; }
+    public virtual ICollection<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; set; } = [];
 }

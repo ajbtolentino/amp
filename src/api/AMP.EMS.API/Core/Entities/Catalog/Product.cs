@@ -9,5 +9,5 @@ public class Product : FullAuditableEntity<Guid>
     public Guid ProductCategoryId { get; set; }
     public decimal Price { get; set; }
 
-    public ProductCategory ProductCategory { get; set; }
+    public virtual ProductCategory ProductCategory { get; set; }
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventGuestInvitationService, EventGuestService } from '@modules/event/guest';
 import { Guest, EventGuestInvitation, EventInvitation, EventGuest } from '@shared/models';
 import { Table } from 'primeng/table';
-import { lastValueFrom, map, Observable } from 'rxjs';
+import { lastValueFrom, map, Observable, switchMap, tap } from 'rxjs';
 import { EventInvitationService } from '@modules/event/invitation';
 import { MessageService } from 'primeng/api';
 
@@ -47,15 +47,11 @@ import { MessageService } from 'primeng/api';
   `
 })
 export class EventInvitationGuestListComponent implements OnInit {
-  eventId!: string;
   eventInvitationId!: string;
 
   eventInvitation$: Observable<EventInvitation> = new Observable<EventInvitation>();
   eventGuests$: Observable<EventGuest[]> = new Observable<EventGuest[]>();
   eventGuestInvitations: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
-
-
-  isCreating: boolean = false;
 
   selectedItems: EventGuestInvitation[] | null = [];
 
@@ -75,30 +71,22 @@ export class EventInvitationGuestListComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   async ngOnInit() {
-    this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
-    const eventInvitationId = this.route.snapshot.paramMap.get('eventInvitationId') || '';
-
-    this.eventInvitation$ = this.eventInvitationService.get(eventInvitationId);
+    this.eventInvitationId = this.route.snapshot.paramMap.get('eventInvitationId') || '';
+    this.eventInvitation$ = this.eventInvitationService.get(this.eventInvitationId);
     this.eventGuests$ = this.eventGuestService.getAll();
   }
 
-  add = async (eventGuestId: string, eventInvitationId: string) => {
+  add = async (eventGuestId: string) => {
     const response = await lastValueFrom(this.eventGuestInvitationService.add({
       eventGuestId: eventGuestId,
-      eventInvitationId: eventInvitationId
+      eventInvitationId: this.eventInvitationId
     }));
 
     this.eventGuests$ = this.eventGuestService.getAll();
   }
 
   delete = async (id: string) => {
-    await lastValueFrom(this.eventGuestInvitationService.delete(id));
-
-    this.eventGuests$ = this.eventGuestService.getAll();
-  }
-
-  getEventGuestInvitation = (eventGuest: EventGuest, eventInvitationId: string) => {
-    return eventGuest.eventGuestInvitations?.filter(_ => _.eventInvitationId === eventInvitationId)[0] || {};
+    this.eventGuests$ = this.eventGuestInvitationService.delete(id).pipe(switchMap(() => this.eventGuestService.getAll()));
   }
 
   copyLink = (code: string) => {

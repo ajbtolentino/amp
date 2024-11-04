@@ -25,7 +25,7 @@ export class EventGuestInvitationService extends BaseApiService {
         return this.httpDelete(`api/eventguestinvitation/${id}`);
     }
 
-    rsvp = (code: string): Observable<EventGuestInvitationResponse> => {
+    rsvp = (code: string): Observable<EventGuestInvitation> => {
         return this.httpGet(`api/eventguestinvitation/${code}/rsvp`);
     }
 }

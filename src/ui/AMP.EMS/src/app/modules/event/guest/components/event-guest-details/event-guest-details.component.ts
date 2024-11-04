@@ -12,6 +12,7 @@ import { EventGuestService } from '../..';
 })
 export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   eventId!: string;
+  eventGuestId: string | null | undefined;
 
   eventGuest$: Observable<EventGuest> = new Observable<EventGuest>();
   eventGuestInvitatins$: Observable<EventInvitationInfo[]> = new Observable<EventInvitationInfo[]>();
@@ -30,15 +31,15 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
+    this.eventGuestId = this.route.snapshot.paramMap.get('eventGuestId');
+
     this.loadArray();
     this.loadEventGuest();
   }
 
   loadEventGuest = () => {
-    const eventGuestId = this.route.snapshot.paramMap.get('eventGuestId');
-
-    if (eventGuestId) {
-      this.eventGuest$ = this.eventGuestService.get(eventGuestId || '').pipe(map(response => {
+    if (this.eventGuestId) {
+      this.eventGuest$ = this.eventGuestService.get(this.eventGuestId || '').pipe(map(response => {
         if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
         if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.eventInvitationId).map(_ => _.eventInvitationId!);
         return response;
@@ -57,12 +58,14 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   save = async (item: EventGuest) => {
     if (item?.guest?.firstName?.trim() && item?.guest?.lastName?.trim())
       if (item.id) {
-        await lastValueFrom(this.eventGuestService.update(item, this.selectedEventRoleIds, this.selectedEventInvitationIds));
-        this.loadEventGuest();
+        this.eventGuest$ = this.eventGuestService.update(item, this.selectedEventRoleIds, this.selectedEventInvitationIds).pipe(
+          switchMap(() => this.eventGuestService.get(this.eventGuestId!)));
       }
       else {
-        const response = await lastValueFrom(this.eventGuestService.add(item, this.selectedEventRoleIds, this.selectedEventInvitationIds));
-        this.redirect(response);
+        this.eventGuest$ = this.eventGuestService.add(item, this.selectedEventRoleIds, this.selectedEventInvitationIds).pipe(map(eventGuest => {
+          this.redirect(eventGuest);
+          return eventGuest;
+        }));
       }
   }
 

@@ -26,10 +26,18 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
         {
             unitOfWork.BeginTransaction();
 
-            var rsvpEntity = await unitOfWork.Repository<EventGuestInvitationRsvp>().Add(new EventGuestInvitationRsvp
+            var rsvpEntity = new EventGuestInvitationRsvp
             {
                 Response = request.Response
-            });
+            };
+
+            foreach (var item in request.GuestNames?.Where(_ => !string.IsNullOrEmpty(_)))
+                rsvpEntity.EventGuestInvitationRsvpItems.Add(new EventGuestInvitationRsvpItem
+                {
+                    Name = item
+                });
+
+            await unitOfWork.Repository<EventGuestInvitationRsvp>().Add(rsvpEntity);
 
             guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity);
 

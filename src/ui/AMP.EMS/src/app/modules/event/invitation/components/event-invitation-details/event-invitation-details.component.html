@@ -1,47 +1,56 @@
-<p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left">
-        <button *ngIf="eventInvitation.html" pButton pRipple label="View Sample" icon="pi pi-upload"
-            class="p-button-help"></button>
-    </ng-template>
-    <ng-template pTemplate="right">
-        <div class="my-2">
-            <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
-                (click)="save()"></button>
-        </div>
-    </ng-template>
-</p-toolbar>
+<ng-container *ngIf="eventInvitation$ | withStatus | async as eventInvitation">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button *ngIf="eventInvitation.value?.html" pButton pRipple label="View Sample" icon="pi pi-upload"
+                [loading]="eventInvitation.loading!" class="p-button-help"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    [loading]="eventInvitation.loading!" (click)="save(eventInvitation.value!)"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
 
-<div class="grid">
-    <div class="col-12 ">
-        <div class="card shadow-2">
-            <div class="p-fluid p-formgrid grid">
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="name">Name</label>
-                    <input pInputText id="name" type="text" [(ngModel)]="eventInvitation.name" />
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label htmlFor="description">Description</label>
-                    <input pInputText id="description" type="text" [(ngModel)]="eventInvitation.description" />
+    <div class="grid">
+        <div class="col-12 ">
+            <div class="card shadow-2">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="name">Name</label>
+                        <input *ngIf="!eventInvitation.loading" pInputText id="name" type="text"
+                            [(ngModel)]="eventInvitation.value!.name" />
+                        <p-skeleton *ngIf="eventInvitation.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="description">Description</label>
+                        <input *ngIf="!eventInvitation.loading" pInputText id="description" type="text"
+                            [(ngModel)]="eventInvitation.value!.description" />
+                        <p-skeleton *ngIf="eventInvitation.loading"></p-skeleton>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card shadow-2">
-            <p-tabView orientation="left">
-                <p-tabPanel header="Template" class="line-height-3 m-0">
-                    <div [style]="{height: '100vh !important' , overflow: 'auto'}">
-                        <ngx-dynamic-hooks [content]="eventInvitation.html" [context]="{
+            <div class="card shadow-2">
+                <div class="text-center">
+                    <p-progressSpinner ariaLabel=" loading" *ngIf="eventInvitation.loading" />
+                </div>
+                <p-tabView orientation="left" *ngIf="!eventInvitation.loading">
+                    <p-tabPanel header="Template" class="line-height-3 m-0">
+                        <div [style]="{height: '100vh !important' , overflow: 'auto'}">
+                            <ngx-dynamic-hooks [content]="eventInvitation.value?.html" [context]="{
                                 guest: { firstName: 'First Name', lastName: 'Last Name'},
                                 eventGuestInvitation: { maxGuests: 3},
                                 onSubmit: onRsvpSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
-                    </div>
-                </p-tabPanel>
-                <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">
-                    <ngs-code-editor #codeEditor theme="vs-dark" [codeModel]="model" [options]="options"
-                        (loaded)="onEditorLoaded()" (valueChanged)="onCodeChanged($event)"
-                        [style]="{height: '100vh'}"></ngs-code-editor>
-                </p-tabPanel>
-            </p-tabView>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">
+                        <ngs-code-editor #codeEditor theme="vs-dark" [codeModel]="model" [options]="options"
+                            (valueChanged)="onValueChanged($event, eventInvitation.value!)"
+                            [style]="{height: '100vh'}"></ngs-code-editor>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
         </div>
     </div>
-</div>
+</ng-container>

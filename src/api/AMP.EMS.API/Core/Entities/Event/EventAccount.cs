@@ -7,6 +7,6 @@ public class EventAccount : FullAuditableEntity<Guid>
     public Guid EventId { get; set; }
     public Guid AccountId { get; set; }
 
-    public Event Event { get; set; }
-    public Account Account { get; set; }
+    public virtual Event Event { get; set; }
+    public virtual Account Account { get; set; }
 }

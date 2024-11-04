@@ -15,14 +15,11 @@
                             </span>
                         </div>
                         <div>
-                            <button pButton pRipple *ngIf="!isCreating" label="New" icon="pi pi-plus"
+                            <button pButton pRipple label="New" icon="pi pi-plus" [loading]="eventInvitations.loading!"
                                 class="p-button-success mr-2" routerLink="/event/{{eventId}}/invitations/add"></button>
-                            <button pButton pRipple *ngIf="!isCreating" label="Delete" icon="pi pi-trash"
-                                class="p-button-danger" (click)="deleteSelectedItems()"
+                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                (click)="deleteSelectedItems()"
                                 [disabled]="!selectedItems || !selectedItems.length"></button>
-
-                            <!-- <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
-            (click)="dt?.exportCSV()"></button> -->
                         </div>
                     </div>
                 </ng-template>
@@ -34,7 +31,6 @@
                         <th>Name</th>
                         <th>Recipients</th>
                         <th>Accepted / Declined</th>
-                        <th>Total Guests</th>
                         <th class="p-jc-end"></th>
                     </tr>
                 </ng-template>
@@ -44,19 +40,21 @@
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-item let-editing="editing">
                     <tr [pEditableRow]="item">
                         <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                         <td>{{item?.name}}</td>
-                        <td pTooltip="# of guests who received your invitation">{{getTotalRecipients(item)}}</td>
-                        <td pTooltip="# of guests who responded with either ACCEPT or DECLINE from your invitation">
-                            {{getTotalAccepted(item) }}
-                            / {{ getTotalDeclined(item) }}</td>
-                        <td pTooltip="Actual Guests vs Capacity">
-                            {{getActualGuests(item)}}</td>
+                        <td pTooltip="Guests have received your invitation">
+                            {{item.eventGuestInvitations.length}}
+                        </td>
+                        <td pTooltip="Guests who accepted vs declined your invitation">
+                            {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc' | filter:
+                            getTotalAccepted)?.length || 0}} /
+                            {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc'| filter:
+                            getTotalDeclined)?.length || 0}}
+                        </td>
                         <td>
                             <div class="flex">
                                 <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"

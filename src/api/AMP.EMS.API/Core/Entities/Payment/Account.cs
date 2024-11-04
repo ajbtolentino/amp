@@ -9,9 +9,9 @@ public class Account : FullAuditableEntity<Guid>
     public Guid AccountTypeId { get; set; }
 
     // Navigation properties
-    public AccountType AccountType { get; set; }
-    public ICollection<EventAccount> EventAccounts { get; set; } = [];
-    public ICollection<Transaction> DebitTransactions { get; set; } = [];
-    public ICollection<Transaction> CreditTransactions { get; set; } = [];
-    public ICollection<VendorAccount> VendorAccounts { get; set; } = [];
+    public virtual AccountType AccountType { get; set; }
+    public virtual ICollection<EventAccount> EventAccounts { get; set; } = [];
+    public virtual ICollection<Transaction> DebitTransactions { get; set; } = [];
+    public virtual ICollection<Transaction> CreditTransactions { get; set; } = [];
+    public virtual ICollection<VendorAccount> VendorAccounts { get; set; } = [];
 }

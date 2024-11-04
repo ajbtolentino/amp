@@ -15,6 +15,9 @@ export class EventGuestInvitationRSVPLabelComponent {
   templateUrl: './event-guest-invitation-rsvp-form.component.html'
 })
 export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicMount {
+  @Input() choiceMessage?: string;
+  @Input() acceptMessage?: string;
+
   @Input() guest!: Guest;
   @Input() acceptLabel: string = 'Accept';
   @Input() declineLabel: string = 'Decline';
@@ -24,15 +27,12 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
 
   eventGuestInvitationRsvp: EventGuestInvitationRsvp = { guestNames: [] };
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void { }
 
   onDynamicMount(data: OnDynamicData): void {
     const length = data.context.eventGuestInvitation.maxGuests || 0;
 
     this.eventGuestInvitationRsvp.eventGuestInvitationId = data.context.eventGuestInvitation.id;
-    this.eventGuestInvitationRsvp.response = "ACCEPT";
 
     for (let i = 0; i < length; i++) {
       this.eventGuestInvitationRsvp.guestNames?.push('');

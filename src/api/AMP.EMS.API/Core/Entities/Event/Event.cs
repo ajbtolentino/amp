@@ -17,13 +17,13 @@ public class Event : FullAuditableEntity<Guid>
     public required DateTime StartDate { get; set; }
 
     public required DateTime EndDate { get; set; }
-    
-    public EventType? EventType { get; set; }
 
-    public ICollection<EventAccount> EventAccounts { get; set; }
-    public ICollection<EventVendorTypeBudget> EventBudgets { get; set; } = [];
-    public ICollection<EventGuest> EventGuests { get; set; } = [];
-    public ICollection<EventInvitation> EventInvitations { get; set; } = [];
-    public ICollection<Role> Roles { get; set; } = [];
-    public ICollection<EventVendor> EventVendors { get; set; } = [];
+    public virtual EventType? EventType { get; set; }
+
+    public virtual ICollection<EventAccount> EventAccounts { get; set; }
+    public virtual ICollection<EventVendorTypeBudget> EventBudgets { get; set; } = [];
+    public virtual ICollection<EventGuest> EventGuests { get; set; } = [];
+    public virtual ICollection<EventInvitation> EventInvitations { get; set; } = [];
+    public virtual ICollection<Role> Roles { get; set; } = [];
+    public virtual ICollection<EventVendor> EventVendors { get; set; } = [];
 }

@@ -5,7 +5,7 @@
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
-                    (click)="save(eventGuest.value!)"></button>
+                    [loading]="eventGuest.loading!" (click)="save(eventGuest.value!)"></button>
             </div>
         </ng-template>
     </p-toolbar>

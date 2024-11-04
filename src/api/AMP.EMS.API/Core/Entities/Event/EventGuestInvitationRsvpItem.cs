@@ -6,5 +6,5 @@ public class EventGuestInvitationRsvpItem: FullAuditableEntity<Guid>
 {
     public Guid EventGuestInvitationRsvpId { get; set; }
     public string Name { get; set; } = string.Empty;
-    public EventGuestInvitationRsvp? EventGuestInvitationRsvp { get; set; }
+    public virtual EventGuestInvitationRsvp? EventGuestInvitationRsvp { get; set; }
 }

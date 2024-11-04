@@ -39,14 +39,14 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/invitations")]
-    public IActionResult GetInvitations(Guid eventId)
+    public async Task<IActionResult> GetInvitations(Guid eventId)
     {
-        var eventInvitations = unitOfWork.Repository<EventInvitation>().GetAll()
+        var eventInvitations = await unitOfWork.Repository<EventInvitation>().GetAll()
             .Include(_ => _.EventGuestInvitations).ThenInclude(_ => _.EventGuestInvitationRsvps)
             .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
             .Include(_ => _.EventGuestInvitations).ThenInclude(_ => _.EventGuest)
             .Where(eventInvitation => eventInvitation.EventId == eventId)
-            .AsNoTracking();
+            .AsNoTracking().ToListAsync();
 
         return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = eventInvitations });
     }

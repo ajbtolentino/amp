@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@modules/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { CodeEditorModule } from '@ngstack/code-editor';
