@@ -4,39 +4,35 @@
   <form [formGroup]="rsvpForm" (ngSubmit)="onSendResponseClick()">
     <div class="form-container">
       <div *ngIf="choiceMessage">{{choiceMessage}}</div>
-      <div class="guest-names-container" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
+      <div class="guest-names-container m-3" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
         <div *ngIf="acceptMessage">{{acceptMessage}}</div>
-        <!-- @for (item of eventGuestInvitationRsvp.guestNames; track $index; let i = $index) {
-        <input class="w-full" pInputText type="text"
-          placeholder='{{i === 0 ? "Your Name" : "Companion Name"}}'
-          [(ngModel)]="eventGuestInvitationRsvp!.guestNames![i]" />
-        } -->
-        <input *ngFor="let guestNameControl of guestNames.controls; let i = index" id="guest-{{i}}"
-          [formControl]="guestNameControl" pInputText type="text"
-          [ngClass]="{'ng-invalid': i === 0 && guestNameControl.invalid && guestNameControl.touched, 'w-full': true }"
-          placeholder='{{i === 0 ? "Your Name" : "Companion Name"}}' />
+        <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
+          <input id="guest-{{i}}" [formControl]="guestNameControl" pInputText type="text"
+            [ngClass]="{'ng-invalid': i === 0 && guestNameControl.invalid && guestNameControl.touched, 'w-full m-1': true }"
+            placeholder='{{i === 0 ? "Your name" : "Your companion\' s name"}}' />
 
+          <p-message *ngIf="i===0  && guestNameControl?.invalid && guestNameControl?.touched" severity="warn"
+            class="w-full" text="Please enter your name">
+          </p-message>
+        </ng-container>
 
-        <span *ngIf="rsvpForm.get('guestNames')?.invalid && rsvpForm.get('guestNames')?.touched">Your name is
-          required</span>
       </div>
-      <div class="radiobutton-container">
-        <div>
-          <label for="response-accept" class="accept-label">{{acceptLabel}}</label>
-          <!-- <input id="accept" type="radio" [(ngModel)]="eventGuestInvitationRsvp.response" value="ACCEPT" /> -->
-          <input formControlName="response" id="response-accept" type="radio" value="ACCEPT" />
+      <div class="radiobutton-container flex flex-wrap gap-3 m-3 justify-content-center">
+        <div class="flex gap-3 align-items-center">
+          <p-radioButton inputId="response-accept" formControlName="response" value="ACCEPT" />
+          <label class="ml-2" for="response-accept" class="accept-label">{{acceptLabel}}</label>
         </div>
 
-        <div>
-          <label for="response-decline" class="decline-label">{{declineLabel}}</label>
-          <!-- <input id="decline" type="radio" [(ngModel)]="eventGuestInvitationRsvp.response" value="DECLINE" /> -->
-          <input formControlName="response" id="response-decline" type="radio" value="DECLINE" />
+        <div class="flex gap-3 m-3 align-items-center">
+          <p-radioButton inputId="response-decline" formControlName="response" value="DECLINE" />
+          <label class="ml-2" for="response-decline" class="decline-label">{{declineLabel}}</label>
         </div>
       </div>
-      <div class="button-container" *ngIf="rsvpForm.value['response']">
+      <div class="button-container flex flex-wrap gap-3 m-3 justify-content-center" *ngIf="rsvpForm.value['response']">
         <p-button severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()"
           [disabled]="(rsvpForm.value['response'] === 'ACCEPT' && rsvpForm.get('guestNames')?.invalid)">Send
           Response</p-button>
+
       </div>
     </div>
   </form>

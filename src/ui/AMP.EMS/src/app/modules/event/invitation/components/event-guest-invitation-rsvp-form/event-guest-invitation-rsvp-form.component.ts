@@ -19,6 +19,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Input() choiceMessage?: string;
   @Input() acceptMessage?: string;
 
+
   @Input() guest!: Guest;
   @Input() acceptLabel: string = 'Accept';
   @Input() declineLabel: string = 'Decline';
@@ -59,12 +60,9 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   onDynamicMount(data: OnDynamicData): void {
     const length = data.context.eventGuestInvitation.maxGuests || 0;
 
-    console.log(length)
-
     this.eventGuestInvitationRsvp.eventGuestInvitationId = data.context.eventGuestInvitation.id;
 
     for (let i = 0; i < length; i++) {
-      // this.eventGuestInvitationRsvp.guestNames?.push('');
       const guestNameControl = new FormControl(null);
       this.guestNames.push(guestNameControl);
     }
@@ -75,6 +73,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
       this.eventGuestInvitationRsvp.guestNames = this.rsvpForm.value['guestNames'];
       this.eventGuestInvitationRsvp.response = this.rsvpForm.value['response'];
       this.onSubmit.emit(this.eventGuestInvitationRsvp);
+      this.rsvpForm.reset();
     } else {
       this.rsvpForm.markAllAsTouched();
     }

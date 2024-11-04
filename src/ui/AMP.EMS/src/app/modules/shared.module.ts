@@ -22,6 +22,8 @@ import { DataViewModule } from 'primeng/dataview';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
 import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe],
@@ -41,6 +43,7 @@ import { MessagesModule } from 'primeng/messages';
     CalendarModule,
     DataViewModule,
     MessagesModule,
+    MessageModule,
     ProgressSpinnerModule,
     TableModule,
     TooltipModule,
@@ -48,7 +51,8 @@ import { MessagesModule } from 'primeng/messages';
     ReactiveFormsModule,
     SkeletonModule,
     TabViewModule,
-    ToolbarModule
+    ToolbarModule,
+    RadioButtonModule
   ],
   exports: [
     WithStatusPipe,
@@ -71,6 +75,7 @@ import { MessagesModule } from 'primeng/messages';
     CheckboxModule,
     CalendarModule,
     DropdownModule,
+    MessageModule,
     TableModule,
     TooltipModule,
     ProgressSpinnerModule,
@@ -78,7 +83,8 @@ import { MessagesModule } from 'primeng/messages';
     ReactiveFormsModule,
     SkeletonModule,
     TabViewModule,
-    ToolbarModule
+    ToolbarModule,
+    RadioButtonModule
   ]
 })
 export class SharedModule { }

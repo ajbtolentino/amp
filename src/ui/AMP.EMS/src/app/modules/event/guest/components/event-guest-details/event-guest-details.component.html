@@ -60,7 +60,7 @@
                             placeholder="Select Role" [options]="eventRoles.value" optionLabel="name" optionValue="id"
                             [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoleIds" />
 
-                        <p-skeleton *ngIf="eventRoles.loading"></p-skeleton>
+                        <p-skeleton *ngIf="eventRoles.loading || eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6"
                         *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
@@ -70,7 +70,7 @@
                             [loading]="eventInvitations.loading  && eventGuest.loading" optionLabel="name"
                             [(ngModel)]="selectedEventInvitationIds" />
 
-                        <p-skeleton *ngIf="eventInvitations.loading"></p-skeleton>
+                        <p-skeleton *ngIf="eventInvitations.loading || eventGuest.loading"></p-skeleton>
                     </div>
                 </div>
             </div>
