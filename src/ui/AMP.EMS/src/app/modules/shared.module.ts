@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
@@ -21,6 +21,7 @@ import { EditorModule } from 'primeng/editor';
 import { DataViewModule } from 'primeng/dataview';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
+import { MessagesModule } from 'primeng/messages';
 
 @NgModule({
   declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe],
@@ -39,10 +40,12 @@ import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/p
     CheckboxModule,
     CalendarModule,
     DataViewModule,
+    MessagesModule,
     ProgressSpinnerModule,
     TableModule,
     TooltipModule,
     RippleModule,
+    ReactiveFormsModule,
     SkeletonModule,
     TabViewModule,
     ToolbarModule
@@ -59,6 +62,7 @@ import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/p
     EditorModule,
     FormsModule,
     InputTextModule,
+    MessagesModule,
     InputTextareaModule,
     InputNumberModule,
     MenuModule,
@@ -71,6 +75,7 @@ import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/p
     TooltipModule,
     ProgressSpinnerModule,
     RippleModule,
+    ReactiveFormsModule,
     SkeletonModule,
     TabViewModule,
     ToolbarModule

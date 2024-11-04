@@ -27,6 +27,7 @@ import { EventGuestInvitationService, EventGuestService } from '@modules/event/g
 import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from '@modules/event/invitation';
 import { EventLayoutComponent } from './layout/event-layout/event-layout.component';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
+import { Messages } from 'primeng/messages';
 
 @NgModule({
     imports: [
@@ -42,7 +43,7 @@ import { EventsLayoutComponent } from './layout/events-layout/events-layout.comp
     providers: [
         provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor(), apiResponseInterceptor])),
         provideDynamicHooks({
-            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, Button, RadioButton],
+            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, Button, RadioButton, Messages],
             options: {
                 sanitize: false
             }
