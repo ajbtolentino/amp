@@ -3,12 +3,24 @@
         *ngIf="{userData: userData$ | withStatus | async, isAuthenticated: isAuthenticated$ | withStatus | async, notification: notification$ | async} as auth">
         <div
             class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 flex align-items-center justify-content-between relative lg:static mb-3">
-            <div class="align-items-center surface-0 flex-grow-1 justify-content-start hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
-                *ngIf="auth.isAuthenticated?.value?.isAuthenticated && auth.userData?.value?.userData?.name">
-                <h5 class="my-0">Welcome, {{auth.userData?.value?.userData?.name}}!</h5>
+            <div class=""
+                *ngIf="!(auth.isAuthenticated?.value?.isAuthenticated && auth.userData?.value?.userData?.name)">
+                <h5 class="my-0">EMS</h5>
             </div>
-            <div class="align-items-center surface-0 flex-grow-1 justify-content-end hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
+            <div class="flex flex-grow-1 w-full"
+                *ngIf="auth.isAuthenticated?.value?.isAuthenticated && auth.userData?.value?.userData?.name">
+                <h5 class="my-0">Hi, {{auth.userData?.value?.userData?.name}}!</h5>
+            </div>
+            <a pRipple class="cursor-pointer block lg:hidden text-700" pStyleClass="@next" enterClass="hidden"
+                leaveToClass="hidden" [hideOnOutsideClick]="true">
+                <i class="pi pi-bars text-4xl"></i>
+            </a>
+            <div class="align-items-center surface-0 flex-grow-1 justify-content-between hidden lg:flex absolute lg:static w-full left-0 px-6 lg:px-0 z-2"
                 style="top:120px">
+                <div
+                    class="list-none p-0 m-0 flex lg:align-items-center select-none flex-column lg:flex-row cursor-pointer">
+
+                </div>
                 <div
                     class="flex justify-content-between lg:block border-top-1 lg:border-top-none surface-border py-3 lg:py-0 mt-3 lg:mt-0">
                     <button *ngIf="!auth.isAuthenticated?.value?.isAuthenticated" pButton pRipple label="Login"

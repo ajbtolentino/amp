@@ -1,33 +1,32 @@
-import { AppComponent } from '../app/app.component';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { EventService } from '../app/core/services/event.service';
-import { EventInvitationService as EventInvitationService } from './modules/event/invitation/services/event-invitation.service';
 import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
-import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
-import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppLayoutModule } from '../app/layout/app.layout.module';
-import { EventTypeService } from '../app/core/services/event-type.service';
-import { EventsModule } from '../app/modules/events/events.module';
-import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
-import { provideDynamicHooks } from 'ngx-dynamic-hooks';
-import { CodeEditorModule } from '@ngstack/code-editor';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
-import { HomeComponent } from './pages/home/home.component';
-import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
-import { Button } from 'primeng/button';
-import { RadioButton } from 'primeng/radiobutton';
-import { RsvpService } from './core/services/rsvp.service';
-import { DividerModule } from 'primeng/divider';
-import { AuthConfigModule } from './core/auth-config.module';
+import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { EventGuestInvitationService, EventGuestService } from '@modules/event/guest';
 import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from '@modules/event/invitation';
+import { CodeEditorModule } from '@ngstack/code-editor';
+import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { provideDynamicHooks } from 'ngx-dynamic-hooks';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Button } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { Messages } from 'primeng/messages';
+import { RadioButton } from 'primeng/radiobutton';
+import { ToastModule } from 'primeng/toast';
+import { AppComponent } from '../app/app.component';
+import { EventTypeService } from '../app/core/services/event-type.service';
+import { EventService } from '../app/core/services/event.service';
+import { AppLayoutModule } from '../app/layout/app.layout.module';
+import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
+import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
+import { AuthConfigModule } from './core/auth-config.module';
+import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
+import { RsvpService } from './core/services/rsvp.service';
 import { EventLayoutComponent } from './layout/event-layout/event-layout.component';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
-import { Messages } from 'primeng/messages';
+import { EventInvitationService } from './modules/event/invitation/services/event-invitation.service';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
     imports: [
@@ -58,6 +57,7 @@ import { Messages } from 'primeng/messages';
                 {
                     path: 'events',
                     title: 'Events',
+                    canActivate: [autoLoginPartialRoutesGuard],
                     component: EventsLayoutComponent,
                     loadChildren: () => import('../app/modules/events/events.module').then(m => m.EventsModule)
                 },

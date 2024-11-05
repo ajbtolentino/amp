@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { EventBudgetComponent } from './budget/components/event-budget-list/event-budget-list.component';
-import { EventDashboardComponent } from './dashboard/components/event-dashboard/event-dashboard.component';
-import { EventDetailsComponent } from './settings/components/event-details/event-details.component';
-import { EventTransactionsComponent } from './event-transactions/event-transactions.component';
-import { EventVendorListComponent } from './vendors/components/event-vendor-list/event-vendor-list.component';
-import { EventVendorDetailsComponent } from './vendors/components/event-vendor-details/event-vendor-details.component';
-import { EventInvitationModule } from './invitation/event-invitation.module';
 import { EventGuestModule } from '@modules/event/guest/event-guest.module';
 import { EventSettingsModule } from '@modules/event/settings/event-settings.module';
-import { EventDashboardModule } from './dashboard/event-dashboard.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
+import { EventBudgetComponent } from './budget/components/event-budget-list/event-budget-list.component';
+import { EventDashboardComponent } from './dashboard/components/event-dashboard/event-dashboard.component';
+import { EventDashboardModule } from './dashboard/event-dashboard.module';
+import { EventTransactionsComponent } from './event-transactions/event-transactions.component';
+import { EventInvitationModule } from './invitation/event-invitation.module';
+import { EventDetailsComponent } from './settings/components/event-details/event-details.component';
+import { EventVendorDetailsComponent } from './vendors/components/event-vendor-details/event-vendor-details.component';
+import { EventVendorListComponent } from './vendors/components/event-vendor-list/event-vendor-list.component';
 
 @NgModule({
   declarations: [

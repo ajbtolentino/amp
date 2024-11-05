@@ -1,46 +1,97 @@
 <ng-container *ngIf="events$ | withStatus | async as events">
-    <p-dataView #dv [value]="events.value" [paginator]="true" [rows]="9" filterBy="title" layout="grid"
-        [loading]="events.loading">
+    <p-dataView #dv [value]="events.value" [paginator]="true" [rows]="9" filterBy="title" layout="grid">
         <ng-template pTemplate="header">
             <div class="flex flex-column md:flex-row md:justify-content-between gap-2">
-                <span class="p-input-icon-left">
+                <!-- <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input type="search" pInputText placeholder="Search by Title">
-                </span>
+                </span> -->
                 <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
                 <button pButton pRipple label="Add Event" class="p-button-raised p-button-success"
                     routerLink="/events/add"></button>
             </div>
         </ng-template>
 
-        <ng-template let-events pTemplate="listItem">
-            <div class="col-12" *ngFor="let event of events">
-                <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                    <div class="flex-1 flex justify-content-between md:text-left">
-                        <div class="font-bold text-2xl">{{event.title}}</div>
+        <ng-template let-eventItems pTemplate="listItem">
+            <div class="grid grid-nogutter" *ngIf="!events.loading">
+                <div class="col-12" *ngFor="let event of eventItems; let first = first" class="col-12">
+                    <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
+                        [ngClass]="{ 'border-top-1 surface-border': !first }">
+                        <div
+                            class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div class="font-bold text-2xl">{{event.title}}</div>
 
-                        <div class="flex align-items-center justify-content-between m-3">
-                            <button pButton pRipple label="Launch" routerLink="/event/{{event.id}}/dashboard"></button>
-                            <button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-danger"
-                                (click)="delete(event)"></button>
+                            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                                <button pButton pRipple label="Launch" icon="pi pi-play"
+                                    routerLink="/event/{{event.id}}/dashboard"></button>
+                                <button pButton pRipple icon="pi pi-trash" label="Delete"
+                                    class="p-button-text p-button-danger" (click)="delete(event)"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-nogutter" *ngIf="events.loading">
+                <div class="col-12" *ngFor="let i of counterArray(4); let first = first" class="col-12">
+                    <div class="flex flex-column xl:flex-row xl:align-items-start p-4 gap-4"
+                        [ngClass]="{ 'border-top-1 surface-border': !first }">
+                        <p-skeleton styleClass="w-9 sm:w-16rem xl:w-10rem h-6rem block xl:block mx-auto border-round" />
+                        <div
+                            class="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
+                            <div class="flex flex-column align-items-center sm:align-items-start gap-3">
+                                <p-skeleton styleClass="w-8rem border-round h-2rem" />
+                                <p-skeleton styleClass="w-6rem border-round h-1rem" />
+                                <div class="flex align-items-center gap-3">
+                                    <p-skeleton styleClass="w-6rem border-round h-1rem" />
+                                    <p-skeleton styleClass="w-3rem border-round h-1rem" />
+                                </div>
+                            </div>
+                            <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
+                                <p-skeleton styleClass="w-4rem border-round h-2rem" />
+                                <p-skeleton shape="circle" styleClass="w-3rem h-3rem" />
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </ng-template>
 
-        <ng-template let-events pTemplate="gridItem">
-            <div class="grid grid-nogutter">
-                <div class="col-12 md:col-4" *ngFor="let event of events">
+        <ng-template let-eventItems pTemplate="gridItem">
+            <div class="grid grid-nogutter" *ngIf="!events.loading">
+                <div class="col-12 sm:col-6 md:col-4 xl:col-6 p-2" *ngFor="let event of eventItems">
                     <div class="surface-card shadow-2 p-3 border-round m-3 border-1 surface-border">
                         <div class="flex justify-content-between mb-3">
                             <div class="text-2xl font-bold">{{event.title}}</div>
-                            <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-secondary"
+                            <button pButton type="button" icon="pi pi-times"
+                                class="p-button-text p-button-secondary p-button-danger"
                                 (click)="delete(event)"></button>
                         </div>
+                        <div class="flex flex-column align-items-start gap-3 py-5">
+                            {{event.description}}&nbsp;
+                        </div>
                         <div class="flex align-items-center justify-content-between">
-                            <button pButton pRipple label="Launch" class="p-3 w-full mt-auto"
-                                routerLink="/event/{{event.id}}/dashboard"></button>
+                            <button pButton pRipple label="Launch" routerLink="/event/{{event.id}}/dashboard"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-nogutter" *ngIf="events.loading">
+                <div class="col-12 sm:col-6 md:col-4 xl:col-6 p-2" *ngFor="let i of counterArray(4)">
+                    <div class="surface-card shadow-2 p-3 border-round m-3 border-1 surface-border">
+                        <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+                            <p-skeleton styleClass="w-6rem border-round h-2rem" />
+                            <p-skeleton styleClass="w-3rem border-round h-1rem" />
+                        </div>
+                        <div class="flex flex-column align-items-center gap-3 py-5">
+                            <p-skeleton styleClass="w-9 border-round h-10rem" />
+                            <p-skeleton styleClass="w-8rem border-round h-2rem" />
+                            <p-skeleton styleClass="w-6rem border-round h-1rem" />
+                        </div>
+                        <div class="flex align-items-center justify-content-between">
+                            <p-skeleton styleClass="w-4rem border-round h-2rem" />
+                            <p-skeleton shape="circle" styleClass="w-3rem h-3rem" />
                         </div>
                     </div>
                 </div>

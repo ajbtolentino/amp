@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { EventDetailsComponent } from '@modules/event/settings';
+import { SharedModule } from '@modules/shared.module';
+import { HomeComponent } from '../../pages/home/home.component';
 import { EventListComponent } from './event-list/event-list.component';
 import { AppSettingsComponent } from './settings/settings.component';
-import { EventDetailsComponent } from '../event/settings/components/event-details/event-details.component';
-import { HomeComponent } from '../../pages/home/home.component';
-import { SharedModule } from '@modules/shared.module';
 
 @NgModule({
   declarations: [
