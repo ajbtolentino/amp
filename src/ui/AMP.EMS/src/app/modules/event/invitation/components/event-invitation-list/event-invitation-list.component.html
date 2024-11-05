@@ -1,85 +1,83 @@
-<div class="grid">
-    <div class="col-12">
-        <div class="card" *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
-            <p-table #dt [value]="eventInvitations.value!" [rows]="10" [paginator]="true"
-                [globalFilterFields]="['firstName','code']" [(selection)]="selectedItems" [rowHover]="true" dataKey="id"
-                [loading]="eventInvitations.loading" [showLoader]="false">
-                <ng-template pTemplate="caption">
-                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <div>
-                            <span class="block mt-2 md:mt-0 p-input-icon-left">
-                                <i class="pi pi-search"></i>
-                                <input class="w-full sm:w-auto" pInputText type="text"
-                                    (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                                    placeholder="Search..." />
-                            </span>
-                        </div>
-                        <div>
-                            <button pButton pRipple label="New" icon="pi pi-plus" [loading]="eventInvitations.loading!"
-                                class="p-button-success mr-2" routerLink="/event/{{eventId}}/invitations/add"></button>
-                            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                                (click)="deleteSelectedItems()"
-                                [disabled]="!selectedItems || !selectedItems.length"></button>
-                        </div>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th>Name</th>
-                        <th>Recipients</th>
-                        <th>Accepted / Declined</th>
-                        <th class="p-jc-end"></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="loadingbody">
-                    <tr>
-                        <td></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-item let-editing="editing">
-                    <tr [pEditableRow]="item">
-                        <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
-                        <td>{{item?.name}}</td>
-                        <td pTooltip="Guests have received your invitation">
-                            {{item.eventGuestInvitations.length}}
-                        </td>
-                        <td pTooltip="Guests who accepted vs declined your invitation">
-                            {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc' | filter:
-                            getTotalAccepted)?.length || 0}} /
-                            {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc'| filter:
-                            getTotalDeclined)?.length || 0}}
-                        </td>
-                        <td>
-                            <div class="flex">
-                                <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
-                                    routerLink="/event/{{eventId}}/invitations/{{item.id}}/edit"
-                                    class="p-button-text p-button-success mr-2 p-jc-end" pTooltip="Edit">
-                                </button>
-                                <button *ngIf="!editing" pButton pRipple
-                                    routerLink="/event/{{eventId}}/invitations/{{item.id}}/guests"
-                                    class="p-button-text p-button-info mr-2 p-jc-end" icon="pi pi-users"
-                                    pTooltip="Manage Guests"></button>
-                                <button *ngIf="!editing" pButton pRipple
-                                    class="p-button-text p-button-warning mr-2 p-jc-end" icon="pi pi-trash"
-                                    (click)="delete(item)" pTooltip="Delete"></button>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage" let-columns>
-                    <tr>
-                        <td [colSpan]="7">
-                            No records found
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
+<ng-container *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="New" icon="pi pi-plus" [loading]="eventInvitations.loading!"
+                    class="p-button-success mr-2" routerLink="/event/{{eventId}}/invitations/add"></button>
+                <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                    [loading]="eventInvitations.loading!" (click)="deleteSelectedItems()"
+                    [disabled]="!selectedItems || !selectedItems.length"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <p-table #dt [value]="eventInvitations.value!" [rows]="10" [paginator]="true"
+                    [globalFilterFields]="['firstName','code']" [(selection)]="selectedItems" [rowHover]="true"
+                    dataKey="id" [loading]="eventInvitations.loading" [showLoader]="false">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th>Name</th>
+                            <th>Recipients</th>
+                            <th>Accepted / Declined</th>
+                            <th class="p-jc-end"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="loadingbody">
+                        <tr>
+                            <td></td>
+                            <td><p-skeleton /></td>
+                            <td><p-skeleton /></td>
+                            <td><p-skeleton /></td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-editing="editing">
+                        <tr [pEditableRow]="item">
+                            <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
+                            <td>{{item?.name}}</td>
+                            <td pTooltip="Guests have received your invitation">
+                                {{item.eventGuestInvitations.length}}
+                            </td>
+                            <td pTooltip="Guests who accepted vs declined your invitation">
+                                {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc' | filter:
+                                getTotalAccepted)?.length || 0}} /
+                                {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc'| filter:
+                                getTotalDeclined)?.length || 0}}
+                            </td>
+                            <td>
+                                <div class="flex">
+                                    <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
+                                        routerLink="/event/{{eventId}}/invitations/{{item.id}}/edit"
+                                        class="p-button-text p-button-success mr-2 p-jc-end" pTooltip="Edit">
+                                    </button>
+                                    <button *ngIf="!editing" pButton pRipple
+                                        routerLink="/event/{{eventId}}/invitations/{{item.id}}/guests"
+                                        class="p-button-text p-button-info mr-2 p-jc-end" icon="pi pi-users"
+                                        pTooltip="Manage Guests"></button>
+                                    <button *ngIf="!editing" pButton pRipple
+                                        class="p-button-text p-button-warning mr-2 p-jc-end" icon="pi pi-trash"
+                                        (click)="delete(item)" pTooltip="Delete"></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [colSpan]="7">
+                                No records found
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
         </div>
     </div>
-</div>
+</ng-container>

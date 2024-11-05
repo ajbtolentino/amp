@@ -1,9 +1,9 @@
-import { inject, Injectable } from "@angular/core";
-import { environment } from "../../../environments/environment";
-import { HttpClient, HttpContext, HttpEvent, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { EMSResponse } from "@shared/models";
 import { OidcSecurityService } from "angular-auth-oidc-client";
 import { map, Observable } from "rxjs";
-import { EMSResponse } from "@shared/models";
+import { environment } from "../../../environments/environment";
 
 @Injectable()
 export class BaseApiService {
@@ -37,5 +37,9 @@ export class BaseApiService {
 
     protected httpDelete = <T>(url: string, options?: any): Observable<T> => {
         return this.httpClient.delete<EMSResponse<T>>(`${this.API_URL}/${url}`, { headers: this.headers, ...options }).pipe(map((a: any) => (a as EMSResponse<T>)?.data));
+    }
+
+    protected httpDeleteSelected = <T>(url: string, body: any[], options?: any): Observable<T> => {
+        return this.httpClient.delete<EMSResponse<T>>(`${this.API_URL}/${url}`, { headers: this.headers, ...options, body: body }).pipe(map((a: any) => (a as EMSResponse<T>)?.data));
     }
 }

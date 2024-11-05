@@ -9,8 +9,8 @@
                         <th style="width: 3rem"></th>
                         <th>Guest</th>
                         <th>Code</th>
-                        <th># of Seats</th>
-                        <th># of Secondary Guests</th>
+                        <th>Seats</th>
+                        <th>Secondary Guests</th>
                         <th>Response</th>
                         <th></th>
                     </tr>
@@ -42,7 +42,7 @@
                         <td>
                             <span
                                 *ngIf="eventGuestInvitation.id && eventGuestInvitation.eventGuestInvitationRsvps.length && eventGuestInvitation.eventGuestInvitationRsvps | orderBy: 'dateCreated': 'desc' as eventGuestInvitationRsvps">
-                                {{eventGuestInvitationRsvps[0].eventGuestInvitationRsvpItems.length}}
+                                {{eventGuestInvitationRsvps[0].eventGuestInvitationRsvpItems.length - 1}}
                             </span>
                         </td>
                         <td>

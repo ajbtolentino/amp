@@ -84,7 +84,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
             {
                 EventId = request.EventId,
                 GuestId = newGuest.Id,
-                MaxGuests = request.MaxGuests ?? 0
+                Seats = request.Seats ?? 1
             });
 
             UpdateEventGuestInvitations(newEventGuest, request.EventInvitationIds ?? []);
@@ -128,7 +128,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
 
             unitOfWork.Repository<Guest>().Update(guest);
 
-            eventGuest.MaxGuests = request.MaxGuests ?? 0;
+            eventGuest.Seats = request.Seats ?? 0;
 
             UpdateEventGuestInvitations(eventGuest, request.EventInvitationIds ?? []);
             UpdateEventGuestRoles(eventGuest, request.EventRoleIds ?? []);
@@ -195,7 +195,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
         GuestController.GuestData? Guest,
         Guid EventId,
         Guid? GuestId,
-        int? MaxGuests,
+        int? Seats,
         IEnumerable<Guid>? EventRoleIds,
         IEnumerable<Guid>? EventInvitationIds);
 }

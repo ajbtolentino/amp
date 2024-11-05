@@ -8,6 +8,7 @@ export interface Event {
     eventType?: EventType;
     startDate?: Date;
     endDate?: Date;
+    seats?: number;
     eventRoles?: EventGuestRole[];
     description?: string;
 }

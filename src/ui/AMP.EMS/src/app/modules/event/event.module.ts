@@ -1,80 +1,66 @@
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { EventGuestModule } from '@modules/event/guest/event-guest.module';
+import { RouterModule, Routes } from '@angular/router';
 import { EventSettingsModule } from '@modules/event/settings/event-settings.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventBudgetComponent } from './budget/components/event-budget-list/event-budget-list.component';
 import { EventDashboardComponent } from './dashboard/components/event-dashboard/event-dashboard.component';
 import { EventDashboardModule } from './dashboard/event-dashboard.module';
-import { EventTransactionsComponent } from './event-transactions/event-transactions.component';
-import { EventInvitationModule } from './invitation/event-invitation.module';
 import { EventDetailsComponent } from './settings/components/event-details/event-details.component';
-import { EventVendorDetailsComponent } from './vendors/components/event-vendor-details/event-vendor-details.component';
-import { EventVendorListComponent } from './vendors/components/event-vendor-list/event-vendor-list.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard'
+  },
+  {
+    path: 'dashboard',
+    title: 'Dashboard',
+    data: { breadcrumb: 'Dashboard' },
+    component: EventDashboardComponent
+  },
+  {
+    path: 'edit',
+    title: 'Event Settings',
+    data: { breadcrumb: 'Edit Event' },
+    component: EventDetailsComponent,
+  },
+  {
+    path: 'budget',
+    title: 'Budget',
+    data: { breadcrumb: 'Budget' },
+    component: EventBudgetComponent
+  },
+  {
+    path: 'vendors',
+    title: 'Vendors',
+    data: { breadcrumb: 'Vendors' },
+    loadChildren: () => import('@modules/event/vendor/event-vendor.module').then(m => m.EventVendorModule)
+  },
+  {
+    path: 'guests',
+    title: 'Guests',
+    data: { breadcrumb: 'Guests' },
+    loadChildren: () => import('@modules/event/guest/event-guest.module').then(m => m.EventGuestModule),
+  },
+  {
+    path: 'invitations',
+    data: { breadcrumb: 'Invitations' },
+    loadChildren: () => import('@modules/event/invitation/event-invitation.module').then(m => m.EventInvitationModule)
+  }
+]
 
 @NgModule({
   declarations: [
-    EventTransactionsComponent,
     EventBudgetComponent,
-    EventVendorListComponent,
-    EventVendorDetailsComponent
   ],
   imports: [
     EventDashboardModule,
-    EventGuestModule,
-    EventInvitationModule,
     EventSettingsModule,
     CodeEditorModule.forChild(),
-    RouterModule.forChild([
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'dashboard'
-      },
-      {
-        path: 'dashboard',
-        title: 'Dashboard',
-        data: { breadcrumb: 'Dashboard' },
-        component: EventDashboardComponent
-      },
-      {
-        path: 'edit',
-        title: 'Event Settings',
-        data: { breadcrumb: 'Edit Event' },
-        component: EventDetailsComponent,
-      },
-      {
-        path: 'vendors',
-        title: 'Vendors',
-        data: { breadcrumb: 'Vendors' },
-        component: EventVendorListComponent
-      },
-      {
-        path: 'transactions',
-        title: 'Transactions',
-        data: { breadcrumb: 'Transactions' },
-        component: EventTransactionsComponent
-      },
-      {
-        path: 'budget',
-        title: 'Budget',
-        data: { breadcrumb: 'Budget' },
-        component: EventBudgetComponent
-      },
-      {
-        path: 'invitations',
-        data: { breadcrumb: 'Invitations' },
-        loadChildren: () => import('@modules/event/invitation/event-invitation.module').then(m => m.EventInvitationModule)
-      },
-      {
-        path: 'guests',
-        title: 'Guests',
-        data: { breadcrumb: 'Guests' },
-        loadChildren: () => import('@modules/event/guest/event-guest.module').then(m => m.EventGuestModule)
-      },
-    ])
+    RouterModule.forChild(routes)
   ],
-  exports: []
+  exports: [RouterModule]
 })
 
 export class EventModule { }

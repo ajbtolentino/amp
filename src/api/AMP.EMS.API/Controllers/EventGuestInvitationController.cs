@@ -49,7 +49,7 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
             EventGuestId = request.EventGuestId,
             EventInvitationId = request.EventInvitationId,
             Code = InvitationHelper.GenerateCode(),
-            MaxGuests = eventGuest.MaxGuests
+            Seats = eventGuest.Seats
         });
     }
 
@@ -65,12 +65,12 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
             guestInvitation.Code = request.Code;
 
         guestInvitation.EventInvitationId = request.EventInvitationId;
-        guestInvitation.MaxGuests = request.MaxGuests;
+        guestInvitation.Seats = request.Seats;
 
         return await base.Put(guestInvitation);
     }
 
-    public record EventGuestInvitationRequest(Guid EventInvitationId, Guid EventGuestId, string? Code, int MaxGuests);
+    public record EventGuestInvitationRequest(Guid EventInvitationId, Guid EventGuestId, string? Code, int Seats);
 
     private record RsvpResponse(
         Guest Guest,

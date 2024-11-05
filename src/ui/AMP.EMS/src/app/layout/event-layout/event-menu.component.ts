@@ -1,8 +1,7 @@
-import { Input, OnInit } from '@angular/core';
-import { Component } from '@angular/core';
-import { LayoutService } from '../service/app.layout.service';
-import { MenuItem } from 'primeng/api';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { LayoutService } from '../service/app.layout.service';
 
 @Component({
     selector: 'app-event-menu',
@@ -28,11 +27,6 @@ export class EventMenuComponent implements OnInit {
                             routerLink: [`/event/${this.eventId}/dashboard`]
                         },
                         {
-                            label: 'Vendors',
-                            icon: 'pi pi-fw pi-shopping-bag',
-                            routerLink: [`/event/${this.eventId}/vendors`]
-                        },
-                        {
                             label: 'Guests',
                             icon: 'pi pi-fw pi-users',
                             routerLink: [`/event/${this.eventId}/guests`]
@@ -41,6 +35,27 @@ export class EventMenuComponent implements OnInit {
                             label: 'Invitations',
                             icon: 'pi pi-fw pi-envelope',
                             routerLink: [`/event/${this.eventId}/invitations`],
+                        },
+                        {
+                            label: 'Vendors',
+                            icon: 'pi pi-fw pi-shop',
+                            items: [
+                                {
+                                    label: 'Find Vendor',
+                                    icon: 'pi pi-fw pi-search',
+                                    routerLink: [`/event/${this.eventId}/vendors`]
+                                },
+                                {
+                                    label: 'Transactions',
+                                    icon: 'pi pi-fw pi-receipt',
+                                    routerLink: [`/event/${this.eventId}/vendors/transactions`]
+                                },
+                                {
+                                    label: 'Contracts',
+                                    icon: 'pi pi-pen-to-square',
+                                    routerLink: [`/event/${this.eventId}/vendors/contracts`]
+                                }
+                            ]
                         },
                         {
                             label: 'Budget Management',

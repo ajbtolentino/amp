@@ -17,7 +17,7 @@
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label htmlFor="firstName">First Name</label>
-                        <input pInputText *ngIf="!eventGuest.loading" id="title" type="text"
+                        <input pInputText *ngIf="!eventGuest.loading" id="firstName" type="text"
                             [(ngModel)]="eventGuest.value?.guest!.firstName"
                             [value]="eventGuest.value?.guest?.firstName" />
 
@@ -32,7 +32,7 @@
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="lastName">Nickname</label>
+                        <label htmlFor="nickName">Nickname</label>
                         <input pInputText *ngIf="!eventGuest.loading" id="nickName" rows="1" type="text"
                             [(ngModel)]="eventGuest.value?.guest!.nickName"
                             [value]="eventGuest.value?.guest!.nickName" />
@@ -40,7 +40,7 @@
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="lastName">Phone Number</label>
+                        <label htmlFor="phoneNumber">Phone Number</label>
                         <input pInputText *ngIf="!eventGuest.loading" id="phoneNumber" rows="1" type="text"
                             [(ngModel)]="eventGuest.value?.guest!.phoneNumber"
                             [value]="eventGuest.value?.guest!.phoneNumber" />
@@ -48,25 +48,25 @@
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="maxGuests">Max # of Guests</label>
-                        <input pInputText *ngIf="!eventGuest.loading" id="maxGuests" rows="1" type="text"
-                            [(ngModel)]="eventGuest.value!.maxGuests" [value]="eventGuest.value?.maxGuests" />
-
+                        <label htmlFor="seats">Seats</label>
+                        <p-inputNumber *ngIf="!eventGuest.loading" [(ngModel)]="eventGuest.value!.seats" [min]="1"
+                            inputId="seats" [showButtons]="true" inputId="seats" />
                         <p-skeleton *ngIf="eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
-                        <label htmlFor="lastName">Role</label>
+                        <label htmlFor="role">Role</label>
                         <p-multiSelect #rolemultiselect *ngIf="!eventRoles.loading && !eventGuest.loading"
-                            placeholder="Select Role" [options]="eventRoles.value" optionLabel="name" optionValue="id"
-                            [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoleIds" />
+                            inputId="role" placeholder="Select Role" [options]="eventRoles.value" optionLabel="name"
+                            optionValue="id" [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoleIds" />
 
                         <p-skeleton *ngIf="eventRoles.loading || eventGuest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6"
                         *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
-                        <label htmlFor="lastName">Invitations</label>
+                        <label htmlFor="invitations">Invitations</label>
                         <p-multiSelect *ngIf="!eventInvitations.loading && !eventGuest.loading" optionLabel="name"
-                            optionValue="id" placeholder="Select Invitations" [options]="eventInvitations.value"
+                            inputId="invitations" optionValue="id" placeholder="Select Invitations"
+                            [options]="eventInvitations.value"
                             [loading]="eventInvitations.loading  && eventGuest.loading" optionLabel="name"
                             [(ngModel)]="selectedEventInvitationIds" />
 

@@ -6,7 +6,7 @@ public class EventGuestInvitation : FullAuditableEntity<Guid>
 {
     public Guid EventGuestId { get; set; }
     public required Guid EventInvitationId { get; set; }
-    public int MaxGuests { get; set; }
+    public int Seats { get; set; }
     public string Code { get; set; }
     public virtual EventGuest? EventGuest { get; set; }
     public virtual EventInvitation? EventInvitation { get; set; }

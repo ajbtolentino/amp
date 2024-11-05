@@ -16,6 +16,8 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<VendorAccount> VendorAccounts { get; }
 
     //Event
+    public DbSet<ContractState> ContractStates { get; }
+    public DbSet<ContractPaymentState> ContractPaymentStates { get; }
     public DbSet<EventAccount> EventAccounts { get; }
     public DbSet<Event> Events { get; }
     public DbSet<EventVendorTypeBudget> EventVendorTypeBudgets { get; }
@@ -192,6 +194,8 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         SeedTransactionTypes(modelBuilder);
         SeedVendors(modelBuilder);
         SeedProductTypes(modelBuilder);
+        SeedContractStates(modelBuilder);
+        SeedContractPaymentStates(modelBuilder);
     }
 
     private static void SeedEventTypes(ModelBuilder modelBuilder)
@@ -635,38 +639,98 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         );
     }
 
-    private static void SeedEventVendorContractStates(ModelBuilder modelBuilder)
+    private static void SeedContractStates(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<EventVendorContractState>().HasData(
-            new EventVendorContractState
+        modelBuilder.Entity<ContractState>().HasData(
+            new ContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Inquiry",
+                Description = "Initial inquiry stage."
+            },
+            new ContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Pending Quote",
+                Description = "Waiting for a quote from the vendor."
+            },
+            new ContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Quote Received",
+                Description = "Quote has been received from the vendor."
+            },
+            new ContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Negotiation",
+                Description = "Negotiations are ongoing with the vendor."
+            },
+            new ContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Reserved",
+                Description = "Reserved but not yet confirmed."
+            },
+            new ContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Tentative",
+                Description = "Tentatively booked, awaiting confirmation."
+            },
+            new ContractState
             {
                 Id = Guid.NewGuid(),
                 Name = "Booked",
-                Description = "The product, service, or contract has been booked for the event."
+                Description = "Contract has been booked and confirmed."
             },
-            new EventVendorContractState
+            new ContractState
             {
                 Id = Guid.NewGuid(),
-                Name = "Partially Paid",
-                Description = "The transaction has received partial payment."
+                Name = "Closed",
+                Description = "Contract has been completed and closed."
+            }
+        );
+    }
+
+    private static void SeedContractPaymentStates(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ContractPaymentState>().HasData(
+            new ContractPaymentState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Deposit Pending",
+                Description = "Waiting for the initial deposit to be paid."
             },
-            new EventVendorContractState
+            new ContractPaymentState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Partial Payment",
+                Description = "Partial payment received, remaining balance due."
+            },
+            new ContractPaymentState
             {
                 Id = Guid.NewGuid(),
                 Name = "Paid in Full",
-                Description = "The transaction has been paid in full."
+                Description = "All payments have been made, contract is paid in full."
             },
-            new EventVendorContractState
+            new ContractPaymentState
             {
                 Id = Guid.NewGuid(),
-                Name = "Fulfilled",
-                Description = "The product or service has been delivered as per the contract."
+                Name = "Overdue Payment",
+                Description = "Payment is overdue."
             },
-            new EventVendorContractState
+            new ContractPaymentState
             {
                 Id = Guid.NewGuid(),
-                Name = "Cancelled",
-                Description = "The transaction has been cancelled."
+                Name = "Refund Pending",
+                Description = "Refund is pending processing."
+            },
+            new ContractPaymentState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Refunded",
+                Description = "Refund has been processed and completed."
             }
         );
     }

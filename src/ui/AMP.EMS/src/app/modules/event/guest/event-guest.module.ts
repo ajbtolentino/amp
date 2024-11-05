@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@modules/shared.module';
 
-import { EventGuestListComponent, EventGuestDetailsComponent } from '@modules/event/guest';
+import { EventGuestDetailsComponent, EventGuestListComponent } from '@modules/event/guest';
 
 const routes: Routes = [
   {

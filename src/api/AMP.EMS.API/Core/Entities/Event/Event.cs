@@ -12,7 +12,7 @@ public class Event : FullAuditableEntity<Guid>
 
     public string Location { get; set; }
 
-    public int MaxGuests { get; set; }
+    public int Seats { get; set; }
 
     public required DateTime StartDate { get; set; }
 

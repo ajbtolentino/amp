@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 
-import { firstValueFrom, lastValueFrom, Observable, take } from 'rxjs';
-import { Guest } from '@shared/models/guest-model';
 import { EventService } from '@core/services/event.service';
 import { EventGuestService } from '@modules/services/event-guest.service';
 import { EventGuest } from '@shared/models';
+import { Guest } from '@shared/models/guest-model';
+import { lastValueFrom, Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-guests',
@@ -16,7 +16,7 @@ import { EventGuest } from '@shared/models';
 export class EventGuestListComponent implements OnInit {
   eventId!: string;
 
-  guests$: Observable<Guest[]> = new Observable<Guest[]>();
+  eventGuests$: Observable<EventGuest[]> = new Observable<EventGuest[]>();
 
   selectedItems: Guest[] | null = [];
 
@@ -37,25 +37,11 @@ export class EventGuestListComponent implements OnInit {
   }
 
   refreshGrid = () => {
-    this.guests$ = this.eventService.getGuests(this.eventId);
+    this.eventGuests$ = this.eventService.getGuests(this.eventId);
   }
 
   hasResponded = (item: any) => {
     return item.eventGuestInvitations?.filter((_: any) => _.rsvps?.length ?? false).length ?? false;
-  }
-
-  deleteSelectedItems = () => {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected items?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        // this.eventGuests$ = this.eventGuests$.filter(val => !this.selectedItems?.includes(val));
-        this.selectedItems = null;
-
-        this.refreshGrid();
-      }
-    });
   }
 
   delete = (eventGuest: EventGuest) => {
@@ -70,6 +56,17 @@ export class EventGuestListComponent implements OnInit {
 
           this.refreshGrid();
         }
+      }
+    });
+  }
+
+  deleteSelectedItems = () => {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected items?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.eventGuests$ = this.eventGuestService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventService.getGuests(this.eventId)));
       }
     });
   }

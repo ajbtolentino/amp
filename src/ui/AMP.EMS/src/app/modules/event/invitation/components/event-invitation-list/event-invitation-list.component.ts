@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
-import { Table } from 'primeng/table';
-import { Observable, switchMap, tap } from 'rxjs';
-import { EventGuestInvitation, EventGuestInvitationRsvp, EventInvitation, EventInvitationInfo } from '@shared/models';
 import { EventService } from '@core/services/event.service';
+import { EventGuestInvitation, EventInvitation } from '@shared/models';
+import { ConfirmationService } from 'primeng/api';
+import { Table } from 'primeng/table';
+import { Observable, switchMap } from 'rxjs';
 import { EventInvitationService } from '../../services/event-invitation.service';
 
 @Component({
@@ -41,17 +41,6 @@ export class EventInvitationListComponent implements OnInit {
 
   refreshGrid = async () => {
     this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
-  }
-
-  deleteSelectedItems = () => {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected invitations?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.selectedItems = null;
-      }
-    });
   }
 
   getTotalAccepted = (eventGuestInvitation: EventGuestInvitation): boolean => {
@@ -92,5 +81,16 @@ export class EventInvitationListComponent implements OnInit {
         }
       });
     }
+  }
+
+  deleteSelectedItems = () => {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected invitations?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.eventInvitations$ = this.eventInvitationService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventInvitationService.getAll()));
+      }
+    });
   }
 }

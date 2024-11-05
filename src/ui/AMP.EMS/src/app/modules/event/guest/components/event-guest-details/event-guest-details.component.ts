@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@core/services/event.service';
-import { EventGuest, EventInvitationInfo, EventGuestRole, EventInvitation } from '@shared/models';
-import { MessageService, ConfirmationService, Message } from 'primeng/api';
-import { firstValueFrom, from, lastValueFrom, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { EventGuest, EventGuestRole, EventInvitation, EventInvitationInfo } from '@shared/models';
+import { MessageService } from 'primeng/api';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { EventGuestService } from '../..';
 
 @Component({
@@ -38,15 +38,14 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadEventGuest = () => {
+    this.eventGuest$ = of<EventGuest>({ eventId: this.eventId, guest: {}, seats: 1 });
+
     if (this.eventGuestId) {
       this.eventGuest$ = this.eventGuestService.get(this.eventGuestId || '').pipe(map(response => {
         if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
         if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.eventInvitationId).map(_ => _.eventInvitationId!);
         return response;
       }));
-    }
-    else {
-      this.eventGuest$ = of<EventGuest>({ eventId: this.eventId, guest: {} });
     }
   }
 

@@ -35,17 +35,17 @@
                             <div class="field col-12 md:col-6" *ngIf="eventTypes$ | withStatus | async as eventTypes">
                                 <label htmlFor="event-type">Type</label>
 
-                                <p-dropdown *ngIf="!eventTypes.loading" [options]="eventTypes.value"
+                                <p-dropdown *ngIf="!event.loading" [options]="eventTypes.value"
                                     [(ngModel)]="event.value!.eventTypeId" optionValue="id" optionLabel="name"
-                                    placeholder="Select event type">
+                                    [loading]="eventTypes.loading" placeholder="Select event type">
                                 </p-dropdown>
 
                                 <p-skeleton *ngIf="event.loading"></p-skeleton>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label htmlFor="zip">Max Guests</label>
+                                <label htmlFor="zip">Seats</label>
                                 <p-inputNumber *ngIf="!event.loading" mode="decimal" [showButtons]="true" [min]="0"
-                                    [max]="500">
+                                    [(ngModel)]="event.value!.seats" [max]="500">
                                 </p-inputNumber>
 
                                 <p-skeleton *ngIf="event.loading"></p-skeleton>

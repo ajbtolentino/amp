@@ -30,7 +30,7 @@ export class EventService extends BaseApiService {
     }
 
     add = (event: Event): Observable<Event> => {
-        return this.httpPut(`api/event`, event);
+        return this.httpPost(`api/event`, event);
     }
 
     update = (event: Event): Observable<Event> => {

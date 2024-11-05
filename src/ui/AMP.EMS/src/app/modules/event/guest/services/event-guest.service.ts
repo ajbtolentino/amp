@@ -1,7 +1,7 @@
-import { lastValueFrom, Observable } from 'rxjs';
-import { BaseApiService } from '@core/services/base.api.service';
 import { Injectable } from '@angular/core';
+import { BaseApiService } from '@core/services/base.api.service';
 import { EventGuest, EventGuestInvitation } from '@shared/models';
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -37,5 +37,9 @@ export class EventGuestService extends BaseApiService {
 
     delete = (id: string): Observable<EventGuest> => {
         return this.httpDelete<EventGuest>(`api/eventguest/${id}`);
+    }
+
+    deleteSelected = (ids: string[]): Observable<EventGuest[]> => {
+        return this.httpDeleteSelected(`api/eventguest`, ids);
     }
 }

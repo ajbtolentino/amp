@@ -51,7 +51,7 @@ export class EventDetailsComponent implements OnInit {
         this.event$ = this.eventService.update(event).pipe(tap((event) => this.loadEvent()));
       }
       else {
-        this.eventService.add(event).pipe(tap((event) => {
+        this.event$ = this.eventService.add(event).pipe(tap((event) => {
           this.redirect(event);
         }));
       }
@@ -59,6 +59,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   redirect = (item: any) => {
-    this.router.navigate([`/event/${item.id}`]);
+    this.router.navigate([`/event/${item.id}/dashboard`]);
   }
 }

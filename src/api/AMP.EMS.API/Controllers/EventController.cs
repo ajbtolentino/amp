@@ -69,7 +69,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
                 EventTypeId = request.EventTypeId,
                 Description = request.Description ?? string.Empty,
                 Location = request.Location ?? string.Empty,
-                MaxGuests = request.MaxGuests,
+                Seats = request.Seats,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate
             });
@@ -107,7 +107,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
         @event.EventTypeId = request.EventTypeId;
         @event.Description = request.Description ?? string.Empty;
         @event.Location = request.Location ?? string.Empty;
-        @event.MaxGuests = request.MaxGuests;
+        @event.Seats = request.Seats;
         @event.StartDate = request.StartDate;
         @event.EndDate = request.EndDate;
 
@@ -119,7 +119,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
         Guid EventTypeId,
         string? Description,
         string? Location,
-        int MaxGuests,
+        int Seats,
         DateTime StartDate,
         DateTime EndDate);
 }
