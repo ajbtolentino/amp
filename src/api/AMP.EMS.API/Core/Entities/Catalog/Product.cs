@@ -6,8 +6,8 @@ public class Product : FullAuditableEntity<Guid>
 {
     public string Name { get; set; }
     public string Description { get; set; }
-    public Guid ProductCategoryId { get; set; }
+    public Guid ProductTypeId { get; set; }
     public decimal Price { get; set; }
 
-    public virtual ProductCategory ProductCategory { get; set; }
+    public virtual ProductType ProductType { get; set; }
 }

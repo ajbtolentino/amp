@@ -47,7 +47,8 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.OpenIdConnect,
         OpenIdConnectUrl = new Uri($"{authority}.well-known/openid-configuration")
     });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
             new OpenApiSecurityScheme
             {
@@ -71,7 +72,7 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EMSDbContext>(config);
+builder.Services.AddDbContext<EmsDbContext>(config);
 
 builder.Services.AddHttpContextAccessor();
 
@@ -89,7 +90,7 @@ app.UseRequestLogging();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-app.Services.Migrate<EMSDbContext>(config);
+app.Services.Migrate<EmsDbContext>(config);
 
 //Add Middleware
 app.UseMiddleware<RequestPipelineMiddleware>();

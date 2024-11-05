@@ -8,6 +8,7 @@ public class EventInvitation : FullAuditableEntity<Guid>
     public required string Name { get; set; }
     public string Description { get; set; } = string.Empty;
     public string Html { get; set; } = string.Empty;
+    public DateTime? RsvpDeadline { get; set; }
     public virtual Event? Event { get; set; }
     public virtual ICollection<EventGuestInvitation> EventGuestInvitations { get; set; } = [];
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventInvitationService } from '../../services/event-invitation.service';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
-import { map, mergeMap, Observable, of, switchMap, tap } from 'rxjs';
-import { EventInvitation, EventGuestInvitation } from '@shared/models';
+import { EventInvitation } from '@shared/models';
+import { Observable, of, tap } from 'rxjs';
+import { EventInvitationService } from '../../services/event-invitation.service';
 
 @Component({
   selector: 'app-event-invitation-details',
@@ -75,6 +75,8 @@ export class EventInvitationDetailsComponent implements OnInit {
     }
   };
 
+  currentDate: Date = new Date();
+
   @ViewChild('codeEditor', { static: false }) codeEditor!: CodeEditorComponent;
 
   constructor(private eventInvitationService: EventInvitationService,
@@ -93,6 +95,7 @@ export class EventInvitationDetailsComponent implements OnInit {
     if (this.eventInvitationId) {
       this.eventInvitation$ = this.eventInvitationService.get(this.eventInvitationId).pipe(tap(eventInvitation => {
         this.model.value = eventInvitation.html || '';
+        if (eventInvitation.rsvpDeadline) eventInvitation.rsvpDeadline = new Date(eventInvitation.rsvpDeadline);
       }));
     }
   }
@@ -104,12 +107,10 @@ export class EventInvitationDetailsComponent implements OnInit {
   save = (eventInvitation: EventInvitation) => {
     if (eventInvitation?.name?.trim()) {
       if (eventInvitation.id) {
-        this.eventInvitation$ = this.eventInvitationService.update(eventInvitation).pipe(switchMap(() => this.eventInvitationService.get(eventInvitation.id!)));
+        this.eventInvitation$ = this.eventInvitationService.update(eventInvitation).pipe(tap(() => this.loadEventInvitation()));
       }
       else {
-        this.eventInvitation$ = this.eventInvitationService.add(eventInvitation).pipe(tap((eventInvitation) => {
-          this.redirect(eventInvitation);
-        }));
+        this.eventInvitation$ = this.eventInvitationService.add(eventInvitation).pipe(tap((eventInvitation) => this.redirect(eventInvitation)));
       }
     }
   }

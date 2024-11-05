@@ -25,7 +25,14 @@
                     <div class="field col-12 md:col-6">
                         <label htmlFor="description">Description</label>
                         <input *ngIf="!eventInvitation.loading" pInputText id="description" type="text"
-                            [(ngModel)]="eventInvitation.value!.description" />
+                            [(ngModel)]="eventInvitation.value!.description" dateFormat="dd.mm.yy" />
+                        <p-skeleton *ngIf="eventInvitation.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="rsvpDeadline">RSVP Deadline</label>
+                        <p-calendar *ngIf="!eventInvitation.loading" id="rsvpDeadline" dateFormat="yy-mm-dd"
+                            [(ngModel)]="eventInvitation.value!.rsvpDeadline" [showIcon]="true">
+                        </p-calendar>
                         <p-skeleton *ngIf="eventInvitation.loading"></p-skeleton>
                     </div>
                 </div>
@@ -40,7 +47,7 @@
                         <div [style]="{height: '100vh !important' , overflow: 'auto'}">
                             <ngx-dynamic-hooks [content]="eventInvitation.value?.html" [context]="{
                                 guest: { firstName: 'First Name', lastName: 'Last Name'},
-                                eventGuestInvitation: { maxGuests: 3},
+                                eventGuestInvitation: { maxGuests: 3, eventInvitation: {rsvpDeadline: currentDate}},
                                 onSubmit: onRsvpSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
                         </div>
                     </p-tabPanel>

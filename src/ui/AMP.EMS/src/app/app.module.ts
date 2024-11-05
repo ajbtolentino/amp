@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { EventGuestInvitationService, EventGuestService } from '@modules/event/guest';
-import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from '@modules/event/invitation';
+import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from '@modules/event/invitation';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { provideDynamicHooks } from 'ngx-dynamic-hooks';
@@ -42,7 +42,12 @@ import { HomeComponent } from './pages/home/home.component';
     providers: [
         provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor(), apiResponseInterceptor])),
         provideDynamicHooks({
-            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, Button, RadioButton, Messages],
+            parsers: [EventGuestInvitationRSVPFormComponent,
+                EventGuestInvitationRSVPLabelComponent,
+                EventGuestInvitationRSVPDateComponent,
+                Button,
+                RadioButton,
+                Messages],
             options: {
                 sanitize: false
             }

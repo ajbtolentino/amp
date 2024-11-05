@@ -1,44 +1,44 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers;
 
-public class VendorController(IUnitOfWork unitOfWork, ILogger<VendorController> logger) : ApiBaseController<Vendor, Guid>(unitOfWork, logger)
+public class VendorController(IUnitOfWork unitOfWork, ILogger<VendorController> logger)
+    : ApiBaseController<Vendor, Guid>(unitOfWork, logger)
 {
-   public record VendorRequest(Guid EventId, string Name, string Description, string ContactInformation);
-
-   [HttpPost]
-   public async Task<IActionResult> Post([FromBody] VendorRequest request)
-   {
-      try
-      {
-         unitOfWork.BeginTransaction();
-
-         var vendor = await unitOfWork.Repository<Vendor>().Add(new Vendor
-         {
-            Description = request.Description,
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] VendorRequest request)
+    {
+        return await base.Post(new Vendor
+        {
             Name = request.Name,
-            ContactInformation = request.ContactInformation
-         });
-         
-         vendor.EventVendors.Add(new EventVendor()
-         {
-            EventId = request.EventId,
-            VendorId = vendor.Id
-         });
+            Description = request.Description,
+            ContactInformation = request.ContactInformation,
+            Address = request.Address
+        });
+    }
 
-         await unitOfWork.SaveChangesAsync();
-         await unitOfWork.CommitTransactionAsync();
-         
-         return Ok(new OkResponse<Vendor>(string.Empty));
-      }
-      catch (Exception e)
-      {
-         logger.LogError(e.Message, e);
-         await unitOfWork.RollbackTransactionAsync();
-         return Problem(e.Message);
-      }
-   }
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] VendorRequest request)
+    {
+        var vendor = await entityRepository.Get(id);
+
+        ArgumentNullException.ThrowIfNull(vendor);
+
+        vendor.Name = request.Name;
+        vendor.ContactInformation = request.ContactInformation;
+        vendor.Description = request.Description;
+        vendor.Address = request.Address;
+
+        return await base.Put(vendor);
+    }
+
+    public record VendorRequest(
+        Guid EventId,
+        string Name,
+        string Description,
+        string Address,
+        string ContactInformation);
 }

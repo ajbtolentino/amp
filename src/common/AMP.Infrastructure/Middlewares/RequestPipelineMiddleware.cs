@@ -1,9 +1,5 @@
-using System;
-using System.Net;
-using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace AMP.Infrastructure.Middlewares;
 
@@ -24,10 +20,10 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
 
             var request = await new StreamReader(context.Request.Body).ReadToEndAsync();
             _logger.LogInformation("HTTP {Method} {Path} {QueryString} received request \n{Request}",
-                        context.Request.Method,
-                        context.Request.Path,
-                        context.Request.QueryString,
-                        request);
+                context.Request.Method,
+                context.Request.Path,
+                context.Request.QueryString,
+                request);
 
             context.Request.Body.Position = 0;
 
@@ -54,12 +50,13 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
                 // Read Memory Stream data to the end
                 var response = await new StreamReader(responseMemoryStream).ReadToEndAsync();
 
-                _logger.LogInformation("HTTP {Method} {Path} {QueryString} returned with a status {StatusCode} and response {Response}",
-                                context.Request.Method,
-                                context.Request.Path,
-                                context.Request.QueryString,
-                                context.Response.StatusCode,
-                                response);
+                _logger.LogInformation(
+                    "HTTP {Method} {Path} {QueryString} returned with a status {StatusCode} and response {Response}",
+                    context.Request.Method,
+                    context.Request.Path,
+                    context.Request.QueryString,
+                    context.Response.StatusCode,
+                    response);
 
                 // returing response to caller
                 await context.Response.WriteAsync(response);
@@ -71,7 +68,8 @@ public class RequestPipelineMiddleware(RequestDelegate next, ILogger<RequestPipe
         }
         catch (Exception ex)
         {
-            _logger.LogError("Exception: {Exception}", ex);
+            _logger.LogError(ex, ex.Message);
+            throw;
         }
     }
 }

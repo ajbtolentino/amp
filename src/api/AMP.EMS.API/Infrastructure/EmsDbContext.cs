@@ -18,7 +18,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     //Event
     public DbSet<EventAccount> EventAccounts { get; }
     public DbSet<Event> Events { get; }
-    public DbSet<EventVendorTypeBudget> EventBudgets { get; }
+    public DbSet<EventVendorTypeBudget> EventVendorTypeBudgets { get; }
     public DbSet<EventGuest> EventGuests { get; }
     public DbSet<EventGuestInvitation> EventGuestInvitations { get; }
     public DbSet<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; }
@@ -27,10 +27,9 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventInvitation> EventInvitations { get; }
     public DbSet<EventType> EventTypes { get; }
     public DbSet<EventTypeRole> EventTypeRoles { get; }
-    public DbSet<EventVendor> EventVendors { get; }
-    public DbSet<EventVendorStatus> EventVendorStatus { get; }
-    public DbSet<EventProduct> EventProducts { get; set; }
-    public DbSet<EventProductStatus> EventProductStatuses { get; set; }
+    public DbSet<EventVendorContract> EventVendorContracts { get; set; }
+    public DbSet<EventVendorContractState> EventVendorContractStates { get; set; }
+    public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; }
     public DbSet<Role> Roles { get; }
 
@@ -79,7 +78,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
 
                     hasManyMethod.WithOne(targetEntityType.Name + "s")
                         .HasForeignKey(foreignKeyName)
-                        .OnDelete(DeleteBehavior.Cascade); // General case
+                        .OnDelete(DeleteBehavior.Restrict); // General case
                 }
             }
 
@@ -103,7 +102,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
                         .HasOne(referenceProperty.Name)
                         .WithMany(targetEntityType.Name + "s")
                         .HasForeignKey(foreignKeyName)
-                        .OnDelete(DeleteBehavior.Cascade); // Set delete behavior as needed
+                        .OnDelete(DeleteBehavior.Restrict); // Set delete behavior as needed
                 }
             }
 
@@ -121,13 +120,13 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
             .HasMany(a => a.CreditTransactions)
             .WithOne(t => t.CreditAccount)
             .HasForeignKey(t => t.CreditAccountId)
-            .OnDelete(DeleteBehavior.Cascade); // Set delete behavior as needed
+            .OnDelete(DeleteBehavior.Restrict); // Set delete behavior as needed
 
         modelBuilder.Entity<Account>()
             .HasMany(a => a.DebitTransactions)
             .WithOne(t => t.DebitAccount)
             .HasForeignKey(t => t.DebitAccountId)
-            .OnDelete(DeleteBehavior.Cascade); // Set delete behavior as needed
+            .OnDelete(DeleteBehavior.Restrict); // Set delete behavior as needed
     }
 
 
@@ -191,8 +190,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         SeedEventTypes(modelBuilder);
         SeedAccountTypes(modelBuilder);
         SeedTransactionTypes(modelBuilder);
-        SeedEventVendorStatus(modelBuilder);
-        SeedVendorTypes(modelBuilder);
+        SeedVendors(modelBuilder);
         SeedProductTypes(modelBuilder);
     }
 
@@ -386,86 +384,45 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         );
     }
 
-    private static void SeedEventVendorStatus(ModelBuilder modelBuilder)
+    private static void SeedVendors(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<EventVendorStatus>().HasData(
-            new EventVendorStatus
+        var catererVendorType = new VendorType
+        {
+            Id = Guid.NewGuid(),
+            Name = "Caterer",
+            Description = "Provides food and beverage services for the wedding."
+        };
+        var venueVendorType =
+            new VendorType
             {
                 Id = Guid.NewGuid(),
-                Name = "Pending",
-                Description = "The vendor has been identified but the booking has not yet been finalized."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Confirmed",
-                Description = "The vendor has been officially booked for the event."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Reserved",
-                Description = "The vendor is on hold for the event while waiting for confirmation."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Cancelled",
-                Description = "The vendor was booked but has been removed from the event."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Declined",
-                Description = "The vendor has formally declined the offer to provide services."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Completed",
-                Description = "The vendor has fulfilled their obligations, and the event has occurred."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "In Progress",
-                Description = "The vendor is actively working on preparations for the event."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Wishlist",
-                Description = "The vendor is of interest for potential future events."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "Feedback Needed",
-                Description = "The vendor's performance is under review, and feedback is required."
-            },
-            new EventVendorStatus
-            {
-                Id = Guid.NewGuid(),
-                Name = "On Hold",
-                Description = "The vendor's status is temporarily suspended due to ongoing discussions."
-            });
-    }
-
-    private static void SeedVendorTypes(ModelBuilder modelBuilder)
-    {
+                Name = "Venue",
+                Description = "Location where the wedding ceremony and/or reception is held."
+            };
+        var floristVendorType = new VendorType
+        {
+            Id = Guid.NewGuid(),
+            Name = "Florist",
+            Description = "Supplies floral arrangements, bouquets, and centerpieces."
+        };
+        var photovideoVendorType = new VendorType
+        {
+            Id = Guid.NewGuid(),
+            Name = "Photographer & Videographer",
+            Description = "Captures memories through professional photography during the wedding."
+        };
+        var liveBandVendorType = new VendorType
+        {
+            Id = Guid.NewGuid(),
+            Name = "Live Band",
+            Description = "A musical group that performs live at the wedding reception."
+        };
         modelBuilder.Entity<VendorType>().HasData(
-            new VendorType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Caterer",
-                Description = "Provides food and beverage services for the wedding."
-            },
-            new VendorType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Florist",
-                Description = "Supplies floral arrangements, bouquets, and centerpieces."
-            },
+            catererVendorType,
+            venueVendorType,
+            floristVendorType,
+            photovideoVendorType,
+            liveBandVendorType,
             new VendorType
             {
                 Id = Guid.NewGuid(),
@@ -495,12 +452,6 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
                 Id = Guid.NewGuid(),
                 Name = "Wedding Planner",
                 Description = "Coordinates all aspects of the wedding planning process from start to finish."
-            },
-            new VendorType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Venue",
-                Description = "Location where the wedding ceremony and/or reception is held."
             },
             new VendorType
             {
@@ -569,6 +520,8 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
                 Description = "Manages sound systems and audio equipment for the ceremony and reception."
             }
         );
+
+        // SeedEventVendorContractStates(modelBuilder);
     }
 
     private static void SeedProductTypes(ModelBuilder modelBuilder)
@@ -678,6 +631,42 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
                 Id = Guid.NewGuid(),
                 Name = "Favors & Gifts",
                 Description = "Gifts and party favors for guests."
+            }
+        );
+    }
+
+    private static void SeedEventVendorContractStates(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<EventVendorContractState>().HasData(
+            new EventVendorContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Booked",
+                Description = "The product, service, or contract has been booked for the event."
+            },
+            new EventVendorContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Partially Paid",
+                Description = "The transaction has received partial payment."
+            },
+            new EventVendorContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Paid in Full",
+                Description = "The transaction has been paid in full."
+            },
+            new EventVendorContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Fulfilled",
+                Description = "The product or service has been delivered as per the contract."
+            },
+            new EventVendorContractState
+            {
+                Id = Guid.NewGuid(),
+                Name = "Cancelled",
+                Description = "The transaction has been cancelled."
             }
         );
     }

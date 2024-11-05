@@ -4,18 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers;
 
-public class EventTransactionController(IUnitOfWork unitOfWork, ILogger<EventTransactionController> logger)
+public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<EventVendorContractController> logger)
     : ApiBaseController<EventVendorContract, Guid>(unitOfWork, logger)
 {
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] EventTransactionRequest data)
+    public async Task<IActionResult> Post([FromBody] EventVendorContractRequest request)
     {
-        return await base.Post(new EventVendorContract());
+        return await base.Post(new EventVendorContract
+        {
+            EventId = request.EventId,
+            VendorId = request.VendorId,
+            EventVendorContractStateId = request.EventVendorContractStatusId
+        });
     }
 
     [HttpPut]
     [Route("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] EventTransactionRequest data)
+    public async Task<IActionResult> Put(Guid id, [FromBody] EventVendorContractRequest data)
     {
         var eventTransaction = await entityRepository.Get(id);
 
@@ -25,5 +30,5 @@ public class EventTransactionController(IUnitOfWork unitOfWork, ILogger<EventTra
         return await base.Put(eventTransaction);
     }
 
-    public record EventTransactionRequest(Guid EventId, Guid ProductId);
+    public record EventVendorContractRequest(Guid EventId, Guid VendorId, Guid EventVendorContractStatusId);
 }

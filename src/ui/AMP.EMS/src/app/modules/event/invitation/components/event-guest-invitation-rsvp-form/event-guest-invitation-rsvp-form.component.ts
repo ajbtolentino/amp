@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
-import { Guest, EventGuestInvitationRsvp } from '@shared/models';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { EventGuestInvitationRsvp, Guest } from '@shared/models';
 import { OnDynamicData, OnDynamicMount } from 'ngx-dynamic-hooks';
 
 @Component({
@@ -8,7 +8,23 @@ import { OnDynamicData, OnDynamicMount } from 'ngx-dynamic-hooks';
   template: `{{text}}`
 })
 export class EventGuestInvitationRSVPLabelComponent {
-  @Input() text?: string | '';
+  @Input() text?: string | undefined | null | '';
+}
+
+@Component({
+  selector: 'app-event-guest-invitation-rsvp-date',
+  template: `
+  <ng-container *ngIf="dateFormat">
+    {{date | date : dateFormat }}
+  </ng-container>
+  <ng-container  *ngIf="!dateFormat">
+    {{date | date}}
+  </ng-container>
+  `
+})
+export class EventGuestInvitationRSVPDateComponent {
+  @Input() date?: string | undefined | null | '';
+  @Input() dateFormat?: string | undefined | null | '';
 }
 
 @Component({
@@ -61,6 +77,9 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
     const length = data.context.eventGuestInvitation.maxGuests || 0;
 
     this.eventGuestInvitationRsvp.eventGuestInvitationId = data.context.eventGuestInvitation.id;
+
+    if (data.context.eventGuestInvitation.eventInvitation.rsvpDeadline)
+      data.context.eventGuestInvitation.eventInvitation.rsvpDeadline = new Date(data.context.eventGuestInvitation.eventInvitation.rsvpDeadline);
 
     for (let i = 0; i < length; i++) {
       const guestNameControl = new FormControl(null);

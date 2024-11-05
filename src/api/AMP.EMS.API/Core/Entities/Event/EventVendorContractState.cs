@@ -2,7 +2,10 @@ using AMP.Infrastructure.Entity;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class EventVendorContractStatus : LookupEntity<Guid>
+public class EventVendorContractState : LookupEntity<Guid>
 {
-    public virtual ICollection<EventVendorContract> EventTransactions { get; set; } = [];
+    public Guid EventId { get; set; }
+
+    public Event Event { get; set; }
+    public virtual ICollection<EventVendorContract> EventVendorContracts { get; set; } = [];
 }

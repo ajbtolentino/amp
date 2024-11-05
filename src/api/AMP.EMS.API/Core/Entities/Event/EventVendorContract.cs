@@ -2,13 +2,13 @@ using AMP.Infrastructure.Entity;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class EventOrder : FullAuditableEntity<Guid>
+public class EventVendorContract : FullAuditableEntity<Guid>
 {
     public Guid EventId { get; set; }
-    public Guid ProductId { get; set; }
-    public Guid EventTransactionStatusId { get; set; }
+    public Guid VendorId { get; set; }
+    public Guid EventVendorContractStateId { get; set; }
 
-    public Event Event { get; set; }
-    public Product Product { get; set; }
-    public EventOrderStatus EventOrderStatus { get; set; }
+    public virtual Event Event { get; set; }
+    public virtual Vendor Vendor { get; set; }
+    public virtual EventVendorContractState EventVendorContractState { get; set; }
 }

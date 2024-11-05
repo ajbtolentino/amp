@@ -5,6 +5,7 @@ export interface EventInvitation {
     eventId?: string;
     name?: string;
     description?: string;
+    rsvpDeadline?: Date
     html?: string;
     eventGuestInvitations?: EventGuestInvitation[];
 }

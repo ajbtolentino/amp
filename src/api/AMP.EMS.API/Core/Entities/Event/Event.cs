@@ -20,10 +20,12 @@ public class Event : FullAuditableEntity<Guid>
 
     public virtual EventType? EventType { get; set; }
 
-    public virtual ICollection<EventAccount> EventAccounts { get; set; }
+    public virtual ICollection<EventAccount> EventAccounts { get; set; } = [];
     public virtual ICollection<EventVendorTypeBudget> EventBudgets { get; set; } = [];
     public virtual ICollection<EventGuest> EventGuests { get; set; } = [];
     public virtual ICollection<EventInvitation> EventInvitations { get; set; } = [];
     public virtual ICollection<Role> Roles { get; set; } = [];
-    public virtual ICollection<EventVendor> EventVendors { get; set; } = [];
+    public virtual ICollection<EventVendorContract> EventVendorContracts { get; set; } = [];
+    public virtual ICollection<EventVendorTransaction> EventVendorTransactions { get; set; } = [];
+    public virtual ICollection<EventVendorContractState> EventVendorContractStates { get; set; } = [];
 }

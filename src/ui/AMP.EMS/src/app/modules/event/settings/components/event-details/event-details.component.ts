@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EventTypeService } from '@core/services/event-type.service';
 import { EventService } from '@core/services/event.service';
 import { Event, EventType } from '@shared/models';
-import { Observable } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 
 
 @Component({
@@ -11,13 +11,9 @@ import { Observable } from 'rxjs';
   templateUrl: './event-details.component.html'
 })
 export class EventDetailsComponent implements OnInit {
-  loading: boolean = true;
-
-  event: Event = {};
-
+  eventId!: string;
+  event$: Observable<Event> = new Observable<Event>();
   eventTypes$: Observable<EventType[]> = new Observable<EventType[]>();
-
-  date: Date | undefined;
 
   constructor(private eventService: EventService,
     private eventTypeService: EventTypeService,
@@ -27,45 +23,42 @@ export class EventDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.parent?.params.subscribe((params) => {
-      this.loadEvent(params["eventId"]);
-    });
+    this.eventId = this.route.parent?.snapshot.paramMap.get("eventId") || '';
+    this.loadEvent();
   }
 
-  loadEvent = async (eventId: string | undefined | null) => {
-    this.loading = true;
+  loadEvent = () => {
+    this.event$ = of<Event>({});
 
-    if (eventId) {
-      const response = await this.eventService.get(eventId);
-
-      if (response.data) {
-        this.event = response.data;
-        this.event.startDate = new Date(response.data.startDate);
-        this.event.endDate = new Date(response.data.endDate);
-      }
+    if (this.eventId) {
+      this.event$ = this.eventService.get(this.eventId).pipe(map(event => {
+        if (event.startDate) event.startDate = new Date(event.startDate);
+        if (event.endDate) event.endDate = new Date(event.endDate);
+        return event;
+      }));
     }
 
-    await this.loadEventTypes();
-
-    this.loading = false;
+    this.loadEventTypes();
   }
 
   loadEventTypes = async () => {
     this.eventTypes$ = this.eventTypeService.getAll();
   }
 
-  save = async () => {
-    if (this.event?.title?.trim()) {
-      if (this.event.id) {
-        await this.eventService.update(this.event);
+  save = (event: Event) => {
+    if (event?.title?.trim()) {
+      if (event.id) {
+        this.event$ = this.eventService.update(event).pipe(tap((event) => this.loadEvent()));
       }
       else {
-        await this.eventService.add(this.event);
+        this.eventService.add(event).pipe(tap((event) => {
+          this.redirect(event);
+        }));
       }
     }
+  }
 
-    if (!this.event.id) {
-      this.router.navigate(["events"]);
-    }
+  redirect = (item: any) => {
+    this.router.navigate([`/event/${item.id}`]);
   }
 }

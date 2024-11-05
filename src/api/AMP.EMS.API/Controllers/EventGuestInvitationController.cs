@@ -19,11 +19,18 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
     public IActionResult Rsvp(string code)
     {
         var eventGuestInvitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
-            .Include(eventGuestInvitation => eventGuestInvitation.EventInvitation)
-            .Include(eventInvitation => eventInvitation.EventInvitation)
+            .Where(_ => _.Code == code)
+            .Include(_ => _.EventInvitation)
+            .Include(_ => _.EventGuestInvitationRsvps)
+            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
             .Include(eventGuestInvitation => eventGuestInvitation.EventGuest)
             .ThenInclude(eventGuest => eventGuest.Guest)
-            .FirstOrDefault(guestInvitation => guestInvitation.Code == code);
+            .FirstOrDefault();
+
+        ArgumentNullException.ThrowIfNull(eventGuestInvitation);
+
+        eventGuestInvitation.EventGuestInvitationRsvps = eventGuestInvitation.EventGuestInvitationRsvps
+            .OrderByDescending(_ => _.DateCreated).Take(1).AsEnumerable().ToList();
 
         ArgumentNullException.ThrowIfNull(eventGuestInvitation);
 

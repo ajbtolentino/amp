@@ -4,7 +4,7 @@
   <form [formGroup]="rsvpForm" (ngSubmit)="onSendResponseClick()">
     <div class="form-container">
       <div *ngIf="choiceMessage">{{choiceMessage}}</div>
-      <div class="guest-names-container m-3" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
+      <div class="guest-names-container" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
         <div *ngIf="acceptMessage">{{acceptMessage}}</div>
         <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
           <input id="guest-{{i}}" [formControl]="guestNameControl" pInputText type="text"
@@ -17,18 +17,18 @@
         </ng-container>
 
       </div>
-      <div class="radiobutton-container flex flex-wrap gap-3 m-3 justify-content-center">
+      <div class="radiobutton-container flex flex-wrap gap-3">
         <div class="flex gap-3 align-items-center">
           <p-radioButton inputId="response-accept" formControlName="response" value="ACCEPT" />
           <label class="ml-2" for="response-accept" class="accept-label">{{acceptLabel}}</label>
         </div>
 
-        <div class="flex gap-3 m-3 align-items-center">
+        <div class="flex gap-3 align-items-center">
           <p-radioButton inputId="response-decline" formControlName="response" value="DECLINE" />
           <label class="ml-2" for="response-decline" class="decline-label">{{declineLabel}}</label>
         </div>
       </div>
-      <div class="button-container flex flex-wrap gap-3 m-3 justify-content-center" *ngIf="rsvpForm.value['response']">
+      <div class="button-container flex flex-wrap gap-3" *ngIf="rsvpForm.value['response']">
         <p-button severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()"
           [disabled]="(rsvpForm.value['response'] === 'ACCEPT' && rsvpForm.get('guestNames')?.invalid)">Send
           Response</p-button>

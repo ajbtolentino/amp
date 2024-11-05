@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '@modules/shared.module';
 import { RouterModule, Routes } from '@angular/router';
+import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
 
 import {
-  EventInvitationListComponent,
+  EventGuestInvitationRSVPDateComponent,
+  EventGuestInvitationRSVPFormComponent,
+  EventGuestInvitationRSVPLabelComponent,
   EventInvitationDetailsComponent,
   EventInvitationGuestListComponent,
-  EventGuestInvitationRSVPFormComponent,
-  EventGuestInvitationRSVPLabelComponent
+  EventInvitationListComponent
 } from '@modules/event/invitation';
 
 const routes: Routes = [
@@ -48,6 +49,7 @@ const routes: Routes = [
     EventInvitationDetailsComponent,
     EventInvitationGuestListComponent,
     EventGuestInvitationRSVPLabelComponent,
+    EventGuestInvitationRSVPDateComponent,
     EventGuestInvitationRSVPFormComponent
   ],
   imports: [

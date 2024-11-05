@@ -1,17 +1,16 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import { lastValueFrom, map, Observable } from 'rxjs';
+import { lastValueFrom, Observable } from 'rxjs';
 
+import { Event, EventGuest, EventGuestRole, EventInvitation } from '@shared/models';
 import { BaseApiService } from './base.api.service';
-import { EventGuestRole, EventInvitation, EventGuest, Event } from '@shared/models';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EventService extends BaseApiService {
-    get = async (id: string) => {
-        return await lastValueFrom(this.httpClient.get<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
+    get = (id: string): Observable<Event> => {
+        return this.httpGet(`api/event/${id}`);
     }
 
     getRoles = (id: string): Observable<EventGuestRole[]> => {
@@ -30,12 +29,12 @@ export class EventService extends BaseApiService {
         return this.httpGet<Event[]>(`api/event/`);
     }
 
-    add = async (event: Event) => {
-        return await lastValueFrom(this.httpClient.post<any>(`${this.API_URL}/api/event`, event, { headers: this.headers }));
+    add = (event: Event): Observable<Event> => {
+        return this.httpPut(`api/event`, event);
     }
 
-    update = async (event: Event) => {
-        return await lastValueFrom(this.httpClient.put<any>(`${this.API_URL}/api/event/${event.id}`, event, { headers: this.headers }));
+    update = (event: Event): Observable<Event> => {
+        return this.httpPut(`api/event/${event.id}`, event);
     }
 
     delete = async (id: string) => {
