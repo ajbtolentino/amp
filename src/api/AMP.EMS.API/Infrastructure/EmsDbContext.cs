@@ -10,14 +10,16 @@ namespace AMP.EMS.API.Infrastructure;
 /// </summary>
 public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(options)
 {
+    private static List<AccountType> _accountTypes;
+
+    private static List<EventType> _eventTypes;
+
     //Catalog
     public DbSet<Vendor> Vendors { get; }
     public DbSet<VendorType> VendorTypes { get; }
     public DbSet<VendorAccount> VendorAccounts { get; }
 
     //Event
-    public DbSet<ContractState> ContractStates { get; }
-    public DbSet<ContractPaymentState> ContractPaymentStates { get; }
     public DbSet<EventAccount> EventAccounts { get; }
     public DbSet<Event> Events { get; }
     public DbSet<EventVendorTypeBudget> EventVendorTypeBudgets { get; }
@@ -37,7 +39,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
 
     //Payment
     public DbSet<Account> Accounts { get; }
-    public DbSet<AccountType> AccountsTypes { get; }
+    public DbSet<AccountType> AccountTypes { get; }
     public DbSet<Transaction> Transactions { get; }
     public DbSet<TransactionType> TransactionTypes { get; }
 
@@ -192,163 +194,163 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         SeedEventTypes(modelBuilder);
         SeedAccountTypes(modelBuilder);
         SeedTransactionTypes(modelBuilder);
-        SeedVendors(modelBuilder);
         SeedProductTypes(modelBuilder);
-        SeedContractStates(modelBuilder);
-        SeedContractPaymentStates(modelBuilder);
+        SeedVendors(modelBuilder);
+        SeedEvents(modelBuilder);
     }
 
     private static void SeedEventTypes(ModelBuilder modelBuilder)
     {
-        var weddingEventType = new EventType
+        _eventTypes = new List<EventType>
         {
-            Id = Guid.NewGuid(),
-            Name = "Wedding",
-            Description = "A ceremony where two people are united in marriage."
-        };
-
-        modelBuilder.Entity<EventType>().HasData(
-            weddingEventType
-            ,
-            new EventType
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Wedding",
+                Description = "A ceremony where two people are united in marriage."
+            },
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Corporate Event",
                 Description = "An event organized by a company or business for its employees or clients."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Birthday Party",
                 Description = "A celebration of the anniversary of a person's birth."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Anniversary Celebration",
                 Description = "A celebration commemorating a significant milestone in a couple's relationship."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Graduation Party",
                 Description = "A celebration to honor the completion of an academic program."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Baby Shower",
                 Description = "A celebration held to honor the expectant mother and her baby."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Charity Event",
                 Description = "An event organized to raise funds or awareness for a charitable cause."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Concert",
                 Description = "A live performance of music by one or more musicians."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Festival",
                 Description = "A series of events or activities celebrating a particular theme or occasion."
             },
-            new EventType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Trade Show",
                 Description = "An exhibition where businesses showcase their products and services."
-            });
+            }
+        };
+
+        modelBuilder.Entity<EventType>().HasData(_eventTypes);
 
         modelBuilder.Entity<EventTypeRole>().HasData(
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Bride",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Bride",
                 Description = "The female participant in the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Groom",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Groom",
                 Description = "The male participant in the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Best Man",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Best Man",
                 Description = "The groom's chief assistant during the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Maid of Honor",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Maid of Honor",
                 Description = "The bride's chief assistant during the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Primary Sponsor",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Primary Sponsor",
                 Description = "The main financial supporter of the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Secondary Sponsor",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Secondary Sponsor",
                 Description = "An additional financial supporter of the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Flower Girl",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Flower Girl",
                 Description = "A young girl who scatters flower petals along the aisle."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Ring Bearer",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Ring Bearer",
                 Description = "A young child who carries the wedding rings during the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Guest",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Guest",
                 Description = "A person invited to attend the wedding."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Bible Bearer",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Bible Bearer",
                 Description = "A person who carries the Bible during the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Cord",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Cord",
                 Description = "A role representing the cord used in the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Candles",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Candles",
                 Description = "A role representing the candle holders during the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Ushers",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Ushers",
                 Description = "Individuals responsible for seating guests at the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Groomsmen",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Groomsmen",
                 Description = "Friends or family who stand with the groom during the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Bridesmaids",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Bridesmaids",
                 Description = "Friends or family who stand with the bride during the ceremony."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Parent of the Bride",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Parent of the Bride",
                 Description = "A key family member who may have a significant role."
             },
             new EventTypeRole
             {
-                Id = Guid.NewGuid(), EventTypeId = weddingEventType.Id, Name = "Parent of the Groom",
+                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Parent of the Groom",
                 Description = "A key family member representing the groom's side."
             }
         );
@@ -356,13 +358,15 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
 
     private static void SeedAccountTypes(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AccountType>().HasData(
-            new AccountType { Id = Guid.NewGuid(), Name = "Cash" },
-            new AccountType { Id = Guid.NewGuid(), Name = "GCash" },
-            new AccountType { Id = Guid.NewGuid(), Name = "Savings" },
-            new AccountType { Id = Guid.NewGuid(), Name = "Credit Card" },
-            new AccountType { Id = Guid.NewGuid(), Name = "Checking" }
-        );
+        _accountTypes = new List<AccountType>
+        {
+            new() { Id = Guid.NewGuid(), Name = "Cash" },
+            new() { Id = Guid.NewGuid(), Name = "GCash" },
+            new() { Id = Guid.NewGuid(), Name = "Savings" },
+            new() { Id = Guid.NewGuid(), Name = "Credit Card" },
+            new() { Id = Guid.NewGuid(), Name = "Checking" }
+        };
+        modelBuilder.Entity<AccountType>().HasData(_accountTypes);
     }
 
     private static void SeedTransactionTypes(ModelBuilder modelBuilder)
@@ -390,142 +394,313 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
 
     private static void SeedVendors(ModelBuilder modelBuilder)
     {
-        var catererVendorType = new VendorType
+        var vendorTypes = new List<VendorType>
         {
-            Id = Guid.NewGuid(),
-            Name = "Caterer",
-            Description = "Provides food and beverage services for the wedding."
-        };
-        var venueVendorType =
-            new VendorType
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Church",
+                Description = "A venue for hosting wedding ceremonies, typically in a religious setting."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(), Name = "Reception Venue",
+                Description = "A venue for hosting post-ceremony receptions or gatherings."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Lights & Sounds",
+                Description = "Manages lights, sound systems and audio equipment for the ceremony and reception."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(), Name = "Caterer",
+                Description = "Provides food and beverage services for the wedding."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(), Name = "Photographer & Videographer",
+                Description = "Captures memories through professional photography during the wedding."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(), Name = "Live Band",
+                Description = "A musical group that performs live at the wedding reception."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Hair & Makeup Artist",
+                Description = "Provides professional makeup services for the bride and bridal party."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Florist",
+                Description = "Supplies floral arrangements, bouquets, and centerpieces."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Jeweler",
+                Description = "Sells wedding rings and related jewelry."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Wedding Coordinator",
+                Description = "Organizes wedding activities and ensures event flows smoothly."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Mobile Bar",
+                Description = "Provides mobile bar services for cocktail hours and receptions."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Souvenirs",
+                Description = "Offers keepsakes or favors for wedding guests."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Emcee",
+                Description = "Hosts and coordinates the wedding program."
+            },
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Venue",
                 Description = "Location where the wedding ceremony and/or reception is held."
-            };
-        var floristVendorType = new VendorType
-        {
-            Id = Guid.NewGuid(),
-            Name = "Florist",
-            Description = "Supplies floral arrangements, bouquets, and centerpieces."
-        };
-        var photovideoVendorType = new VendorType
-        {
-            Id = Guid.NewGuid(),
-            Name = "Photographer & Videographer",
-            Description = "Captures memories through professional photography during the wedding."
-        };
-        var liveBandVendorType = new VendorType
-        {
-            Id = Guid.NewGuid(),
-            Name = "Live Band",
-            Description = "A musical group that performs live at the wedding reception."
-        };
-        modelBuilder.Entity<VendorType>().HasData(
-            catererVendorType,
-            venueVendorType,
-            floristVendorType,
-            photovideoVendorType,
-            liveBandVendorType,
-            new VendorType
+            },
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Photographer",
                 Description = "Captures memories through professional photography during the wedding."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Videographer",
                 Description = "Records the wedding ceremony and reception with high-quality video."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "DJ",
                 Description = "Provides music entertainment and emceeing for the wedding and reception."
             },
-            new VendorType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Live Band",
-                Description = "A musical group that performs live at the wedding reception."
-            },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Wedding Planner",
                 Description = "Coordinates all aspects of the wedding planning process from start to finish."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Baker",
                 Description = "Creates wedding cakes, cupcakes, and desserts for the celebration."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Transportation",
                 Description = "Provides vehicles for transporting the wedding party and guests."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Officiant",
                 Description = "Conducts the wedding ceremony and ensures it is legally binding."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Hair Stylist",
                 Description = "Styles hair for the bride, bridesmaids, and other family members."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Makeup Artist",
                 Description = "Provides professional makeup services for the bride and bridal party."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Rentals",
                 Description = "Offers items for rent such as tables, chairs, linens, and decor."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Stationery",
                 Description = "Designs and prints wedding invitations, save-the-dates, and programs."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Photo Booth",
                 Description = "Provides a fun photo booth setup with props for guests to enjoy."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Security",
                 Description = "Ensures the safety and security of the wedding event and guests."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Lighting Designer",
                 Description = "Creates customized lighting plans to enhance the wedding ambiance."
             },
-            new VendorType
+            new()
             {
                 Id = Guid.NewGuid(),
                 Name = "Sound Engineer",
                 Description = "Manages sound systems and audio equipment for the ceremony and reception."
             }
-        );
+        };
 
-        // SeedEventVendorContractStates(modelBuilder);
+        modelBuilder.Entity<VendorType>().HasData(vendorTypes);
+
+        var vendors = new List<Vendor>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Church",
+                Description = vendorTypes[0].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[0].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Reception Venue",
+                Description = vendorTypes[1].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[1].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Lights & Sounds",
+                Description = vendorTypes[2].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[2].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Caterer",
+                Description = vendorTypes[3].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[3].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Photo & Video",
+                Description = vendorTypes[4].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[4].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Strings",
+                Description = vendorTypes[5].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[5].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Hair & Makeup",
+                Description = vendorTypes[6].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[6].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Florist",
+                Description = vendorTypes[7].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[7].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Jeweler",
+                Description = vendorTypes[8].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[8].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Wedding Coordinator",
+                Description = vendorTypes[9].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[9].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Mobile Bar",
+                Description = vendorTypes[10].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[10].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Souvenirs",
+                Description = vendorTypes[11].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[11].Id
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                Name = "Emcee",
+                Description = vendorTypes[12].Description,
+                Address = "N/A",
+                VendorTypeId = vendorTypes[12].Id
+            }
+        };
+
+        modelBuilder.Entity<Vendor>().HasData(vendors);
+
+        var account = new Account
+        {
+            Id = Guid.NewGuid(),
+            Name = "Vendor Account",
+            AccountNumber = Guid.NewGuid().ToString(),
+            AccountTypeId = _accountTypes[0].Id
+        };
+
+        modelBuilder.Entity<Account>().HasData(account);
+
+        var vendorAccounts = new List<VendorAccount>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                VendorId = vendors[0].Id,
+                AccountId = account.Id
+            }
+        };
+
+        modelBuilder.Entity<VendorAccount>().HasData(vendorAccounts);
     }
 
     private static void SeedProductTypes(ModelBuilder modelBuilder)
@@ -639,99 +814,149 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         );
     }
 
-    private static void SeedContractStates(ModelBuilder modelBuilder)
+    private static void SeedEvents(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ContractState>().HasData(
-            new ContractState
+        var @event = new Event
+        {
+            Id = Guid.NewGuid(),
+            Title = "Wedding",
+            EventTypeId = _eventTypes[0].Id,
+            Description = "Wedding",
+            Location = "Ph"
+        };
+
+        modelBuilder.Entity<Event>().HasData(@event);
+
+        var eventVendorContractState = new List<EventVendorContractState>
+        {
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Inquiry",
                 Description = "Initial inquiry stage."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Pending Quote",
                 Description = "Waiting for a quote from the vendor."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Quote Received",
                 Description = "Quote has been received from the vendor."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Negotiation",
                 Description = "Negotiations are ongoing with the vendor."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Reserved",
                 Description = "Reserved but not yet confirmed."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Tentative",
                 Description = "Tentatively booked, awaiting confirmation."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Booked",
                 Description = "Contract has been booked and confirmed."
             },
-            new ContractState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Closed",
                 Description = "Contract has been completed and closed."
             }
-        );
-    }
+        };
 
-    private static void SeedContractPaymentStates(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<ContractPaymentState>().HasData(
-            new ContractPaymentState
+        modelBuilder.Entity<EventVendorContractState>().HasData(eventVendorContractState);
+
+        var eventVendorContractPaymentState = new List<EventVendorContractPaymentState>
+        {
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Deposit Pending",
                 Description = "Waiting for the initial deposit to be paid."
             },
-            new ContractPaymentState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Partial Payment",
                 Description = "Partial payment received, remaining balance due."
             },
-            new ContractPaymentState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Paid in Full",
                 Description = "All payments have been made, contract is paid in full."
             },
-            new ContractPaymentState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Overdue Payment",
                 Description = "Payment is overdue."
             },
-            new ContractPaymentState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Refund Pending",
                 Description = "Refund is pending processing."
             },
-            new ContractPaymentState
+            new()
             {
                 Id = Guid.NewGuid(),
+                EventId = @event.Id,
                 Name = "Refunded",
                 Description = "Refund has been processed and completed."
             }
-        );
+        };
+
+        modelBuilder.Entity<EventVendorContractPaymentState>().HasData(eventVendorContractPaymentState);
+
+        var account = new Account
+        {
+            Id = Guid.NewGuid(),
+            Name = "Event Account",
+            AccountNumber = Guid.NewGuid().ToString(),
+            AccountTypeId = _accountTypes[0].Id
+        };
+
+        modelBuilder.Entity<Account>().HasData(account);
+
+        var eventAccounts = new List<EventAccount>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                AccountId = account.Id
+            }
+        };
+
+        modelBuilder.Entity<EventAccount>().HasData(eventAccounts);
     }
 }

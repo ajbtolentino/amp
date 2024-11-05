@@ -10,13 +10,13 @@ public class Event : FullAuditableEntity<Guid>
 
     public string Description { get; set; } = string.Empty;
 
-    public string Location { get; set; }
+    public string Location { get; set; } = string.Empty;
 
     public int Seats { get; set; }
 
-    public required DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
-    public required DateTime EndDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     public virtual EventType? EventType { get; set; }
 
