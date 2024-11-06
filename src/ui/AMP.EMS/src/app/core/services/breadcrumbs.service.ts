@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Router, ActivatedRoute, NavigationEnd } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { MenuItem } from "primeng/api";
 import { BehaviorSubject, filter } from "rxjs";
 

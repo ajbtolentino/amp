@@ -8,7 +8,8 @@ export interface Vendor extends Base {
     name?: string;
     description?: string;
     vendorTypeId?: string;
-    conactInformation?: string;
+    contactInformation?: string;
+    address?: string;
 
     vendorType?: VendorType;
     eventVendorContracts?: EventVendorContract[];

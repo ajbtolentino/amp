@@ -41,13 +41,13 @@ export class EventMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-shop',
                             items: [
                                 {
-                                    label: 'Find Vendor',
+                                    label: 'Search',
                                     icon: 'pi pi-fw pi-search',
                                     routerLink: [`/event/${this.eventId}/vendors`]
                                 },
                                 {
                                     label: 'Contracts',
-                                    icon: 'pi pi-pen-to-square',
+                                    icon: 'pi pi-fw pi-pencil',
                                     routerLink: [`/event/${this.eventId}/vendors/contracts`]
                                 },
                                 {
@@ -58,7 +58,7 @@ export class EventMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Budget Management',
+                            label: 'Budget',
                             icon: 'pi pi-fw pi-calculator',
                             items: [
                                 {
