@@ -1,8 +1,7 @@
-export interface Role {
-    id?: string;
+import { Lookup } from "./lookup-model";
+
+export interface Role extends Lookup {
     eventId?: string;
-    name?: string;
-    description?: string;
     dateCreated?: Date;
     dateUpdated?: Date;
 }

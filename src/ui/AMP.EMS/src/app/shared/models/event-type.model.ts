@@ -1,5 +1,4 @@
-export interface EventType {
-    id?: string;
-    name?: string;
-    description?: string;
+import { Lookup } from "./lookup-model";
+
+export interface EventType extends Lookup {
 }
