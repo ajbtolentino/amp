@@ -22,7 +22,7 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
     [Route("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] EventVendorContractRequest data)
     {
-        var eventTransaction = await entityRepository.Get(id);
+        var eventTransaction = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(eventTransaction);
 

@@ -18,7 +18,7 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
     [AllowAnonymous]
     public IActionResult Rsvp(string code)
     {
-        var eventGuestInvitation = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+        var eventGuestInvitation = UnitOfWork.Set<EventGuestInvitation>().GetAll()
             .Where(_ => _.Code == code)
             .Include(_ => _.EventInvitation)
             .Include(_ => _.EventGuestInvitationRsvps)
@@ -40,7 +40,7 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventGuestInvitationRequest request)
     {
-        var eventGuest = await unitOfWork.Repository<EventGuest>().Get(request.EventGuestId);
+        var eventGuest = await UnitOfWork.Set<EventGuest>().Get(request.EventGuestId);
 
         ArgumentNullException.ThrowIfNull(eventGuest);
 
@@ -57,7 +57,7 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
     [Route("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] EventGuestInvitationRequest request)
     {
-        var guestInvitation = await entityRepository.Get(id);
+        var guestInvitation = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
 

@@ -15,7 +15,7 @@ public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvi
     [Route("{id:guid}/guests")]
     public IActionResult GetGuests(Guid id)
     {
-        var eventGuestInvitations = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+        var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll()
             .Where(_ => _.EventInvitationId == id)
             .Include(_ => _.EventGuest).ThenInclude(_ => _.Guest)
             .Include(_ => _.EventGuestInvitationRsvps).ThenInclude(_ => _.EventGuestInvitationRsvpItems);
@@ -42,7 +42,7 @@ public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvi
     [Route("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] EventInvitationRequest request)
     {
-        var eventInvitation = await entityRepository.Get(id);
+        var eventInvitation = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(eventInvitation);
 

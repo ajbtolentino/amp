@@ -266,94 +266,6 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         };
 
         modelBuilder.Entity<EventType>().HasData(_eventTypes);
-
-        modelBuilder.Entity<EventTypeRole>().HasData(
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Bride",
-                Description = "The female participant in the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Groom",
-                Description = "The male participant in the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Best Man",
-                Description = "The groom's chief assistant during the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Maid of Honor",
-                Description = "The bride's chief assistant during the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Primary Sponsor",
-                Description = "The main financial supporter of the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Secondary Sponsor",
-                Description = "An additional financial supporter of the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Flower Girl",
-                Description = "A young girl who scatters flower petals along the aisle."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Ring Bearer",
-                Description = "A young child who carries the wedding rings during the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Guest",
-                Description = "A person invited to attend the wedding."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Bible Bearer",
-                Description = "A person who carries the Bible during the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Cord",
-                Description = "A role representing the cord used in the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Candles",
-                Description = "A role representing the candle holders during the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Ushers",
-                Description = "Individuals responsible for seating guests at the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Groomsmen",
-                Description = "Friends or family who stand with the groom during the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Bridesmaids",
-                Description = "Friends or family who stand with the bride during the ceremony."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Parent of the Bride",
-                Description = "A key family member who may have a significant role."
-            },
-            new EventTypeRole
-            {
-                Id = Guid.NewGuid(), EventTypeId = _eventTypes[0].Id, Name = "Parent of the Groom",
-                Description = "A key family member representing the groom's side."
-            }
-        );
     }
 
     private static void SeedAccountTypes(ModelBuilder modelBuilder)
@@ -826,6 +738,114 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         };
 
         modelBuilder.Entity<Event>().HasData(@event);
+
+        var roles = new List<Role>
+        {
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Bride",
+                Description = "The female participant in the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Groom",
+                Description = "The male participant in the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Best Man",
+                Description = "The groom's chief assistant during the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Maid of Honor",
+                Description = "The bride's chief assistant during the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Primary Sponsor",
+                Description = "The main financial supporter of the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Secondary Sponsor",
+                Description = "An additional financial supporter of the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Flower Girl",
+                Description = "A young girl who scatters flower petals along the aisle."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Ring Bearer",
+                Description = "A young child who carries the wedding rings during the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Guest",
+                Description = "A person invited to attend the wedding."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Bible Bearer",
+                Description = "A person who carries the Bible during the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Cord",
+                Description = "A role representing the cord used in the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Candles",
+                Description = "A role representing the candle holders during the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Ushers",
+                Description = "Individuals responsible for seating guests at the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Groomsmen",
+                Description = "Friends or family who stand with the groom during the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Bridesmaids",
+                Description = "Friends or family who stand with the bride during the ceremony."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Parent of the Bride",
+                Description = "A key family member who may have a significant role."
+            },
+            new()
+            {
+                EventId = @event.Id,
+                Id = Guid.NewGuid(), Name = "Parent of the Groom",
+                Description = "A key family member representing the groom's side."
+            }
+        };
+
+        modelBuilder.Entity<Role>().HasData(roles);
 
         var eventVendorContractState = new List<EventVendorContractState>
         {

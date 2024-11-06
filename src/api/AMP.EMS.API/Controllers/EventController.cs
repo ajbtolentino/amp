@@ -15,7 +15,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/roles")]
     public IActionResult GetRoles(Guid eventId)
     {
-        var eventRoles = unitOfWork.Repository<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
+        var eventRoles = UnitOfWork.Set<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
 
         return Ok(new OkResponse<IEnumerable<Role>>(string.Empty) { Data = eventRoles });
     }
@@ -24,7 +24,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/guests")]
     public IActionResult GetGuests(Guid eventId)
     {
-        var eventGuests = unitOfWork.Repository<EventGuest>().GetAll()
+        var eventGuests = UnitOfWork.Set<EventGuest>().GetAll()
             .Where(eventGuest => eventGuest.EventId == eventId)
             .Include(eventGuest => eventGuest.Guest)
             .Include(eventGuest => eventGuest.EventGuestRoles)
@@ -41,7 +41,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/invitations")]
     public async Task<IActionResult> GetInvitations(Guid eventId)
     {
-        var eventInvitations = await unitOfWork.Repository<EventInvitation>().GetAll()
+        var eventInvitations = await UnitOfWork.Set<EventInvitation>().GetAll()
             .Include(_ => _.EventGuestInvitations).ThenInclude(_ => _.EventGuestInvitationRsvps)
             .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
             .Include(_ => _.EventGuestInvitations).ThenInclude(_ => _.EventGuest)
@@ -56,14 +56,14 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     {
         try
         {
-            unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
-            var eventType = unitOfWork.Repository<EventType>().GetAll().Include(_ => _.EventTypeRoles)
+            var eventType = UnitOfWork.Set<EventType>().GetAll().Include(_ => _.EventTypeRoles)
                 .FirstOrDefault(_ => _.Id == request.EventTypeId);
 
             ArgumentNullException.ThrowIfNull(eventType);
 
-            var newEvent = await entityRepository.Add(new Event
+            var newEvent = await EntityRepository.Add(new Event
             {
                 Title = request.Title,
                 EventTypeId = request.EventTypeId,
@@ -75,21 +75,21 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
             });
 
             foreach (var role in eventType.EventTypeRoles.ToList())
-                await unitOfWork.Repository<Role>().Add(new Role
+                await UnitOfWork.Set<Role>().Add(new Role
                 {
                     EventId = newEvent.Id,
                     Name = role.Name,
                     Description = role.Description
                 });
 
-            await unitOfWork.SaveChangesAsync();
-            await unitOfWork.CommitTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
             return Ok(new OkResponse<Event>(string.Empty) { Data = newEvent });
         }
         catch (Exception e)
         {
-            await unitOfWork.RollbackTransactionAsync();
+            await UnitOfWork.RollbackTransactionAsync();
             logger.LogError(e.Message, e);
             return Problem(e.Message);
         }
@@ -99,7 +99,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] EventRequest request)
     {
-        var @event = await entityRepository.Get(id);
+        var @event = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(@event);
 

@@ -13,9 +13,9 @@ public class EventVendorTransactionController(IUnitOfWork unitOfWork, ILogger<Ev
     {
         try
         {
-            unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
-            var transaction = await unitOfWork.Repository<Transaction>().Add(new Transaction
+            var transaction = await UnitOfWork.Set<Transaction>().Add(new Transaction
             {
                 Id = Guid.NewGuid(),
                 ReferenceNumber = request.ReferenceNumber,
@@ -48,7 +48,7 @@ public class EventVendorTransactionController(IUnitOfWork unitOfWork, ILogger<Ev
         try
         {
             var eventVendorTransaction =
-                entityRepository.GetAll().Include(_ => _.Transaction).FirstOrDefault(_ => _.Id == id);
+                EntityRepository.GetAll().Include(_ => _.Transaction).FirstOrDefault(_ => _.Id == id);
 
             ArgumentNullException.ThrowIfNull(eventVendorTransaction);
 

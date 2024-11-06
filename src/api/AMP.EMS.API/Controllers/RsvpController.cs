@@ -18,13 +18,13 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
     [AllowAnonymous]
     public async Task<IActionResult> Post([FromBody] RsvpRequest request)
     {
-        var guestInvitation = await unitOfWork.Repository<EventGuestInvitation>().Get(request.EventGuestInvitationId);
+        var guestInvitation = await UnitOfWork.Set<EventGuestInvitation>().Get(request.EventGuestInvitationId);
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
 
         try
         {
-            unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
             var rsvpEntity = new EventGuestInvitationRsvp
             {
@@ -37,19 +37,19 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
                     Name = item
                 });
 
-            await unitOfWork.Repository<EventGuestInvitationRsvp>().Add(rsvpEntity);
+            await UnitOfWork.Set<EventGuestInvitationRsvp>().Add(rsvpEntity);
 
             guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity);
 
-            await unitOfWork.SaveChangesAsync();
-            await unitOfWork.CommitTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
             return Ok(new OkResponse<EventGuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
         }
         catch (Exception ex)
         {
             logger.LogError(ex, ex.Message);
-            await unitOfWork.RollbackTransactionAsync();
+            await UnitOfWork.RollbackTransactionAsync();
             return Problem(ex.Message);
         }
     }

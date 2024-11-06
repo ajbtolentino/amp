@@ -1,6 +1,3 @@
-using System;
-using AMP.Core.Entity;
-
 namespace AMP.Core.Repository;
 
 public interface IRepository<TEntity> where TEntity : class

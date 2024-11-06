@@ -14,7 +14,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
 {
     public override async Task<IActionResult> Get(Guid id)
     {
-        var eventGuest = await entityRepository.GetAll()
+        var eventGuest = await EntityRepository.GetAll()
             .Where(_ => _.Id == id)
             .Include(_ => _.Guest)
             .Include(_ => _.EventGuestInvitations)
@@ -31,9 +31,9 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
         return Ok(new OkResponse<EventGuest>(string.Empty) { Data = eventGuest });
     }
 
-    public override async Task<IActionResult> GetAll()
+    public override IActionResult GetAll()
     {
-        var eventGuests = entityRepository.GetAll()
+        var eventGuests = EntityRepository.GetAll()
             .Include(_ => _.Guest)
             .Include(_ => _.EventGuestInvitations)
             .ThenInclude(_ => _.EventInvitation)
@@ -52,7 +52,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
     [Route("{id:guid}/invitations")]
     public IActionResult GetInvitations(Guid id)
     {
-        var eventGuestInvitations = unitOfWork.Repository<EventGuestInvitation>().GetAll()
+        var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll()
             .Where(_ => _.EventGuestId == id)
             .Include(_ => _.EventInvitation)
             .Include(_ => _.EventGuestInvitationRsvps)
@@ -70,9 +70,9 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
         {
             ArgumentNullException.ThrowIfNull(request.Guest);
 
-            unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
-            var newGuest = await unitOfWork.Repository<Guest>().Add(new Guest
+            var newGuest = await UnitOfWork.Set<Guest>().Add(new Guest
             {
                 FirstName = request.Guest.FirstName,
                 LastName = request.Guest.LastName,
@@ -80,7 +80,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
                 PhoneNumber = request.Guest.PhoneNumber ?? string.Empty
             });
 
-            var newEventGuest = await entityRepository.Add(new EventGuest
+            var newEventGuest = await EntityRepository.Add(new EventGuest
             {
                 EventId = request.EventId,
                 GuestId = newGuest.Id,
@@ -90,15 +90,15 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
             UpdateEventGuestInvitations(newEventGuest, request.EventInvitationIds ?? []);
             UpdateEventGuestRoles(newEventGuest, request.EventRoleIds ?? []);
 
-            await unitOfWork.SaveChangesAsync();
-            await unitOfWork.CommitTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
             return Ok(new OkResponse<EventGuest>(string.Empty) { Data = newEventGuest });
         }
         catch (Exception ex)
         {
             logger.LogError(ex.Message, ex);
-            await unitOfWork.RollbackTransactionAsync();
+            await UnitOfWork.RollbackTransactionAsync();
             return Problem(ex.Message);
         }
 
@@ -111,13 +111,13 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
     {
         try
         {
-            var eventGuest = await entityRepository.Get(id);
+            var eventGuest = await EntityRepository.Get(id);
 
             ArgumentNullException.ThrowIfNull(eventGuest);
 
-            unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
-            var guest = await unitOfWork.Repository<Guest>().Get(eventGuest.GuestId);
+            var guest = await UnitOfWork.Set<Guest>().Get(eventGuest.GuestId);
 
             ArgumentNullException.ThrowIfNull(guest);
 
@@ -126,19 +126,19 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
             guest.NickName = request.Guest.Nickname ?? string.Empty;
             guest.PhoneNumber = request.Guest.PhoneNumber ?? string.Empty;
 
-            unitOfWork.Repository<Guest>().Update(guest);
+            UnitOfWork.Set<Guest>().Update(guest);
 
             eventGuest.Seats = request.Seats ?? 0;
 
             UpdateEventGuestInvitations(eventGuest, request.EventInvitationIds ?? []);
             UpdateEventGuestRoles(eventGuest, request.EventRoleIds ?? []);
 
-            entityRepository.Update(eventGuest);
+            EntityRepository.Update(eventGuest);
 
-            await unitOfWork.SaveChangesAsync();
-            await unitOfWork.CommitTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
-            eventGuest = await entityRepository.GetAll()
+            eventGuest = await EntityRepository.GetAll()
                 .Where(_ => _.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -147,14 +147,14 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
         catch (Exception ex)
         {
             logger.LogError(ex.Message, ex);
-            await unitOfWork.RollbackTransactionAsync();
+            await UnitOfWork.RollbackTransactionAsync();
             return Problem(ex.Message);
         }
     }
 
     private void UpdateEventGuestInvitations(EventGuest eventGuest, IEnumerable<Guid> eventInvitationIds)
     {
-        var eventGuestInvitations = unitOfWork.Repository<EventGuestInvitation>().GetAll().AsNoTracking()
+        var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll().AsNoTracking()
             .Where(_ => _.EventGuestId == eventGuest.Id);
         var newEventInvitationIds =
             eventInvitationIds.Except(eventGuestInvitations.Select(_ => _.EventInvitationId));
@@ -162,7 +162,7 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
             eventGuestInvitations.Where(_ => !eventInvitationIds.Contains(_.EventInvitationId));
 
         foreach (var eventInvitationId in newEventInvitationIds)
-            unitOfWork.Repository<EventGuestInvitation>().Add(new EventGuestInvitation
+            UnitOfWork.Set<EventGuestInvitation>().Add(new EventGuestInvitation
             {
                 Code = InvitationHelper.GenerateCode(),
                 EventGuestId = eventGuest.Id,
@@ -170,25 +170,25 @@ public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestCont
             });
 
         foreach (var eventGuestInvitation in deletedEventGuestInvitations)
-            unitOfWork.Repository<EventGuestInvitation>().Delete(eventGuestInvitation.Id);
+            UnitOfWork.Set<EventGuestInvitation>().Delete(eventGuestInvitation.Id);
     }
 
     private void UpdateEventGuestRoles(EventGuest eventGuest, IEnumerable<Guid> eventRoleIds)
     {
-        var eventGuestRoles = unitOfWork.Repository<EventGuestRole>().GetAll().AsNoTracking()
+        var eventGuestRoles = UnitOfWork.Set<EventGuestRole>().GetAll().AsNoTracking()
             .Where(_ => _.EventGuestId == eventGuest.Id);
         var newEventRoles = eventRoleIds.Except(eventGuestRoles.Select(_ => _.RoleId));
         var deletedEventGuestRoles = eventGuestRoles.Where(_ => !eventRoleIds.Contains(_.RoleId));
 
         foreach (var eventRoleId in newEventRoles)
-            unitOfWork.Repository<EventGuestRole>().Add(new EventGuestRole
+            UnitOfWork.Set<EventGuestRole>().Add(new EventGuestRole
             {
                 EventGuestId = eventGuest.Id,
                 RoleId = eventRoleId
             });
 
         foreach (var eventGuestRole in deletedEventGuestRoles)
-            unitOfWork.Repository<EventGuestRole>().Delete(eventGuestRole.Id);
+            UnitOfWork.Set<EventGuestRole>().Delete(eventGuestRole.Id);
     }
 
     public record EventGuestRequest(

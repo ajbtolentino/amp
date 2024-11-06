@@ -23,7 +23,7 @@ public class VendorController(IUnitOfWork unitOfWork, ILogger<VendorController> 
     [Route("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] VendorRequest request)
     {
-        var vendor = await entityRepository.Get(id);
+        var vendor = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(vendor);
 
