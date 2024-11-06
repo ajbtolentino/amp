@@ -1,12 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
 
-import { Table, TableLazyLoadEvent } from 'primeng/table';
-import { EventTypeService } from '../../../core/services/event-type.service';
-import { lastValueFrom, Observable } from 'rxjs';
 import { Column, EventType } from '@shared/models';
+import { Table } from 'primeng/table';
+import { lastValueFrom, Observable } from 'rxjs';
+import { EventTypeService } from '../../../core/services/event-type.service';
 
 @Component({
   selector: 'app-settings',
@@ -83,7 +82,6 @@ export class AppSettingsComponent implements OnInit {
   }
 
   initTableEdit = () => {
-    console.log("Edit");
   }
 
   save = (item: EventType | undefined) => {
