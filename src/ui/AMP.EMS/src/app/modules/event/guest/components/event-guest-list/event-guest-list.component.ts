@@ -26,14 +26,8 @@ export class EventGuestListComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.parent?.parent?.paramMap.subscribe(data => {
-      const eventId = data.get("eventId");
-
-      if (eventId) {
-        this.eventId = eventId;
-        this.refreshGrid();
-      }
-    });
+    this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
+    this.refreshGrid();
   }
 
   refreshGrid = () => {
@@ -45,7 +39,6 @@ export class EventGuestListComponent implements OnInit {
   }
 
   delete = (eventGuest: EventGuest) => {
-    console.log(eventGuest);
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${eventGuest.guest?.firstName} ${eventGuest.guest?.lastName}?`,
       header: 'Confirm',

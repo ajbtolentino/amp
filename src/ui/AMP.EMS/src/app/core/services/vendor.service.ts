@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Vendor } from '@shared/models';
 import { Observable } from 'rxjs';
 import { BaseApiService } from './base.api.service';
-import { Vendor } from '@shared/models/vendor-model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,8 @@ export class VendorService extends BaseApiService {
     return this.httpPost<Vendor>(`api/vendor`, vendor);
   }
 
-  update = (transaction: Vendor): Observable<Vendor> => {
-    return this.httpPut<Vendor>(`api/vendor`, transaction);
+  update = (vendor: Vendor): Observable<Vendor> => {
+    return this.httpPut<Vendor>(`api/vendor`, vendor);
   }
 
   delete = (id: string): Observable<Vendor> => {

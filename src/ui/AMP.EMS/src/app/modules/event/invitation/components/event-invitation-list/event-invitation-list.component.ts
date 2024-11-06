@@ -28,18 +28,11 @@ export class EventInvitationListComponent implements OnInit {
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.parent?.parent?.paramMap.subscribe(data => {
-      const eventId = data.get("eventId");
-
-      if (eventId) {
-        this.eventId = eventId;
-        this.refreshGrid();
-      }
-    });
-
+    this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
+    this.refreshGrid();
   }
 
-  refreshGrid = async () => {
+  refreshGrid = () => {
     this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
   }
 

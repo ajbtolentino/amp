@@ -3,12 +3,14 @@ import { Event } from "./event.model";
 import { Lookup } from "./lookup-model";
 import { Vendor } from "./vendor-model";
 
-export interface EventVendor extends Base {
-    id?: string;
-    eventId?: string;
-    vendorId?: string;
-    event?: Event
+export interface EventVendorContract extends Base {
+    eventId: string;
+    vendorId: string;
+    eventVendorContractStateId?: string;
+    eventVendorContractStatePaymentId?: string;
+
     vendor?: Vendor;
+    event?: Event;
     eventVendorContractState?: Lookup;
     eventVendorContractPaymentState?: Lookup;
 }

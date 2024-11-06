@@ -24,8 +24,8 @@ public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork, ILogger lo
     }
 
     [HttpGet]
-    [Route("getbyids")]
-    public virtual IActionResult GetAll([FromBody] IEnumerable<TKey> ids)
+    [Route(nameof(GetByIds))]
+    public virtual IActionResult GetByIds([FromQuery] List<TKey> ids)
     {
         var entities = EntityRepository.GetAll().Where(entity => ids.Contains(entity.Id));
 

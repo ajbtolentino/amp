@@ -51,6 +51,39 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
         return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = eventInvitations });
     }
 
+    [HttpGet]
+    [Route("{eventId:guid}/vendorContracts")]
+    public IActionResult GetVendorContracts(Guid eventId)
+    {
+        var eventVendorContracts = UnitOfWork.Set<EventVendorContract>().GetAll()
+            .Where(eventVendorContract => eventVendorContract.EventId == eventId).AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<EventVendorContract>>(string.Empty) { Data = eventVendorContracts });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/vendorContractStates")]
+    public IActionResult GetVendorContractStates(Guid eventId)
+    {
+        var eventVendorContractStates = UnitOfWork.Set<EventVendorContractState>().GetAll()
+            .Where(eventVendorContractState => eventVendorContractState.EventId == eventId).AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<EventVendorContractState>>(string.Empty)
+            { Data = eventVendorContractStates });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/vendorContractPaymentStates")]
+    public IActionResult GetVendorContractPaymentStates(Guid eventId)
+    {
+        var eventVendorContractPaymentState = UnitOfWork.Set<EventVendorContractPaymentState>().GetAll()
+            .Where(eventVendorContractPaymentState => eventVendorContractPaymentState.EventId == eventId)
+            .AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<EventVendorContractPaymentState>>(string.Empty)
+            { Data = eventVendorContractPaymentState });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventRequest request)
     {

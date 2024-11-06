@@ -8,6 +8,7 @@ export * from './event-guest.model';
 export * from './event-invitation-info.model';
 export * from './event-invitation.model';
 export * from './event-type.model';
+export * from './event-vendor-contract.model';
 export * from './event-vendor.model';
 export * from './event.model';
 export * from './guest-model';
@@ -16,3 +17,4 @@ export * from './transaction-model';
 export * from './transaction-type-model';
 export * from './vendor-account.model';
 export * from './vendor-model';
+

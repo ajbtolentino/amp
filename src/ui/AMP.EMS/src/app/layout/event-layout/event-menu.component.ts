@@ -46,15 +46,15 @@ export class EventMenuComponent implements OnInit {
                                     routerLink: [`/event/${this.eventId}/vendors`]
                                 },
                                 {
+                                    label: 'Contracts',
+                                    icon: 'pi pi-pen-to-square',
+                                    routerLink: [`/event/${this.eventId}/vendors/contracts`]
+                                },
+                                {
                                     label: 'Transactions',
                                     icon: 'pi pi-fw pi-receipt',
                                     routerLink: [`/event/${this.eventId}/vendors/transactions`]
                                 },
-                                {
-                                    label: 'Contracts',
-                                    icon: 'pi pi-pen-to-square',
-                                    routerLink: [`/event/${this.eventId}/vendors/contracts`]
-                                }
                             ]
                         },
                         {
