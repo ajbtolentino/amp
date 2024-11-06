@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { lastValueFrom, Observable } from 'rxjs';
-import { RsvpService } from '../../../core/services/rsvp.service';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { EventGuestInvitationService } from '@modules/event/guest';
 import { EventGuestInvitation, EventGuestInvitationRsvp } from '@shared/models';
+import { lastValueFrom, Observable } from 'rxjs';
+import { RsvpService } from '../../../core/services/rsvp.service';
 
 @Component({
   selector: 'app-invitation-details',
@@ -23,7 +23,6 @@ export class InvitationDetailsComponent {
   }
 
   onSubmit = async (rsvp: EventGuestInvitationRsvp) => {
-    console.log(rsvp);
     await lastValueFrom(this.rsvpService.add(rsvp));
   }
 }

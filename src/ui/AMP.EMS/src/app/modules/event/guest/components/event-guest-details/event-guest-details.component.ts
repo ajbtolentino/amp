@@ -74,7 +74,6 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   copyLink = (code: string) => {
     navigator.clipboard.writeText(code);
-    console.log(`${location.host}${code}`);
     this.messageService.add({ severity: "info", summary: "Success", detail: "Link copied!" });
   }
 
