@@ -576,8 +576,8 @@ namespace AMP.EMS.API.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     EventId = table.Column<Guid>(type: "TEXT", nullable: false),
                     VendorId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventVendorContractStateId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventVendorContractPaymentStateId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventVendorContractStateId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    EventVendorContractPaymentStateId = table.Column<Guid>(type: "TEXT", nullable: true),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -590,14 +590,12 @@ namespace AMP.EMS.API.Migrations
                         name: "FK_EventVendorContracts_EventVendorContractPaymentState_EventVendorContractPaymentStateId",
                         column: x => x.EventVendorContractPaymentStateId,
                         principalTable: "EventVendorContractPaymentState",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EventVendorContracts_EventVendorContractStates_EventVendorContractStateId",
                         column: x => x.EventVendorContractStateId,
                         principalTable: "EventVendorContractStates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EventVendorContracts_Events_EventId",
                         column: x => x.EventId,
@@ -693,11 +691,11 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("37ec77c7-e2d3-4e52-85ab-c0f68faaa61e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6240), null, "", "Checking", "" },
-                    { new Guid("3e272327-3c04-47d4-a421-8bcce138c8d8"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6220), null, "", "Cash", "" },
-                    { new Guid("6e452f94-f5aa-4d59-a2b0-9306f098555e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6240), null, "", "Credit Card", "" },
-                    { new Guid("8ecc048d-8b40-4873-af0b-9dd911b292c7"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6240), null, "", "Savings", "" },
-                    { new Guid("fbf7574c-629d-435d-94f7-f49913f67c1a"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6230), null, "", "GCash", "" }
+                    { new Guid("24942542-7aaa-49df-b97a-569c98df1aba"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(750), null, "", "Credit Card", "" },
+                    { new Guid("42720c94-07ec-4901-b14c-8173f869a3f7"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(750), null, "", "Checking", "" },
+                    { new Guid("65edd900-f9fd-49a5-bc20-0e41f38632d7"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(750), null, "", "Savings", "" },
+                    { new Guid("c8d7e776-acbb-4b1d-80df-4dd888fb87b3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(740), null, "", "Cash", "" },
+                    { new Guid("ff262531-fa1f-4eec-992e-19fb7ada6616"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(740), null, "", "GCash", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -705,16 +703,16 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("011a6f73-1bc8-4a5d-bf67-8ff4d37a3fea"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6110), null, "An event organized by a company or business for its employees or clients.", "Corporate Event", "" },
-                    { new Guid("1efec157-4a09-46b0-93b8-586373297569"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6120), null, "A celebration commemorating a significant milestone in a couple's relationship.", "Anniversary Celebration", "" },
-                    { new Guid("2fec3324-cd83-44aa-b8d6-5478ec2bf24b"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6110), null, "A celebration of the anniversary of a person's birth.", "Birthday Party", "" },
-                    { new Guid("454ff548-ed76-4d99-bdac-b196dec39622"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6140), null, "A series of events or activities celebrating a particular theme or occasion.", "Festival", "" },
-                    { new Guid("758f47e9-b7c2-4298-a768-c48a65973292"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6130), null, "An event organized to raise funds or awareness for a charitable cause.", "Charity Event", "" },
-                    { new Guid("97a7efd1-e428-4996-a80f-5f4ce9514d14"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6140), null, "An exhibition where businesses showcase their products and services.", "Trade Show", "" },
-                    { new Guid("ad10fd4d-ad14-4877-876a-3a8092abea76"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6130), null, "A live performance of music by one or more musicians.", "Concert", "" },
-                    { new Guid("bb58d68b-26fe-4d5d-8015-d41dea405914"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6120), null, "A celebration to honor the completion of an academic program.", "Graduation Party", "" },
-                    { new Guid("c39f50c5-90a2-46c8-92ca-3c9631016277"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6120), null, "A celebration held to honor the expectant mother and her baby.", "Baby Shower", "" },
-                    { new Guid("ece6572c-3d92-4efe-a42f-14f78cba1b4c"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6050), null, "A ceremony where two people are united in marriage.", "Wedding", "" }
+                    { new Guid("183bf5ad-c3ca-457d-adbc-40955196204b"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(640), null, "A celebration of the anniversary of a person's birth.", "Birthday Party", "" },
+                    { new Guid("36ae1366-8f70-498f-a770-98c02570788e"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(660), null, "An event organized to raise funds or awareness for a charitable cause.", "Charity Event", "" },
+                    { new Guid("4a0cbda5-fd39-4938-a67b-e3bcce3591e0"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(650), null, "A celebration held to honor the expectant mother and her baby.", "Baby Shower", "" },
+                    { new Guid("5d3aeb1f-df53-4615-90c5-43b1560513b1"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(660), null, "A live performance of music by one or more musicians.", "Concert", "" },
+                    { new Guid("6054ef8f-bd58-41e5-a4e4-4efe93a0feb3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(650), null, "A celebration to honor the completion of an academic program.", "Graduation Party", "" },
+                    { new Guid("711c66e3-44f4-492c-a303-c0e441f0bf07"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(660), null, "A series of events or activities celebrating a particular theme or occasion.", "Festival", "" },
+                    { new Guid("7201311b-e463-491a-ad5e-ad0aa765fcad"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(670), null, "An exhibition where businesses showcase their products and services.", "Trade Show", "" },
+                    { new Guid("79c16dc1-a94b-4c68-8bcb-bec04c440f77"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(640), null, "A celebration commemorating a significant milestone in a couple's relationship.", "Anniversary Celebration", "" },
+                    { new Guid("aa26c480-40e1-4435-9339-5ba09de27abd"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(630), null, "An event organized by a company or business for its employees or clients.", "Corporate Event", "" },
+                    { new Guid("f7c6c362-90ad-475f-bd0e-854c83d55870"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(580), null, "A ceremony where two people are united in marriage.", "Wedding", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -722,23 +720,23 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("09cf4998-69b8-44bb-b5a0-7ff5cd920423"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3350), null, "Wedding cakes, desserts, and other sweets for the reception.", "Cake & Confectionery", "" },
-                    { new Guid("0ad3cc6d-a63b-4dbd-a503-edb6842bec37"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3360), null, "Professional officiants to conduct the wedding ceremony.", "Officiant Services", "" },
-                    { new Guid("0dc59c71-aece-47e9-832a-d766cf57e732"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3340), null, "Decorative items and setup services, including centerpieces, lighting, and table settings.", "Decor", "" },
-                    { new Guid("1805ddaa-38b1-4661-bca8-89c0885aa6ef"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3340), null, "Coordination and planning services to manage the entire wedding event.", "Wedding Planning", "" },
-                    { new Guid("2b76d2e9-69c3-4490-b8d9-662e3b19adc9"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3380), null, "Gifts and party favors for guests.", "Favors & Gifts", "" },
-                    { new Guid("34952766-c64d-41f7-885c-99c4931eef3e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3350), null, "Transportation services for the wedding party and guests, such as limousines and shuttles.", "Transportation", "" },
-                    { new Guid("34b7cea4-5d9b-4096-bcf3-95a4ae6b1ed0"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3330), null, "Video recording services to capture and document the wedding day.", "Videography", "" },
-                    { new Guid("52581775-dfdb-453a-b35c-ab140aa7d16c"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3370), null, "Rental of items like furniture, tableware, tents, and dance floors.", "Rentals", "" },
-                    { new Guid("59c9bb63-ccb8-4925-aad0-f53c183c2c78"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3310), null, "Food and beverage services, including full-course meals, buffets, and bar services.", "Catering", "" },
-                    { new Guid("71ad1250-1230-43f1-a83f-f369b6e7ca6f"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3320), null, "Locations for wedding ceremonies, receptions, and other related events.", "Venue", "" },
-                    { new Guid("82253fc4-1abd-4090-9d9e-ecbae8cd4e0b"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3360), null, "Design and printing services for wedding invitations, save-the-dates, and other stationery.", "Stationery & Invitations", "" },
-                    { new Guid("87465b17-0b47-44df-85e1-1046a668d5a9"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3360), null, "Beauty services for the bridal party, including hairstyling and makeup.", "Hair & Makeup", "" },
-                    { new Guid("8e3d7646-3c33-44ed-be0c-f460dfaeae74"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3330), null, "Floral arrangements, bouquets, and other decorative flower services.", "Floristry", "" },
-                    { new Guid("a5b62787-b898-48ad-bdae-2901c1ac151e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3330), null, "Professional photography services for capturing wedding moments.", "Photography", "" },
-                    { new Guid("af97030c-272f-4779-ae6d-2b61a65bc863"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3370), null, "Wedding rings, bridal jewelry, and other related accessories.", "Jewelry", "" },
-                    { new Guid("b969e5b0-d980-4479-a1ab-119ba688fc43"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3340), null, "Entertainment services, including live bands, DJs, and performers.", "Music & Entertainment", "" },
-                    { new Guid("bfea5b43-8cec-49b3-8599-ca4130142e70"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3350), null, "Wedding attire rentals or purchases, including dresses, suits, and accessories.", "Attire & Accessories", "" }
+                    { new Guid("029334aa-e87c-4ea3-8914-7f58f204b913"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7570), null, "Transportation services for the wedding party and guests, such as limousines and shuttles.", "Transportation", "" },
+                    { new Guid("131b721e-913a-4689-86fc-032c7653c5b3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7550), null, "Video recording services to capture and document the wedding day.", "Videography", "" },
+                    { new Guid("1d1c3f60-16e3-48a9-836f-36fa9ac7f368"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7560), null, "Decorative items and setup services, including centerpieces, lighting, and table settings.", "Decor", "" },
+                    { new Guid("370b8c67-a068-40a8-ad9a-12a8f4930121"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7590), null, "Wedding rings, bridal jewelry, and other related accessories.", "Jewelry", "" },
+                    { new Guid("3a94507a-2019-47fa-94af-ade237a1813b"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7570), null, "Wedding cakes, desserts, and other sweets for the reception.", "Cake & Confectionery", "" },
+                    { new Guid("3d89eed8-de2a-410c-9186-60bae382e187"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7550), null, "Floral arrangements, bouquets, and other decorative flower services.", "Floristry", "" },
+                    { new Guid("4dd8ed37-a4bd-46a3-9ced-0930c3b7a395"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7570), null, "Wedding attire rentals or purchases, including dresses, suits, and accessories.", "Attire & Accessories", "" },
+                    { new Guid("587e6750-6106-4e63-9e8c-7855955776a2"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7540), null, "Locations for wedding ceremonies, receptions, and other related events.", "Venue", "" },
+                    { new Guid("5b344922-2272-4aad-b7bf-746cff87cddd"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7560), null, "Coordination and planning services to manage the entire wedding event.", "Wedding Planning", "" },
+                    { new Guid("83051d11-3f92-4b22-b1f1-4d66b8698423"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7590), null, "Rental of items like furniture, tableware, tents, and dance floors.", "Rentals", "" },
+                    { new Guid("8b3e8901-29f4-4486-a849-f82543c812d2"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7580), null, "Beauty services for the bridal party, including hairstyling and makeup.", "Hair & Makeup", "" },
+                    { new Guid("a52aac78-9294-41bc-b96f-6868f51edb72"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7580), null, "Design and printing services for wedding invitations, save-the-dates, and other stationery.", "Stationery & Invitations", "" },
+                    { new Guid("ab8025d4-5b5d-4cad-9ef3-1574b50323fa"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7550), null, "Professional photography services for capturing wedding moments.", "Photography", "" },
+                    { new Guid("ad54812b-f71e-4d14-bcbc-c3a7d9020f96"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7560), null, "Entertainment services, including live bands, DJs, and performers.", "Music & Entertainment", "" },
+                    { new Guid("bdf497e7-8cdb-47fe-9ebf-f700427091f4"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7530), null, "Food and beverage services, including full-course meals, buffets, and bar services.", "Catering", "" },
+                    { new Guid("cc748d21-f978-4332-90eb-b4607ebe713a"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7590), null, "Professional officiants to conduct the wedding ceremony.", "Officiant Services", "" },
+                    { new Guid("d8bd39c7-cd95-4b40-8c5f-91ca0cc5c1be"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7600), null, "Gifts and party favors for guests.", "Favors & Gifts", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -746,9 +744,9 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("189cc01f-1bd9-47e1-8be3-501e9de6d585"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6280), null, "Represents adding funds to an account, usually as a top-up or a prepayment.", "Deposit", "" },
-                    { new Guid("7eb9cf21-48e6-4519-9823-d16f1caaaac2"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6290), null, "Represents money returned to the user for a previous purchase, usually due to a return or an issue with the product/service.", "Refund", "" },
-                    { new Guid("cc84258b-4f37-4be0-aceb-d073094f3723"), "", new DateTime(2024, 11, 6, 15, 8, 3, 511, DateTimeKind.Utc).AddTicks(6280), null, "A general payment or debit from a user’s account, often for non-purchase activities, such as bill payments or installment payments.", "Payment", "" }
+                    { new Guid("18d56995-5908-403a-ab43-f75d4c9bc775"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(810), null, "Represents money returned to the user for a previous purchase, usually due to a return or an issue with the product/service.", "Refund", "" },
+                    { new Guid("3961e5ba-7230-40a1-812c-2bf91780e3b3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(810), null, "Represents adding funds to an account, usually as a top-up or a prepayment.", "Deposit", "" },
+                    { new Guid("d56e836e-be51-4976-b07d-1d80b2b56bd2"), "", new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(800), null, "A general payment or debit from a user’s account, often for non-purchase activities, such as bill payments or installment payments.", "Payment", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -756,35 +754,35 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("1589a775-a1c9-4f2b-9eec-bb61b413b444"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3490), null, "Conducts the wedding ceremony and ensures it is legally binding.", "Officiant", "" },
-                    { new Guid("19752ed9-fa8a-4f56-8117-f33d9efe816b"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3500), null, "Styles hair for the bride, bridesmaids, and other family members.", "Hair Stylist", "" },
-                    { new Guid("23cfc6a8-7cb7-4a20-97a9-c10ae3ce88d6"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3520), null, "Ensures the safety and security of the wedding event and guests.", "Security", "" },
-                    { new Guid("39a9b752-8109-479d-a971-d39cd488e257"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3440), null, "Provides professional makeup services for the bride and bridal party.", "Hair & Makeup Artist", "" },
-                    { new Guid("418b6e96-a70b-4d05-8e45-08ab01bb8077"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3520), null, "Manages sound systems and audio equipment for the ceremony and reception.", "Sound Engineer", "" },
-                    { new Guid("49ff4985-d30d-47c9-87b1-9c85ebe79961"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3490), null, "Creates wedding cakes, cupcakes, and desserts for the celebration.", "Baker", "" },
-                    { new Guid("5165d054-5dec-467c-b618-feb993ff4f14"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3510), null, "Provides a fun photo booth setup with props for guests to enjoy.", "Photo Booth", "" },
-                    { new Guid("51ae28e4-e2d0-44d0-8170-90fcc54e20e2"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3510), null, "Offers items for rent such as tables, chairs, linens, and decor.", "Rentals", "" },
-                    { new Guid("5b812c6a-5e30-4dc8-a3d1-a625860d196a"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3470), null, "Records the wedding ceremony and reception with high-quality video.", "Videographer", "" },
-                    { new Guid("5c8954ae-65a5-4b14-b2ee-42634d48b2f0"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3440), null, "Supplies floral arrangements, bouquets, and centerpieces.", "Florist", "" },
-                    { new Guid("5ccce4f4-91db-43ef-9134-3bdca2a3e7d3"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3490), null, "Provides vehicles for transporting the wedding party and guests.", "Transportation", "" },
-                    { new Guid("6164e55c-4bf4-4f7f-9a5f-5509d84f4046"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3420), null, "A venue for hosting wedding ceremonies, typically in a religious setting.", "Church", "" },
-                    { new Guid("6b1e9b96-98ee-4b65-a591-6221df95c4f4"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3480), null, "Coordinates all aspects of the wedding planning process from start to finish.", "Wedding Planner", "" },
-                    { new Guid("6f246120-8522-4ad8-b308-dbf39801604c"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3430), null, "Captures memories through professional photography during the wedding.", "Photographer & Videographer", "" },
-                    { new Guid("7031fbc0-5efc-401f-b38f-3719703de161"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3460), null, "Offers keepsakes or favors for wedding guests.", "Souvenirs", "" },
-                    { new Guid("7054cfa5-9a47-413d-83a0-89b1911b811e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3500), null, "Provides professional makeup services for the bride and bridal party.", "Makeup Artist", "" },
-                    { new Guid("75d1cf60-d140-420b-ba2b-40788e705cfa"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3520), null, "Creates customized lighting plans to enhance the wedding ambiance.", "Lighting Designer", "" },
-                    { new Guid("866841d1-89f0-45a8-84aa-12c37302110f"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3440), null, "A musical group that performs live at the wedding reception.", "Live Band", "" },
-                    { new Guid("869549c2-914a-4fa8-8496-67256106d19b"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3460), null, "Provides mobile bar services for cocktail hours and receptions.", "Mobile Bar", "" },
-                    { new Guid("87d60d1d-c073-4373-818e-f3d57b8e635d"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3450), null, "Sells wedding rings and related jewelry.", "Jeweler", "" },
-                    { new Guid("8f351ec6-9438-44c3-bac7-b290fa6450e8"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3420), null, "A venue for hosting post-ceremony receptions or gatherings.", "Reception Venue", "" },
-                    { new Guid("90b0ddff-0f05-47d9-ad7d-941f9a541efe"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3460), null, "Hosts and coordinates the wedding program.", "Emcee", "" },
-                    { new Guid("9e775d04-47ce-4422-a70c-c2e6f84a7808"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3450), null, "Organizes wedding activities and ensures event flows smoothly.", "Wedding Coordinator", "" },
-                    { new Guid("b282998d-fd89-44c3-ab54-5aaabe8ce5d1"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3480), null, "Provides music entertainment and emceeing for the wedding and reception.", "DJ", "" },
-                    { new Guid("db97c0b1-21f2-414a-8453-b6aba638ec0f"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3470), null, "Captures memories through professional photography during the wedding.", "Photographer", "" },
-                    { new Guid("e51403e9-40fd-4eec-8252-e63d4fea1068"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3430), null, "Manages lights, sound systems and audio equipment for the ceremony and reception.", "Lights & Sounds", "" },
-                    { new Guid("e77590c5-47bb-4280-bfb5-28fe31ef1d12"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3470), null, "Location where the wedding ceremony and/or reception is held.", "Venue", "" },
-                    { new Guid("e9d460a2-738e-40d9-beb8-5e0318f2a637"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3430), null, "Provides food and beverage services for the wedding.", "Caterer", "" },
-                    { new Guid("f24a07f6-8589-4442-a2e5-bb53bff7ede6"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3510), null, "Designs and prints wedding invitations, save-the-dates, and programs.", "Stationery", "" }
+                    { new Guid("0215f011-ddb4-46e0-904e-5e520f3a170b"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7730), null, "Designs and prints wedding invitations, save-the-dates, and programs.", "Stationery", "" },
+                    { new Guid("05dd88de-960e-42e6-af2c-9ba614369833"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7650), null, "A musical group that performs live at the wedding reception.", "Live Band", "" },
+                    { new Guid("0c2b6903-955a-40be-8323-90a2653197ca"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7660), null, "Provides mobile bar services for cocktail hours and receptions.", "Mobile Bar", "" },
+                    { new Guid("0f19a7bf-d67b-4d06-86ed-db782c61a12e"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7650), null, "Supplies floral arrangements, bouquets, and centerpieces.", "Florist", "" },
+                    { new Guid("17665b12-d967-4cf3-9a02-80ca603e0936"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7670), null, "Offers keepsakes or favors for wedding guests.", "Souvenirs", "" },
+                    { new Guid("242eb61a-ceb1-4944-b6cb-dbc3b2d7e7ec"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7720), null, "Conducts the wedding ceremony and ensures it is legally binding.", "Officiant", "" },
+                    { new Guid("25522887-25ec-4f2f-bfbf-433e97000a1b"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7670), null, "Hosts and coordinates the wedding program.", "Emcee", "" },
+                    { new Guid("3ca5bbbc-32d0-4d7f-ad8d-fe2d007296ba"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7640), null, "Provides food and beverage services for the wedding.", "Caterer", "" },
+                    { new Guid("4f9f72b4-e242-4a9a-857a-78467b5ab2bd"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7750), null, "Creates customized lighting plans to enhance the wedding ambiance.", "Lighting Designer", "" },
+                    { new Guid("508ee3db-f119-410f-ad66-20c9150535e2"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7640), null, "Captures memories through professional photography during the wedding.", "Photographer & Videographer", "" },
+                    { new Guid("5fe77510-e4a4-457c-aae1-250f9887eee2"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7680), null, "Location where the wedding ceremony and/or reception is held.", "Venue", "" },
+                    { new Guid("63ed16d6-67a7-413b-b55f-a88693444886"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7750), null, "Manages sound systems and audio equipment for the ceremony and reception.", "Sound Engineer", "" },
+                    { new Guid("65d40493-0478-409e-99f6-b8904942b642"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7730), null, "Provides professional makeup services for the bride and bridal party.", "Makeup Artist", "" },
+                    { new Guid("7c0285eb-57d8-41dc-8c3b-7e2093ec7532"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7650), null, "Provides professional makeup services for the bride and bridal party.", "Hair & Makeup Artist", "" },
+                    { new Guid("7d334885-a8ed-4fa1-917c-7c46740cb58d"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7700), null, "Captures memories through professional photography during the wedding.", "Photographer", "" },
+                    { new Guid("85e14ff5-7905-497f-af12-92e0cdd9032f"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7620), null, "A venue for hosting wedding ceremonies, typically in a religious setting.", "Church", "" },
+                    { new Guid("86b63700-3a45-47cf-985a-ce065310e9ed"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7740), null, "Provides a fun photo booth setup with props for guests to enjoy.", "Photo Booth", "" },
+                    { new Guid("8750de2c-1151-448b-be69-fed4898d5cc7"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7730), null, "Offers items for rent such as tables, chairs, linens, and decor.", "Rentals", "" },
+                    { new Guid("89d88aad-dfbc-41b4-aa8d-186bc19481e5"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7660), null, "Sells wedding rings and related jewelry.", "Jeweler", "" },
+                    { new Guid("921fb57d-df79-4184-822e-f144d9928514"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7740), null, "Ensures the safety and security of the wedding event and guests.", "Security", "" },
+                    { new Guid("95a48777-4e64-4d59-b96f-a0eba4df43c5"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7710), null, "Creates wedding cakes, cupcakes, and desserts for the celebration.", "Baker", "" },
+                    { new Guid("96725c6a-2732-4cea-90e8-0c3731c3fd94"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7720), null, "Styles hair for the bride, bridesmaids, and other family members.", "Hair Stylist", "" },
+                    { new Guid("97b5dd40-f540-40d1-bfa2-66d4dede9ac5"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7630), null, "Manages lights, sound systems and audio equipment for the ceremony and reception.", "Lights & Sounds", "" },
+                    { new Guid("a0a206f6-0b33-4ac1-acc7-2ce5de4403f7"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7720), null, "Provides vehicles for transporting the wedding party and guests.", "Transportation", "" },
+                    { new Guid("b68ee99f-0313-4002-9f0a-ff20edd378f2"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7660), null, "Organizes wedding activities and ensures event flows smoothly.", "Wedding Coordinator", "" },
+                    { new Guid("b96aef48-211e-4b09-801b-3c71c35667ae"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7700), null, "Provides music entertainment and emceeing for the wedding and reception.", "DJ", "" },
+                    { new Guid("ebdd7825-f0e2-4451-bc33-196b2d9f75bd"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7700), null, "Records the wedding ceremony and reception with high-quality video.", "Videographer", "" },
+                    { new Guid("f4828f75-1eb9-407a-86ce-1e643cb902c9"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7710), null, "Coordinates all aspects of the wedding planning process from start to finish.", "Wedding Planner", "" },
+                    { new Guid("f821501d-cb36-4dfd-b8b8-daad3ebc42d9"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7630), null, "A venue for hosting post-ceremony receptions or gatherings.", "Reception Venue", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -792,51 +790,51 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "AccountNumber", "AccountTypeId", "CreatedBy", "DateCreated", "DateUpdated", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("5bcceecd-bb53-4cb9-8e60-918a3ad304d8"), "cad37ebb-9b41-482b-8701-03688568ed24", new Guid("3e272327-3c04-47d4-a421-8bcce138c8d8"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3720), null, "Vendor Account", "" },
-                    { new Guid("e33572da-54f6-4d9c-93c5-c1467d73d80d"), "6de7af2b-cf30-4cf3-9e7f-f20f9fe436b3", new Guid("3e272327-3c04-47d4-a421-8bcce138c8d8"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3990), null, "Event Account", "" }
+                    { new Guid("35d2acaa-2f90-42ce-bee9-bc4c16e2d2bf"), "51035d7e-291a-4d22-b9f0-04506a30bc0c", new Guid("c8d7e776-acbb-4b1d-80df-4dd888fb87b3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8190), null, "Event Account", "" },
+                    { new Guid("9c32a87a-6527-4f55-ac3e-e4d78e3bf031"), "9c02578b-0b7e-46ef-a4f9-66596bce6762", new Guid("c8d7e776-acbb-4b1d-80df-4dd888fb87b3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7900), null, "Vendor Account", "" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Events",
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "EndDate", "EventTypeId", "Location", "Seats", "StartDate", "Title", "UpdatedBy" },
-                values: new object[] { new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3780), null, "Wedding", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("ece6572c-3d92-4efe-a42f-14f78cba1b4c"), "Ph", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wedding", "" });
+                values: new object[] { new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7970), null, "Wedding", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new Guid("f7c6c362-90ad-475f-bd0e-854c83d55870"), "Ph", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Wedding", "" });
 
             migrationBuilder.InsertData(
                 table: "Vendors",
                 columns: new[] { "Id", "Address", "ContactInformation", "CreatedBy", "DateCreated", "DateUpdated", "Description", "Name", "UpdatedBy", "VendorTypeId" },
                 values: new object[,]
                 {
-                    { new Guid("0dba9a51-ad96-4b14-aef4-bab0a224aab1"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3680), null, "Hosts and coordinates the wedding program.", "Emcee", "", new Guid("90b0ddff-0f05-47d9-ad7d-941f9a541efe") },
-                    { new Guid("167a0583-ee94-4e6c-8388-a68b3a1d346e"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3590), null, "A venue for hosting post-ceremony receptions or gatherings.", "Reception Venue", "", new Guid("8f351ec6-9438-44c3-bac7-b290fa6450e8") },
-                    { new Guid("376a54f3-5407-46c8-965c-01c7b500b8c0"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3580), null, "A venue for hosting wedding ceremonies, typically in a religious setting.", "Church", "", new Guid("6164e55c-4bf4-4f7f-9a5f-5509d84f4046") },
-                    { new Guid("5aae6725-0061-4794-833d-c599d14a1b2b"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3650), null, "A musical group that performs live at the wedding reception.", "Strings", "", new Guid("866841d1-89f0-45a8-84aa-12c37302110f") },
-                    { new Guid("64142c84-fa91-42f6-9aa7-bb23f72a1974"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3600), null, "Manages lights, sound systems and audio equipment for the ceremony and reception.", "Lights & Sounds", "", new Guid("e51403e9-40fd-4eec-8252-e63d4fea1068") },
-                    { new Guid("892a31ea-3943-40ea-9527-93d87bc3e61d"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3660), null, "Supplies floral arrangements, bouquets, and centerpieces.", "Florist", "", new Guid("5c8954ae-65a5-4b14-b2ee-42634d48b2f0") },
-                    { new Guid("9f8d86bd-3867-4dea-a903-1c265e79d33c"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3670), null, "Organizes wedding activities and ensures event flows smoothly.", "Wedding Coordinator", "", new Guid("9e775d04-47ce-4422-a70c-c2e6f84a7808") },
-                    { new Guid("9ffef654-d864-4d16-b8b0-9cf941fdd732"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3680), null, "Offers keepsakes or favors for wedding guests.", "Souvenirs", "", new Guid("7031fbc0-5efc-401f-b38f-3719703de161") },
-                    { new Guid("af0ddcd8-f403-461e-94dd-52f1fa5dc924"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3670), null, "Sells wedding rings and related jewelry.", "Jeweler", "", new Guid("87d60d1d-c073-4373-818e-f3d57b8e635d") },
-                    { new Guid("b52414f3-0f7b-4bf4-9390-51b784de58f6"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3600), null, "Provides food and beverage services for the wedding.", "Caterer", "", new Guid("e9d460a2-738e-40d9-beb8-5e0318f2a637") },
-                    { new Guid("ea935641-a447-4589-840d-c09d51b4eba8"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3600), null, "Captures memories through professional photography during the wedding.", "Photo & Video", "", new Guid("6f246120-8522-4ad8-b308-dbf39801604c") },
-                    { new Guid("fac0e951-f173-4685-9fcd-355069cef98f"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3680), null, "Provides mobile bar services for cocktail hours and receptions.", "Mobile Bar", "", new Guid("869549c2-914a-4fa8-8496-67256106d19b") },
-                    { new Guid("fd0d943b-ab9f-4efb-919b-9d70e7da2be5"), "N/A", "", "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3660), null, "Provides professional makeup services for the bride and bridal party.", "Hair & Makeup", "", new Guid("39a9b752-8109-479d-a971-d39cd488e257") }
+                    { new Guid("006fd6a8-19fd-4075-bb82-80549f154e5e"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7820), null, "Manages lights, sound systems and audio equipment for the ceremony and reception.", "Lights & Sounds", "", new Guid("97b5dd40-f540-40d1-bfa2-66d4dede9ac5") },
+                    { new Guid("13557d96-26fe-4b8a-bfe3-e7a6c2e645bd"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7820), null, "A venue for hosting post-ceremony receptions or gatherings.", "Reception Venue", "", new Guid("f821501d-cb36-4dfd-b8b8-daad3ebc42d9") },
+                    { new Guid("23449a6f-418d-4651-84d8-72116167bfed"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7840), null, "Provides professional makeup services for the bride and bridal party.", "Hair & Makeup", "", new Guid("7c0285eb-57d8-41dc-8c3b-7e2093ec7532") },
+                    { new Guid("2662bdea-cb67-45bb-93f2-caa6c117f97b"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7850), null, "Sells wedding rings and related jewelry.", "Jeweler", "", new Guid("89d88aad-dfbc-41b4-aa8d-186bc19481e5") },
+                    { new Guid("5413447f-8438-4d77-8f60-2101731bc13b"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7840), null, "A musical group that performs live at the wedding reception.", "Strings", "", new Guid("05dd88de-960e-42e6-af2c-9ba614369833") },
+                    { new Guid("5afe4043-aad0-4bbb-9a41-eb6cc9331f86"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7850), null, "Supplies floral arrangements, bouquets, and centerpieces.", "Florist", "", new Guid("0f19a7bf-d67b-4d06-86ed-db782c61a12e") },
+                    { new Guid("71617f5e-54c0-4749-81ad-b7e0323bdb17"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7860), null, "Provides mobile bar services for cocktail hours and receptions.", "Mobile Bar", "", new Guid("0c2b6903-955a-40be-8323-90a2653197ca") },
+                    { new Guid("7c49b5d1-fa13-43e1-b68a-3f25864064db"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7830), null, "Provides food and beverage services for the wedding.", "Caterer", "", new Guid("3ca5bbbc-32d0-4d7f-ad8d-fe2d007296ba") },
+                    { new Guid("ad3ca28b-f710-4b46-9a1e-f1f188cac358"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7860), null, "Offers keepsakes or favors for wedding guests.", "Souvenirs", "", new Guid("17665b12-d967-4cf3-9a02-80ca603e0936") },
+                    { new Guid("c618cca2-fc8e-4a58-832e-8ddc1287ae29"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7810), null, "A venue for hosting wedding ceremonies, typically in a religious setting.", "Church", "", new Guid("85e14ff5-7905-497f-af12-92e0cdd9032f") },
+                    { new Guid("d7edf160-588d-4e7d-83de-2c1f67658c4b"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7830), null, "Captures memories through professional photography during the wedding.", "Photo & Video", "", new Guid("508ee3db-f119-410f-ad66-20c9150535e2") },
+                    { new Guid("f2c6d454-07d6-4c62-8b2f-bb09ac307830"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7850), null, "Organizes wedding activities and ensures event flows smoothly.", "Wedding Coordinator", "", new Guid("b68ee99f-0313-4002-9f0a-ff20edd378f2") },
+                    { new Guid("f806f849-4d64-4652-bcef-1d828896bd7a"), "N/A", "", "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7870), null, "Hosts and coordinates the wedding program.", "Emcee", "", new Guid("25522887-25ec-4f2f-bfbf-433e97000a1b") }
                 });
 
             migrationBuilder.InsertData(
                 table: "EventAccounts",
                 columns: new[] { "Id", "AccountId", "CreatedBy", "DateCreated", "DateUpdated", "EventId", "UpdatedBy" },
-                values: new object[] { new Guid("9ac58092-a6f4-457b-aff3-cb9ed7826ac3"), new Guid("e33572da-54f6-4d9c-93c5-c1467d73d80d"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(4010), null, new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "" });
+                values: new object[] { new Guid("b14d741e-0235-4c67-8427-c223e085961e"), new Guid("35d2acaa-2f90-42ce-bee9-bc4c16e2d2bf"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8210), null, new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "" });
 
             migrationBuilder.InsertData(
                 table: "EventVendorContractPaymentState",
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "EventId", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("3aa5361d-41f9-41d5-ac3b-5d917db12029"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3960), null, "Payment is overdue.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Overdue Payment", "" },
-                    { new Guid("83145820-e9de-42f3-b468-069622e89184"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3970), null, "Refund has been processed and completed.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Refunded", "" },
-                    { new Guid("a0d21065-6b66-4a70-9873-e10d7c89a6dc"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3960), null, "Refund is pending processing.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Refund Pending", "" },
-                    { new Guid("ac667552-ca86-46b6-93ed-889f27523db4"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3950), null, "Waiting for the initial deposit to be paid.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Deposit Pending", "" },
-                    { new Guid("c671aae5-704f-4f06-ba0c-489fd5726fe7"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3950), null, "Partial payment received, remaining balance due.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Partial Payment", "" },
-                    { new Guid("d5f14890-b4dc-448d-8904-5ae54d1c2aeb"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3960), null, "All payments have been made, contract is paid in full.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Paid in Full", "" }
+                    { new Guid("258c66f0-ebc1-4db2-8eca-2f56c4be545e"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8150), null, "Refund is pending processing.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Refund Pending", "" },
+                    { new Guid("48ba786e-2259-4f9c-baf2-75f40f2ff34f"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8140), null, "All payments have been made, contract is paid in full.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Paid in Full", "" },
+                    { new Guid("50eb29c9-2ae2-43fd-8349-c33a90d67985"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8150), null, "Refund has been processed and completed.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Refunded", "" },
+                    { new Guid("62103302-c8af-474c-9829-4535246ea8de"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8150), null, "Payment is overdue.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Overdue Payment", "" },
+                    { new Guid("79dba2a1-6bcd-45a7-b08a-9d184ee456bb"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8140), null, "Partial payment received, remaining balance due.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Partial Payment", "" },
+                    { new Guid("94c0f886-9d0e-4d73-84b0-5733222dd42a"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8130), null, "Waiting for the initial deposit to be paid.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Deposit Pending", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -844,14 +842,14 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "EventId", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("2dc955c9-7c73-4c2c-ae45-4e006267d133"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3910), null, "Reserved but not yet confirmed.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Reserved", "" },
-                    { new Guid("2ef8c7ef-e07a-44be-b8e4-12d0b978be7e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3910), null, "Quote has been received from the vendor.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Quote Received", "" },
-                    { new Guid("3113a60d-150f-4ab9-b08b-1113b1140f1f"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3920), null, "Tentatively booked, awaiting confirmation.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Tentative", "" },
-                    { new Guid("33473d2c-d212-44de-a929-eceec1d421d0"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3900), null, "Initial inquiry stage.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Inquiry", "" },
-                    { new Guid("59d6369c-fb5d-4ef4-9489-88aa1e90f00a"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3930), null, "Contract has been completed and closed.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Closed", "" },
-                    { new Guid("bdd36b97-04cf-4e7d-8c0b-9bac322c19dc"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3920), null, "Contract has been booked and confirmed.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Booked", "" },
-                    { new Guid("c619c388-e801-4d04-9c12-deb32784d544"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3900), null, "Waiting for a quote from the vendor.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Pending Quote", "" },
-                    { new Guid("c8e8774c-7560-47c9-bca5-f2ae263f6049"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3910), null, "Negotiations are ongoing with the vendor.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Negotiation", "" }
+                    { new Guid("06259499-dc3d-4200-bb25-db4365bbd2bf"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8080), null, "Initial inquiry stage.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Inquiry", "" },
+                    { new Guid("0a921687-4ff9-480c-b396-98d6675c1ab3"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8090), null, "Quote has been received from the vendor.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Quote Received", "" },
+                    { new Guid("2a2e96c6-32ac-4f21-bb80-a96de656fe10"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8110), null, "Tentatively booked, awaiting confirmation.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Tentative", "" },
+                    { new Guid("2a7604f4-24eb-44b9-be95-923b6fcacb76"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8100), null, "Reserved but not yet confirmed.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Reserved", "" },
+                    { new Guid("7ec31d87-276e-41e2-9c62-0229c7589277"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8100), null, "Negotiations are ongoing with the vendor.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Negotiation", "" },
+                    { new Guid("a2209a96-afeb-4ba5-88cc-f33623acee7f"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8090), null, "Waiting for a quote from the vendor.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Pending Quote", "" },
+                    { new Guid("e166af46-0fb4-450f-9ddd-d45f3d6a3609"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8110), null, "Contract has been completed and closed.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Closed", "" },
+                    { new Guid("ea394113-327f-42c2-bc28-c42759562f10"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8110), null, "Contract has been booked and confirmed.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Booked", "" }
                 });
 
             migrationBuilder.InsertData(
@@ -859,29 +857,29 @@ namespace AMP.EMS.API.Migrations
                 columns: new[] { "Id", "CreatedBy", "DateCreated", "DateUpdated", "Description", "EventId", "Name", "UpdatedBy" },
                 values: new object[,]
                 {
-                    { new Guid("146b01c9-18d2-4010-ac5f-147a04d8fbf8"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3860), null, "Friends or family who stand with the bride during the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Bridesmaids", "" },
-                    { new Guid("15892117-1c68-473a-af32-06c86412a171"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3810), null, "The male participant in the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Groom", "" },
-                    { new Guid("21889917-84a9-478b-8548-3a9e4f39a2b4"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3820), null, "The bride's chief assistant during the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Maid of Honor", "" },
-                    { new Guid("3bca0d1a-db7b-4f5c-b80f-1176cd0c5b5b"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3830), null, "An additional financial supporter of the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Secondary Sponsor", "" },
-                    { new Guid("472ae49a-0734-4c18-a07e-d019a7ab084e"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3830), null, "A young child who carries the wedding rings during the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Ring Bearer", "" },
-                    { new Guid("4c77671e-a9c2-44fe-91a4-222fcfa2ffcc"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3820), null, "The main financial supporter of the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Primary Sponsor", "" },
-                    { new Guid("53ca6266-d74e-45ca-bd85-af12bb58f8ec"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3860), null, "Friends or family who stand with the groom during the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Groomsmen", "" },
-                    { new Guid("55512cc9-2820-4dde-8b77-6bb209a8fbb6"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3830), null, "A young girl who scatters flower petals along the aisle.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Flower Girl", "" },
-                    { new Guid("5dda5254-afaa-448b-8be7-8a27f094e935"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3860), null, "A key family member who may have a significant role.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Parent of the Bride", "" },
-                    { new Guid("60debef8-ca06-45af-be34-9d4241538e6b"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3850), null, "A role representing the candle holders during the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Candles", "" },
-                    { new Guid("8068b564-bcf2-4e23-94ef-a0eb496221c6"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3840), null, "A person who carries the Bible during the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Bible Bearer", "" },
-                    { new Guid("b4f214b6-d63a-4217-871c-2034066b721a"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3810), null, "The groom's chief assistant during the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Best Man", "" },
-                    { new Guid("cd1383a4-1d5a-49dd-9c82-d276cfa03c59"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3850), null, "Individuals responsible for seating guests at the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Ushers", "" },
-                    { new Guid("e02e9a97-96c0-4ee4-9269-1b21275856c1"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3840), null, "A person invited to attend the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Guest", "" },
-                    { new Guid("ed2467fd-b876-4254-a1bd-6f244c7a7767"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3810), null, "The female participant in the wedding.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Bride", "" },
-                    { new Guid("f30bc4d2-01c6-4b8b-bc9a-4a637afeab85"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3840), null, "A role representing the cord used in the ceremony.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Cord", "" },
-                    { new Guid("fce707ca-48d9-4c8d-8fcd-2e1e9fbf0e69"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3870), null, "A key family member representing the groom's side.", new Guid("14d36c6d-2a04-4e91-bdff-e8508c787c97"), "Parent of the Groom", "" }
+                    { new Guid("12f8381a-e544-408c-bbde-2a70f4d76922"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8000), null, "The groom's chief assistant during the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Best Man", "" },
+                    { new Guid("200fda0f-1595-4e6b-aba4-0dc10e0fe5ff"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8030), null, "A person who carries the Bible during the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Bible Bearer", "" },
+                    { new Guid("29206ed1-da08-43d2-8e28-2cc91acd8d4b"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8050), null, "A key family member who may have a significant role.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Parent of the Bride", "" },
+                    { new Guid("3b5ef963-f882-4f39-ab10-d08be7fc3b08"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8010), null, "The main financial supporter of the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Primary Sponsor", "" },
+                    { new Guid("3ba5ddcb-be28-49d6-995b-b83b546ed73a"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8020), null, "A young girl who scatters flower petals along the aisle.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Flower Girl", "" },
+                    { new Guid("57d29754-80d5-4a15-822e-f7abadf945d9"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8030), null, "A person invited to attend the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Guest", "" },
+                    { new Guid("65066089-4699-4b9e-ad87-d60c55e61d84"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8050), null, "Friends or family who stand with the groom during the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Groomsmen", "" },
+                    { new Guid("6f150c4b-6332-4940-8b25-cb712aaa127c"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8040), null, "A role representing the candle holders during the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Candles", "" },
+                    { new Guid("8d10c669-ad01-4c40-b7c6-aa88def5684f"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8000), null, "The male participant in the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Groom", "" },
+                    { new Guid("8d21fb20-b114-4f2b-b356-0ebff9cfd631"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7990), null, "The female participant in the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Bride", "" },
+                    { new Guid("a57a3392-a2f2-4054-abbe-0becf445a0c4"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8030), null, "A role representing the cord used in the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Cord", "" },
+                    { new Guid("ac61a7f7-11ba-493f-984f-5e28c56a67d4"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8010), null, "An additional financial supporter of the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Secondary Sponsor", "" },
+                    { new Guid("b6fa2863-f662-4764-8ab3-a3a9d166b98d"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8060), null, "A key family member representing the groom's side.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Parent of the Groom", "" },
+                    { new Guid("d4739baa-4862-485a-ad51-f11e57d43c2f"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8050), null, "Friends or family who stand with the bride during the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Bridesmaids", "" },
+                    { new Guid("e5e53174-f0bf-4712-86c8-5b327b07e617"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8010), null, "The bride's chief assistant during the wedding.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Maid of Honor", "" },
+                    { new Guid("ece31ae7-c125-4b63-8ce2-7c69fb40ec3c"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8020), null, "A young child who carries the wedding rings during the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Ring Bearer", "" },
+                    { new Guid("ffae5178-7d4b-45df-84dc-da8f92c80a66"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8040), null, "Individuals responsible for seating guests at the ceremony.", new Guid("69ab9653-c631-4634-b4b6-a629f8615212"), "Ushers", "" }
                 });
 
             migrationBuilder.InsertData(
                 table: "VendorAccounts",
                 columns: new[] { "Id", "AccountId", "CreatedBy", "DateCreated", "DateUpdated", "UpdatedBy", "VendorId" },
-                values: new object[] { new Guid("e9d7214c-9141-4b6d-a522-6b8ab5d9c3bd"), new Guid("5bcceecd-bb53-4cb9-8e60-918a3ad304d8"), "", new DateTime(2024, 11, 6, 15, 8, 3, 513, DateTimeKind.Utc).AddTicks(3750), null, "", new Guid("376a54f3-5407-46c8-965c-01c7b500b8c0") });
+                values: new object[] { new Guid("9af1d76c-b9ac-4d93-b544-5408db653f62"), new Guid("9c32a87a-6527-4f55-ac3e-e4d78e3bf031"), "", new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7940), null, "", new Guid("c618cca2-fc8e-4a58-832e-8ddc1287ae29") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_AccountTypeId",

@@ -10,25 +10,11 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventVendorContractRequest request)
     {
-        var eventVendorContract = new EventVendorContract
+        return await base.Post(new EventVendorContract
         {
             EventId = request.EventId,
             VendorId = request.VendorId
-        };
-
-        if (!request.EventVendorContractStateId.HasValue)
-        {
-            var contractStates = UnitOfWork.Set<EventVendorContractState>().GetAll();
-            eventVendorContract.EventVendorContractStateId = contractStates.FirstOrDefault().Id;
-        }
-
-        if (!request.EventVendorContractPaymentStateId.HasValue)
-        {
-            var paymentStates = UnitOfWork.Set<EventVendorContractPaymentState>().GetAll();
-            eventVendorContract.EventVendorContractPaymentStateId = paymentStates.FirstOrDefault().Id;
-        }
-
-        return await base.Post(eventVendorContract);
+        });
     }
 
     [HttpPut]
@@ -38,18 +24,11 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
         var eventVendorContract = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(eventVendorContract);
+        ArgumentNullException.ThrowIfNull(request.EventVendorContractStateId);
+        ArgumentNullException.ThrowIfNull(request.EventVendorContractPaymentStateId);
 
-        if (!request.EventVendorContractStateId.HasValue)
-        {
-            var contractStates = UnitOfWork.Set<EventVendorContractState>().GetAll();
-            eventVendorContract.EventVendorContractStateId = contractStates.FirstOrDefault().Id;
-        }
-
-        if (!request.EventVendorContractPaymentStateId.HasValue)
-        {
-            var paymentStates = UnitOfWork.Set<EventVendorContractPaymentState>().GetAll();
-            eventVendorContract.EventVendorContractPaymentStateId = paymentStates.FirstOrDefault().Id;
-        }
+        eventVendorContract.EventVendorContractStateId = request.EventVendorContractStateId.Value;
+        eventVendorContract.EventVendorContractPaymentStateId = request.EventVendorContractPaymentStateId.Value;
 
         return await base.Put(eventVendorContract);
     }

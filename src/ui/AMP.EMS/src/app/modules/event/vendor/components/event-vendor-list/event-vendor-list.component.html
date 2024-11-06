@@ -21,19 +21,19 @@
                             <div class="col-12" *ngFor="let vendor of vendors; let first = first">
                                 <div class="flex flex-column md:flex-row align-items-center p-3 w-full"
                                     [ngClass]="{ 'border-top-1 surface-border': !first }">
-                                    <div class="flex-1 flex flex-column align-items-start text-center md:text-left">
-                                        <div>
+                                    <div class="flex flex-column align-items-start text-center md:text-left">
+                                        <div class="mb-2">
                                             <span class="font-medium text-secondary text-sm h-2rem">{{
                                                 vendor.vendorType?.name
                                                 }}</span>
-                                            <div class="text-lg font-medium text-900 mt-2 mb-2">{{vendor.name}}</div>
                                         </div>
-                                        <div class="mb-2">{{vendor.description}}</div>
                                         <div class="mb-2">{{vendor.address}}</div>
-                                        <div class="mb-2">{{vendor.contactInformation}}</div>
-                                        <div class="flex align-items-center mt-2">
-                                            <span class="font-semibold">{{vendor.type}}</span>
+                                        <div class="mb-2">{{vendor.contactInformation || 'No contact information'}}
                                         </div>
+                                    </div>
+                                    <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
+                                        <div class="text-lg font-medium text-900 mt-2 mb-2">{{vendor.name}}</div>
+                                        <div class="mb-2">{{vendor.description}}</div>
                                     </div>
                                     <div
                                         class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
@@ -41,14 +41,9 @@
                                             *ngIf="vendor.eventVendorContracts?.length === 0" (onClick)="add(vendor)"
                                             styleClass="mb-2 p-button-sm"></p-button>
 
-                                        <p-button [text]="true" icon="pi pi-minus" label="View Contract"
+                                        <p-button [text]="true" label="View Contract"
                                             *ngIf="vendor.eventVendorContracts?.length > 0" severity="help"
-                                            (onClick)="viewContract(vendor.eventVendorContracts[0])"
-                                            styleClass="mb-2 p-button-sm"></p-button>
-
-                                        <p-button [text]="true" icon="pi pi-minus" label="Remove"
-                                            *ngIf="vendor.eventVendorContracts?.length > 0" severity="danger"
-                                            (onClick)="viewContract(vendor.eventVendorContracts[0])"
+                                            routerLink="/event/{{eventId}}/vendors/contracts/{{vendor.eventVendorContracts[0].id}}"
                                             styleClass="mb-2 p-button-sm"></p-button>
                                     </div>
                                 </div>

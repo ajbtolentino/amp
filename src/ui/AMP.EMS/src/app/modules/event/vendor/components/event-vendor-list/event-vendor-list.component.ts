@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@core/services/event.service';
 import { VendorTypeService } from '@core/services/vendor-type.service';
 import { VendorService } from '@core/services/vendor.service';
@@ -26,7 +26,8 @@ export class EventVendorListComponent implements OnInit {
     private vendorTypeService: VendorTypeService,
     private eventVendorContractService: EventVendorContractService,
     private confirmationService: ConfirmationService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
 
   }
 
@@ -59,7 +60,7 @@ export class EventVendorListComponent implements OnInit {
               ...eventVendorContract,
               vendor: vendor,
               eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId),
-              eventVendorContractPaymentState: eventVendorContractPaymentStates.find(_ => _.id === eventVendorContract.eventVendorContractStatePaymentId)
+              eventVendorContractPaymentState: eventVendorContractPaymentStates.find(_ => _.id === eventVendorContract.eventVendorContractPaymentStateId)
             })),
         }))
       ));
@@ -86,14 +87,8 @@ export class EventVendorListComponent implements OnInit {
   }
 
   viewContract = (eventVendorContract: EventVendorContract) => {
-    this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${eventVendorContract.vendor?.name}?`,
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: async () => {
-        this.vendors$ = this.eventVendorContractService.delete(eventVendorContract.id!).pipe(switchMap(() => this.refresh()));
-      }
-    });
+    console.log(eventVendorContract)
+    this.router.navigate([`/events/${this.eventId}/vendors/contracts/${eventVendorContract.id}`]);
   }
 
   onFilter(dv: DataView, event: Event) {

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EventVendorContractListComponent, EventVendorDetailsComponent, EventVendorListComponent, EventVendorTransactionListComponent } from '@modules/event/vendor';
 import { SharedModule } from '@modules/shared.module';
+import { EventVendorContractDetailsComponent } from './components/event-vendor-contract-details/event-vendor-contract-details.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,11 @@ const routes: Routes = [
   {
     path: 'contracts',
     component: EventVendorContractListComponent
+  },
+  {
+    path: 'contracts/:eventVendorContractId',
+    pathMatch: 'full',
+    component: EventVendorContractDetailsComponent
   }
 ]
 
@@ -24,7 +30,8 @@ const routes: Routes = [
     EventVendorListComponent,
     EventVendorDetailsComponent,
     EventVendorContractListComponent,
-    EventVendorTransactionListComponent
+    EventVendorTransactionListComponent,
+    EventVendorContractDetailsComponent
   ],
   imports: [
     CommonModule,
