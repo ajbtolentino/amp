@@ -43,12 +43,12 @@
                                     <div
                                         class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
                                         <p-button [text]="true" icon="pi pi-pen-to-square" label="Draft Contract"
-                                            *ngIf="vendor.eventVendorContracts?.length === 0" (onClick)="add(vendor)"
+                                            *ngIf="vendor.eventVendorContracts?.length === 0"
+                                            routerLink="/event/{{eventId}}/vendors/{{vendor.id}}/contracts/draft"
                                             styleClass="mb-2 p-button-sm"></p-button>
-
                                         <p-button [text]="true" icon="pi pi-file-o" label="Review Contract"
                                             *ngIf="vendor.eventVendorContracts?.length > 0" severity="help"
-                                            routerLink="/event/{{eventId}}/vendors/contracts/{{vendor.eventVendorContracts[0].id}}"
+                                            routerLink="/event/{{eventId}}/vendors/{{vendor.id}}/contracts/{{vendor.eventVendorContracts[0].id}}"
                                             styleClass="mb-2 p-button-sm"></p-button>
                                     </div>
                                 </div>

@@ -16,13 +16,23 @@ const routes: Routes = [
   },
   {
     path: 'contracts',
+    pathMatch: 'full',
     component: EventVendorContractListComponent
   },
   {
-    path: 'contracts/:eventVendorContractId',
-    pathMatch: 'full',
-    component: EventVendorContractDetailsComponent
-  }
+    path: ':vendorId',
+    children: [
+      {
+        path: 'contracts/draft',
+        pathMatch: 'full',
+        component: EventVendorContractDetailsComponent
+      },
+      {
+        path: 'contracts/:eventVendorContractId',
+        component: EventVendorContractDetailsComponent
+      }
+    ]
+  },
 ]
 
 @NgModule({
