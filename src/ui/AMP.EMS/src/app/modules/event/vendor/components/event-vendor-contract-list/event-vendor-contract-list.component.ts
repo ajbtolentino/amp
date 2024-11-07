@@ -49,14 +49,12 @@ export class EventVendorContractListComponent implements OnInit {
       vendorTypes: this.vendorTypeService.getAll(),
       eventVendorContracts: this.eventService.getVendorContracts(this.eventId),
       eventVendorContractStates: this.eventService.getVendorContractStates(this.eventId),
-      eventVendorContractPaymentStates: this.eventService.getVendorContractPaymentStates(this.eventId)
     }).pipe(
-      map(({ vendors, vendorTypes, eventVendorContracts, eventVendorContractStates, eventVendorContractPaymentStates }) =>
+      map(({ vendors, vendorTypes, eventVendorContracts, eventVendorContractStates }) =>
         eventVendorContracts.map(eventVendorContract => ({
           ...eventVendorContract,
           vendor: vendors.map(vendor => ({ ...vendor, vendorType: vendorTypes.find(_ => _.id === vendor.vendorTypeId) })).find(_ => _.id === eventVendorContract.vendorId),
           eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId),
-          eventVendorContractPaymentState: eventVendorContractPaymentStates.find(_ => _.id === eventVendorContract.eventVendorContractPaymentStateId)
         }))
       ));
   }

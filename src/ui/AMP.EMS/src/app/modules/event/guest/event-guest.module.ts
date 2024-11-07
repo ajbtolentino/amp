@@ -15,12 +15,12 @@ const routes: Routes = [
   {
     path: 'add',
     title: 'Add Guest',
-    data: { breadcrumb: null },
+    data: { breadcrumb: 'Add' },
     component: EventGuestDetailsComponent,
   },
   {
     path: ':eventGuestId/edit',
-    data: { breadcrumb: null },
+    data: { breadcrumb: 'Guest Details' },
     component: EventGuestDetailsComponent,
   }
 ];

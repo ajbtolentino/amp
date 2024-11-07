@@ -1,48 +1,71 @@
 <ng-container *ngIf="eventVendorContract$ | withStatus | async as eventVendorContract">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    (click)="save(eventVendorContract.value!)" [loading]="eventVendorContract.loading!"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
 
     <div class="card">
         <div class="font-medium text-3xl text-900 mb-3">{{eventVendorContract.value?.vendor?.name}}</div>
-        <div class="text-500 mb-5">{{eventVendorContract.value?.vendor?.description}}</div>
+        <div class="text-500 mb-5">{{eventVendorContract.value?.vendor?.description}}
+            <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+        </div>
+        <div class="text-500 mb-5">
+            <span *ngIf="!eventVendorContract.loading">
+                <i class="pi pi-warehouse"></i>
+                {{eventVendorContract.value?.vendor?.address || '-'}}
+            </span>
+            <span *ngIf="!eventVendorContract.loading">
+                <i class="pi pi-phone"></i>
+                {{eventVendorContract.value?.vendor?.contactInformation}}
+            </span>
+            <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+        </div>
         <ul class="list-none p-0 m-0">
             <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                <div class="text-500 w-6 md:w-2 font-medium">Contract State</div>
-                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                    {{eventVendorContract.value?.eventVendorContractState?.name || '-'}}</div>
-                <div class="w-6 md:w-2 flex justify-content-end">
-                </div>
-            </li>
-            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                <div class="text-500 w-6 md:w-2 font-medium">Payment Status</div>
-                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                    {{eventVendorContract.value?.eventVendorContractPaymentState?.name || '-'}}
-                </div>
-                <div class="w-6 md:w-2 flex justify-content-end">
-                </div>
-            </li>
-            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                <div class="text-500 w-6 md:w-2 font-medium">Contact Information</div>
-                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                    {{eventVendorContract.value?.vendor?.contactInformation || '-'}}</div>
-                <div class="w-6 md:w-2 flex justify-content-end">
-                </div>
-            </li>
-            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
-                <div class="text-500 w-6 md:w-2 font-medium">Address</div>
-                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                    {{eventVendorContract.value?.vendor?.address || '-'}}</div>
-                <div class="w-6 md:w-2 flex justify-content-end">
-                </div>
-            </li>
-            <li class="flex align-items-center py-3 px-2 border-top-1 border-bottom-1 surface-border flex-wrap">
-                <div class="text-500 w-6 md:w-2 font-medium">Contract Price</div>
+                <div class="text-500 w-6 md:w-2 font-medium">Amount</div>
                 <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
-                    -</div>
+                    <p-inputNumber *ngIf="!eventVendorContract.loading" id="amount" currency="PHP" mode="currency"
+                        locale="en-US" [(ngModel)]="eventVendorContract.value!.amount!" />
+                    <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+                </div>
+                <div class="w-6 md:w-2 flex justify-content-end">
+                </div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap"
+                *ngIf="eventVendorContractStates$ | withStatus | async as eventVendorContractStates">
+                <div class="text-500 w-6 md:w-2 font-medium">State</div>
+                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
+                    <p-dropdown *ngIf="!eventVendorContract.loading" [options]="eventVendorContractStates.value"
+                        [loading]="eventVendorContractStates.loading"
+                        [(ngModel)]="eventVendorContract.value!.eventVendorContractStateId" optionValue="id"
+                        optionLabel="name" placeholder="Select a state"></p-dropdown>
+
+                    <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+                </div>
+                <div class="w-6 md:w-2 flex justify-content-end">
+                </div>
+            </li>
+            <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
+                <div class="text-500 w-6 md:w-2 font-medium align-items-start">Details</div>
+                <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
+                    <textarea rows="20" cols="50" pInputTextarea *ngIf="!eventVendorContract.loading" id="description"
+                        [(ngModel)]="eventVendorContract.value!.details"
+                        [value]="eventVendorContract.value!.details"></textarea>
+
+                    <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+                </div>
                 <div class="w-6 md:w-2 flex justify-content-end">
                 </div>
             </li>
         </ul>
     </div>
     <div class="card">
-        <div class="font-medium text-3xl text-500 mb-3">Transactions</div>
+        <div class="font-medium text-3xl text-500 mb-3">Payments</div>
     </div>
 </ng-container>

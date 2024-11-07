@@ -13,7 +13,9 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
         return await base.Post(new EventVendorContract
         {
             EventId = request.EventId,
-            VendorId = request.VendorId
+            VendorId = request.VendorId,
+            Amount = request.Amount ?? 0M,
+            Details = request.Details ?? string.Empty
         });
     }
 
@@ -24,11 +26,12 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
         var eventVendorContract = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(eventVendorContract);
-        ArgumentNullException.ThrowIfNull(request.EventVendorContractStateId);
-        ArgumentNullException.ThrowIfNull(request.EventVendorContractPaymentStateId);
+        ArgumentNullException.ThrowIfNull(eventVendorContract.Amount);
+        ArgumentNullException.ThrowIfNull(eventVendorContract.Details);
 
-        eventVendorContract.EventVendorContractStateId = request.EventVendorContractStateId.Value;
-        eventVendorContract.EventVendorContractPaymentStateId = request.EventVendorContractPaymentStateId.Value;
+        eventVendorContract.EventVendorContractStateId = request.EventVendorContractStateId;
+        eventVendorContract.Amount = request.Amount ?? 0M;
+        eventVendorContract.Details = request.Details ?? string.Empty;
 
         return await base.Put(eventVendorContract);
     }
@@ -36,6 +39,7 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
     public record EventVendorContractRequest(
         Guid EventId,
         Guid VendorId,
-        Guid? EventVendorContractStateId,
-        Guid? EventVendorContractPaymentStateId);
+        decimal? Amount,
+        string? Details,
+        Guid? EventVendorContractStateId);
 }

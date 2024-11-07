@@ -7,10 +7,10 @@ export interface EventVendorContract extends Base {
     eventId: string;
     vendorId: string;
     eventVendorContractStateId?: string;
-    eventVendorContractPaymentStateId?: string;
+    amount?: number;
+    details?: string;
 
     vendor?: Vendor;
     event?: Event;
     eventVendorContractState?: Lookup;
-    eventVendorContractPaymentState?: Lookup;
 }

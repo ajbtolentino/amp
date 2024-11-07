@@ -49,9 +49,8 @@ export class EventVendorListComponent implements OnInit {
       vendorTypes: this.vendorTypeService.getAll(),
       eventVendorContracts: this.eventService.getVendorContracts(this.eventId),
       eventVendorContractStates: this.eventService.getVendorContractStates(this.eventId),
-      eventVendorContractPaymentStates: this.eventService.getVendorContractPaymentStates(this.eventId)
     }).pipe(
-      map(({ vendors, vendorTypes, eventVendorContracts, eventVendorContractStates, eventVendorContractPaymentStates }) =>
+      map(({ vendors, vendorTypes, eventVendorContracts, eventVendorContractStates }) =>
         vendors.map(vendor => ({
           ...vendor,
           vendorType: vendorTypes.find(_ => _.id === vendor.vendorTypeId),
@@ -59,8 +58,7 @@ export class EventVendorListComponent implements OnInit {
             .map(eventVendorContract => ({
               ...eventVendorContract,
               vendor: vendor,
-              eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId),
-              eventVendorContractPaymentState: eventVendorContractPaymentStates.find(_ => _.id === eventVendorContract.eventVendorContractPaymentStateId)
+              eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId)
             })),
         }))
       ));
@@ -83,12 +81,15 @@ export class EventVendorListComponent implements OnInit {
       {
         vendorId: vendor.id!,
         eventId: this.eventId,
-      }).pipe(switchMap(() => this.refresh()));
+      }).pipe(switchMap((eventVendorContract) => {
+        this.viewContract(eventVendorContract);
+        return [];
+      }
+      ));
   }
 
   viewContract = (eventVendorContract: EventVendorContract) => {
-    console.log(eventVendorContract)
-    this.router.navigate([`/events/${this.eventId}/vendors/contracts/${eventVendorContract.id}`]);
+    this.router.navigate([`/event/${this.eventId}/vendors/contracts/${eventVendorContract.id}`]);
   }
 
   onFilter(dv: DataView, event: Event) {

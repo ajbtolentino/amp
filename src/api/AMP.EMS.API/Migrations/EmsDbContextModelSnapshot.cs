@@ -57,21 +57,21 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9c32a87a-6527-4f55-ac3e-e4d78e3bf031"),
-                            AccountNumber = "9c02578b-0b7e-46ef-a4f9-66596bce6762",
-                            AccountTypeId = new Guid("c8d7e776-acbb-4b1d-80df-4dd888fb87b3"),
+                            Id = new Guid("9eeaf26b-7bb4-428e-b3c8-49b38c20ec0a"),
+                            AccountNumber = "54f0f096-2892-48bd-b7df-fe1dc74995e4",
+                            AccountTypeId = new Guid("a872efe7-3637-4a24-a0a9-f5e259d758df"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7900),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8730),
                             Name = "Vendor Account",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("35d2acaa-2f90-42ce-bee9-bc4c16e2d2bf"),
-                            AccountNumber = "51035d7e-291a-4d22-b9f0-04506a30bc0c",
-                            AccountTypeId = new Guid("c8d7e776-acbb-4b1d-80df-4dd888fb87b3"),
+                            Id = new Guid("db04c174-bbe0-4af6-a672-87d73ff53c81"),
+                            AccountNumber = "9c690120-840a-4e6a-828a-934b466aee40",
+                            AccountTypeId = new Guid("a872efe7-3637-4a24-a0a9-f5e259d758df"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8190),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9240),
                             Name = "Event Account",
                             UpdatedBy = ""
                         });
@@ -112,45 +112,45 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c8d7e776-acbb-4b1d-80df-4dd888fb87b3"),
+                            Id = new Guid("a872efe7-3637-4a24-a0a9-f5e259d758df"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(740),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(390),
                             Description = "",
                             Name = "Cash",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ff262531-fa1f-4eec-992e-19fb7ada6616"),
+                            Id = new Guid("67cf0138-3e78-41d9-8aa7-7df876279419"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(740),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(400),
                             Description = "",
                             Name = "GCash",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("65edd900-f9fd-49a5-bc20-0e41f38632d7"),
+                            Id = new Guid("de4847da-0087-42d3-8392-ecd7257e9f99"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(750),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(400),
                             Description = "",
                             Name = "Savings",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("24942542-7aaa-49df-b97a-569c98df1aba"),
+                            Id = new Guid("696769e1-0d06-4f6c-8156-5490b3a7124b"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(750),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(410),
                             Description = "",
                             Name = "Credit Card",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("42720c94-07ec-4901-b14c-8173f869a3f7"),
+                            Id = new Guid("c0ee6a72-4d5f-443a-875c-58466f3d37b2"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(750),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(410),
                             Description = "",
                             Name = "Checking",
                             UpdatedBy = ""
@@ -210,12 +210,12 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            Id = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7970),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8880),
                             Description = "Wedding",
                             EndDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EventTypeId = new Guid("f7c6c362-90ad-475f-bd0e-854c83d55870"),
+                            EventTypeId = new Guid("ae14ca14-0365-4d5b-a55d-d518e1fad713"),
                             Location = "Ph",
                             Seats = 0,
                             StartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -261,11 +261,11 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b14d741e-0235-4c67-8427-c223e085961e"),
-                            AccountId = new Guid("35d2acaa-2f90-42ce-bee9-bc4c16e2d2bf"),
+                            Id = new Guid("6e946b5a-2871-4695-b15f-753558feb218"),
+                            AccountId = new Guid("db04c174-bbe0-4af6-a672-87d73ff53c81"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8210),
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9260),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             UpdatedBy = ""
                         });
                 });
@@ -536,90 +536,90 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f7c6c362-90ad-475f-bd0e-854c83d55870"),
+                            Id = new Guid("ae14ca14-0365-4d5b-a55d-d518e1fad713"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(580),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(50),
                             Description = "A ceremony where two people are united in marriage.",
                             Name = "Wedding",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("aa26c480-40e1-4435-9339-5ba09de27abd"),
+                            Id = new Guid("5747076a-cf91-47df-989f-d850f125ed23"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(630),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(250),
                             Description = "An event organized by a company or business for its employees or clients.",
                             Name = "Corporate Event",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("183bf5ad-c3ca-457d-adbc-40955196204b"),
+                            Id = new Guid("0f30a7fe-1097-48a5-87e9-33f3278bb2fa"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(640),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(260),
                             Description = "A celebration of the anniversary of a person's birth.",
                             Name = "Birthday Party",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("79c16dc1-a94b-4c68-8bcb-bec04c440f77"),
+                            Id = new Guid("0be51e0c-f8d6-494e-8f63-d46d35a7e7e9"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(640),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(260),
                             Description = "A celebration commemorating a significant milestone in a couple's relationship.",
                             Name = "Anniversary Celebration",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("6054ef8f-bd58-41e5-a4e4-4efe93a0feb3"),
+                            Id = new Guid("7abdbe46-0098-4b90-bb4b-5bd5e69fe606"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(650),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(270),
                             Description = "A celebration to honor the completion of an academic program.",
                             Name = "Graduation Party",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("4a0cbda5-fd39-4938-a67b-e3bcce3591e0"),
+                            Id = new Guid("aa259699-66c7-4566-a8e8-15f29554d478"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(650),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(270),
                             Description = "A celebration held to honor the expectant mother and her baby.",
                             Name = "Baby Shower",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("36ae1366-8f70-498f-a770-98c02570788e"),
+                            Id = new Guid("93b0fe2d-b1bb-488e-a681-e48ae7173c89"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(660),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(280),
                             Description = "An event organized to raise funds or awareness for a charitable cause.",
                             Name = "Charity Event",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("5d3aeb1f-df53-4615-90c5-43b1560513b1"),
+                            Id = new Guid("069373d0-1844-4dab-a688-422b189078b0"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(660),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(280),
                             Description = "A live performance of music by one or more musicians.",
                             Name = "Concert",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("711c66e3-44f4-492c-a303-c0e441f0bf07"),
+                            Id = new Guid("07651705-cacd-4607-bfe9-af4b1d25f977"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(660),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(280),
                             Description = "A series of events or activities celebrating a particular theme or occasion.",
                             Name = "Festival",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("7201311b-e463-491a-ad5e-ad0aa765fcad"),
+                            Id = new Guid("fe3968ce-f4f2-46f1-a567-25847b78a0e2"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(670),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(290),
                             Description = "An exhibition where businesses showcase their products and services.",
                             Name = "Trade Show",
                             UpdatedBy = ""
@@ -670,6 +670,9 @@ namespace AMP.EMS.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -678,6 +681,10 @@ namespace AMP.EMS.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("EventId")
@@ -700,13 +707,57 @@ namespace AMP.EMS.API.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("EventVendorContractPaymentStateId");
-
                     b.HasIndex("EventVendorContractStateId");
 
                     b.HasIndex("VendorId");
 
                     b.ToTable("EventVendorContracts");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DueAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventVendorContractId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventVendorContractPaymentStateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TransactionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventVendorContractId");
+
+                    b.HasIndex("EventVendorContractPaymentStateId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("EventVendorContractPayments");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", b =>
@@ -744,67 +795,107 @@ namespace AMP.EMS.API.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("EventVendorContractPaymentState");
+                    b.ToTable("EventVendorContractPaymentStates");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94c0f886-9d0e-4d73-84b0-5733222dd42a"),
+                            Id = new Guid("f2d3124e-c2d3-4927-b85d-13f3879bf628"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8130),
-                            Description = "Waiting for the initial deposit to be paid.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Deposit Pending",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9180),
+                            Description = "Payment is scheduled but not yet made.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Pending",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("79dba2a1-6bcd-45a7-b08a-9d184ee456bb"),
+                            Id = new Guid("06464364-9997-45be-abd3-0620d0a12bc0"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8140),
-                            Description = "Partial payment received, remaining balance due.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Partial Payment",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9180),
+                            Description = "A portion of the payment has been made.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Partially Paid",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("48ba786e-2259-4f9c-baf2-75f40f2ff34f"),
+                            Id = new Guid("d5ccf453-e4ef-459e-bf3e-4b59a410736a"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8140),
-                            Description = "All payments have been made, contract is paid in full.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Paid in Full",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9190),
+                            Description = "The full payment has been received.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Completed",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("62103302-c8af-474c-9829-4535246ea8de"),
+                            Id = new Guid("30bcb8e3-6506-4613-b9a7-d3cb0f469cdb"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8150),
-                            Description = "Payment is overdue.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Overdue Payment",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9190),
+                            Description = "Payment is past the due date and is overdue.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Overdue",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("258c66f0-ebc1-4db2-8eca-2f56c4be545e"),
+                            Id = new Guid("fdd36c39-ae5f-4b64-ae74-96223d57bce5"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8150),
-                            Description = "Refund is pending processing.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Refund Pending",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9190),
+                            Description = "Payment attempt was unsuccessful.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Failed",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("50eb29c9-2ae2-43fd-8349-c33a90d67985"),
+                            Id = new Guid("85dd7bfb-58d3-4c33-8264-bb23fbd94aa9"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8150),
-                            Description = "Refund has been processed and completed.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9200),
+                            Description = "Payment has been returned to the payer.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Refunded",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("b5be3405-a3c5-4b5f-b184-c6aad01e6a10"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9200),
+                            Description = "The payment was canceled.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Canceled",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("572f3452-bb44-49b7-8781-d04c3b37d219"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9200),
+                            Description = "Payment is under review and pending approval.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "In Review",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("32df8cfb-bc62-439d-b0b8-e3b56dbda17f"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9210),
+                            Description = "Payment is temporarily paused or held.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Hold",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("18f6e91e-e023-425e-a374-54b563fc28ec"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9210),
+                            Description = "Payment is planned for a future date.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Scheduled",
                             UpdatedBy = ""
                         });
                 });
@@ -849,82 +940,142 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("06259499-dc3d-4200-bb25-db4365bbd2bf"),
+                            Id = new Guid("530ba3e4-30c9-49f7-8cb4-3e898ba3e27c"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8080),
-                            Description = "Initial inquiry stage.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9090),
+                            Description = "Initial contact to check vendor availability and gather preliminary information.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Inquiry",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("a2209a96-afeb-4ba5-88cc-f33623acee7f"),
+                            Id = new Guid("07f085d6-caa7-4d9d-bf0a-dabd19009e49"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8090),
-                            Description = "Waiting for a quote from the vendor.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Pending Quote",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9090),
+                            Description = "Vendor provides a detailed proposal including costs, services, and timelines.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Proposal",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("0a921687-4ff9-480c-b396-98d6675c1ab3"),
+                            Id = new Guid("ba1f6436-fd6b-4082-92c1-b3f2f2d75d99"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8090),
-                            Description = "Quote has been received from the vendor.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Quote Received",
-                            UpdatedBy = ""
-                        },
-                        new
-                        {
-                            Id = new Guid("7ec31d87-276e-41e2-9c62-0229c7589277"),
-                            CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8100),
-                            Description = "Negotiations are ongoing with the vendor.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9100),
+                            Description = "Discussion and adjustments of terms, pricing, and deliverables.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Negotiation",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("2a7604f4-24eb-44b9-be95-923b6fcacb76"),
+                            Id = new Guid("ca3077c1-4214-4423-bd85-eb00274d450a"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8100),
-                            Description = "Reserved but not yet confirmed.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Reserved",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9100),
+                            Description = "Internal review and approval of the final terms.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Approval",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("2a2e96c6-32ac-4f21-bb80-a96de656fe10"),
+                            Id = new Guid("fbac17b9-ee55-4232-a5c4-051c3433b521"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8110),
-                            Description = "Tentatively booked, awaiting confirmation.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Tentative",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9100),
+                            Description = "Formal contract is drafted and sent to the vendor for review and signing.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Contract Sent",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ea394113-327f-42c2-bc28-c42759562f10"),
+                            Id = new Guid("29c71799-03c3-4b38-a501-8054beed977d"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8110),
-                            Description = "Contract has been booked and confirmed.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Booked",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9110),
+                            Description = "Vendor reviews the contract and proposes changes or confirms terms.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Contract Review",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("e166af46-0fb4-450f-9ddd-d45f3d6a3609"),
+                            Id = new Guid("73f36843-399a-4efa-9316-0306f2f12dab"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8110),
-                            Description = "Contract has been completed and closed.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
-                            Name = "Closed",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9110),
+                            Description = "Both parties sign the contract, making it legally binding.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Signed",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("40740243-b92c-41c7-af7f-63eedf5714a0"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9120),
+                            Description = "An initial deposit is paid to secure the vendor’s services.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Deposit Paid",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("44506b4c-2ac5-4af9-8590-59288065f59b"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9120),
+                            Description = "Vendor begins preparations for the event based on the agreed services.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Preparation and Planning",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("78d2d474-371b-4dd4-9496-7683240c4977"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9130),
+                            Description = "Vendor delivers their services during the event as outlined in the contract.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Execution",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("14fcec6b-1040-4ae3-8746-8e95e5753567"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9140),
+                            Description = "Discussion of adjustments if needed during execution.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Review and Adjustments",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("30025398-b771-48e9-8929-d047a2fe4eee"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9140),
+                            Description = "Final payment is made upon the completion of services.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Completion and Final Payment",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("fafaa3d4-868d-4999-ad3b-f141172386bf"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9140),
+                            Description = "Event manager provides feedback on the vendor’s performance.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Feedback and Review",
+                            UpdatedBy = ""
+                        },
+                        new
+                        {
+                            Id = new Guid("e27dc3b2-73c8-4f3a-aeb5-071d25f4470d"),
+                            CreatedBy = "",
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9150),
+                            Description = "Contract is officially closed after all deliverables are met and payments are completed.",
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
+                            Name = "Contract Closeout",
                             UpdatedBy = ""
                         });
                 });
@@ -1132,153 +1283,153 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bdf497e7-8cdb-47fe-9ebf-f700427091f4"),
+                            Id = new Guid("a7a87b48-3e92-44d0-a0b4-77b899e4c29f"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7530),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8330),
                             Description = "Food and beverage services, including full-course meals, buffets, and bar services.",
                             Name = "Catering",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("587e6750-6106-4e63-9e8c-7855955776a2"),
+                            Id = new Guid("c31ce01b-5aa0-4a13-9da8-dd0d3445278f"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7540),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8350),
                             Description = "Locations for wedding ceremonies, receptions, and other related events.",
                             Name = "Venue",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ab8025d4-5b5d-4cad-9ef3-1574b50323fa"),
+                            Id = new Guid("07e708e0-3583-43cc-b5ce-1f3cba828401"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7550),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8350),
                             Description = "Professional photography services for capturing wedding moments.",
                             Name = "Photography",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("131b721e-913a-4689-86fc-032c7653c5b3"),
+                            Id = new Guid("d2dc51bf-0096-40dd-b825-bd28fab842f1"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7550),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8350),
                             Description = "Video recording services to capture and document the wedding day.",
                             Name = "Videography",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("3d89eed8-de2a-410c-9186-60bae382e187"),
+                            Id = new Guid("9e080ba9-d6f3-4b90-b5ea-2f731c4a5546"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7550),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8360),
                             Description = "Floral arrangements, bouquets, and other decorative flower services.",
                             Name = "Floristry",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("1d1c3f60-16e3-48a9-836f-36fa9ac7f368"),
+                            Id = new Guid("5d8aa879-4b02-4982-a185-fb4dfbdb5335"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7560),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8360),
                             Description = "Decorative items and setup services, including centerpieces, lighting, and table settings.",
                             Name = "Decor",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ad54812b-f71e-4d14-bcbc-c3a7d9020f96"),
+                            Id = new Guid("0b6e20a7-5ef8-44b7-8956-d2a78441d0b2"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7560),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8360),
                             Description = "Entertainment services, including live bands, DJs, and performers.",
                             Name = "Music & Entertainment",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("5b344922-2272-4aad-b7bf-746cff87cddd"),
+                            Id = new Guid("0dde6433-965b-409c-99e7-2243c57e2ab8"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7560),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8370),
                             Description = "Coordination and planning services to manage the entire wedding event.",
                             Name = "Wedding Planning",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("029334aa-e87c-4ea3-8914-7f58f204b913"),
+                            Id = new Guid("9dc9f4f9-6490-4d5d-82f3-351f7b249c7e"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7570),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8370),
                             Description = "Transportation services for the wedding party and guests, such as limousines and shuttles.",
                             Name = "Transportation",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("3a94507a-2019-47fa-94af-ade237a1813b"),
+                            Id = new Guid("00862258-65b9-4671-aa56-c789b7ba13f6"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7570),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8370),
                             Description = "Wedding cakes, desserts, and other sweets for the reception.",
                             Name = "Cake & Confectionery",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("4dd8ed37-a4bd-46a3-9ced-0930c3b7a395"),
+                            Id = new Guid("d7bbfa89-219a-4ce8-984b-38f73ff414f7"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7570),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8380),
                             Description = "Wedding attire rentals or purchases, including dresses, suits, and accessories.",
                             Name = "Attire & Accessories",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("8b3e8901-29f4-4486-a849-f82543c812d2"),
+                            Id = new Guid("74da8e0c-1a8f-4cd7-85e4-695a3cad94d0"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7580),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8380),
                             Description = "Beauty services for the bridal party, including hairstyling and makeup.",
                             Name = "Hair & Makeup",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("a52aac78-9294-41bc-b96f-6868f51edb72"),
+                            Id = new Guid("54df8687-b3bf-4021-bdbf-353837701168"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7580),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8380),
                             Description = "Design and printing services for wedding invitations, save-the-dates, and other stationery.",
                             Name = "Stationery & Invitations",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("cc748d21-f978-4332-90eb-b4607ebe713a"),
+                            Id = new Guid("e16700aa-73b0-4591-86cc-a5e75463d49a"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7590),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8390),
                             Description = "Professional officiants to conduct the wedding ceremony.",
                             Name = "Officiant Services",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("83051d11-3f92-4b22-b1f1-4d66b8698423"),
+                            Id = new Guid("6f935cad-4216-4617-815c-914293eb0915"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7590),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8390),
                             Description = "Rental of items like furniture, tableware, tents, and dance floors.",
                             Name = "Rentals",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("370b8c67-a068-40a8-ad9a-12a8f4930121"),
+                            Id = new Guid("e983d1cd-b3c1-4899-b8c9-6de331f1ab68"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7590),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8400),
                             Description = "Wedding rings, bridal jewelry, and other related accessories.",
                             Name = "Jewelry",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("d8bd39c7-cd95-4b40-8c5f-91ca0cc5c1be"),
+                            Id = new Guid("c744eb84-ff97-419d-ad2a-b517c075dcaa"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7600),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8400),
                             Description = "Gifts and party favors for guests.",
                             Name = "Favors & Gifts",
                             UpdatedBy = ""
@@ -1325,171 +1476,171 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8d21fb20-b114-4f2b-b356-0ebff9cfd631"),
+                            Id = new Guid("534d9868-a607-4cd4-bfa8-a5a835d7c612"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7990),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8980),
                             Description = "The female participant in the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Bride",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("8d10c669-ad01-4c40-b7c6-aa88def5684f"),
+                            Id = new Guid("359a4723-7b5a-4e03-9306-b96af03878ed"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8000),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8990),
                             Description = "The male participant in the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Groom",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("12f8381a-e544-408c-bbde-2a70f4d76922"),
+                            Id = new Guid("15f926f7-079d-430f-8575-ae139b55763c"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8000),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8990),
                             Description = "The groom's chief assistant during the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Best Man",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("e5e53174-f0bf-4712-86c8-5b327b07e617"),
+                            Id = new Guid("a4b2fcdc-56b4-43b9-9f72-5b6bdbb5053e"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8010),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9000),
                             Description = "The bride's chief assistant during the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Maid of Honor",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("3b5ef963-f882-4f39-ab10-d08be7fc3b08"),
+                            Id = new Guid("b4250995-802c-45e1-a00d-8762bfea192b"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8010),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9000),
                             Description = "The main financial supporter of the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Primary Sponsor",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ac61a7f7-11ba-493f-984f-5e28c56a67d4"),
+                            Id = new Guid("7f613d74-481b-4ab0-90d8-f0ea6ffbddd0"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8010),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9010),
                             Description = "An additional financial supporter of the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Secondary Sponsor",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("3ba5ddcb-be28-49d6-995b-b83b546ed73a"),
+                            Id = new Guid("deac1bd2-9c5d-4aff-9c8f-3bae30d98e74"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8020),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9010),
                             Description = "A young girl who scatters flower petals along the aisle.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Flower Girl",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ece31ae7-c125-4b63-8ce2-7c69fb40ec3c"),
+                            Id = new Guid("f11e5a9e-46e2-49e8-a1ec-ef48671149be"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8020),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9020),
                             Description = "A young child who carries the wedding rings during the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Ring Bearer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("57d29754-80d5-4a15-822e-f7abadf945d9"),
+                            Id = new Guid("0cbb5055-e496-4d2e-9f7c-314664cec69d"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8030),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9020),
                             Description = "A person invited to attend the wedding.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Guest",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("200fda0f-1595-4e6b-aba4-0dc10e0fe5ff"),
+                            Id = new Guid("f428fc80-7550-4d33-b083-95db84a68bdc"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8030),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9020),
                             Description = "A person who carries the Bible during the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Bible Bearer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("a57a3392-a2f2-4054-abbe-0becf445a0c4"),
+                            Id = new Guid("6434a0b6-bddb-47e3-9d56-1d62d83ccc97"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8030),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9030),
                             Description = "A role representing the cord used in the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Cord",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("6f150c4b-6332-4940-8b25-cb712aaa127c"),
+                            Id = new Guid("c8491153-cb93-4539-a4d7-70da270db8a2"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8040),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9030),
                             Description = "A role representing the candle holders during the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Candles",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ffae5178-7d4b-45df-84dc-da8f92c80a66"),
+                            Id = new Guid("fd914703-407f-4047-805f-3b191ddc39f5"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8040),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9030),
                             Description = "Individuals responsible for seating guests at the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Ushers",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("65066089-4699-4b9e-ad87-d60c55e61d84"),
+                            Id = new Guid("fac7f0fb-62d4-43e5-b49a-6a4ab0b1456d"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8050),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9040),
                             Description = "Friends or family who stand with the groom during the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Groomsmen",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("d4739baa-4862-485a-ad51-f11e57d43c2f"),
+                            Id = new Guid("292447d1-ad18-4be3-b1b8-0a5b35efd688"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8050),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9040),
                             Description = "Friends or family who stand with the bride during the ceremony.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Bridesmaids",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("29206ed1-da08-43d2-8e28-2cc91acd8d4b"),
+                            Id = new Guid("0e554623-f674-4369-8d9a-5772c672576c"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8050),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9050),
                             Description = "A key family member who may have a significant role.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Parent of the Bride",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("b6fa2863-f662-4764-8ab3-a3a9d166b98d"),
+                            Id = new Guid("fd5e0598-11ae-467e-b24c-10cd5c2b132b"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(8060),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(9050),
                             Description = "A key family member representing the groom's side.",
-                            EventId = new Guid("69ab9653-c631-4634-b4b6-a629f8615212"),
+                            EventId = new Guid("659eea8c-e1c1-493b-9fd2-4075bc5efded"),
                             Name = "Parent of the Groom",
                             UpdatedBy = ""
                         });
@@ -1584,27 +1735,27 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d56e836e-be51-4976-b07d-1d80b2b56bd2"),
+                            Id = new Guid("13ec197f-aeca-4d3d-ac88-3992286628e5"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(800),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(450),
                             Description = "A general payment or debit from a user’s account, often for non-purchase activities, such as bill payments or installment payments.",
                             Name = "Payment",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("3961e5ba-7230-40a1-812c-2bf91780e3b3"),
+                            Id = new Guid("439cf117-b218-4f33-bac2-cd6de7880b4c"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(810),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(450),
                             Description = "Represents adding funds to an account, usually as a top-up or a prepayment.",
                             Name = "Deposit",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("18d56995-5908-403a-ab43-f75d4c9bc775"),
+                            Id = new Guid("d462db61-395c-46ab-b6cd-5455e59803a6"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 681, DateTimeKind.Utc).AddTicks(810),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 460, DateTimeKind.Utc).AddTicks(460),
                             Description = "Represents money returned to the user for a previous purchase, usually due to a return or an issue with the product/service.",
                             Name = "Refund",
                             UpdatedBy = ""
@@ -1659,159 +1810,159 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c618cca2-fc8e-4a58-832e-8ddc1287ae29"),
+                            Id = new Guid("e6f96dc6-b200-4e5c-a44a-b85bd07b7059"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7810),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8620),
                             Description = "A venue for hosting wedding ceremonies, typically in a religious setting.",
                             Name = "Church",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("85e14ff5-7905-497f-af12-92e0cdd9032f")
+                            VendorTypeId = new Guid("88d4f898-5448-49bb-bfe5-6d55b9d72c55")
                         },
                         new
                         {
-                            Id = new Guid("13557d96-26fe-4b8a-bfe3-e7a6c2e645bd"),
+                            Id = new Guid("4b39ad4a-d5f0-4480-86b4-1609ca645068"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7820),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8630),
                             Description = "A venue for hosting post-ceremony receptions or gatherings.",
                             Name = "Reception Venue",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("f821501d-cb36-4dfd-b8b8-daad3ebc42d9")
+                            VendorTypeId = new Guid("4476b022-a68c-4a71-b28b-a15c3d468f66")
                         },
                         new
                         {
-                            Id = new Guid("006fd6a8-19fd-4075-bb82-80549f154e5e"),
+                            Id = new Guid("52ec4091-9678-41b0-a586-499531718bb8"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7820),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8630),
                             Description = "Manages lights, sound systems and audio equipment for the ceremony and reception.",
                             Name = "Lights & Sounds",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("97b5dd40-f540-40d1-bfa2-66d4dede9ac5")
+                            VendorTypeId = new Guid("46dd3189-e7c0-475a-b505-3a0738f5f940")
                         },
                         new
                         {
-                            Id = new Guid("7c49b5d1-fa13-43e1-b68a-3f25864064db"),
+                            Id = new Guid("ef139de5-6812-4a9c-8d5d-8abdf4f3d653"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7830),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8640),
                             Description = "Provides food and beverage services for the wedding.",
                             Name = "Caterer",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("3ca5bbbc-32d0-4d7f-ad8d-fe2d007296ba")
+                            VendorTypeId = new Guid("a986cc7e-3926-4f5f-b7b9-e5e3ce6e3965")
                         },
                         new
                         {
-                            Id = new Guid("d7edf160-588d-4e7d-83de-2c1f67658c4b"),
+                            Id = new Guid("d5c5500e-a4a4-4d5d-8017-c1b232e7e522"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7830),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8640),
                             Description = "Captures memories through professional photography during the wedding.",
                             Name = "Photo & Video",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("508ee3db-f119-410f-ad66-20c9150535e2")
+                            VendorTypeId = new Guid("17475c86-b987-4ba9-a6c7-487424720d77")
                         },
                         new
                         {
-                            Id = new Guid("5413447f-8438-4d77-8f60-2101731bc13b"),
+                            Id = new Guid("8189b52c-3692-4aff-9d71-5fbc163e8238"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7840),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8650),
                             Description = "A musical group that performs live at the wedding reception.",
                             Name = "Strings",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("05dd88de-960e-42e6-af2c-9ba614369833")
+                            VendorTypeId = new Guid("f595994f-672e-4e10-8ad4-553177f0297e")
                         },
                         new
                         {
-                            Id = new Guid("23449a6f-418d-4651-84d8-72116167bfed"),
+                            Id = new Guid("94a1b1f6-95bd-4a53-8f99-6657c93c3bb7"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7840),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8650),
                             Description = "Provides professional makeup services for the bride and bridal party.",
                             Name = "Hair & Makeup",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("7c0285eb-57d8-41dc-8c3b-7e2093ec7532")
+                            VendorTypeId = new Guid("29758e12-89c6-4a7d-b8f5-b9f92b4160b9")
                         },
                         new
                         {
-                            Id = new Guid("5afe4043-aad0-4bbb-9a41-eb6cc9331f86"),
+                            Id = new Guid("25867a12-2734-472d-9c7f-ddfa2193ea09"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7850),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8660),
                             Description = "Supplies floral arrangements, bouquets, and centerpieces.",
                             Name = "Florist",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("0f19a7bf-d67b-4d06-86ed-db782c61a12e")
+                            VendorTypeId = new Guid("7c1a8a08-7aff-49f1-9ecf-d8e904ec3def")
                         },
                         new
                         {
-                            Id = new Guid("2662bdea-cb67-45bb-93f2-caa6c117f97b"),
+                            Id = new Guid("83e7d021-e17d-4d5c-ae6f-261fc54fef4a"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7850),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8660),
                             Description = "Sells wedding rings and related jewelry.",
                             Name = "Jeweler",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("89d88aad-dfbc-41b4-aa8d-186bc19481e5")
+                            VendorTypeId = new Guid("ac208798-76de-4091-a559-e2b4583fc820")
                         },
                         new
                         {
-                            Id = new Guid("f2c6d454-07d6-4c62-8b2f-bb09ac307830"),
+                            Id = new Guid("b99f9e38-c951-4f61-b747-43635704ad7c"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7850),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8670),
                             Description = "Organizes wedding activities and ensures event flows smoothly.",
                             Name = "Wedding Coordinator",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("b68ee99f-0313-4002-9f0a-ff20edd378f2")
+                            VendorTypeId = new Guid("6e330c35-a815-409e-8165-cfc97c5d2aa1")
                         },
                         new
                         {
-                            Id = new Guid("71617f5e-54c0-4749-81ad-b7e0323bdb17"),
+                            Id = new Guid("ba831837-8568-49f7-b27a-2fc7df7ca647"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7860),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8670),
                             Description = "Provides mobile bar services for cocktail hours and receptions.",
                             Name = "Mobile Bar",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("0c2b6903-955a-40be-8323-90a2653197ca")
+                            VendorTypeId = new Guid("31585b5e-1038-4ffd-a74c-85bd2e44af2f")
                         },
                         new
                         {
-                            Id = new Guid("ad3ca28b-f710-4b46-9a1e-f1f188cac358"),
+                            Id = new Guid("6685c600-8b2e-46f9-aabb-72c3ec121b85"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7860),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8680),
                             Description = "Offers keepsakes or favors for wedding guests.",
                             Name = "Souvenirs",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("17665b12-d967-4cf3-9a02-80ca603e0936")
+                            VendorTypeId = new Guid("b193f0cb-1d05-41c9-aad4-17c27079ff9f")
                         },
                         new
                         {
-                            Id = new Guid("f806f849-4d64-4652-bcef-1d828896bd7a"),
+                            Id = new Guid("2e753c51-3af4-4d2a-85f4-1815cef1a6c3"),
                             Address = "N/A",
                             ContactInformation = "",
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7870),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8680),
                             Description = "Hosts and coordinates the wedding program.",
                             Name = "Emcee",
                             UpdatedBy = "",
-                            VendorTypeId = new Guid("25522887-25ec-4f2f-bfbf-433e97000a1b")
+                            VendorTypeId = new Guid("cb27773b-ec40-4986-8a39-7c35744538ee")
                         });
                 });
 
@@ -1852,12 +2003,12 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9af1d76c-b9ac-4d93-b544-5408db653f62"),
-                            AccountId = new Guid("9c32a87a-6527-4f55-ac3e-e4d78e3bf031"),
+                            Id = new Guid("b19b0a6e-00d0-4ea8-a8d8-7ff6635f3b96"),
+                            AccountId = new Guid("9eeaf26b-7bb4-428e-b3c8-49b38c20ec0a"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7940),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8770),
                             UpdatedBy = "",
-                            VendorId = new Guid("c618cca2-fc8e-4a58-832e-8ddc1287ae29")
+                            VendorId = new Guid("e6f96dc6-b200-4e5c-a44a-b85bd07b7059")
                         });
                 });
 
@@ -1896,261 +2047,261 @@ namespace AMP.EMS.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("85e14ff5-7905-497f-af12-92e0cdd9032f"),
+                            Id = new Guid("88d4f898-5448-49bb-bfe5-6d55b9d72c55"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7620),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8450),
                             Description = "A venue for hosting wedding ceremonies, typically in a religious setting.",
                             Name = "Church",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("f821501d-cb36-4dfd-b8b8-daad3ebc42d9"),
+                            Id = new Guid("4476b022-a68c-4a71-b28b-a15c3d468f66"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7630),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8450),
                             Description = "A venue for hosting post-ceremony receptions or gatherings.",
                             Name = "Reception Venue",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("97b5dd40-f540-40d1-bfa2-66d4dede9ac5"),
+                            Id = new Guid("46dd3189-e7c0-475a-b505-3a0738f5f940"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7630),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8460),
                             Description = "Manages lights, sound systems and audio equipment for the ceremony and reception.",
                             Name = "Lights & Sounds",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("3ca5bbbc-32d0-4d7f-ad8d-fe2d007296ba"),
+                            Id = new Guid("a986cc7e-3926-4f5f-b7b9-e5e3ce6e3965"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7640),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8460),
                             Description = "Provides food and beverage services for the wedding.",
                             Name = "Caterer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("508ee3db-f119-410f-ad66-20c9150535e2"),
+                            Id = new Guid("17475c86-b987-4ba9-a6c7-487424720d77"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7640),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8460),
                             Description = "Captures memories through professional photography during the wedding.",
                             Name = "Photographer & Videographer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("05dd88de-960e-42e6-af2c-9ba614369833"),
+                            Id = new Guid("f595994f-672e-4e10-8ad4-553177f0297e"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7650),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8470),
                             Description = "A musical group that performs live at the wedding reception.",
                             Name = "Live Band",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("7c0285eb-57d8-41dc-8c3b-7e2093ec7532"),
+                            Id = new Guid("29758e12-89c6-4a7d-b8f5-b9f92b4160b9"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7650),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8470),
                             Description = "Provides professional makeup services for the bride and bridal party.",
                             Name = "Hair & Makeup Artist",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("0f19a7bf-d67b-4d06-86ed-db782c61a12e"),
+                            Id = new Guid("7c1a8a08-7aff-49f1-9ecf-d8e904ec3def"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7650),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8480),
                             Description = "Supplies floral arrangements, bouquets, and centerpieces.",
                             Name = "Florist",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("89d88aad-dfbc-41b4-aa8d-186bc19481e5"),
+                            Id = new Guid("ac208798-76de-4091-a559-e2b4583fc820"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7660),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8480),
                             Description = "Sells wedding rings and related jewelry.",
                             Name = "Jeweler",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("b68ee99f-0313-4002-9f0a-ff20edd378f2"),
+                            Id = new Guid("6e330c35-a815-409e-8165-cfc97c5d2aa1"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7660),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8490),
                             Description = "Organizes wedding activities and ensures event flows smoothly.",
                             Name = "Wedding Coordinator",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("0c2b6903-955a-40be-8323-90a2653197ca"),
+                            Id = new Guid("31585b5e-1038-4ffd-a74c-85bd2e44af2f"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7660),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8490),
                             Description = "Provides mobile bar services for cocktail hours and receptions.",
                             Name = "Mobile Bar",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("17665b12-d967-4cf3-9a02-80ca603e0936"),
+                            Id = new Guid("b193f0cb-1d05-41c9-aad4-17c27079ff9f"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7670),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8490),
                             Description = "Offers keepsakes or favors for wedding guests.",
                             Name = "Souvenirs",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("25522887-25ec-4f2f-bfbf-433e97000a1b"),
+                            Id = new Guid("cb27773b-ec40-4986-8a39-7c35744538ee"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7670),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8500),
                             Description = "Hosts and coordinates the wedding program.",
                             Name = "Emcee",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("5fe77510-e4a4-457c-aae1-250f9887eee2"),
+                            Id = new Guid("2112bbd8-731c-4571-8d4e-2b15d3c0b64d"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7680),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8500),
                             Description = "Location where the wedding ceremony and/or reception is held.",
                             Name = "Venue",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("7d334885-a8ed-4fa1-917c-7c46740cb58d"),
+                            Id = new Guid("0f7dd14c-94e7-4036-b544-7b73641bab2e"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7700),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8510),
                             Description = "Captures memories through professional photography during the wedding.",
                             Name = "Photographer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("ebdd7825-f0e2-4451-bc33-196b2d9f75bd"),
+                            Id = new Guid("7d60b841-e093-47be-b5d6-dbcc75e4083d"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7700),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8510),
                             Description = "Records the wedding ceremony and reception with high-quality video.",
                             Name = "Videographer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("b96aef48-211e-4b09-801b-3c71c35667ae"),
+                            Id = new Guid("a4a75fd3-8e4c-4fb4-b695-023afe22524b"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7700),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8510),
                             Description = "Provides music entertainment and emceeing for the wedding and reception.",
                             Name = "DJ",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("f4828f75-1eb9-407a-86ce-1e643cb902c9"),
+                            Id = new Guid("2af9c85a-926d-48c4-bb18-e576996e8c66"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7710),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8520),
                             Description = "Coordinates all aspects of the wedding planning process from start to finish.",
                             Name = "Wedding Planner",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("95a48777-4e64-4d59-b96f-a0eba4df43c5"),
+                            Id = new Guid("1ced64f7-1b16-4522-bf5a-0fe4972b2b06"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7710),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8520),
                             Description = "Creates wedding cakes, cupcakes, and desserts for the celebration.",
                             Name = "Baker",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("a0a206f6-0b33-4ac1-acc7-2ce5de4403f7"),
+                            Id = new Guid("12a3c347-008d-488d-9875-c4d336e0ae7b"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7720),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8530),
                             Description = "Provides vehicles for transporting the wedding party and guests.",
                             Name = "Transportation",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("242eb61a-ceb1-4944-b6cb-dbc3b2d7e7ec"),
+                            Id = new Guid("bf999a0a-1afd-494c-a119-0712837bb1fd"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7720),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8530),
                             Description = "Conducts the wedding ceremony and ensures it is legally binding.",
                             Name = "Officiant",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("96725c6a-2732-4cea-90e8-0c3731c3fd94"),
+                            Id = new Guid("aeb2e7cf-12f4-47c1-95e8-1b9afe54d3dc"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7720),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8530),
                             Description = "Styles hair for the bride, bridesmaids, and other family members.",
                             Name = "Hair Stylist",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("65d40493-0478-409e-99f6-b8904942b642"),
+                            Id = new Guid("46e67c5c-442e-4d95-b7e4-ae0aee864cb9"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7730),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8540),
                             Description = "Provides professional makeup services for the bride and bridal party.",
                             Name = "Makeup Artist",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("8750de2c-1151-448b-be69-fed4898d5cc7"),
+                            Id = new Guid("e5bd3892-5eb6-4294-ba5e-1156ed5d9be4"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7730),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8540),
                             Description = "Offers items for rent such as tables, chairs, linens, and decor.",
                             Name = "Rentals",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("0215f011-ddb4-46e0-904e-5e520f3a170b"),
+                            Id = new Guid("77539244-771a-4f8a-ad04-c017e1b7ee60"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7730),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8550),
                             Description = "Designs and prints wedding invitations, save-the-dates, and programs.",
                             Name = "Stationery",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("86b63700-3a45-47cf-985a-ce065310e9ed"),
+                            Id = new Guid("5f37be38-426d-4ad6-b232-9bb3a445b1dd"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7740),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8550),
                             Description = "Provides a fun photo booth setup with props for guests to enjoy.",
                             Name = "Photo Booth",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("921fb57d-df79-4184-822e-f144d9928514"),
+                            Id = new Guid("e83ff3a4-ffc3-4dac-9c34-d31a161de626"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7740),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8550),
                             Description = "Ensures the safety and security of the wedding event and guests.",
                             Name = "Security",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("4f9f72b4-e242-4a9a-857a-78467b5ab2bd"),
+                            Id = new Guid("cb5840d7-0f64-4d67-b73d-16ffda21e35b"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7750),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8560),
                             Description = "Creates customized lighting plans to enhance the wedding ambiance.",
                             Name = "Lighting Designer",
                             UpdatedBy = ""
                         },
                         new
                         {
-                            Id = new Guid("63ed16d6-67a7-413b-b55f-a88693444886"),
+                            Id = new Guid("6fb75e39-3cbf-4ed3-8b5c-cc9421518aea"),
                             CreatedBy = "",
-                            DateCreated = new DateTime(2024, 11, 6, 19, 3, 37, 682, DateTimeKind.Utc).AddTicks(7750),
+                            DateCreated = new DateTime(2024, 11, 7, 11, 42, 35, 461, DateTimeKind.Utc).AddTicks(8560),
                             Description = "Manages sound systems and audio equipment for the ceremony and reception.",
                             Name = "Sound Engineer",
                             UpdatedBy = ""
@@ -2307,10 +2458,6 @@ namespace AMP.EMS.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", "EventVendorContractPaymentState")
-                        .WithMany("EventVendorContracts")
-                        .HasForeignKey("EventVendorContractPaymentStateId");
-
                     b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContractState", "EventVendorContractState")
                         .WithMany("EventVendorContracts")
                         .HasForeignKey("EventVendorContractStateId");
@@ -2323,11 +2470,34 @@ namespace AMP.EMS.API.Migrations
 
                     b.Navigation("Event");
 
-                    b.Navigation("EventVendorContractPaymentState");
-
                     b.Navigation("EventVendorContractState");
 
                     b.Navigation("Vendor");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPayment", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContract", "EventVendorContract")
+                        .WithMany("EventVendorContractPayments")
+                        .HasForeignKey("EventVendorContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", "EventVendorContractPaymentState")
+                        .WithMany("EventVendorContractPayments")
+                        .HasForeignKey("EventVendorContractPaymentStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("EventVendorContract");
+
+                    b.Navigation("EventVendorContractPaymentState");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", b =>
@@ -2539,9 +2709,14 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("Events");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContract", b =>
+                {
+                    b.Navigation("EventVendorContractPayments");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", b =>
                 {
-                    b.Navigation("EventVendorContracts");
+                    b.Navigation("EventVendorContractPayments");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractState", b =>

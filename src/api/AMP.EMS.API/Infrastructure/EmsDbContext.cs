@@ -33,6 +33,8 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventTypeRole> EventTypeRoles { get; }
     public DbSet<EventVendorContract> EventVendorContracts { get; set; }
     public DbSet<EventVendorContractState> EventVendorContractStates { get; set; }
+    public DbSet<EventVendorContractPayment> EventVendorContractPayments { get; set; }
+    public DbSet<EventVendorContractPaymentState> EventVendorContractPaymentStates { get; set; }
     public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; }
     public DbSet<Role> Roles { get; }
@@ -854,56 +856,98 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
                 Name = "Inquiry",
-                Description = "Initial inquiry stage."
+                Description = "Initial contact to check vendor availability and gather preliminary information."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Pending Quote",
-                Description = "Waiting for a quote from the vendor."
-            },
-            new()
-            {
-                Id = Guid.NewGuid(),
-                EventId = @event.Id,
-                Name = "Quote Received",
-                Description = "Quote has been received from the vendor."
+                Name = "Proposal",
+                Description = "Vendor provides a detailed proposal including costs, services, and timelines."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
                 Name = "Negotiation",
-                Description = "Negotiations are ongoing with the vendor."
+                Description = "Discussion and adjustments of terms, pricing, and deliverables."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Reserved",
-                Description = "Reserved but not yet confirmed."
+                Name = "Approval",
+                Description = "Internal review and approval of the final terms."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Tentative",
-                Description = "Tentatively booked, awaiting confirmation."
+                Name = "Contract Sent",
+                Description = "Formal contract is drafted and sent to the vendor for review and signing."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Booked",
-                Description = "Contract has been booked and confirmed."
+                Name = "Contract Review",
+                Description = "Vendor reviews the contract and proposes changes or confirms terms."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Closed",
-                Description = "Contract has been completed and closed."
+                Name = "Signed",
+                Description = "Both parties sign the contract, making it legally binding."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Deposit Paid",
+                Description = "An initial deposit is paid to secure the vendor’s services."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Preparation and Planning",
+                Description = "Vendor begins preparations for the event based on the agreed services."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Execution",
+                Description = "Vendor delivers their services during the event as outlined in the contract."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Review and Adjustments",
+                Description = "Discussion of adjustments if needed during execution."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Completion and Final Payment",
+                Description = "Final payment is made upon the completion of services."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Feedback and Review",
+                Description = "Event manager provides feedback on the vendor’s performance."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Contract Closeout",
+                Description = "Contract is officially closed after all deliverables are met and payments are completed."
             }
         };
 
@@ -915,43 +959,71 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Deposit Pending",
-                Description = "Waiting for the initial deposit to be paid."
+                Name = "Pending",
+                Description = "Payment is scheduled but not yet made."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Partial Payment",
-                Description = "Partial payment received, remaining balance due."
+                Name = "Partially Paid",
+                Description = "A portion of the payment has been made."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Paid in Full",
-                Description = "All payments have been made, contract is paid in full."
+                Name = "Completed",
+                Description = "The full payment has been received."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Overdue Payment",
-                Description = "Payment is overdue."
+                Name = "Overdue",
+                Description = "Payment is past the due date and is overdue."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
-                Name = "Refund Pending",
-                Description = "Refund is pending processing."
+                Name = "Failed",
+                Description = "Payment attempt was unsuccessful."
             },
             new()
             {
                 Id = Guid.NewGuid(),
                 EventId = @event.Id,
                 Name = "Refunded",
-                Description = "Refund has been processed and completed."
+                Description = "Payment has been returned to the payer."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Canceled",
+                Description = "The payment was canceled."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "In Review",
+                Description = "Payment is under review and pending approval."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Hold",
+                Description = "Payment is temporarily paused or held."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Scheduled",
+                Description = "Payment is planned for a future date."
             }
         };
 

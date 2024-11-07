@@ -20,7 +20,7 @@ export class EventVendorContractService extends BaseApiService {
     }
 
     update = (eventVendorContract: EventVendorContract): Observable<EventVendorContract> => {
-        return this.httpPut<EventVendorContract>(`api/eventvendorcontract`, eventVendorContract);
+        return this.httpPut<EventVendorContract>(`api/eventvendorcontract/${eventVendorContract.id}`, eventVendorContract);
     }
 
     delete = (id: string): Observable<EventVendorContract> => {
