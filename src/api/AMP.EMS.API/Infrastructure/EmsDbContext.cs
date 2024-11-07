@@ -34,6 +34,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventVendorContract> EventVendorContracts { get; set; }
     public DbSet<EventVendorContractState> EventVendorContractStates { get; set; }
     public DbSet<EventVendorContractPayment> EventVendorContractPayments { get; set; }
+    public DbSet<EventVendorContractPaymentType> EventVendorContractPaymentTypes { get; set; }
     public DbSet<EventVendorContractPaymentState> EventVendorContractPaymentStates { get; set; }
     public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; }
@@ -953,7 +954,118 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
 
         modelBuilder.Entity<EventVendorContractState>().HasData(eventVendorContractState);
 
-        var eventVendorContractPaymentState = new List<EventVendorContractPaymentState>
+        var eventVendorContractPaymentTypes = new List<EventVendorContractPaymentType>
+        {
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Deposit",
+                Description = "Initial payment to secure services or confirm a booking."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Retainer",
+                Description = "Payment to secure ongoing services, may or may not apply toward final balance."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Installment",
+                Description = "Scheduled partial payment at specific intervals in the contract."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Progress Payment",
+                Description = "Payments made upon reaching specific milestones or stages."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Final Payment",
+                Description = "Remaining balance due upon completion of the contract."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Advance Payment",
+                Description = "Payment made in advance for materials, equipment, or initial requirements."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Penalty Payment",
+                Description = "Fee charged for contract violations or unmet deadlines."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Late Fee",
+                Description = "Additional fee imposed if a payment is not made on time."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Cancellation Fee",
+                Description = "Fee charged if the contract is canceled after a specified date."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Discount",
+                Description = "Reduction in payment, often for early payment or promotional purposes."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Refund",
+                Description = "Amount returned to the client if conditions such as cancellations are met."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Holdback",
+                Description = "Portion of payment withheld until contract conditions are satisfactorily fulfilled."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Service Charge",
+                Description = "Additional fee for using a specific payment method."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Escrow Payment",
+                Description = "Payment held by a third party until contract terms are fulfilled."
+            },
+            new()
+            {
+                Id = Guid.NewGuid(),
+                EventId = @event.Id,
+                Name = "Bonus Payment",
+                Description = "Additional payment for exceeding performance expectations."
+            }
+        };
+
+        modelBuilder.Entity<EventVendorContractPaymentType>().HasData(eventVendorContractPaymentTypes);
+
+        var eventVendorContractPaymentStates = new List<EventVendorContractPaymentState>
         {
             new()
             {
@@ -1027,7 +1139,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
             }
         };
 
-        modelBuilder.Entity<EventVendorContractPaymentState>().HasData(eventVendorContractPaymentState);
+        modelBuilder.Entity<EventVendorContractPaymentState>().HasData(eventVendorContractPaymentStates);
 
         var account = new Account
         {

@@ -65,7 +65,153 @@
             </li>
         </ul>
     </div>
-    <div class="card">
+    <div class="card" *ngIf="eventVendorContract.value?.id && {
+        eventVendorContractPaymentTypes: eventVendorContractPaymentTypes$ | withStatus | async,
+        eventVendorContractPaymentStates: eventVendorContractPaymentStates$ | withStatus | async } as lookup">
         <div class="font-medium text-3xl text-500 mb-3">Payments</div>
+        <p-table #dt *ngIf="eventVendorContractPayments$ | withStatus | async as eventVendorContractPayments"
+            [value]="eventVendorContractPayments.value!" [rows]="10" [paginator]="true" editMode="row" [rowHover]="true"
+            [loading]="eventVendorContractPayments.loading" [showLoader]="false" dataKey="id"
+            [loading]="eventVendorContractPayments.loading" [showLoader]="false">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Type
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Due Amount
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            Due Date
+                        </div>
+                    </th>
+                    <th>
+                        <div class="flex justify-content-between align-items-center">
+                            State
+                        </div>
+                    </th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item let-editing="editing">
+                <tr [pEditableRow]="item">
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown *ngIf="!lookup.eventVendorContractPaymentTypes!.loading" appendTo="body"
+                                    [options]="lookup.eventVendorContractPaymentTypes!.value"
+                                    [loading]="lookup.eventVendorContractPaymentTypes!.loading"
+                                    [(ngModel)]="item.eventVendorContractPaymentTypeId" optionValue="id"
+                                    optionLabel="name" placeholder="Select a state"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                <ng-container *ngIf="!lookup.eventVendorContractPaymentTypes!.loading">
+                                    {{(lookup.eventVendorContractPaymentTypes!.value!| findItem :
+                                    item.eventVendorContractPaymentTypeId : 'id')?.name
+                                    || '-'}}
+                                </ng-container>
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-inputNumber mode="currency" currency="PHP" [(ngModel)]="item.dueAmount" />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{item.dueAmount | currency : 'PHP'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-calendar [(ngModel)]="item.dueDate" appendTo="body" />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{item.dueDate | date : 'shortDate'}}
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <p-dropdown *ngIf="!lookup.eventVendorContractPaymentStates!.loading" appendTo="body"
+                                    [options]="lookup.eventVendorContractPaymentStates!.value"
+                                    [loading]="lookup.eventVendorContractPaymentStates!.loading"
+                                    [(ngModel)]="item.eventVendorContractPaymentStateId" optionValue="id"
+                                    optionLabel="name" placeholder="Select a state"></p-dropdown>
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                <ng-container *ngIf="!lookup.eventVendorContractPaymentStates!.loading">
+                                    {{(lookup.eventVendorContractPaymentStates!.value | findItem :
+                                    item.eventVendorContractPaymentStateId : 'id')?.name
+                                    || '-'}}
+                                </ng-container>
+                            </ng-template>
+                        </p-cellEditor>
+                    </td>
+                    <td>
+                        <div class="flex">
+                            <button *ngIf="editing && !item.id" pButton pRipple type="button" pInitEditableRow
+                                icon="pi pi-plus" class="p-button-text p-button-success mr-2" pTooltip="Add"
+                                (click)="savePayment(item)">
+                            </button>
+                            <button *ngIf="!editing && item.id && item.id" pButton pRipple type="button"
+                                pInitEditableRow icon="pi pi-pencil" class="p-button-text p-button-success mr-2"
+                                pTooltip="Edit">
+                            </button>
+                            <button *ngIf="!editing && item.id" pButton pRipple class="p-button-text p-button-warning"
+                                icon="pi pi-trash" (click)="delete(item)" pTooltip="Delete"></button>
+
+                            <button *ngIf="editing && item.id" pButton pRipple type="button" pSaveEditableRow
+                                icon="pi pi-save" (click)="savePayment(item)"
+                                class="p-button-text p-button-text p-button-success mr-2" pTooltip="Save">
+                            </button>
+                            <button *ngIf="editing && item.id" pButton pRipple type="button" pCancelEditableRow
+                                icon="pi pi-times" class="p-button-text p-button-text p-button-danger"
+                                pTooltip="Cancel"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [colSpan]="7">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                </tr>
+                <tr>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                </tr>
+                <tr>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                    <td><p-skeleton></p-skeleton></td>
+                </tr>
+            </ng-template>
+        </p-table>
     </div>
 </ng-container>

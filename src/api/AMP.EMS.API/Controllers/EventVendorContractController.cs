@@ -1,12 +1,24 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers;
 
 public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<EventVendorContractController> logger)
     : ApiBaseController<EventVendorContract, Guid>(unitOfWork, logger)
 {
+    [HttpGet("{id:guid}/payments")]
+    public IActionResult GetPayments(Guid id)
+    {
+        var eventVendorContractPayments = unitOfWork.Set<EventVendorContractPayment>().GetAll().AsNoTracking()
+            .Where(_ => _.EventVendorContractId == id);
+
+        return Ok(new OkResponse<IEnumerable<EventVendorContractPayment>>(string.Empty)
+            { Data = eventVendorContractPayments });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventVendorContractRequest request)
     {
@@ -15,7 +27,8 @@ public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<Event
             EventId = request.EventId,
             VendorId = request.VendorId,
             Amount = request.Amount ?? 0M,
-            Details = request.Details ?? string.Empty
+            Details = request.Details ?? string.Empty,
+            EventVendorContractStateId = request.EventVendorContractStateId
         });
     }
 

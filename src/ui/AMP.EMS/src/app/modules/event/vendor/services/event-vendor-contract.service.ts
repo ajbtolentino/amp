@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '@core/services';
+import { EventVendorContractPayment } from '@shared/models';
 import { EventVendorContract } from '@shared/models/event-vendor-contract.model';
 import { Observable } from 'rxjs';
 
@@ -13,6 +14,10 @@ export class EventVendorContractService extends BaseApiService {
 
     getAll = (): Observable<EventVendorContract[]> => {
         return this.httpGet<EventVendorContract[]>(`api/eventvendorcontract/`);
+    }
+
+    getPayments = (id: string): Observable<EventVendorContractPayment[]> => {
+        return this.httpGet<EventVendorContract[]>(`api/eventvendorcontract/${id}/payments`);
     }
 
     add = (eventVendorContract: EventVendorContract): Observable<EventVendorContract> => {

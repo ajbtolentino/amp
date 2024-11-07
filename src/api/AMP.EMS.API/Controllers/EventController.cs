@@ -73,6 +73,18 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     }
 
     [HttpGet]
+    [Route("{eventId:guid}/vendorContractPaymentTypes")]
+    public IActionResult GetVendorContractPaymentTypes(Guid eventId)
+    {
+        var eventVendorContractPaymentTypes = UnitOfWork.Set<EventVendorContractPaymentType>().GetAll()
+            .Where(eventVendorContractPaymentType => eventVendorContractPaymentType.EventId == eventId)
+            .AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<EventVendorContractPaymentType>>(string.Empty)
+            { Data = eventVendorContractPaymentTypes });
+    }
+
+    [HttpGet]
     [Route("{eventId:guid}/vendorContractPaymentStates")]
     public IActionResult GetVendorContractPaymentStates(Guid eventId)
     {
