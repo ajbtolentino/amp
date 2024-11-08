@@ -12,32 +12,11 @@ namespace AMP.EMS.API.Controllers;
 public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestController> logger)
     : ApiBaseController<EventGuest, Guid>(unitOfWork, logger)
 {
-    public override IActionResult GetAll()
-    {
-        var eventGuests = EntityRepository.GetAll()
-            .Include(_ => _.Guest)
-            .Include(_ => _.EventGuestInvitations)
-            .ThenInclude(_ => _.EventInvitation)
-            .Include(_ => _.EventGuestInvitations)
-            .ThenInclude(_ => _.EventGuestInvitationRsvps)
-            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
-            .Include(_ => _.EventGuestRoles)
-            .ThenInclude(_ => _.Role);
-
-        ArgumentNullException.ThrowIfNull(eventGuests);
-
-        return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = eventGuests });
-    }
-
     [HttpGet]
     [Route("{id:guid}/invitations")]
     public IActionResult GetInvitations(Guid id)
     {
-        var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll()
-            .Where(_ => _.EventGuestId == id)
-            .Include(_ => _.EventInvitation)
-            .Include(_ => _.EventGuestInvitationRsvps)
-            .ThenInclude(_ => _.EventGuestInvitationRsvpItems);
+        var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll();
 
         ArgumentNullException.ThrowIfNull(eventGuestInvitations);
 

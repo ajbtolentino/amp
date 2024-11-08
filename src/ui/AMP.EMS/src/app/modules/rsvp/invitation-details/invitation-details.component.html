@@ -1,6 +1,12 @@
-<ng-container *ngIf="eventGuestInvitation$ | withStatus | async as eventGuestInvitation">
-    <ngx-dynamic-hooks [content]="eventGuestInvitation.value?.eventInvitation?.html" [context]="{
-        guest: eventGuestInvitation.value?.eventGuest?.guest!,
-            eventGuestInvitation: eventGuestInvitation.value!,
+<ng-container *ngIf="
+{
+    eventGuestInvitation: eventGuestInvitation$ | withStatus | async,
+    content: content$ | withStatus | async,
+    guest: guest$ | withStatus | async
+} as data">
+    <ngx-dynamic-hooks *ngIf="!data.content?.loading && !data.guest?.loading && !data.eventGuestInvitation?.loading"
+        [content]="data.content!.value?.htmlContent" [context]="{
+        guest: data.guest?.value,
+            eventGuestInvitation: data.eventGuestInvitation!.value!,
             onSubmit: onSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
 </ng-container>

@@ -85,9 +85,8 @@
                     </ng-template>
 
                     <ng-template pTemplate="loadingbody">
-                        <tr>
+                        <tr *ngFor="let i of [].constructor(5)">
                             <td></td>
-                            <td><p-skeleton></p-skeleton></td>
                             <td><p-skeleton></p-skeleton></td>
                             <td><p-skeleton></p-skeleton></td>
                             <td><p-skeleton></p-skeleton></td>

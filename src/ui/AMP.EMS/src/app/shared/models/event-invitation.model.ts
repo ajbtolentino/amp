@@ -1,3 +1,4 @@
+import { Content } from "./content.model";
 import { EventGuestInvitation } from "./event-guest-invitation.model";
 
 export interface EventInvitation {
@@ -5,7 +6,8 @@ export interface EventInvitation {
     eventId?: string;
     name?: string;
     description?: string;
+    contentId?: string;
     rsvpDeadline?: Date
-    html?: string;
+    content?: Content;
     eventGuestInvitations?: EventGuestInvitation[];
 }

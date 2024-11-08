@@ -19,6 +19,9 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<VendorType> VendorTypes { get; }
     public DbSet<VendorAccount> VendorAccounts { get; }
 
+    //Content
+    public DbSet<Content> Contents { get; }
+
     //Event
     public DbSet<EventAccount> EventAccounts { get; }
     public DbSet<Event> Events { get; }

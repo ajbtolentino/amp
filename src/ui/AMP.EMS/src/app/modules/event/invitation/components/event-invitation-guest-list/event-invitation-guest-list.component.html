@@ -16,7 +16,8 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="loadingbody">
-                    <tr>
+                    <tr *ngFor="let i of [].constructor(5)">
+                        <td></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
@@ -38,11 +39,12 @@
                         </td>
                         <td>{{eventGuest.guest.firstName}} {{eventGuest.guest.lastName}}</td>
                         <td>{{eventGuestInvitation.code}}</td>
-                        <td>{{eventGuestInvitation.maxGuests}}</td>
+                        <td>{{eventGuestInvitation.seats}}</td>
                         <td>
                             <span
                                 *ngIf="eventGuestInvitation.id && eventGuestInvitation.eventGuestInvitationRsvps.length && eventGuestInvitation.eventGuestInvitationRsvps | orderBy: 'dateCreated': 'desc' as eventGuestInvitationRsvps">
-                                {{eventGuestInvitationRsvps[0].eventGuestInvitationRsvpItems.length - 1}}
+                                {{eventGuestInvitationRsvps[0].eventGuestInvitationRsvpItems.length ?
+                                eventGuestInvitationRsvps[0].eventGuestInvitationRsvpItems.length - 1 : "N/A"}}
                             </span>
                         </td>
                         <td>
@@ -83,7 +85,7 @@
                                     responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="amount">Names</th>
+                        <th pSortableColumn="amount">Name</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rsvpItem>
@@ -93,7 +95,9 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="6">There are no guest names recorded.</td>
+                        <td colspan="6">There were no guest names recorded.
+
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>

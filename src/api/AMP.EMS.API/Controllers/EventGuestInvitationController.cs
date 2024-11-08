@@ -14,17 +14,33 @@ public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<Even
     : ApiBaseController<EventGuestInvitation, Guid>(unitOfWork, logger)
 {
     [HttpGet]
+    [Route(nameof(GetByEventGuestIds))]
+    public virtual IActionResult GetByEventGuestIds([FromQuery] List<Guid> eventGuestIds)
+    {
+        var eventGuestInvitations =
+            EntityRepository.GetAll().Where(entity => eventGuestIds.Contains(entity.EventGuestId));
+
+        return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuestInvitations });
+    }
+
+    [HttpGet]
+    [Route(nameof(GetByEventInvitationIds))]
+    public virtual IActionResult GetByEventInvitationIds([FromQuery] List<Guid> eventInvitationIds)
+    {
+        var eventGuestInvitations =
+            EntityRepository.GetAll().Where(entity => eventInvitationIds.Contains(entity.EventInvitationId));
+
+        return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuestInvitations });
+    }
+
+    [HttpGet]
     [Route("{code}/[action]")]
     [AllowAnonymous]
     public IActionResult Rsvp(string code)
     {
         var eventGuestInvitation = UnitOfWork.Set<EventGuestInvitation>().GetAll()
+            .AsNoTracking()
             .Where(_ => _.Code == code)
-            .Include(_ => _.EventInvitation)
-            .Include(_ => _.EventGuestInvitationRsvps)
-            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
-            .Include(eventGuestInvitation => eventGuestInvitation.EventGuest)
-            .ThenInclude(eventGuest => eventGuest.Guest)
             .FirstOrDefault();
 
         ArgumentNullException.ThrowIfNull(eventGuestInvitation);

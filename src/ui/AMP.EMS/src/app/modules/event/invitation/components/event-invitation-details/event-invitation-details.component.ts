@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ContentService } from '@core/services/content.service';
 import { EventInvitationService } from '@modules/event/invitation';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { EventInvitation } from '@shared/models';
+import { Content } from '@shared/models/content.model';
 import { Observable, of, tap } from 'rxjs';
 
 @Component({
@@ -50,6 +52,7 @@ import { Observable, of, tap } from 'rxjs';
 export class EventInvitationDetailsComponent implements OnInit {
   eventInvitationId: string | null | undefined;
   eventInvitation$: Observable<EventInvitation> = new Observable<EventInvitation>();
+  content$: Observable<Content> = new Observable<Content>();
 
   loading: boolean = false;
 
@@ -80,6 +83,7 @@ export class EventInvitationDetailsComponent implements OnInit {
   @ViewChild('codeEditor', { static: false }) codeEditor!: CodeEditorComponent;
 
   constructor(private eventInvitationService: EventInvitationService,
+    private contentService: ContentService,
     private router: Router,
     private route: ActivatedRoute) { }
 
@@ -91,26 +95,37 @@ export class EventInvitationDetailsComponent implements OnInit {
 
   loadEventInvitation = () => {
     this.eventInvitation$ = of<EventInvitation>({ eventId: this.eventId });
+    this.content$ = of<Content>({ htmlContent: '' });
 
     if (this.eventInvitationId) {
-      this.eventInvitation$ = this.eventInvitationService.get(this.eventInvitationId).pipe(tap(eventInvitation => {
-        this.model.value = eventInvitation.html || '';
-        if (eventInvitation.rsvpDeadline) eventInvitation.rsvpDeadline = new Date(eventInvitation.rsvpDeadline);
-      }));
+      this.eventInvitation$ = this.eventInvitationService.get(this.eventInvitationId)
+        .pipe(
+          tap(eventInvitation => {
+            if (eventInvitation.contentId)
+              this.content$ = this.contentService.get(eventInvitation.contentId)
+                .pipe(
+                  tap(content => {
+                    this.model.value = content.htmlContent || 'vvvvvv';
+                  }));
+            if (eventInvitation.rsvpDeadline) eventInvitation.rsvpDeadline = new Date(eventInvitation.rsvpDeadline);
+          }));
     }
   }
 
-  onValueChanged(e: any, eventInvitation: EventInvitation) {
-    eventInvitation.html = e;
+  onValueChanged(e: any, content: Content) {
+    content.htmlContent = e;
   }
 
-  save = (eventInvitation: EventInvitation) => {
+  save = (eventInvitation: EventInvitation, content: Content) => {
     if (eventInvitation?.name?.trim()) {
       if (eventInvitation.id) {
-        this.eventInvitation$ = this.eventInvitationService.update(eventInvitation).pipe(tap(() => this.loadEventInvitation()));
+        this.eventInvitation$ = this.eventInvitationService.update(
+          eventInvitation,
+          content
+        ).pipe(tap(() => this.loadEventInvitation()));
       }
       else {
-        this.eventInvitation$ = this.eventInvitationService.add(eventInvitation).pipe(tap((eventInvitation) => this.redirect(eventInvitation)));
+        this.eventInvitation$ = this.eventInvitationService.add(eventInvitation, content).pipe(tap((eventInvitation) => this.redirect(eventInvitation)));
       }
     }
   }

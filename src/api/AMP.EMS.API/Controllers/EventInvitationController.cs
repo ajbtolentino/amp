@@ -2,7 +2,6 @@ using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers;
 
@@ -16,9 +15,7 @@ public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvi
     public IActionResult GetGuests(Guid id)
     {
         var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll()
-            .Where(_ => _.EventInvitationId == id)
-            .Include(_ => _.EventGuest).ThenInclude(_ => _.Guest)
-            .Include(_ => _.EventGuestInvitationRsvps).ThenInclude(_ => _.EventGuestInvitationRsvpItems);
+            .Where(_ => _.EventInvitationId == id);
 
         ArgumentNullException.ThrowIfNull(eventGuestInvitations);
 
@@ -28,14 +25,37 @@ public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvi
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventInvitationRequest request)
     {
-        return await base.Post(new EventInvitation
+        try
         {
-            EventId = request.EventId,
-            Name = request.Name,
-            Description = request.Description ?? string.Empty,
-            Html = request.Html ?? string.Empty,
-            RsvpDeadline = request.RsvpDeadline
-        });
+            UnitOfWork.BeginTransaction();
+
+            var eventInvitation = new EventInvitation
+            {
+                EventId = request.EventId,
+                Name = request.Name,
+                Description = request.Description ?? string.Empty,
+                RsvpDeadline = request.RsvpDeadline
+            };
+
+            if (!string.IsNullOrEmpty(request.Html))
+                eventInvitation.Content = new Content
+                {
+                    HtmlContent = request.Html
+                };
+
+            await EntityRepository.Add(eventInvitation);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<EventInvitation>(string.Empty) { Data = eventInvitation });
+        }
+        catch (Exception e)
+        {
+            await UnitOfWork.RollbackTransactionAsync();
+            logger.LogError(e.Message, e);
+            return Problem(e.Message);
+        }
     }
 
     [HttpPut]
@@ -46,13 +66,46 @@ public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvi
 
         ArgumentNullException.ThrowIfNull(eventInvitation);
 
-        eventInvitation.EventId = request.EventId;
-        eventInvitation.Name = request.Name;
-        eventInvitation.Description = request.Description ?? string.Empty;
-        eventInvitation.Html = request.Html ?? string.Empty;
-        eventInvitation.RsvpDeadline = request.RsvpDeadline;
+        try
+        {
+            UnitOfWork.BeginTransaction();
 
-        return await base.Put(eventInvitation);
+            eventInvitation.EventId = request.EventId;
+            eventInvitation.Name = request.Name;
+            eventInvitation.Description = request.Description ?? string.Empty;
+            eventInvitation.RsvpDeadline = request.RsvpDeadline;
+
+            if (eventInvitation.ContentId.HasValue)
+            {
+                var content = await UnitOfWork.Set<Content>().Get(eventInvitation.ContentId.Value);
+
+                content.HtmlContent = request.Html ?? string.Empty;
+
+                UnitOfWork.Set<Content>().Update(content);
+            }
+            else if (!string.IsNullOrEmpty(request.Html))
+            {
+                var content = await UnitOfWork.Set<Content>().Add(new Content
+                {
+                    HtmlContent = request.Html
+                });
+
+                eventInvitation.ContentId = content.Id;
+            }
+
+            EntityRepository.Update(eventInvitation);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<EventInvitation>(string.Empty) { Data = eventInvitation });
+        }
+        catch (Exception e)
+        {
+            await UnitOfWork.RollbackTransactionAsync();
+            logger.LogError(e.Message, e);
+            return Problem(e.Message);
+        }
     }
 
     public record EventInvitationRequest(

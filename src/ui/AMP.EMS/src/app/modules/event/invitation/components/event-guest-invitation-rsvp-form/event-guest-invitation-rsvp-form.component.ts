@@ -74,7 +74,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   }
 
   onDynamicMount(data: OnDynamicData): void {
-    const length = data.context.eventGuestInvitation.maxGuests || 0;
+    const length = data.context.eventGuestInvitation.seats || 0;
 
     this.eventGuestInvitationRsvp.eventGuestInvitationId = data.context.eventGuestInvitation.id;
 

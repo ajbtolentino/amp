@@ -1,7 +1,7 @@
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '@core/services/base.api.service';
-import { Guest, EventGuestInvitation, EventInvitation } from '@shared/models';
+import { EventGuestInvitation, EventInvitation, Guest } from '@shared/models';
+import { Observable } from 'rxjs';
 
 export interface EventGuestInvitationResponse {
     guest: Guest;
@@ -13,6 +13,14 @@ export interface EventGuestInvitationResponse {
     providedIn: 'root'
 })
 export class EventGuestInvitationService extends BaseApiService {
+    getByEventGuestIds = (eventGuestIds: string[]): Observable<EventGuestInvitation[]> => {
+        return this.httpGet(`api/eventguestinvitation/getbyeventguestids`, { params: { eventGuestIds: eventGuestIds } });
+    }
+
+    getByEventInvitationIds = (eventInvitationIds: string[]): Observable<EventGuestInvitation[]> => {
+        return this.httpGet(`api/eventguestinvitation/getbyeventinvitationids`, { params: { eventInvitationIds: eventInvitationIds } });
+    }
+
     add = (eventGuestInvitation: EventGuestInvitation): Observable<EventGuestInvitation> => {
         return this.httpPost(`api/eventguestinvitation/`, eventGuestInvitation);
     }
