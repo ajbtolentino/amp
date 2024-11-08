@@ -15,7 +15,11 @@
             class="w-full" text="Please enter your name">
           </p-message>
         </ng-container>
-
+        <div *ngIf="requestDetails">
+          <div>{{requestDetailsMessage}}</div>
+          <textarea pInputText id="request-details" rows="10" class="w-full"
+            [(ngModel)]="eventGuestInvitationRsvp.details"></textarea>
+        </div>
       </div>
       <div class="radiobutton-container flex flex-wrap gap-3">
         <div class="flex gap-3 align-items-center">

@@ -4,7 +4,7 @@ export interface EventGuestInvitationRsvp {
     id?: string;
     eventGuestInvitationId?: string;
     guestNames?: string[];
-    phoneNumber?: string;
+    details?: string;
     response?: 'ACCEPT' | 'DECLINE' | undefined;
     dateCreated?: Date;
     eventGuestInvitationRsvpItems?: EventGuestInvitationRsvpItem[];

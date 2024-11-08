@@ -34,7 +34,8 @@ export class EventGuestInvitationRSVPDateComponent {
 export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicMount {
   @Input() choiceMessage?: string;
   @Input() acceptMessage?: string;
-
+  @Input() requestDetailsMessage?: string;
+  @Input() requestDetails?: boolean;
 
   @Input() guest!: Guest;
   @Input() acceptLabel: string = 'Accept';

@@ -32,11 +32,12 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="loadingbody">
-                        <tr>
+                        <tr *ngFor="let i of [].constructor(5)">
                             <td></td>
                             <td><p-skeleton /></td>
                             <td><p-skeleton /></td>
                             <td><p-skeleton /></td>
+                            <td></td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-item let-editing="editing">
