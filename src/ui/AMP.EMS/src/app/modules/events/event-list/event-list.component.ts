@@ -2,11 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 
 
+import { EventService } from '@core/services';
 import { Column, Event, EventType } from '@shared/models';
 import { Table } from 'primeng/table';
 import { Observable } from 'rxjs';
-import { EventTypeService } from '../../../core/services/event-type.service';
-import { EventService } from '../../../core/services/event.service';
 
 @Component({
   selector: 'app-event-list',
@@ -27,7 +26,6 @@ export class EventListComponent implements OnInit {
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
-    private eventTypeService: EventTypeService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit() {

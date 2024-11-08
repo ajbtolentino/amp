@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '@core/services/event.service';
+import { EventGuestService } from '@modules/event/guest';
 import { EventGuest, EventGuestRole, EventInvitation, EventInvitationInfo } from '@shared/models';
 import { MessageService } from 'primeng/api';
 import { map, Observable, of, switchMap } from 'rxjs';
-import { EventGuestService } from '../..';
 
 @Component({
   selector: 'app-event-guest-details',

@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { filter, Observable, Subscription } from 'rxjs';
-import { LayoutService } from "../service/app.layout.service";
-import { EventTopBarComponent } from '../event-layout/event-topbar.component';
+import { Router } from '@angular/router';
 import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { Observable, Subscription } from 'rxjs';
+import { EventTopBarComponent } from '../event-layout/event-topbar.component';
+import { LayoutService } from "../service/app.layout.service";
 
 @Component({
   selector: 'app-events-layout',

@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { EventService, LookupService } from '@core/services';
+import { Column, Role } from '@shared/models';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { EventService } from '../../../../../core/services/event.service';
 import { lastValueFrom, Observable } from 'rxjs';
-import { RoleService } from '../../../../../core/services/role.service';
-import { Role, Column } from '@shared/models';
 
 @Component({
   selector: 'app-event-roles',
@@ -26,7 +25,7 @@ export class EventRolesComponent {
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
-    private roleService: RoleService,
+    private lookupService: LookupService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -91,7 +90,7 @@ export class EventRolesComponent {
         if (itemToDelete.id) {
           this.loading = true;
 
-          await lastValueFrom(this.roleService.delete(itemToDelete.id));
+          await lastValueFrom(this.lookupService.delete('role', itemToDelete.id));
           this.refreshGrid();
 
           this.loading = false;
@@ -108,11 +107,11 @@ export class EventRolesComponent {
       this.loading = true;
 
       if (item.id) {
-        await lastValueFrom(this.roleService.update(item));
+        await lastValueFrom(this.lookupService.update('role', item));
       }
       else {
         item.eventId = this.eventId;
-        await lastValueFrom(this.roleService.add(item));
+        await lastValueFrom(this.lookupService.add('role', item));
       }
 
       this.loading = false;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventTypeService } from '@core/services/event-type.service';
+import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { Event, EventType } from '@shared/models';
 import { map, Observable, of, tap } from 'rxjs';
@@ -16,7 +16,7 @@ export class EventDetailsComponent implements OnInit {
   eventTypes$: Observable<EventType[]> = new Observable<EventType[]>();
 
   constructor(private eventService: EventService,
-    private eventTypeService: EventTypeService,
+    private lookupService: LookupService,
     private router: Router,
     private route: ActivatedRoute) {
 
@@ -42,7 +42,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   loadEventTypes = async () => {
-    this.eventTypes$ = this.eventTypeService.getAll();
+    this.eventTypes$ = this.lookupService.getAll('eventtype');
   }
 
   save = (event: Event) => {

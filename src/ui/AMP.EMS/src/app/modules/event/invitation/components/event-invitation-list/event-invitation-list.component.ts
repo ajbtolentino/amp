@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services/event.service';
+import { EventInvitationService } from '@modules/event/invitation/services/event-invitation.service';
 import { EventGuestInvitation, EventInvitation } from '@shared/models';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Observable, switchMap } from 'rxjs';
-import { EventInvitationService } from '../../services/event-invitation.service';
 
 @Component({
   selector: 'app-event-invitation-list',

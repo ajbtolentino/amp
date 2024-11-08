@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { BaseApiService } from '@core/services';
 import { EventVendor } from '@shared/models';
 import { Vendor } from '@shared/models/vendor-model';
 import { Observable } from 'rxjs';
-import { BaseApiService } from '../../../../core/services/base.api.service';
 
 @Injectable({
     providedIn: 'root'

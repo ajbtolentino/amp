@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { VendorTypeService } from '@core/services/vendor-type.service';
 import { VendorService } from '@core/services/vendor.service';
 import { EventVendorContractService } from '@modules/event/vendor';
 import { EventVendorContract, Vendor } from '@shared/models';
@@ -23,7 +23,7 @@ export class EventVendorListComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private vendorService: VendorService,
-    private vendorTypeService: VendorTypeService,
+    private lookupService: LookupService,
     private eventVendorContractService: EventVendorContractService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
@@ -46,7 +46,7 @@ export class EventVendorListComponent implements OnInit {
   refresh = () => {
     return forkJoin({
       vendors: this.vendorService.getAll(),
-      vendorTypes: this.vendorTypeService.getAll(),
+      vendorTypes: this.lookupService.getAll('vendortype'),
       eventVendorContracts: this.eventService.getVendorContracts(this.eventId),
       eventVendorContractStates: this.eventService.getVendorContractStates(this.eventId),
     }).pipe(

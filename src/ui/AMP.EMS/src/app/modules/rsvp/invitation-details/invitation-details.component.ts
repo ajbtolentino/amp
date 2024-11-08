@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RsvpService } from '@core/services';
 import { EventGuestInvitationService } from '@modules/event/guest';
 import { EventGuestInvitation, EventGuestInvitationRsvp } from '@shared/models';
 import { lastValueFrom, Observable } from 'rxjs';
-import { RsvpService } from '../../../core/services/rsvp.service';
 
 @Component({
   selector: 'app-invitation-details',

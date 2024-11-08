@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventService, VendorService } from '@core/services';
-import { VendorTypeService } from '@core/services/vendor-type.service';
+import { EventService, LookupService, VendorService } from '@core/services';
+import { EventVendorContractService } from '@modules/event/vendor';
 import { EventVendorContract, Vendor } from '@shared/models';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { Observable, forkJoin, map, switchMap } from 'rxjs';
-import { EventVendorContractService } from '../../services/event-vendor-contract.service';
 
 @Component({
   selector: 'app-event-vendor-contract-list',
@@ -23,7 +22,7 @@ export class EventVendorContractListComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private vendorService: VendorService,
-    private vendorTypeService: VendorTypeService,
+    private lookupService: LookupService,
     private eventVendorContractService: EventVendorContractService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
@@ -46,7 +45,7 @@ export class EventVendorContractListComponent implements OnInit {
   refresh = () => {
     return forkJoin({
       vendors: this.vendorService.getAll(),
-      vendorTypes: this.vendorTypeService.getAll(),
+      vendorTypes: this.lookupService.getAll('vendortype'),
       eventVendorContracts: this.eventService.getVendorContracts(this.eventId),
       eventVendorContractStates: this.eventService.getVendorContractStates(this.eventId),
     }).pipe(

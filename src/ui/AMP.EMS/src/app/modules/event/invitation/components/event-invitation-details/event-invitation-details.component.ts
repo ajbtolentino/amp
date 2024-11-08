@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EventInvitationService } from '@modules/event/invitation';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { EventInvitation } from '@shared/models';
 import { Observable, of, tap } from 'rxjs';
-import { EventInvitationService } from '../../services/event-invitation.service';
 
 @Component({
   selector: 'app-event-invitation-details',
