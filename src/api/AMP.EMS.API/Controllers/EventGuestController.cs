@@ -12,25 +12,6 @@ namespace AMP.EMS.API.Controllers;
 public class EventGuestController(IUnitOfWork unitOfWork, ILogger<EventGuestController> logger)
     : ApiBaseController<EventGuest, Guid>(unitOfWork, logger)
 {
-    public override async Task<IActionResult> Get(Guid id)
-    {
-        var eventGuest = await EntityRepository.GetAll()
-            .Where(_ => _.Id == id)
-            .Include(_ => _.Guest)
-            .Include(_ => _.EventGuestInvitations)
-            .ThenInclude(_ => _.EventInvitation)
-            .Include(_ => _.EventGuestInvitations)
-            .ThenInclude(_ => _.EventGuestInvitationRsvps)
-            .ThenInclude(_ => _.EventGuestInvitationRsvpItems)
-            .Include(_ => _.EventGuestRoles)
-            .ThenInclude(_ => _.Role)
-            .FirstOrDefaultAsync();
-
-        ArgumentNullException.ThrowIfNull(eventGuest);
-
-        return Ok(new OkResponse<EventGuest>(string.Empty) { Data = eventGuest });
-    }
-
     public override IActionResult GetAll()
     {
         var eventGuests = EntityRepository.GetAll()
