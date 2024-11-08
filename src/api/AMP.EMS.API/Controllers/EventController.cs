@@ -26,12 +26,6 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     {
         var eventGuests = UnitOfWork.Set<EventGuest>().GetAll()
             .Where(eventGuest => eventGuest.EventId == eventId)
-            .Include(eventGuest => eventGuest.Guest)
-            .Include(eventGuest => eventGuest.EventGuestRoles)
-            .ThenInclude(eventGuestRole => eventGuestRole.Role)
-            .Include(eventGuest => eventGuest.EventGuestInvitations)
-            .ThenInclude(eventGuestInvitation => eventGuestInvitation.EventGuestInvitationRsvps)
-            .ThenInclude(eventGuestInvitationRsvp => eventGuestInvitationRsvp.EventGuestInvitationRsvpItems)
             .AsNoTracking();
 
         return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = eventGuests });

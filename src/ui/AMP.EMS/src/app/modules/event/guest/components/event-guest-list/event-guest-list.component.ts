@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 
+import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { EventGuestService } from '@modules/services/event-guest.service';
-import { EventGuest } from '@shared/models';
+import { EventGuestRoleService, EventGuestService, GuestService } from '@modules/event/guest';
+import { EventGuest, EventGuestRole } from '@shared/models';
 import { Guest } from '@shared/models/guest-model';
-import { lastValueFrom, Observable, switchMap } from 'rxjs';
+import { lastValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-event-guests',
@@ -22,6 +23,9 @@ export class EventGuestListComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private eventGuestService: EventGuestService,
+    private eventGuestRoleService: EventGuestRoleService,
+    private guestService: GuestService,
+    private lookupService: LookupService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
@@ -31,7 +35,54 @@ export class EventGuestListComponent implements OnInit {
   }
 
   refreshGrid = () => {
-    this.eventGuests$ = this.eventService.getGuests(this.eventId);
+    this.eventGuests$ = this.eventService.getGuests(this.eventId).pipe(
+      switchMap(eventGuests => this.loadGuest(eventGuests)),
+      tap(eventGuests => console.log(eventGuests)),
+      switchMap(eventGuests => this.loadEventGuestRole(eventGuests))
+    );
+  }
+
+  loadGuest = (eventGuests: EventGuest[]): Observable<EventGuest[]> => {
+    return this.guestService.getByIds(eventGuests.filter(_ => _.guestId).map(_ => _.guestId!)
+    ).pipe(
+      map(guests => {
+        return eventGuests.map(eventGuest => {
+          return {
+            ...eventGuest,
+            guest: guests.find(_ => _.id === eventGuest.guestId)
+          }
+        });
+      }
+      ));
+  }
+
+  loadEventGuestRole = (eventGuests: EventGuest[]): Observable<EventGuest[]> => {
+    return this.eventGuestRoleService.getByEventGuestIds(eventGuests.filter(_ => _.id).map(_ => _.id!))
+      .pipe(
+        switchMap(eventGuestRoles => this.loadRole(eventGuestRoles)),
+        map(eventGuestRoles => {
+          return eventGuests.map(eventGuest => {
+            return {
+              ...eventGuest,
+              eventGuestRoles: eventGuestRoles.filter(_ => _.eventGuestId === eventGuest.id)
+            }
+          })
+        }));
+  }
+
+  loadRole = (eventGuestRoles: EventGuestRole[]): Observable<EventGuestRole[]> => {
+    if (!eventGuestRoles.length) return of<EventGuestRole[]>(eventGuestRoles);
+
+    return this.lookupService.getByIds('role', eventGuestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
+      .pipe(
+        map(roles => {
+          return eventGuestRoles.map(eventGuestRole => {
+            return {
+              ...eventGuestRole,
+              role: roles.find(_ => _.id === eventGuestRole.roleId)
+            }
+          })
+        }));
   }
 
   hasResponded = (item: any) => {

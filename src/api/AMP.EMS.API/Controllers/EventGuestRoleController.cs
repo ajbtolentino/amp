@@ -1,5 +1,6 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers;
@@ -7,16 +8,24 @@ namespace AMP.EMS.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class EventGuestRoleController(IUnitOfWork unitOfWork, ILogger<EventGuestRoleController> logger)
-    : ApiBaseController<Role, Guid>(unitOfWork, logger)
+    : ApiBaseController<EventGuestRole, Guid>(unitOfWork, logger)
 {
+    [HttpGet]
+    [Route(nameof(GetByEventGuestIds))]
+    public virtual IActionResult GetByEventGuestIds([FromQuery] List<Guid> eventGuestIds)
+    {
+        var eventGuestRoles = EntityRepository.GetAll().Where(entity => eventGuestIds.Contains(entity.EventGuestId));
+
+        return Ok(new OkResponse<IEnumerable<EventGuestRole>>(string.Empty) { Data = eventGuestRoles });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventGuestRoleRequest request)
     {
-        return await base.Post(new Role
+        return await base.Post(new EventGuestRole
         {
-            EventId = request.EventId,
-            Name = request.Name,
-            Description = request.Description
+            EventGuestId = request.EventGuestId,
+            RoleId = request.RoleId
         });
     }
 
@@ -28,12 +37,11 @@ public class EventGuestRoleController(IUnitOfWork unitOfWork, ILogger<EventGuest
 
         ArgumentNullException.ThrowIfNull(eventGuestRole);
 
-        eventGuestRole.EventId = request.EventId;
-        eventGuestRole.Name = request.Name;
-        eventGuestRole.Description = request.Description;
+        eventGuestRole.EventGuestId = request.EventGuestId;
+        eventGuestRole.RoleId = request.RoleId;
 
         return await base.Put(eventGuestRole);
     }
 
-    public record EventGuestRoleRequest(Guid EventId, string Name, string Description);
+    public record EventGuestRoleRequest(Guid EventGuestId, Guid RoleId);
 }

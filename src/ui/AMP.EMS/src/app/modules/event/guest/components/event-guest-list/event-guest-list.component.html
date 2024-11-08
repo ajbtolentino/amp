@@ -54,8 +54,8 @@
                     <ng-template pTemplate="body" let-item>
                         <tr [pEditableRow]="item">
                             <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
-                            <td>{{item.guest.firstName}}</td>
-                            <td>{{item.guest.lastName}}</td>
+                            <td>{{item.guest?.firstName}}</td>
+                            <td>{{item.guest?.lastName}}</td>
                             <td>{{item.seats}}</td>
                             <td class="text-center">
                                 <span *ngFor='let eventGuestRole of item.eventGuestRoles; let i = index'>

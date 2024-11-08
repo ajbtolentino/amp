@@ -12,7 +12,11 @@ export class LookupService extends BaseApiService {
     }
 
     getAll = (lookupType: string): Observable<Lookup[]> => {
-        return this.httpGet(`api/${lookupType}`, { headers: this.headers });
+        return this.httpGet(`api/${lookupType}`);
+    }
+
+    getByIds = (lookupType: string, ids: string[]): Observable<Lookup[]> => {
+        return this.httpGet(`api/${lookupType}`, { params: { ids: ids } });
     }
 
     add = (lookupType: string, eventRole: Lookup): Observable<Lookup> => {
