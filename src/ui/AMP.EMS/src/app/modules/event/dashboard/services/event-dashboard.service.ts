@@ -9,4 +9,8 @@ export class EventDashboardService extends BaseApiService {
     guestInvitations = (eventId: string): Observable<any> => {
         return this.httpGet<any>(`api/dashboard/${eventId}/guestinvitations`);
     }
+
+    budget = (eventId: string): Observable<any> => {
+        return this.httpGet<any>(`api/dashboard/${eventId}/budget`);
+    }
 }

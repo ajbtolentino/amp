@@ -53,4 +53,20 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
             }
         });
     }
+
+    [HttpGet("{eventId:guid}/[action]")]
+    public async Task<IActionResult> Budget(Guid eventId)
+    {
+        var budgets = await unitOfWork.Set<EventVendorTypeBudget>().GetAll().Where(_ => _.EventId == eventId)
+            .AsNoTracking().ToListAsync();
+
+        return Ok(new
+        {
+            data = new
+            {
+                totalAmount = budgets.Sum(_ => _.Amount),
+                totalVendorTypes = budgets.Select(_ => _.VendorTypeId).Distinct().Count()
+            }
+        });
+    }
 }

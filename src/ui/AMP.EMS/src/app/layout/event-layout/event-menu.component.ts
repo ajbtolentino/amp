@@ -62,8 +62,8 @@ export class EventMenuComponent implements OnInit {
                             icon: 'pi pi-fw pi-calculator',
                             items: [
                                 {
-                                    label: 'View Budgets',
-                                    routerLink: [`/event/${this.eventId}/budget`]
+                                    label: 'Setup',
+                                    routerLink: [`/event/${this.eventId}/budgets`]
                                 },
                                 {
                                     label: 'Expense Tracking',

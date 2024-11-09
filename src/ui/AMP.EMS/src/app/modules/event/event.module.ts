@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EventSettingsModule } from '@modules/event/settings/event-settings.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
-import { EventBudgetComponent } from './budget/components/event-budget-list/event-budget-list.component';
 import { EventDashboardComponent } from './dashboard/components/event-dashboard/event-dashboard.component';
 import { EventDashboardModule } from './dashboard/event-dashboard.module';
 import { EventDetailsComponent } from './settings/components/event-details/event-details.component';
@@ -26,10 +25,10 @@ const routes: Routes = [
     component: EventDetailsComponent,
   },
   {
-    path: 'budget',
+    path: 'budgets',
     title: 'Budget',
     data: { breadcrumb: 'Budget' },
-    component: EventBudgetComponent
+    loadChildren: () => import('@modules/event/budget/budget.module').then(m => m.BudgetModule)
   },
   {
     path: 'vendors',
@@ -52,7 +51,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    EventBudgetComponent,
   ],
   imports: [
     EventDashboardModule,

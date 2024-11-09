@@ -13,7 +13,7 @@ public class EventVendorTypeBudgetController(IUnitOfWork unitOfWork, ILogger<Eve
     {
         try
         {
-            await UnitOfWork.RollbackTransactionAsync();
+            UnitOfWork.BeginTransaction();
 
             var eventVendorTypeBudget = await EntityRepository.Add(new EventVendorTypeBudget
             {
@@ -34,6 +34,21 @@ public class EventVendorTypeBudgetController(IUnitOfWork unitOfWork, ILogger<Eve
             await UnitOfWork.RollbackTransactionAsync();
             return Problem(e.Message);
         }
+    }
+
+    [HttpPut]
+    [Route("{id}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] EventVendorTypeBudgetRequest request)
+    {
+        var entity = await EntityRepository.Get(id);
+
+        if (entity == null) return BadRequest();
+
+        entity.Amount = request.Amount;
+        entity.Description = request.Description;
+        entity.VendorTypeId = request.VendorTypeId;
+
+        return await base.Put(entity);
     }
 
     public record EventVendorTypeBudgetRequest(Guid EventId, Guid VendorTypeId, string? Description, decimal Amount);

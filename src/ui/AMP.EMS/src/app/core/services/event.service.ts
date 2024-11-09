@@ -42,6 +42,10 @@ export class EventService extends BaseApiService {
         return this.httpGet<Lookup[]>(`api/event/${id}/vendorcontractpaymentstates`);
     }
 
+    getVendorTypeBudgets = (id: string): Observable<Lookup[]> => {
+        return this.httpGet<Lookup[]>(`api/event/${id}/vendortypebudgets`);
+    }
+
     getAll = (): Observable<Event[]> => {
         return this.httpGet<Event[]>(`api/event/`);
     }

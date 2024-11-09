@@ -3,9 +3,8 @@
         <div class="card mb-0" *ngIf="!guestInvitations.loading">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Total Guests</span>
-                    <div class="text-900 font-medium text-xl">{{guestInvitations.value?.totalAccepted +
-                        guestInvitations.value?.totalSecondaryGuests || 0}}
+                    <span class="block text-500 font-medium mb-3">Invited Guests</span>
+                    <div class="text-900 font-medium text-xl">{{guestInvitations.value?.totalMainGuests|| 0}}
                         <div class="text-500 text-sm"></div>
                     </div>
 
@@ -15,10 +14,10 @@
                     <i class="pi pi-users text-blue-500 text-xl"></i>
                 </div>
             </div>
-            <span class="text-blue-500 font-medium">{{guestInvitations.value?.totalAccepted || 0}} main guests
+            <span class="text-blue-500 font-medium">{{guestInvitations.value?.totalAccepted || 0}} accepted
             </span>
-            <span class="text-500 font-medium">{{guestInvitations.value?.totalSecondaryGuests || 0}} secondary
-                guests</span>
+            <span class="text-green-500 font-medium">+ {{guestInvitations.value?.totalSecondaryGuests || 0}} secondary
+            </span>
         </div>
         <div class="card mb-0 text-center" *ngIf="guestInvitations.loading">
             <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
@@ -29,7 +28,7 @@
         <div class="card mb-0" *ngIf="!guestInvitations.loading">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Invitations Sent</span>
+                    <span class="block text-500 font-medium mb-3">Sent Invitations</span>
                     <div class="text-900 font-medium text-xl">{{guestInvitations.value?.totalEventGuestInvitations|| 0}}
                         <div class="text-500 text-sm"></div>
                     </div>
@@ -52,20 +51,25 @@
                 animationDuration=".5s" />
         </div>
     </div>
-    <div class="col-12 lg:col-6 xl:col-3">
-        <div class="card mb-0">
+    <div class="col-12 lg:col-6 xl:col-3" *ngIf="budgets$ | withStatus | async as budget">
+        <div class="card mb-0" *ngIf="!budget.loading">
             <div class="flex justify-content-between mb-3">
                 <div>
                     <span class="block text-500 font-medium mb-3">Total Budget</span>
-                    <div class="text-900 font-medium text-xl">P5,100</div>
+                    <div class="text-900 font-medium text-xl">{{budget.value.totalAmount || 0 | currency : 'PHP'}}
+                    </div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                     [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
                     <i class="pi pi-calculator text-green-500 text-xl"></i>
                 </div>
             </div>
-            <span class="text-green-500 font-medium">80% </span>
-            <span class="text-500"> last week</span>
+            <span class="text-orange-500 font-medium">{{budget.value.totalVendorTypes}} Vendor Types</span>
+            <span class="text-500"></span>
+        </div>
+        <div class="card mb-0 text-center" *ngIf="budget.loading">
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
+                animationDuration=".5s" />
         </div>
     </div>
 
@@ -154,11 +158,7 @@
                     <p-card [header]="event.status" [subheader]="event.date">
                         <img *ngIf="event.image" [src]="'assets/demo/images/product/' + event.image" [alt]="event.name"
                             width="200" class="shadow-2" />
-                        <p class="line-height-3 my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                            Inventore sed consequuntur error repudiandae numquam deserunt
-                            quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse,
-                            cupiditate neque quas!</p>
-                        <button pButton label="Read more" class="p-button-outlined mb-5"></button>
+                        <p class="line-height-3 my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                     </p-card>
                 </ng-template>
             </p-timeline>
