@@ -72,6 +72,12 @@ import { HomeComponent } from './pages/home/home.component';
                     loadChildren: () => import('@modules/event/event.module').then(m => m.EventModule)
                 },
                 {
+                    path: 'vendors',
+                    component: EventsLayoutComponent,
+                    canActivate: [autoLoginPartialRoutesGuard],
+                    loadChildren: () => import('@modules/vendor/vendor.module').then(m => m.VendorModule)
+                },
+                {
                     path: 'invitation',
                     title: 'Invitation',
                     loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)

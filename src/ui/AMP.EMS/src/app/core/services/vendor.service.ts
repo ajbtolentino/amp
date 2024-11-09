@@ -24,7 +24,7 @@ export class VendorService extends BaseApiService {
   }
 
   update = (vendor: Vendor): Observable<Vendor> => {
-    return this.httpPut<Vendor>(`api/vendor`, vendor);
+    return this.httpPut<Vendor>(`api/vendor/${vendor.id}`, vendor);
   }
 
   delete = (id: string): Observable<Vendor> => {

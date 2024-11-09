@@ -14,25 +14,10 @@
 
     <div #topbarmenu class="layout-topbar-menu"
         [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Events"
+        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Go back to Events"
             [routerLink]="'/events'">
             <i class="pi pi-calendar"></i>
             <span>Events</span>
-        </button>
-        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Edit Event"
-            routerLink="/event/{{eventId}}/edit">
-            <i class="pi pi-cog"></i>
-            <span>Edit Event</span>
-        </button>
-        <button *ngIf="auth.value?.isAuthenticated" (click)="logout()" class="p-link layout-topbar-button"
-            pTooltip="Logout">
-            <i class="pi pi-sign-out"></i>
-            <span>Logout</span>
-        </button>
-        <button *ngIf="!auth.value?.isAuthenticated" (click)="login()" class="p-link layout-topbar-button"
-            pTooltip="Login">
-            <i class="pi pi-sign-in"></i>
-            <span>Login</span>
         </button>
     </div>
 </div>

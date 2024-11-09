@@ -15,7 +15,8 @@ public class VendorController(IUnitOfWork unitOfWork, ILogger<VendorController> 
             Name = request.Name,
             Description = request.Description,
             ContactInformation = request.ContactInformation,
-            Address = request.Address
+            Address = request.Address,
+            VendorTypeId = request.VendorTypeId
         });
     }
 
@@ -31,14 +32,15 @@ public class VendorController(IUnitOfWork unitOfWork, ILogger<VendorController> 
         vendor.ContactInformation = request.ContactInformation;
         vendor.Description = request.Description;
         vendor.Address = request.Address;
+        vendor.VendorTypeId = request.VendorTypeId;
 
         return await base.Put(vendor);
     }
 
     public record VendorRequest(
-        Guid EventId,
         string Name,
         string Description,
         string Address,
-        string ContactInformation);
+        string ContactInformation,
+        Guid VendorTypeId);
 }
