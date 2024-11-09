@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventService, LookupService, VendorService } from '@core/services';
+import { EventService, LookupService, TransactionService, VendorService } from '@core/services';
 import { EventVendorContractPaymentService, EventVendorContractService } from '@modules/event/vendor';
-import { EventVendorContract, EventVendorContractPayment, Vendor } from '@shared/models';
-import { Lookup } from '@shared/models/lookup-model';
+import { EventVendorContract, EventVendorContractPayment, Transaction, TransactionType, Vendor } from '@shared/models';
+import { Lookup } from '@shared/models/lookup.model';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { concatMap, iif, map, Observable, of, switchMap, tap } from 'rxjs';
@@ -24,6 +24,10 @@ export class EventVendorContractDetailsComponent implements OnInit {
   eventVendorContractPaymentTypes$: Observable<Lookup[]> = new Observable<Lookup[]>();
   eventVendorContractPaymentStates$: Observable<Lookup[]> = new Observable<Lookup[]>();
 
+  transactionTypes$: Observable<Lookup[]> = new Observable<Lookup[]>();
+  eventVendorContractPaymentTransaction$: Observable<EventVendorContractPayment> = new Observable<EventVendorContractPayment>();
+  showTransactionDialog: boolean = false;
+
   @ViewChild('dt') dt!: Table;
 
   constructor(private eventVendorContractService: EventVendorContractService,
@@ -32,6 +36,7 @@ export class EventVendorContractDetailsComponent implements OnInit {
     private lookupService: LookupService,
     private vendorService: VendorService,
     private confirmationService: ConfirmationService,
+    private transactionService: TransactionService,
     private route: ActivatedRoute,
     private router: Router) {
 
@@ -45,6 +50,7 @@ export class EventVendorContractDetailsComponent implements OnInit {
     this.eventVendorContractStates$ = this.eventService.getVendorContractStates(this.eventId);
     this.eventVendorContractPaymentTypes$ = this.eventService.getVendorContractPaymentTypes(this.eventId);
     this.eventVendorContractPaymentStates$ = this.eventService.getVendorContractPaymentStates(this.eventId);
+    this.transactionTypes$ = this.lookupService.getAll('transactiontype').pipe();
   }
 
   loadEventVendorContract = (): Observable<EventVendorContract> => {
@@ -55,8 +61,8 @@ export class EventVendorContractDetailsComponent implements OnInit {
 
       return this.eventVendorContractService.get(eventVendorContractId)
         .pipe(
-          concatMap(eventVendorContract => this.loadEventVendorContractState(eventVendorContract)),
-          concatMap(eventVendorContract => this.loadVendor(eventVendorContract)));
+          switchMap(eventVendorContract => this.loadEventVendorContractState(eventVendorContract)),
+          switchMap(eventVendorContract => this.loadVendor(eventVendorContract)));
     }
 
     this.eventVendorContractPayments$ = of<EventVendorContractPayment[]>([{ eventVendorContractPaymentStateId: '', eventVendorContractPaymentTypeId: '', eventVendorContractId: eventVendorContractId }])
@@ -80,11 +86,88 @@ export class EventVendorContractDetailsComponent implements OnInit {
 
   loadPayments = (eventVendorContractId: string) => {
     return this.eventVendorContractService.getPayments(eventVendorContractId)
-      .pipe(map(eventVendorContractPayments => [{ eventVendorContractId: eventVendorContractId }, ...eventVendorContractPayments.map(_ => {
-        if (_.dueDate) _.dueDate = new Date(_.dueDate);
-        return _;
-      })]),
+      .pipe(
+        switchMap(eventVendorContractPayments => this.loadTransactions(eventVendorContractPayments)),
+        map(eventVendorContractPayments => [{ eventVendorContractId: eventVendorContractId }, ...eventVendorContractPayments.map(_ => {
+          if (_.dueDate) _.dueDate = new Date(_.dueDate);
+          return _;
+        })]),
         tap(eventVendorContractPayments => this.dt.initRowEdit(eventVendorContractPayments.at(0))));
+  }
+
+  loadTransactions = (eventVendorContractPayments: EventVendorContractPayment[]): Observable<EventVendorContractPayment[]> => {
+    return this.transactionService.getByIds(eventVendorContractPayments.filter(_ => _.transactionId).map(_ => _.transactionId!))
+      .pipe(
+        switchMap(transactions => this.loadTransactionTypes(transactions)),
+        map(transactions => eventVendorContractPayments.map(eventVendorContractPayment => ({
+          ...eventVendorContractPayment,
+          transaction: transactions.find(_ => _.id === eventVendorContractPayment.transactionId)
+        })))
+      )
+  }
+
+  loadTransactionTypes = (transactions: Transaction[]): Observable<Transaction[]> => {
+    if (!transactions.filter(_ => _.transactionTypeId).length) return of<TransactionType[]>([]);
+
+    return this.lookupService.getByIds('transactiontype', transactions.filter(_ => _.transactionTypeId).map(_ => _.transactionTypeId!))
+      .pipe(
+        map(transactionTypes => transactions.map(transaction => ({
+          ...transaction,
+          transactionType: transactionTypes.find(_ => _.id === transaction.transactionTypeId)
+        })))
+      );
+  }
+
+  openTransaction = (eventVendorContractPayment: EventVendorContractPayment) => {
+    this.eventVendorContractPaymentTransaction$ = of<EventVendorContractPayment>({
+      ...eventVendorContractPayment
+    }).pipe(
+      switchMap(_ => this.loadTransaction(_)),
+      tap(() => {
+        this.showTransactionDialog = true;
+      }));
+  }
+
+  loadTransaction = (eventVendorContractPayment: EventVendorContractPayment): Observable<EventVendorContractPayment> => {
+    if (!eventVendorContractPayment.transactionId)
+      return of<EventVendorContractPayment>({
+        ...eventVendorContractPayment,
+        transaction: {
+          transactionDate: new Date(),
+          amount: eventVendorContractPayment.dueAmount
+        }
+      });
+
+    return this.transactionService.get(eventVendorContractPayment.transactionId!).pipe(map(transaction => ({
+      ...eventVendorContractPayment,
+      transaction: {
+        ...transaction,
+        transactionDate: new Date(transaction.transactionDate!)
+      }
+    })));
+  }
+
+  saveTransaction = (eventVendorContractPayment: EventVendorContractPayment) => {
+    if (eventVendorContractPayment.transaction?.id) {
+      this.eventVendorContractPaymentTransaction$ = this.transactionService.update(eventVendorContractPayment.transaction!)
+        .pipe(
+          tap(() => {
+            this.eventVendorContractPayments$ = this.loadPayments(eventVendorContractPayment.eventVendorContractId!);
+            this.closeTransactionDialog()
+          }));
+    }
+    else {
+      this.eventVendorContractPaymentTransaction$ = this.eventVendorContractPaymentService.addTransaction(eventVendorContractPayment.id!, eventVendorContractPayment.transaction!)
+        .pipe(
+          tap(() => {
+            this.eventVendorContractPayments$ = this.loadPayments(eventVendorContractPayment.eventVendorContractId!);
+            this.closeTransactionDialog()
+          }));
+    }
+  }
+
+  closeTransactionDialog = () => {
+    this.showTransactionDialog = false;
   }
 
   save = (eventVendorContract: EventVendorContract) => {

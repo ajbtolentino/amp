@@ -5,8 +5,7 @@ import { ConfirmationService } from 'primeng/api';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { EventGuestRoleService, EventGuestService, GuestService } from '@modules/event/guest';
-import { EventGuest, EventGuestRole } from '@shared/models';
-import { Guest } from '@shared/models/guest-model';
+import { EventGuest, EventGuestRole, Guest } from '@shared/models';
 import { lastValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Component({

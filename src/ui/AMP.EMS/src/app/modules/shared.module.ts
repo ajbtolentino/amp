@@ -7,6 +7,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DataViewModule } from 'primeng/dataview';
+import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -31,6 +32,7 @@ import { TooltipModule } from 'primeng/tooltip';
   imports: [
     CommonModule,
     ButtonModule,
+    DialogModule,
     DropdownModule,
     EditorModule,
     FormsModule,
@@ -64,6 +66,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommonModule,
     ButtonModule,
     DataViewModule,
+    DialogModule,
     DropdownModule,
     EditorModule,
     FormsModule,

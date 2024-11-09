@@ -95,6 +95,9 @@
                             State
                         </div>
                     </th>
+                    <th>
+                        Transaction Reference
+                    </th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -157,6 +160,17 @@
                         </p-cellEditor>
                     </td>
                     <td>
+                        <div class="flex align-items-center">
+                            <button *ngIf="item.id && !item.transactionId" pButton pRipple type="button"
+                                class="w-full p-button-info mr-2" pTooltip="Add a transaction"
+                                (click)="openTransaction(item)" label="Add"></button>
+                            <button *ngIf="item.transaction" pButton pRipple type="button"
+                                (click)="openTransaction(item)" class="w-full p-button-text p-button-success mr-2"
+                                pTooltip="Click to edit transaction"
+                                label="{{item.transaction.transactionType.name}}"></button>
+                        </div>
+                    </td>
+                    <td>
                         <div class="flex">
                             <button *ngIf="editing && !item.id" pButton pRipple type="button" pInitEditableRow
                                 icon="pi pi-plus" class="p-button-text p-button-success mr-2" pTooltip="Add"
@@ -190,21 +204,7 @@
             </ng-template>
 
             <ng-template pTemplate="loadingbody">
-                <tr>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                </tr>
-                <tr>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                    <td><p-skeleton></p-skeleton></td>
-                </tr>
-                <tr>
+                <tr *ngFor="let i of [].constructor(5)">
                     <td><p-skeleton></p-skeleton></td>
                     <td><p-skeleton></p-skeleton></td>
                     <td><p-skeleton></p-skeleton></td>
@@ -215,3 +215,48 @@
         </p-table>
     </div>
 </ng-container>
+
+<p-dialog *ngIf="eventVendorContractPaymentTransaction$ | withStatus| async as eventVendorContractPaymentTransaction"
+    [(visible)]="showTransactionDialog" [style]="{width: '450px'}" header="Transaction Details" [modal]="true"
+    class="p-fluid">
+
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="amount">Amount</label>
+            <p-inputNumber id="amount" currency="PHP" mode="currency"
+                [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.amount" [disabled]="true" />
+        </div>
+        <div class="field">
+            <label for="date">Reference Number</label>
+            <input pInputText [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.referenceNumber" />
+        </div>
+        <div class="field">
+            <label for="date">Date</label>
+            <p-calendar [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.transactionDate"
+                appendTo="body" />
+        </div>
+        <div class="field">
+            <label for="type">Type</label>
+            <p-dropdown *ngIf="transactionTypes$ | withStatus | async as transactionTypes"
+                [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.transactionTypeId"
+                inputId="inventoryStatus" optionValue="label" [options]="transactionTypes.value" optionLabel="name"
+                optionValue="id" placeholder="Select">
+
+            </p-dropdown>
+        </div>
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea
+                [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.description" rows="3"
+                cols="20"></textarea>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+            [loading]="eventVendorContractPaymentTransaction.loading!" (click)="closeTransactionDialog()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+            [loading]="eventVendorContractPaymentTransaction.loading!"
+            (click)="saveTransaction(eventVendorContractPaymentTransaction.value!)"></button>
+    </ng-template>
+</p-dialog>

@@ -1,5 +1,5 @@
 import { Account } from "./account.model";
-import { Vendor } from "./vendor-model";
+import { Vendor } from "./vendor.model";
 
 export interface VendorAccount {
     id?: string;

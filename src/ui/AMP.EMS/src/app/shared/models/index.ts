@@ -12,10 +12,10 @@ export * from './event-vendor-contract-payment.model';
 export * from './event-vendor-contract.model';
 export * from './event-vendor.model';
 export * from './event.model';
-export * from './guest-model';
+export * from './guest.model';
 export * from './role.model';
-export * from './transaction-model';
-export * from './transaction-type-model';
+export * from './transaction-type.model';
+export * from './transaction.model';
 export * from './vendor-account.model';
-export * from './vendor-model';
+export * from './vendor.model';
 

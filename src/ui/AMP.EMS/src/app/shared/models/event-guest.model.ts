@@ -1,6 +1,6 @@
 import { EventGuestInvitation } from "./event-guest-invitation.model";
 import { EventGuestRole } from "./event-guest-role.model";
-import { Guest } from "./guest-model";
+import { Guest } from "./guest.model";
 
 export interface EventGuest {
     id?: string;

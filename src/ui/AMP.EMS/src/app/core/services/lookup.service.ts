@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Lookup } from '@shared/models/lookup-model';
+import { Lookup } from '@shared/models/lookup.model';
 import { Observable } from 'rxjs';
 import { BaseApiService } from './base.api.service';
 

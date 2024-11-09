@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '@core/services';
-import { EventVendor } from '@shared/models';
-import { Vendor } from '@shared/models/vendor-model';
+import { EventVendor, Vendor } from '@shared/models';
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -608,15 +608,15 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
 
         modelBuilder.Entity<Account>().HasData(account);
 
-        var vendorAccounts = new List<VendorAccount>
-        {
-            new()
+        var vendorAccounts = new List<VendorAccount>();
+
+        foreach (var vendor in vendors)
+            vendorAccounts.Add(new VendorAccount
             {
                 Id = Guid.NewGuid(),
-                VendorId = vendors[0].Id,
+                VendorId = vendor.Id,
                 AccountId = account.Id
-            }
-        };
+            });
 
         modelBuilder.Entity<VendorAccount>().HasData(vendorAccounts);
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '@core/services';
-import { EventVendorContractPayment } from '@shared/models';
+import { EventVendorContractPayment, Transaction } from '@shared/models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,6 +17,10 @@ export class EventVendorContractPaymentService extends BaseApiService {
 
     add = (eventVendorContractPayment: EventVendorContractPayment): Observable<EventVendorContractPayment> => {
         return this.httpPost<EventVendorContractPayment>(`api/eventVendorContractPayment`, eventVendorContractPayment);
+    }
+
+    addTransaction = (id: string, transaction: Transaction): Observable<EventVendorContractPayment> => {
+        return this.httpPost<EventVendorContractPayment>(`api/eventVendorContractPayment/${id}/transaction`, transaction);
     }
 
     update = (eventVendorContractPayment: EventVendorContractPayment): Observable<EventVendorContractPayment> => {

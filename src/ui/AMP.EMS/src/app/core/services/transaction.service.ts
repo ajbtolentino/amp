@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BaseApiService } from './base.api.service';
-import { Observable } from 'rxjs';
 import { Transaction } from '@shared/models';
+import { Observable } from 'rxjs';
+import { BaseApiService } from './base.api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,16 +11,20 @@ export class TransactionService extends BaseApiService {
     return this.httpGet<Transaction>(`api/transaction/${id}`);
   }
 
+  getByIds = (ids: string[]): Observable<Transaction[]> => {
+    return this.httpGet<Transaction[]>(`api/transaction/getbyids`, { params: { ids: ids } });
+  }
+
   getAll = (): Observable<Transaction[]> => {
     return this.httpGet<Transaction[]>(`api/transaction/`);
   }
 
   add = (transaction: Transaction): Observable<Transaction> => {
-    return this.httpPost<Transaction>(`api/transaction`, transaction);
+    return this.httpPost<Transaction>(`api/transaction/`, transaction);
   }
 
   update = (transaction: Transaction): Observable<Transaction> => {
-    return this.httpPut<Transaction>(`api/transaction`, transaction);
+    return this.httpPut<Transaction>(`api/transaction/${transaction.id}`, transaction);
   }
 
   delete = (id: string): Observable<Transaction> => {

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { lastValueFrom, Observable } from 'rxjs';
 
 import { Event, EventGuest, EventGuestRole, EventInvitation, EventVendorContract } from '@shared/models';
-import { Lookup } from '@shared/models/lookup-model';
+import { Lookup } from '@shared/models/lookup.model';
 import { BaseApiService } from './base.api.service';
 
 @Injectable({
