@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class GuestRoleController(IUnitOfWork unitOfWork, ILogger<GuestRoleController> logger)
     : ApiBaseController<Role, Guid>(unitOfWork, logger)
 {

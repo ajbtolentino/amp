@@ -10,8 +10,6 @@ using Newtonsoft.Json.Converters;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logger)
     : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork, logger)
 {

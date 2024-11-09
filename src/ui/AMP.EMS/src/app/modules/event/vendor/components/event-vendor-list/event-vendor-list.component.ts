@@ -5,9 +5,9 @@ import { EventService } from '@core/services/event.service';
 import { VendorService } from '@core/services/vendor.service';
 import { EventVendorContractService } from '@modules/event/vendor';
 import { EventVendorContract, Vendor } from '@shared/models';
-import { ConfirmationService, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-vendors',
@@ -25,7 +25,6 @@ export class EventVendorListComponent implements OnInit {
     private vendorService: VendorService,
     private lookupService: LookupService,
     private eventVendorContractService: EventVendorContractService,
-    private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private router: Router) {
 
@@ -34,7 +33,7 @@ export class EventVendorListComponent implements OnInit {
   ngOnInit(): void {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
 
-    this.vendors$ = this.refresh();
+    this.vendors$ = this.loadVendors();
 
     this.sortOptions = [
       { label: 'Name', value: 'name' },
@@ -43,25 +42,53 @@ export class EventVendorListComponent implements OnInit {
     ];
   }
 
-  refresh = () => {
-    return forkJoin({
-      vendors: this.vendorService.getAll(),
-      vendorTypes: this.lookupService.getAll('vendortype'),
-      eventVendorContracts: this.eventService.getVendorContracts(this.eventId),
-      eventVendorContractStates: this.eventService.getVendorContractStates(this.eventId),
-    }).pipe(
-      map(({ vendors, vendorTypes, eventVendorContracts, eventVendorContractStates }) =>
-        vendors.map(vendor => ({
-          ...vendor,
-          vendorType: vendorTypes.find(_ => _.id === vendor.vendorTypeId),
-          eventVendorContracts: eventVendorContracts.filter(_ => _.vendorId === vendor.id)
-            .map(eventVendorContract => ({
-              ...eventVendorContract,
-              vendor: vendor,
-              eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId)
-            })),
-        }))
-      ));
+  loadVendors = (): Observable<Vendor[]> => {
+    return this.vendorService.getAll()
+      .pipe(
+        switchMap(vendors => this.loadVendorType(vendors)),
+        switchMap(vendors => this.loadEventVendorContracts(vendors))
+      );
+  }
+
+  loadVendorType = (vendors: Vendor[]): Observable<Vendor[]> => {
+    if (!vendors.length) return of<Vendor[]>();
+
+    return this.lookupService.getByIds('vendortype', vendors.map(_ => _.vendorTypeId!))
+      .pipe(
+        map(vendorTypes => {
+          return vendors.map(vendor => ({
+            ...vendor,
+            vendorType: vendorTypes.find(_ => _.id === vendor.vendorTypeId)
+          }))
+        })
+      )
+  }
+
+  loadEventVendorContracts = (vendors: Vendor[]): Observable<Vendor[]> => {
+    return this.eventVendorContractService.getByVendorIds(vendors.map(_ => _.id!))
+      .pipe(
+        switchMap(eventVendorContracts => this.loadEventVendorContractStates(eventVendorContracts)),
+        map(eventVendorContracts => {
+          return vendors.map(vendor => ({
+            ...vendor,
+            eventVendorContracts: eventVendorContracts.filter(_ => _.vendorId === vendor.id)
+          }))
+        })
+      );
+  }
+
+  loadEventVendorContractStates = (eventVendorContracts: EventVendorContract[]): Observable<EventVendorContract[]> => {
+    if (!eventVendorContracts?.filter(_ => _.eventVendorContractStateId).length) return of<EventVendorContract[]>([]);
+
+    return this.lookupService.getByIds('eventVendorContractState', eventVendorContracts.map(_ => _.eventVendorContractStateId!))
+      .pipe(
+        map(eventVendorContractStates => {
+          return eventVendorContracts.map(eventVendorContract => ({
+            ...eventVendorContract,
+            eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId)
+          }))
+        })
+      )
   }
 
   onSortChange(event: any) {

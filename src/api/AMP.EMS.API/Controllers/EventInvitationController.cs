@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvitationController> logger)
     : ApiBaseController<EventInvitation, Guid>(unitOfWork, logger)
 {

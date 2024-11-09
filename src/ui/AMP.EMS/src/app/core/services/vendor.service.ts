@@ -11,6 +11,10 @@ export class VendorService extends BaseApiService {
     return this.httpGet<Vendor>(`api/vendor/${id}`);
   }
 
+  getByIds = (ids: string[]): Observable<Vendor[]> => {
+    return this.httpGet<Vendor[]>(`api/vendor/getbyids`, { params: { ids: ids } });
+  }
+
   getAll = (): Observable<Vendor[]> => {
     return this.httpGet<Vendor[]>(`api/vendor/`);
   }

@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> logger)
     : ApiBaseController<Event, Guid>(unitOfWork, logger)
 {

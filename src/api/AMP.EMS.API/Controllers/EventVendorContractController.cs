@@ -9,10 +9,20 @@ namespace AMP.EMS.API.Controllers;
 public class EventVendorContractController(IUnitOfWork unitOfWork, ILogger<EventVendorContractController> logger)
     : ApiBaseController<EventVendorContract, Guid>(unitOfWork, logger)
 {
+    [HttpGet(nameof(GetByVendorIds))]
+    public IActionResult GetByVendorIds([FromQuery] IEnumerable<Guid> vendorIds)
+    {
+        var eventVendorContracts = UnitOfWork.Set<EventVendorContract>().GetAll().AsNoTracking()
+            .Where(_ => vendorIds.Contains(_.VendorId));
+
+        return Ok(new OkResponse<IEnumerable<EventVendorContract>>(string.Empty)
+            { Data = eventVendorContracts });
+    }
+
     [HttpGet("{id:guid}/payments")]
     public IActionResult GetPayments(Guid id)
     {
-        var eventVendorContractPayments = unitOfWork.Set<EventVendorContractPayment>().GetAll().AsNoTracking()
+        var eventVendorContractPayments = UnitOfWork.Set<EventVendorContractPayment>().GetAll().AsNoTracking()
             .Where(_ => _.EventVendorContractId == id);
 
         return Ok(new OkResponse<IEnumerable<EventVendorContractPayment>>(string.Empty)

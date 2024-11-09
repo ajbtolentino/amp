@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
 public class EventGuestInvitationController(IUnitOfWork unitOfWork, ILogger<EventGuestInvitationController> logger)
     : ApiBaseController<EventGuestInvitation, Guid>(unitOfWork, logger)
 {
