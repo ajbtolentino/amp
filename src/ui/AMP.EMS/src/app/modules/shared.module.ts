@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
+import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DataViewModule } from 'primeng/dataview';
@@ -24,12 +25,14 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
+import { TimelineModule } from 'primeng/timeline';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe],
   imports: [
+    CardModule,
     CommonModule,
     ButtonModule,
     DialogModule,
@@ -56,9 +59,11 @@ import { TooltipModule } from 'primeng/tooltip';
     TabViewModule,
     ToolbarModule,
     RadioButtonModule,
-    StyleClassModule
+    StyleClassModule,
+    TimelineModule
   ],
   exports: [
+    CardModule,
     WithStatusPipe,
     FindItemPipe,
     OrderByPipe,
@@ -90,7 +95,8 @@ import { TooltipModule } from 'primeng/tooltip';
     TabViewModule,
     ToolbarModule,
     RadioButtonModule,
-    StyleClassModule
+    StyleClassModule,
+    TimelineModule
   ]
 })
 export class SharedModule { }
