@@ -75,7 +75,7 @@
                 }
               ],
               "outputHashing": "all",
-              "index": "src/index.production.html"
+              "index": "src/production/index.html"
             },
             "development": {
               "optimization": false,
