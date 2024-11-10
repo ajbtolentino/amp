@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: dawidd6/action-download-artifact
+        uses: dawidd6/action-download-artifact@v6
         with:
           name: ems-api
           path: artifact
