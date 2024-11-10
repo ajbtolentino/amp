@@ -12,7 +12,7 @@ public class EventVendorContractPaymentController(
     : ApiBaseController<EventVendorContractPayment, Guid>(unitOfWork, logger)
 {
     [HttpPost("{id:guid}/transaction")]
-    public async Task<IActionResult> ContractTransaction(Guid id, [FromBody] TransactionRequest request)
+    public async Task<IActionResult> ContractTransaction(Guid id, [FromBody] PaymentTransactionRequest request)
     {
         try
         {
@@ -101,7 +101,7 @@ public class EventVendorContractPaymentController(
         decimal DueAmount,
         DateTime DueDate);
 
-    public record TransactionRequest(
+    public record PaymentTransactionRequest(
         Guid TransactionTypeId,
         decimal Amount,
         DateTime TransactionDate,
