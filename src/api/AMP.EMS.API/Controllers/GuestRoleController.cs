@@ -1,44 +1,41 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AMP.EMS.API.Controllers
+namespace AMP.EMS.API.Controllers;
+
+public class GuestRoleController(IUnitOfWork unitOfWork, ILogger<GuestRoleController> logger)
+    : ApiBaseController<Role, Guid>(unitOfWork, logger)
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GuestRoleController(IUnitOfWork unitOfWork) : ApiBaseController<EventGuestRole, Guid>(unitOfWork)
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] GuestRoleData request)
     {
-        public record GuestRoleData(Guid EventId, string? Name, string? Description);
+        ArgumentException.ThrowIfNullOrEmpty(request.Name);
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] GuestRoleData request)
+        return await base.Post(new Role
         {
-            ArgumentException.ThrowIfNullOrEmpty(request.Name);
-
-            return await base.Post(new EventGuestRole()
-            {
-                EventId = request.EventId,
-                Name = request.Name,
-                Description = request.Description ?? string.Empty
-            });
-        }
-
-        [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] GuestRoleData request)
-        {
-            ArgumentException.ThrowIfNullOrEmpty(request.Name);
-
-            var guestRole = await this.entityRepository.Get(id);
-
-            ArgumentNullException.ThrowIfNull(guestRole);
-
-            guestRole.EventId = request.EventId;
-            guestRole.Name = request.Name;
-            guestRole.Description = request.Description ?? string.Empty;
-
-            return await base.Put(guestRole);
-        }
+            EventId = request.EventId,
+            Name = request.Name,
+            Description = request.Description ?? string.Empty
+        });
     }
+
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] GuestRoleData request)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(request.Name);
+
+        var guestRole = await EntityRepository.Get(id);
+
+        ArgumentNullException.ThrowIfNull(guestRole);
+
+        guestRole.EventId = request.EventId;
+        guestRole.Name = request.Name;
+        guestRole.Description = request.Description ?? string.Empty;
+
+        return await base.Put(guestRole);
+    }
+
+    public record GuestRoleData(Guid EventId, string? Name, string? Description);
 }

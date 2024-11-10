@@ -1,31 +1,38 @@
+using System.Data;
+using System.Security.Claims;
+using AMP.Core.Entity;
 using AMP.Core.Repository;
-using AMP.Infrastructure.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using System.Data;
-using System.Security.Claims;
-using AMP.Core.Entity;
 
 namespace AMP.Infrastructure.Repository;
 
-public class EFUnitOfWork(DbContext dbContext, IHttpContextAccessor httpContextAccessor, IServiceProvider serviceProvider) : IUnitOfWork
+public class EFUnitOfWork(
+    DbContext dbContext,
+    IHttpContextAccessor httpContextAccessor,
+    IServiceProvider serviceProvider) : IUnitOfWork
 {
-    public IRepository<TEntity> Repository<TEntity>() where TEntity : class => serviceProvider.GetRequiredService<EFRepository<TEntity>>();
+    public IRepository<TEntity> Set<TEntity>() where TEntity : class
+    {
+        return serviceProvider.GetRequiredService<EFRepository<TEntity>>();
+    }
 
-    public IDbTransaction BeginTransaction() => IsTransactionSupported ? dbContext.Database.BeginTransaction().GetDbTransaction() : null;
+    public IDbTransaction BeginTransaction()
+    {
+        return dbContext.Database.BeginTransaction().GetDbTransaction();
+    }
 
     public async Task CommitTransactionAsync()
     {
-        if (IsTransactionSupported)
-            await dbContext.Database.CurrentTransaction.CommitAsync();
+        await dbContext.Database.CurrentTransaction.CommitAsync();
     }
 
 
     public async Task RollbackTransactionAsync()
     {
-        if (IsTransactionSupported) await dbContext.Database.CurrentTransaction.RollbackAsync();
+        await dbContext.Database.CurrentTransaction.RollbackAsync();
     }
 
     public async Task SaveChangesAsync()
@@ -38,17 +45,15 @@ public class EFUnitOfWork(DbContext dbContext, IHttpContextAccessor httpContextA
             {
                 case EntityState.Added:
                     entry.Entity.CreatedBy = claims?.Value ?? string.Empty;
-                    entry.Entity.DateCreated = DateTime.Now;
+                    entry.Entity.DateCreated = DateTime.UtcNow;
                     break;
                 case EntityState.Modified:
                     entry.Entity.UpdatedBy = claims?.Value ?? string.Empty;
-                    entry.Entity.DateUpdated = DateTime.Now;
+                    entry.Entity.DateUpdated = DateTime.UtcNow;
                     break;
             }
         }
 
         await dbContext.SaveChangesAsync();
     }
-
-    private bool IsTransactionSupported => !dbContext.Database.ProviderName.Contains("MongoDB");
 }

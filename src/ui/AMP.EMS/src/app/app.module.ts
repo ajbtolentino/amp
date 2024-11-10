@@ -1,69 +1,51 @@
-import { AppComponent } from '../app/app.component';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { EventService } from '../app/core/services/event.service';
-import { EventInvitationService as EventInvitationService } from './core/services/event-invitation.service';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { authInterceptor, provideAuth, LogLevel, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
-import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
-import { environment } from '../environments/environment';
-import { forwardRef, NgModule } from '@angular/core';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppLayoutModule } from '../app/layout/app.layout.module';
-import { EventTypeService } from '../app/core/services/event-type.service';
-import { EventsModule } from '../app/modules/events/events.module';
-import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
-import { EventsLayoutComponent } from '../app/layout/events-layout/events-layout.component';
-import { EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from './modules/event/event-guest-invitation/event-guest-invitation-rsvp.component';
-import { provideDynamicHooks } from 'ngx-dynamic-hooks';
+import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { EventService } from '@core/services';
+import { RsvpService } from '@core/services/rsvp.service';
+import { EventGuestInvitationService, EventGuestService } from '@modules/event/guest';
+import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventInvitationService } from '@modules/event/invitation';
 import { CodeEditorModule } from '@ngstack/code-editor';
-
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
-import { ToastModule } from 'primeng/toast';
-import { DefaultComponent } from './modules/default/default.component';
-import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
+import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { provideDynamicHooks } from 'ngx-dynamic-hooks';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
-import { RadioButton } from 'primeng/radiobutton';
-import { SharedModule } from './modules/shared.module';
-import { EventGuestService } from './core/services/event-guest.service';
-import { EventGuestInvitationService } from './core/services/event-guest-invitation.service';
-import { RsvpService } from './core/services/rsvp.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DividerModule } from 'primeng/divider';
+import { Messages } from 'primeng/messages';
+import { RadioButton } from 'primeng/radiobutton';
+import { ToastModule } from 'primeng/toast';
+import { AppComponent } from '../app/app.component';
+import { AppLayoutModule } from '../app/layout/app.layout.module';
+import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
+import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
+import { AuthConfigModule } from './core/auth-config.module';
+import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
+import { EventLayoutComponent } from './layout/event-layout/event-layout.component';
+import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
+import { HomeComponent } from './pages/home/home.component';
 
 @NgModule({
     imports: [
-        SharedModule,
+        AuthConfigModule,
         BrowserAnimationsModule,
         AppLayoutModule,
         DividerModule,
-        EventsModule,
         ToastModule,
         RouterOutlet,
         ConfirmDialogModule,
         CodeEditorModule.forRoot(),
     ],
     providers: [
-        provideHttpClient(withInterceptors([authInterceptor(), apiResponseInterceptor])),
-        provideAuth({
-            config: {
-                triggerAuthorizationResultEvent: true,
-                forbiddenRoute: '/forbidden',
-                unauthorizedRoute: '/unauthorized',
-                logLevel: LogLevel.Debug,
-                historyCleanupOff: false,
-                authority: environment.IDP_AUTHORITY_HTTPS_URL,
-                redirectUrl: window.location.origin,
-                postLogoutRedirectUri: window.location.origin,
-                clientId: environment.EMS_SPA_CLIENTID,
-                scope: environment.EMS_SPA_CLIENTSCOPE,
-                responseType: 'code',
-                silentRenew: true,
-                useRefreshToken: true,
-            },
-        }),
+        provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor(), apiResponseInterceptor])),
         provideDynamicHooks({
-            parsers: [EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, Button, RadioButton],
+            parsers: [EventGuestInvitationRSVPFormComponent,
+                EventGuestInvitationRSVPLabelComponent,
+                EventGuestInvitationRSVPDateComponent,
+                Button,
+                RadioButton,
+                Messages],
             options: {
                 sanitize: false
             }
@@ -73,28 +55,32 @@ import { DividerModule } from 'primeng/divider';
                 {
                     path: '',
                     pathMatch: 'full',
-                    children: [
-                        {
-                            path: '',
-                            component: DefaultComponent
-                        }
-                    ]
+                    component: HomeComponent
                 },
                 {
-                    path: '',
+                    path: 'events',
                     title: 'Events',
-                    loadChildren: () => import('../app/modules/events/events.module').then(m => m.EventsModule)
+                    canActivate: [autoLoginPartialRoutesGuard],
+                    component: EventsLayoutComponent,
+                    loadChildren: () => import('@modules/events/events.module').then(m => m.EventsModule)
                 },
                 {
-                    path: 'event',
+                    path: 'event/:eventId',
                     title: 'Event',
+                    component: EventLayoutComponent,
                     canActivate: [autoLoginPartialRoutesGuard],
-                    loadChildren: () => import('../app/modules/event/event.module').then(m => m.EventModule)
+                    loadChildren: () => import('@modules/event/event.module').then(m => m.EventModule)
+                },
+                {
+                    path: 'vendors',
+                    component: EventsLayoutComponent,
+                    canActivate: [autoLoginPartialRoutesGuard],
+                    loadChildren: () => import('@modules/vendor/vendor.module').then(m => m.VendorModule)
                 },
                 {
                     path: 'invitation',
                     title: 'Invitation',
-                    loadChildren: () => import('../app/modules/guests/guests.module').then(m => m.GuestModule)
+                    loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
                 {
                     path: 'unauthorized',
@@ -111,8 +97,7 @@ import { DividerModule } from 'primeng/divider';
         EventInvitationService,
         MessageService,
         ConfirmationService,
-        RsvpService,
-        EventTypeService
+        RsvpService
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]

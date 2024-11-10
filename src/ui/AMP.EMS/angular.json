@@ -34,6 +34,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
+              "src/web.config",
               {
                 "glob": "**/*",
                 "input": "./node_modules/monaco-editor/min",
@@ -73,7 +74,8 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "index": "src/production/index.html"
             },
             "development": {
               "optimization": false,

@@ -1,128 +1,132 @@
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.Infrastructure.Entity;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace AMP.EMS.API.Controllers
+namespace AMP.EMS.API.Controllers;
+
+[Authorize]
+[ApiController]
+[Route("[controller]")]
+public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork, ILogger logger) : ControllerBase
+    where TEntity : BaseEntity<TKey>
 {
-    [Route("api/[controller]"), Authorize]
-    [ApiController]
-    public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork) : ControllerBase
-        where TEntity : BaseEntity<TKey>
+    protected readonly IRepository<TEntity> EntityRepository = unitOfWork.Set<TEntity>();
+    protected readonly IUnitOfWork UnitOfWork = unitOfWork;
+
+    [HttpGet]
+    public virtual IActionResult GetAll()
     {
-        protected readonly IUnitOfWork unitOfWork = unitOfWork;
-        protected readonly IRepository<TEntity> entityRepository = unitOfWork.Repository<TEntity>();
+        var entities = EntityRepository.GetAll();
 
-        [HttpGet]
-        public virtual async Task<IActionResult> GetAll()
+        return Ok(new OkResponse<IEnumerable<TEntity>>(string.Empty) { Data = entities });
+    }
+
+    [HttpGet]
+    [Route(nameof(GetByIds))]
+    public virtual IActionResult GetByIds([FromQuery] List<TKey> ids)
+    {
+        var entities = EntityRepository.GetAll().Where(entity => ids.Contains(entity.Id));
+
+        return Ok(new OkResponse<IEnumerable<TEntity>>(string.Empty) { Data = entities });
+    }
+
+    [HttpGet]
+    [Route("{id}")]
+    public virtual async Task<IActionResult> Get(TKey id)
+    {
+        var @event = await EntityRepository.Get(id);
+
+        return Ok(new OkResponse<TEntity>(string.Empty) { Data = @event });
+    }
+
+    [HttpPost]
+    protected async Task<IActionResult> Post(TEntity entity)
+    {
+        try
         {
-            var entities = await this.entityRepository.GetAll().AsNoTracking().ToListAsync();
+            UnitOfWork.BeginTransaction();
 
-            return Ok(new OkResponse<IEnumerable<TEntity>>(string.Empty) { Data = entities });
+            var newEntity = await EntityRepository.Add(entity);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<TEntity>(string.Empty) { Data = newEntity });
         }
-
-        [HttpGet]
-        [Route("{id}")]
-        public virtual async Task<IActionResult> Get(Guid id)
+        catch (Exception ex)
         {
-            var @event = await this.entityRepository.Get(id);
-
-            return Ok(new OkResponse<TEntity>(string.Empty) { Data = @event });
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
         }
+    }
 
-        [HttpPost]
-        protected async Task<IActionResult> Post(TEntity entity)
+    [HttpPut]
+    protected async Task<IActionResult> Put(TEntity entity)
+    {
+        try
         {
-            try
-            {
-                unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
-                var newEntity = await this.entityRepository.Add(entity);
+            var result = EntityRepository.Update(entity);
 
-                await unitOfWork.SaveChangesAsync();
-                await unitOfWork.CommitTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
-                return Ok(new OkResponse<TEntity>(string.Empty) { Data = newEntity });
-            }
-            catch (Exception ex)
-            {
-                await unitOfWork.RollbackTransactionAsync();
-
-                return Problem(ex.Message);
-            }
+            return Ok(result);
         }
-
-        [HttpPut]
-        protected async Task<IActionResult> Put(TEntity entity)
+        catch (Exception ex)
         {
-            try
-            {
-                unitOfWork.BeginTransaction();
-
-                var result = this.entityRepository.Update(entity);
-
-                await unitOfWork.SaveChangesAsync();
-                await unitOfWork.CommitTransactionAsync();
-
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                await unitOfWork.RollbackTransactionAsync();
-
-                return Problem(ex.Message);
-            }
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
         }
+    }
 
-        [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete]
+    [Route("{id}")]
+    public async Task<IActionResult> Delete(TKey id)
+    {
+        try
         {
-            try
-            {
-                unitOfWork.BeginTransaction();
+            UnitOfWork.BeginTransaction();
 
-                this.entityRepository.Delete(id);
+            EntityRepository.Delete(id);
 
-                await unitOfWork.SaveChangesAsync();
-                await unitOfWork.CommitTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                await unitOfWork.RollbackTransactionAsync();
-
-                return Problem(ex.Message);
-            }
+            return Ok();
         }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAll([FromBody] IEnumerable<TKey> keys)
+        catch (Exception ex)
         {
-            try
-            {
-                unitOfWork.BeginTransaction();
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
+        }
+    }
 
-                foreach (var key in keys)
-                {
-                    this.entityRepository.Delete(key);
-                }
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAll([FromBody] IEnumerable<TKey> keys)
+    {
+        try
+        {
+            UnitOfWork.BeginTransaction();
 
-                await unitOfWork.SaveChangesAsync();
-                await unitOfWork.CommitTransactionAsync();
+            foreach (var key in keys) EntityRepository.Delete(key);
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                await unitOfWork.RollbackTransactionAsync();
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
 
-                return Problem(ex.Message);
-            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
         }
     }
 }

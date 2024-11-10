@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { EventsLayoutComponent } from '../events-layout/events-layout.component';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Observable, Subscription, filter } from 'rxjs';
 import { LayoutService } from '../service/app.layout.service';
 import { EventTopBarComponent } from './event-topbar.component';
 import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { EventSidebarComponent } from './event-sidebar.component';
 
 @Component({
   selector: 'app-event-layout',
@@ -22,12 +22,25 @@ export class EventLayoutComponent implements OnInit, OnDestroy {
 
   eventId!: string;
 
+  @ViewChild(EventSidebarComponent) appSidebar!: EventSidebarComponent;
+
   @ViewChild(EventTopBarComponent) appTopbar!: EventTopBarComponent;
 
   constructor(public layoutService: LayoutService, public renderer: Renderer2,
     public router: Router, private activatedRoute: ActivatedRoute, private oidcSecurityService: OidcSecurityService) {
 
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
+      if (!this.menuOutsideClickListener) {
+        this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
+          const isOutsideClicked = !(this.appSidebar.el.nativeElement.isSameNode(event.target) || this.appSidebar.el.nativeElement.contains(event.target)
+            || this.appTopbar.menuButton.nativeElement.isSameNode(event.target) || this.appTopbar.menuButton.nativeElement.contains(event.target));
+
+          if (isOutsideClicked) {
+            this.hideMenu();
+          }
+        });
+      }
+
       if (!this.profileMenuOutsideClickListener) {
         this.profileMenuOutsideClickListener = this.renderer.listen('document', 'click', event => {
           const isOutsideClicked = !(this.appTopbar.menu.nativeElement.isSameNode(event.target) || this.appTopbar.menu.nativeElement.contains(event.target)

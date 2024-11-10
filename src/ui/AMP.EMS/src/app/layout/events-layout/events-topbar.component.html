@@ -15,10 +15,15 @@
             <i class="pi pi-calendar"></i>
             <span>Events</span>
         </button>
-        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Edit Event"
+        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Vendors"
+            [routerLink]="'/vendors'">
+            <i class="pi pi-warehouse"></i>
+            <span>Vendors</span>
+        </button>
+        <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Settings"
             routerLink="/events/settings">
             <i class="pi pi-cog"></i>
-            <span>Edit Event</span>
+            <span>Settings</span>
         </button>
         <button *ngIf="auth.value?.isAuthenticated" (click)="logout()" class="p-link layout-topbar-button"
             pTooltip="Logout">

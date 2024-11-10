@@ -1,0 +1,45 @@
+<ng-container *ngIf="eventVendorTypeBudget$ | withStatus | async as eventVendorTypeBudget">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    [loading]="eventVendorTypeBudget.loading!" (click)="save(eventVendorTypeBudget.value!)"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <h5>Budget Details</h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6" *ngIf="vendorTypes$ | withStatus | async as vendorTypes">
+                        <label htmlFor="lastName">Vendor Type</label>
+                        <p-dropdown *ngIf="!eventVendorTypeBudget.loading" [loading]="vendorTypes.loading"
+                            [options]="vendorTypes.value" [(ngModel)]="eventVendorTypeBudget.value!.vendorTypeId"
+                            optionLabel="name" optionValue="id" placeholder="Select Type"></p-dropdown>
+
+                        <p-skeleton *ngIf="eventVendorTypeBudget.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="amount">Amount</label>
+                        <p-inputNumber *ngIf="!eventVendorTypeBudget.loading" id="amount" currency="PHP" mode="currency"
+                            locale="en-US" [(ngModel)]="eventVendorTypeBudget.value!.amount!" />
+
+                        <p-skeleton *ngIf="eventVendorTypeBudget.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="description">Description</label>
+                        <input pInputText *ngIf="!eventVendorTypeBudget.loading" id="description" rows="1" type="text"
+                            [(ngModel)]="eventVendorTypeBudget.value!.description"
+                            [value]="eventVendorTypeBudget.value?.description" />
+
+                        <p-skeleton *ngIf="eventVendorTypeBudget.loading"></p-skeleton>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

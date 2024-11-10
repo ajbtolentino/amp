@@ -1,0 +1,43 @@
+<ng-container>
+  <ng-content></ng-content>
+
+  <form [formGroup]="rsvpForm" (ngSubmit)="onSendResponseClick()">
+    <div class="form-container">
+      <div *ngIf="choiceMessage">{{choiceMessage}}</div>
+      <div class="guest-names-container" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
+        <div *ngIf="acceptMessage">{{acceptMessage}}</div>
+        <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
+          <input id="guest-{{i}}" [formControl]="guestNameControl" pInputText type="text"
+            [ngClass]="{'ng-invalid': i === 0 && guestNameControl.invalid && guestNameControl.touched, 'w-full m-1': true }"
+            placeholder='{{i === 0 ? "Your name" : "Your companion\' s name"}}' />
+
+          <p-message *ngIf="i===0  && guestNameControl?.invalid && guestNameControl?.touched" severity="warn"
+            class="w-full" text="Please enter your name">
+          </p-message>
+        </ng-container>
+        <div *ngIf="requestDetails">
+          <div>{{requestDetailsMessage}}</div>
+          <textarea pInputText id="request-details" rows="10" class="w-full"
+            [(ngModel)]="eventGuestInvitationRsvp.details"></textarea>
+        </div>
+      </div>
+      <div class="radiobutton-container flex flex-wrap gap-3">
+        <div class="flex gap-3 align-items-center">
+          <p-radioButton inputId="response-accept" formControlName="response" value="ACCEPT" />
+          <label class="ml-2" for="response-accept" class="accept-label">{{acceptLabel}}</label>
+        </div>
+
+        <div class="flex gap-3 align-items-center">
+          <p-radioButton inputId="response-decline" formControlName="response" value="DECLINE" />
+          <label class="ml-2" for="response-decline" class="decline-label">{{declineLabel}}</label>
+        </div>
+      </div>
+      <div class="button-container flex flex-wrap gap-3" *ngIf="rsvpForm.value['response']">
+        <p-button severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()"
+          [disabled]="(rsvpForm.value['response'] === 'ACCEPT' && rsvpForm.get('guestNames')?.invalid)">Send
+          Response</p-button>
+
+      </div>
+    </div>
+  </form>
+</ng-container>

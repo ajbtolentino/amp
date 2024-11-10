@@ -1,8 +1,7 @@
-import { Input, OnInit } from '@angular/core';
-import { Component } from '@angular/core';
-import { LayoutService } from '../service/app.layout.service';
-import { MenuItem } from 'primeng/api';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { LayoutService } from '../service/app.layout.service';
 
 @Component({
     selector: 'app-event-menu',
@@ -34,16 +33,58 @@ export class EventMenuComponent implements OnInit {
                         },
                         {
                             label: 'Invitations',
-                            icon: 'pi pi-fw pi-paperclip',
-                            routerLink: [`/event/${this.eventId}/invitations`]
+                            icon: 'pi pi-fw pi-envelope',
+                            routerLink: [`/event/${this.eventId}/invitations`],
                         },
+                        {
+                            label: 'Vendors',
+                            icon: 'pi pi-fw pi-shop',
+                            items: [
+                                {
+                                    label: 'Search',
+                                    icon: 'pi pi-fw pi-search',
+                                    routerLink: [`/event/${this.eventId}/vendors`]
+                                },
+                                {
+                                    label: 'Contracts',
+                                    icon: 'pi pi-fw pi-pencil',
+                                    routerLink: [`/event/${this.eventId}/vendors/contracts`]
+                                },
+                                {
+                                    label: 'Transactions',
+                                    icon: 'pi pi-fw pi-receipt',
+                                    routerLink: [`/event/${this.eventId}/vendors/transactions`]
+                                },
+                            ]
+                        },
+                        {
+                            label: 'Budget',
+                            icon: 'pi pi-fw pi-calculator',
+                            items: [
+                                {
+                                    label: 'Setup',
+                                    routerLink: [`/event/${this.eventId}/budgets`]
+                                },
+                                {
+                                    label: 'Expense Tracking',
+                                    routerLink: [`/event/${this.eventId}/transactions`]
+                                }
+                            ]
+                        }
                     ]
                 },
                 {
-                    label: 'Accounting',
+                    label: 'Settings',
                     items: [
-                        { label: 'Transactions', icon: 'pi pi-fw pi-dollar', },
-                        { label: 'Budget', icon: 'pi pi-fw pi-calculator', },
+                        {
+                            label: 'Edit Event',
+                            icon: 'pi pi-fw pi-cog',
+                            routerLink: [`/event/${this.eventId}/edit`]
+                        },
+                        {
+                            label: 'Logout',
+                            icon: 'pi pi-fw pi-sign-out',
+                        },
                     ]
                 }
             ];

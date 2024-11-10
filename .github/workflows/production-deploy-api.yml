@@ -1,0 +1,49 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
+
+name: Production - Deploy API
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Deploy-EMS-API:
+    name: Deploy EMS API
+    runs-on: ubuntu-latest
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: ems-api
+      
+      - name: Substitute appsettings
+        uses: microsoft/variable-substitution@v1 
+        with:
+          files: '${{env.DOTNET_ROOT}}/ems-api/src/api/AMP.EMS.API/appsettings*.json'
+        env:
+          ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
+          Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
+          Serilog.WriteTo.0.Args.serverUrl: ${{vars.SEQ_URL}}
+          DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_SUBSCRIPTIONID }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: '${{env.EMS_AZUREAPPSERVICE_APPNAME}}'
+          slot-name: 'Production'
+          package: .

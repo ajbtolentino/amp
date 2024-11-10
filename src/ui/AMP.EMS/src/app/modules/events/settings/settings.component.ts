@@ -1,13 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 
-import { Event } from '../../../core/models/event';
 
-import { Column } from '../../../core/models/column';
-import { Table, TableLazyLoadEvent } from 'primeng/table';
-import { EventType } from '../../../core/models/event-type';
-import { EventTypeService } from '../../../core/services/event-type.service';
+import { LookupService } from '@core/services';
+import { Column, EventType } from '@shared/models';
+import { Table } from 'primeng/table';
 import { lastValueFrom, Observable } from 'rxjs';
 
 @Component({
@@ -27,11 +24,11 @@ export class AppSettingsComponent implements OnInit {
 
   @ViewChild('dt') table!: Table;
 
-  constructor(private eventTypeService: EventTypeService,
+  constructor(private lookupService: LookupService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
-    this.eventTypes$ = this.eventTypeService.getAll();
+    this.eventTypes$ = this.lookupService.getAll('eventType');
 
     this.columns = [
       { field: 'id', header: 'Id', customExportHeader: 'Id' },
@@ -62,13 +59,13 @@ export class AppSettingsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        this.eventTypeService.deleteSelected([]);
+        this.lookupService.deleteSelected('eventtype', []);
       }
     });
   }
 
   refreshGrid = () => {
-    this.eventTypes$ = this.eventTypeService.getAll();
+    this.eventTypes$ = this.lookupService.getAll('eventtype');
   }
 
   delete = (itemToDelete: EventType) => {
@@ -78,23 +75,22 @@ export class AppSettingsComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         if (itemToDelete.id) {
-          lastValueFrom(this.eventTypeService.delete(itemToDelete.id!)).then(this.refreshGrid);
+          lastValueFrom(this.lookupService.delete('eventtype', itemToDelete.id!)).then(this.refreshGrid);
         }
       }
     });
   }
 
   initTableEdit = () => {
-    console.log("Edit");
   }
 
   save = (item: EventType | undefined) => {
     if (item?.name?.trim()) {
       if (item.id) {
-        lastValueFrom(this.eventTypeService.update(item)).then(this.refreshGrid);
+        lastValueFrom(this.lookupService.update('eventtype', item)).then(this.refreshGrid);
       }
       else {
-        lastValueFrom(this.eventTypeService.add(item)).then(this.refreshGrid);
+        lastValueFrom(this.lookupService.add('eventtype', item)).then(this.refreshGrid);
       }
     }
 

@@ -1,14 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
 
-import { Event } from '../../../core/models/event';
 
-import { EventService } from '../../../core/services/event.service';
-import { Column } from '../../../core/models/column';
+import { EventService } from '@core/services';
+import { Column, Event, EventType } from '@shared/models';
 import { Table } from 'primeng/table';
-import { EventType } from '../../../core/models/event-type';
-import { EventTypeService } from '../../../core/services/event-type.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -27,12 +23,9 @@ export class EventListComponent implements OnInit {
 
   columns!: Column[]
 
-  loading: boolean = true;
-
   @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
-    private eventTypeService: EventTypeService,
     private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
@@ -44,12 +37,8 @@ export class EventListComponent implements OnInit {
     ];
   }
 
-  refreshGrid = async () => {
-    this.loading = true;
-
+  refreshGrid = () => {
     this.events$ = this.eventService.getAll();
-
-    this.loading = false;
   }
 
   deleteSelectedItems = async () => {
@@ -58,16 +47,16 @@ export class EventListComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        this.loading = true;
-
         await this.eventService.deleteSelected([]);
-        await this.refreshGrid();
+        this.refreshGrid();
 
         this.selectedItems = null;
-
-        this.loading = false;
       }
     });
+  }
+
+  counterArray(n: number): any[] {
+    return Array(n);
   }
 
   delete = async (itemToDelete: Event) => {
@@ -77,12 +66,8 @@ export class EventListComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         if (itemToDelete.id) {
-          this.loading = true;
-
           await this.eventService.delete(itemToDelete.id);
-          await this.refreshGrid();
-
-          this.loading = false;
+          this.refreshGrid();
         }
       }
     });
@@ -90,18 +75,14 @@ export class EventListComponent implements OnInit {
 
   save = async (item: Event | undefined) => {
     if (item?.title?.trim()) {
-      this.loading = true;
-
       if (item.id) {
         await this.eventService.update(item);
-        await this.refreshGrid();
+        this.refreshGrid();
       }
       else {
         await this.eventService.add(item);
-        await this.refreshGrid();
+        this.refreshGrid();
       }
-
-      this.loading = false;
     }
 
     await this.refreshGrid();

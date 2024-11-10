@@ -1,0 +1,58 @@
+<ng-container *ngIf="vendor$ | withStatus | async as vendor">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    [loading]="vendor.loading!" (click)="save(vendor.value!)"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <div class="grid">
+        <div class="col-12">
+            <div class="card">
+                <h5>Vendor Details</h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="firstName">First Name</label>
+                        <input pInputText *ngIf="!vendor.loading" id="firstName" type="text"
+                            [(ngModel)]="vendor.value!.name" [value]="vendor.value!.name" />
+
+                        <p-skeleton *ngIf="vendor.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="lastName">Description</label>
+                        <input pInputText *ngIf="!vendor.loading" id="lastName" rows="1" type="text"
+                            [(ngModel)]="vendor.value!.description" [value]="vendor.value?.description" />
+
+                        <p-skeleton *ngIf="vendor.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="nickName">Address</label>
+                        <input pInputText *ngIf="!vendor.loading" id="nickName" rows="1" type="text"
+                            [(ngModel)]="vendor.value!.address" [value]="vendor.value?.address" />
+
+                        <p-skeleton *ngIf="vendor.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="phoneNumber">Contact Information</label>
+                        <input pInputText *ngIf="!vendor.loading" id="phoneNumber" rows="1" type="text"
+                            [(ngModel)]="vendor.value!.contactInformation" [value]="vendor.value?.contactInformation" />
+
+                        <p-skeleton *ngIf="vendor.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="seats">Type</label>
+                        <p-dropdown *ngIf="vendorTypes$ | withStatus | async as vendorTypes"
+                            [loading]="vendorTypes.loading" [options]="vendorTypes.value"
+                            [(ngModel)]="vendor.value!.vendorTypeId" optionLabel="name" optionValue="id"
+                            placeholder="Select Type"></p-dropdown>
+                        <p-skeleton *ngIf="vendor.loading"></p-skeleton>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

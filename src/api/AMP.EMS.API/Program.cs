@@ -1,17 +1,11 @@
+using System.Text.Json.Serialization;
 using AMP.EMS.API.Infrastructure;
+using AMP.Infrastructure.Extensions;
 using AMP.Infrastructure.Middlewares;
 using AMP.Infrastructure.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using AMP.Infrastructure.Extensions;
-using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.HttpLogging;
-using System.Text.Json.Serialization;
-using AMP.Infrastructure.Enums;
-using MongoDB.Bson.Serialization;
-using AMP.Infrastructure.Entity;
-using AMP.EMS.API.Core.Entities;
-using MongoDB.Bson;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +47,8 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.OpenIdConnect,
         OpenIdConnectUrl = new Uri($"{authority}.well-known/openid-configuration")
     });
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
             new OpenApiSecurityScheme
             {
@@ -77,7 +72,7 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EMSDbContext>(config);
+builder.Services.AddDbContext<EmsDbContext>(config);
 
 builder.Services.AddHttpContextAccessor();
 
@@ -95,7 +90,7 @@ app.UseRequestLogging();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-app.Services.Migrate<EMSDbContext>(config);
+app.Services.Migrate<EmsDbContext>(config);
 
 //Add Middleware
 app.UseMiddleware<RequestPipelineMiddleware>();

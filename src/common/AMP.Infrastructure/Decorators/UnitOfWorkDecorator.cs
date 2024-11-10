@@ -6,8 +6,6 @@ namespace AMP.Infrastructure.Decorators;
 
 public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecorator> logger) : IUnitOfWork
 {
-    private readonly ILogger logger = logger;
-
     public IDbTransaction BeginTransaction()
     {
         // logger.LogInformation($"Starting transaction...");
@@ -22,11 +20,11 @@ public class UnitOfWorkDecorator(IUnitOfWork unitOfWork, ILogger<UnitOfWorkDecor
         await unitOfWork.CommitTransactionAsync();
     }
 
-    public IRepository<TEntity> Repository<TEntity>() where TEntity : class
+    public IRepository<TEntity> Set<TEntity>() where TEntity : class
     {
         logger.LogInformation($"Accessing {typeof(TEntity).Name} repository...");
 
-        return unitOfWork.Repository<TEntity>();
+        return unitOfWork.Set<TEntity>();
     }
 
     public async Task RollbackTransactionAsync()

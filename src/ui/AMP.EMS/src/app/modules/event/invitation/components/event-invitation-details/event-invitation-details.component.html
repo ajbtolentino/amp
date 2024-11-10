@@ -1,0 +1,69 @@
+<ng-container *ngIf="
+{
+    eventInvitation: eventInvitation$ | withStatus | async,
+    content: content$ | withStatus| async
+} as data">
+    <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+            <button *ngIf="data.content?.value!" pButton pRipple label="View Sample" icon="pi pi-upload"
+                [loading]="data.eventInvitation!.loading!" class="p-button-help"></button>
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    [loading]="data.eventInvitation!.loading!"
+                    (click)="save(data.eventInvitation!.value!, data.content!.value!)"></button>
+            </div>
+        </ng-template>
+    </p-toolbar>
+
+    <div class="grid">
+        <div class="col-12 ">
+            <div class="card">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="name">Name</label>
+                        <input *ngIf="!data.eventInvitation!.loading" pInputText id="name" type="text"
+                            [(ngModel)]="data.eventInvitation!.value!.name" />
+                        <p-skeleton *ngIf="data.eventInvitation!.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="description">Description</label>
+                        <input *ngIf="!data.eventInvitation!.loading" pInputText id="description" type="text"
+                            [(ngModel)]="data.eventInvitation!.value!.description" dateFormat="dd.mm.yy" />
+                        <p-skeleton *ngIf="data.eventInvitation!.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="rsvpDeadline">RSVP Deadline</label>
+                        <p-calendar *ngIf="!data.eventInvitation!.loading" id="rsvpDeadline" dateFormat="yy-mm-dd"
+                            [(ngModel)]="data.eventInvitation!.value!.rsvpDeadline" [showIcon]="true">
+                        </p-calendar>
+                        <p-skeleton *ngIf="data.eventInvitation!.loading"></p-skeleton>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="text-center">
+                    <p-progressSpinner ariaLabel=" loading"
+                        *ngIf="data.content?.loading || data.eventInvitation?.loading" />
+                </div>
+                <p-tabView orientation="left" *ngIf="!data.eventInvitation!.loading">
+                    <p-tabPanel header="Template" class="line-height-3 m-0">
+                        <div [style]="{height: '100vh !important' , overflow: 'auto'}">
+                            <ngx-dynamic-hooks [content]="data.content!.value!.htmlContent" [context]="{
+                                guest: { firstName: 'First Name', lastName: 'Last Name'},
+                                eventGuestInvitation: { seats: 3, eventInvitation: {rsvpDeadline: data.eventInvitation?.value?.rsvpDeadline || currentDate}},
+                                onSubmit: onRsvpSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">
+                        <ngs-code-editor #codeEditor theme="vs-dark" [codeModel]="model" [options]="options"
+                            (valueChanged)="onValueChanged($event, data.content?.value!)"
+                            [style]="{height: '100vh'}"></ngs-code-editor>
+                    </p-tabPanel>
+                </p-tabView>
+            </div>
+        </div>
+    </div>
+</ng-container>

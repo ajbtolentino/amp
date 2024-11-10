@@ -1,124 +1,115 @@
-using System.Collections;
-using System.Security.Claims;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using AMP.EMS.API.Models;
 using AMP.Infrastructure.Responses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace AMP.EMS.API.Controllers
+namespace AMP.EMS.API.Controllers;
+
+public class EventInvitationController(IUnitOfWork unitOfWork, ILogger<EventInvitationController> logger)
+    : ApiBaseController<EventInvitation, Guid>(unitOfWork, logger)
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EventInvitationController(IUnitOfWork unitOfWork) : ApiBaseController<EventInvitation, Guid>(unitOfWork)
+    [HttpGet]
+    [Route("{id:guid}/guests")]
+    public IActionResult GetGuests(Guid id)
     {
-        public record EventInvitationData(string Name, string? Description, string? Html, Guid EventId);
-        
-        [HttpGet]
-        [Route("{id:guid}/guests")]
-        public async Task<IActionResult> GetGuests(Guid id)
+        var eventGuestInvitations = UnitOfWork.Set<EventGuestInvitation>().GetAll()
+            .Where(_ => _.EventInvitationId == id);
+
+        ArgumentNullException.ThrowIfNull(eventGuestInvitations);
+
+        return Ok(new OkResponse<IEnumerable<EventGuestInvitation>>(string.Empty) { Data = eventGuestInvitations });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] EventInvitationRequest request)
+    {
+        try
         {
-            var eventInvitation = await this.entityRepository.Get(id);
+            UnitOfWork.BeginTransaction();
 
-            ArgumentNullException.ThrowIfNull(eventInvitation);
-
-            var eventGuests = await unitOfWork.Repository<EventGuest>().GetAll()
-                .Where(eventGuest => eventGuest.EventInvitations.Contains(id)).ToListAsync();
-            
-            var eventGuestInvitations = await unitOfWork.Repository<EventGuestInvitation>().GetAll()
-                .Where(eventGuestInvitation =>
-                    eventGuests.Any(eventGuest => eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id)) 
-                    && eventGuestInvitation.EventInvitationId == id)
-                .ToListAsync();
-
-            var guests = await unitOfWork.Repository<Guest>().GetAll()
-                .Where(guest => eventGuests.Any(eventGuest => eventGuest.GuestId == guest.Id))
-                .ToListAsync();
-            
-            var eventGuestInvitationRsvps = await unitOfWork.Repository<EventGuestInvitationRsvp>().GetAll()
-                .Where(eventGuestInvitationRsvp =>
-                    eventGuestInvitations.Any(eventGuestInvitation => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id)))
-                .ToListAsync();
-
-            var model = MapEventGuest(eventInvitation, eventGuests, guests, eventGuestInvitations, eventGuestInvitationRsvps);
-            
-            return Ok(new OkResponse<IEnumerable<EventGuestModel>>(string.Empty) { Data = model});
-        }
-
-        private IEnumerable<EventGuestModel> MapEventGuest(EventInvitation eventInvitation, 
-            IEnumerable<EventGuest> eventGuests,
-            IEnumerable<Guest> guests,
-            IEnumerable<EventGuestInvitation> eventGuestInvitations,
-            IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
-        {
-            foreach (var eventGuest in eventGuests)
+            var eventInvitation = new EventInvitation
             {
-                var guest = guests.FirstOrDefault(guest => guest.Id == eventGuest.GuestId);
-                var filteredEventGuestInvitations = eventGuestInvitations.Where(eventGuestInvitation =>
-                    eventGuest.EventGuestInvitations.Contains(eventGuestInvitation.Id));
+                EventId = request.EventId,
+                Name = request.Name,
+                Description = request.Description ?? string.Empty,
+                RsvpDeadline = request.RsvpDeadline
+            };
 
-                yield return new EventGuestModel()
+            if (!string.IsNullOrEmpty(request.Html))
+                eventInvitation.Content = new Content
                 {
-                    EventId = eventInvitation.EventId,
-                    GuestId = eventGuest.GuestId,
-                    MaxGuests = eventGuest.MaxGuests,
-                    LastName = guest.LastName,
-                    FirstName = guest.FirstName,
-                    NickName = guest.NickName,
-                    EventGuestId = eventGuest.Id,
-                    EventGuestInvitations = MapEventGuestInvitations(filteredEventGuestInvitations, eventGuestInvitationRsvps),
+                    HtmlContent = request.Html
                 };
-            }
+
+            await EntityRepository.Add(eventInvitation);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<EventInvitation>(string.Empty) { Data = eventInvitation });
         }
-
-        private IEnumerable<EventGuestInvitationModel> MapEventGuestInvitations(IEnumerable<EventGuestInvitation> eventGuestInvitations,
-            IEnumerable<EventGuestInvitationRsvp> eventGuestInvitationRsvps)
+        catch (Exception e)
         {
-            return eventGuestInvitations.Select(eventGuestInvitation => new EventGuestInvitationModel()
-            {
-                MaxGuests = eventGuestInvitation.MaxGuests,
-                Code = eventGuestInvitation.Code,
-                EventGuestInvitationId = eventGuestInvitation.Id,
-                Rsvps = eventGuestInvitationRsvps.Where(eventGuestInvitationRsvp => eventGuestInvitation.EventGuestInvitationRsvps.Contains(eventGuestInvitationRsvp.Id))
-                    .OrderByDescending(eventGuestInvitationRsvp => eventGuestInvitationRsvp.DateCreated)
-                    .Select(eventGuestInvitationRsvp => new EventGuestInvitationRsvpModel()
-                    {
-                        Response = eventGuestInvitationRsvp.Response,
-                        GuestNames = eventGuestInvitationRsvp.GuestNames,
-                        DateCreated = eventGuestInvitationRsvp.DateCreated,
-                        EventGuestInvitationRsvpId = eventGuestInvitationRsvp.Id,
-                    })
-            });
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EventInvitationData data)
-        {
-            return await base.Post(new EventInvitation
-            {
-                EventId = data.EventId,
-                Name = data.Name,
-                Description = data.Description ?? string.Empty,
-                Html = data.Html ?? string.Empty
-            });
-        }
-
-        [HttpPut]
-        [Route("{id:guid}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] EventInvitationData data)
-        {
-            var eventInvitation = await this.entityRepository.Get(id);
-
-            ArgumentNullException.ThrowIfNull(eventInvitation);
-
-            eventInvitation.EventId = data.EventId;
-            eventInvitation.Name = data.Name;
-            eventInvitation.Description = data.Description ?? string.Empty;
-            eventInvitation.Html = data.Html ?? string.Empty;
-
-            return await base.Put(eventInvitation);
+            await UnitOfWork.RollbackTransactionAsync();
+            logger.LogError(e.Message, e);
+            return Problem(e.Message);
         }
     }
+
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] EventInvitationRequest request)
+    {
+        var eventInvitation = await EntityRepository.Get(id);
+
+        ArgumentNullException.ThrowIfNull(eventInvitation);
+
+        try
+        {
+            UnitOfWork.BeginTransaction();
+
+            eventInvitation.EventId = request.EventId;
+            eventInvitation.Name = request.Name;
+            eventInvitation.Description = request.Description ?? string.Empty;
+            eventInvitation.RsvpDeadline = request.RsvpDeadline;
+
+            if (eventInvitation.ContentId.HasValue)
+            {
+                var content = await UnitOfWork.Set<Content>().Get(eventInvitation.ContentId.Value);
+
+                content.HtmlContent = request.Html ?? string.Empty;
+
+                UnitOfWork.Set<Content>().Update(content);
+            }
+            else if (!string.IsNullOrEmpty(request.Html))
+            {
+                var content = await UnitOfWork.Set<Content>().Add(new Content
+                {
+                    HtmlContent = request.Html
+                });
+
+                eventInvitation.ContentId = content.Id;
+            }
+
+            EntityRepository.Update(eventInvitation);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<EventInvitation>(string.Empty) { Data = eventInvitation });
+        }
+        catch (Exception e)
+        {
+            await UnitOfWork.RollbackTransactionAsync();
+            logger.LogError(e.Message, e);
+            return Problem(e.Message);
+        }
+    }
+
+    public record EventInvitationRequest(
+        Guid EventId,
+        string Name,
+        string? Description,
+        string? Html,
+        DateTime? RsvpDeadline);
 }

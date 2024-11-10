@@ -15,6 +15,7 @@ const setEnv = () => {
     EMS_SPA_APIURL: '${process.env["EMS_SPA_APIURL"]}',
     EMS_SPA_CLIENTID: '${process.env["EMS_SPA_CLIENTID"]}',
     EMS_SPA_CLIENTSCOPE: '${process.env["EMS_SPA_CLIENTSCOPE"]}',
+    EMS_SPA_REDIRECTURL: '${process.env["EMS_SPA_REDIRECTURL"]}',
     production: true,
   };
   `;
