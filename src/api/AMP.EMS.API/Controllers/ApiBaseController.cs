@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
 [Authorize]
 [ApiController]
+[Route("[controller]")]
 public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork, ILogger logger) : ControllerBase
     where TEntity : BaseEntity<TKey>
 {

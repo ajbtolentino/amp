@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers;
 
-[Route("api/[controller]")]
 [Authorize]
 [ApiController]
+[Route("[controller]")]
 public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController> logger) : ControllerBase
 {
     [HttpGet("{eventId:guid}/[action]")]
