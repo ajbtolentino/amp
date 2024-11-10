@@ -73,4 +73,4 @@ jobs:
           app-name: '${{vars.EMS_AZUREAPPSERVICE_APPNAME}}'
           slot-name: 'Production'
           package: .
-          target-path: '/home/site/wwwroot/apiapi'
+          target-path: '/home/site/wwwroot/api'
