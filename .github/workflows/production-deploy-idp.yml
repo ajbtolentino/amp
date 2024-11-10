@@ -96,6 +96,7 @@ jobs:
           id: deploy-to-webapp
           uses: azure/webapps-deploy@v3
           with:
-            app-name: 'amp-idp'
+            app-name: '${{vars.EMS_AZUREAPPSERVICE_APPNAME}}'
             slot-name: 'Production'
             package: .
+            target-path: '/home/site/wwwroot/idp'
