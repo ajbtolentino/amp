@@ -25,7 +25,7 @@ jobs:
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
         with:
-          files: '${{env.DOTNET_ROOT}}/ems-api/src/api/AMP.EMS.API/appsettings*.json'
+          files: './artifact/appsettings*.json'
         env:
           ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
           Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
