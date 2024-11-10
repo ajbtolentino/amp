@@ -16,13 +16,12 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: dawidd6/action-download-artifact
         with:
           name: ems-api
           path: artifact
-          github-token: ${{github.token}}
-          run-id: ${{github.event.workflow_run.id}}
-      
+          workflow: build-api.yml
+          
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
         with:
