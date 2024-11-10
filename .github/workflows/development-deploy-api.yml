@@ -11,7 +11,9 @@ jobs:
   Download-EMS-API:
     name: Download EMS API Artifact
     runs-on: ubuntu-latest        
-
+    environment:
+      name: 'Development'
+      
     permissions: write-all
 
     steps:
@@ -25,7 +27,7 @@ jobs:
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
         with:
-          files: './artifact/ems-api/appsettings*.json'
+          files: './artifact/appsettings*.json'
         env:
           ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
           Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
