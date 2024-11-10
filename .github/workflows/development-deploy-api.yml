@@ -11,6 +11,9 @@ jobs:
   Download-EMS-API:
     name: Download EMS API Artifact
     runs-on: ubuntu-latest        
+
+    permissions: read-all
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
