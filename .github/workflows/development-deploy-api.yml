@@ -5,9 +5,6 @@
 name: Development - Deploy API
 
 on:
-  push:
-    branches:
-      - development
   workflow_dispatch:
 
 jobs:
