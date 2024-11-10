@@ -74,7 +74,8 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "index": "src/index.production.html"
             },
             "development": {
               "optimization": false,
