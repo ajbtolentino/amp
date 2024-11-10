@@ -62,10 +62,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="Web.config">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <None Include="web.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </None>
     </ItemGroup>
 </Project>
