@@ -19,7 +19,8 @@ jobs:
     permissions: write-all
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
@@ -51,7 +52,7 @@ jobs:
       - name: Publish EMS API
         run: dotnet publish ./src/api/AMP.EMS.API/AMP.EMS.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/ems-api
 
-      - name: Upload EMS API Package
+      - name: Upload EMS API Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ems-api

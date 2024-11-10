@@ -9,13 +9,16 @@ on:
 
 jobs:
   Download-EMS-API:
-    name: Download EMS API Package
+    name: Download EMS API Artifact
     runs-on: ubuntu-latest        
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: ems-api
+          path: artifact
+          github-token: ${{github.token}}
+          run-id: ${{github.event.workflow_run.id}}
       
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
