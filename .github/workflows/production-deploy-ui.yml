@@ -5,8 +5,8 @@ name: Production - Deploy Client
 
 on:
   push:
-    branches:
-      - master
+    paths: 
+      - 'src/ui/**'
   workflow_dispatch:
 
 jobs:
