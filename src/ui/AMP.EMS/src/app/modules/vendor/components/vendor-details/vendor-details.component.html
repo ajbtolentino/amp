@@ -43,12 +43,11 @@
 
                         <p-skeleton *ngIf="vendor.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6">
+                    <div class="field col-12 md:col-6" *ngIf="vendorTypes$ | withStatus | async as vendorTypes">
                         <label htmlFor="seats">Type</label>
-                        <p-dropdown *ngIf="vendorTypes$ | withStatus | async as vendorTypes"
-                            [loading]="vendorTypes.loading" [options]="vendorTypes.value"
-                            [(ngModel)]="vendor.value!.vendorTypeId" optionLabel="name" optionValue="id"
-                            placeholder="Select Type"></p-dropdown>
+                        <p-dropdown *ngIf="!vendor.loading" [loading]="vendorTypes.loading"
+                            [options]="vendorTypes.value" [(ngModel)]="vendor.value!.vendorTypeId" optionLabel="name"
+                            optionValue="id" placeholder="Select Type"></p-dropdown>
                         <p-skeleton *ngIf="vendor.loading"></p-skeleton>
                     </div>
                 </div>

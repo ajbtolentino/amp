@@ -8,30 +8,30 @@ import { BaseApiService } from './base.api.service';
 })
 export class LookupService extends BaseApiService {
     get = (lookupType: string, id: string): Observable<Lookup> => {
-        return this.httpGet(`api/${lookupType}/${id}`);
+        return this.httpGet(`${lookupType}/${id}`);
     }
 
     getAll = (lookupType: string): Observable<Lookup[]> => {
-        return this.httpGet(`api/${lookupType}`);
+        return this.httpGet(`${lookupType}`);
     }
 
     getByIds = (lookupType: string, ids: string[]): Observable<Lookup[]> => {
-        return this.httpGet(`api/${lookupType}`, { params: { ids: ids } });
+        return this.httpGet(`${lookupType}`, { params: { ids: ids } });
     }
 
     add = (lookupType: string, eventRole: Lookup): Observable<Lookup> => {
-        return this.httpPost(`api/${lookupType}`, eventRole);
+        return this.httpPost(`${lookupType}`, eventRole);
     }
 
     update = (lookupType: string, eventRole: Lookup): Observable<Lookup> => {
-        return this.httpPut(`api/${lookupType}/${eventRole.id}`, eventRole);
+        return this.httpPut(`${lookupType}/${eventRole.id}`, eventRole);
     }
 
     delete = (lookupType: string, id: string): Observable<Lookup> => {
-        return this.httpDelete(`api/${lookupType}/${id}`);
+        return this.httpDelete(`${lookupType}/${id}`);
     }
 
     deleteSelected = (lookupType: string, ids: string[]): Observable<Lookup> => {
-        return this.httpDeleteSelected(`api/${lookupType}`, ids);
+        return this.httpDeleteSelected(`${lookupType}`, ids);
     }
 }

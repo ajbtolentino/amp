@@ -7,10 +7,10 @@ import { Observable } from 'rxjs';
 })
 export class EventDashboardService extends BaseApiService {
     guestInvitations = (eventId: string): Observable<any> => {
-        return this.httpGet<any>(`api/dashboard/${eventId}/guestinvitations`);
+        return this.httpGet<any>(`dashboard/${eventId}/guestinvitations`);
     }
 
     budget = (eventId: string): Observable<any> => {
-        return this.httpGet<any>(`api/dashboard/${eventId}/budget`);
+        return this.httpGet<any>(`dashboard/${eventId}/budget`);
     }
 }

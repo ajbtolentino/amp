@@ -9,30 +9,30 @@ import { Observable } from 'rxjs';
 })
 export class EventVendorContractService extends BaseApiService {
     get = (id: string): Observable<EventVendorContract> => {
-        return this.httpGet<EventVendorContract>(`api/eventvendorcontract/${id}`);
+        return this.httpGet<EventVendorContract>(`eventvendorcontract/${id}`);
     }
 
     getByVendorIds = (vendorIds: string[]): Observable<EventVendorContract[]> => {
-        return this.httpGet<EventVendorContract[]>(`api/eventvendorcontract/getbyvendorids`, { params: { vendorIds: vendorIds } });
+        return this.httpGet<EventVendorContract[]>(`eventvendorcontract/getbyvendorids`, { params: { vendorIds: vendorIds } });
     }
 
     getAll = (): Observable<EventVendorContract[]> => {
-        return this.httpGet<EventVendorContract[]>(`api/eventvendorcontract/`);
+        return this.httpGet<EventVendorContract[]>(`eventvendorcontract/`);
     }
 
     getPayments = (id: string): Observable<EventVendorContractPayment[]> => {
-        return this.httpGet<EventVendorContract[]>(`api/eventvendorcontract/${id}/payments`);
+        return this.httpGet<EventVendorContract[]>(`eventvendorcontract/${id}/payments`);
     }
 
     add = (eventVendorContract: EventVendorContract): Observable<EventVendorContract> => {
-        return this.httpPost<EventVendorContract>(`api/eventvendorcontract`, eventVendorContract);
+        return this.httpPost<EventVendorContract>(`eventvendorcontract`, eventVendorContract);
     }
 
     update = (eventVendorContract: EventVendorContract): Observable<EventVendorContract> => {
-        return this.httpPut<EventVendorContract>(`api/eventvendorcontract/${eventVendorContract.id}`, eventVendorContract);
+        return this.httpPut<EventVendorContract>(`eventvendorcontract/${eventVendorContract.id}`, eventVendorContract);
     }
 
     delete = (id: string): Observable<EventVendorContract> => {
-        return this.httpDelete(`api/eventvendorcontract/${id}`);
+        return this.httpDelete(`eventvendorcontract/${id}`);
     }
 }

@@ -8,26 +8,26 @@ import { Observable } from 'rxjs';
 })
 export class EventVendorTypeBudgetService extends BaseApiService {
     get = (id: string): Observable<EventVendorTypeBudget> => {
-        return this.httpGet<EventVendorTypeBudget>(`api/eventVendorTypeBudget/${id}`);
+        return this.httpGet<EventVendorTypeBudget>(`eventVendorTypeBudget/${id}`);
     }
 
     getByIds = (ids: string[]): Observable<EventVendorTypeBudget[]> => {
-        return this.httpGet<EventVendorTypeBudget[]>(`api/eventVendorTypeBudget/getbyids`, { params: { ids: ids } });
+        return this.httpGet<EventVendorTypeBudget[]>(`eventVendorTypeBudget/getbyids`, { params: { ids: ids } });
     }
 
     getAll = (): Observable<EventVendorTypeBudget[]> => {
-        return this.httpGet<EventVendorTypeBudget[]>(`api/eventVendorTypeBudget/`);
+        return this.httpGet<EventVendorTypeBudget[]>(`eventVendorTypeBudget/`);
     }
 
     add = (eventVendorTypeBudget: EventVendorTypeBudget): Observable<EventVendorTypeBudget> => {
-        return this.httpPost<EventVendorTypeBudget>(`api/eventVendorTypeBudget/`, eventVendorTypeBudget);
+        return this.httpPost<EventVendorTypeBudget>(`eventVendorTypeBudget/`, eventVendorTypeBudget);
     }
 
     update = (eventVendorTypeBudget: EventVendorTypeBudget): Observable<EventVendorTypeBudget> => {
-        return this.httpPut<EventVendorTypeBudget>(`api/eventVendorTypeBudget/${eventVendorTypeBudget.id}`, eventVendorTypeBudget);
+        return this.httpPut<EventVendorTypeBudget>(`eventVendorTypeBudget/${eventVendorTypeBudget.id}`, eventVendorTypeBudget);
     }
 
     delete = (id: string): Observable<EventVendorTypeBudget> => {
-        return this.httpDelete(`api/eventVendorTypeBudget/${id}`);
+        return this.httpDelete(`eventVendorTypeBudget/${id}`);
     }
 }

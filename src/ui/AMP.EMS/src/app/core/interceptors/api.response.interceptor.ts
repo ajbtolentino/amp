@@ -1,5 +1,6 @@
 import { HttpEvent, HttpEventType, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 import { catchError, tap, throwError } from 'rxjs';
 
@@ -14,7 +15,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
 
   return next(req).pipe(
     tap((httpEvent: HttpEvent<any>) => {
-      if (httpEvent.type === HttpEventType.Response && httpEvent.url?.includes("api")) {
+      if (httpEvent.type === HttpEventType.Response && httpEvent.url?.includes(environment.EMS_SPA_APIURL)) {
         switch (req.method) {
           case "POST":
             notify(httpEvent.body?.message, httpEvent.ok);
@@ -28,7 +29,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
         }
       }
     }), catchError((error) => {
-      if (req.url.includes("api")) {
+      if (req.url.includes(environment.EMS_SPA_APIURL)) {
         const detail = error?.error?.title || 'An error occurred while processing your request.';
         messageService.add({ severity: 'error', summary: 'Error', detail: detail, life: 6000 });
       }

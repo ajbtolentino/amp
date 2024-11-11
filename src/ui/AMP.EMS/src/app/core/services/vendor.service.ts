@@ -8,26 +8,26 @@ import { BaseApiService } from './base.api.service';
 })
 export class VendorService extends BaseApiService {
   get = (id: string): Observable<Vendor> => {
-    return this.httpGet<Vendor>(`api/vendor/${id}`);
+    return this.httpGet<Vendor>(`vendor/${id}`);
   }
 
   getByIds = (ids: string[]): Observable<Vendor[]> => {
-    return this.httpGet<Vendor[]>(`api/vendor/getbyids`, { params: { ids: ids } });
+    return this.httpGet<Vendor[]>(`vendor/getbyids`, { params: { ids: ids } });
   }
 
   getAll = (): Observable<Vendor[]> => {
-    return this.httpGet<Vendor[]>(`api/vendor/`);
+    return this.httpGet<Vendor[]>(`vendor/`);
   }
 
   add = (vendor: Vendor): Observable<Vendor> => {
-    return this.httpPost<Vendor>(`api/vendor`, vendor);
+    return this.httpPost<Vendor>(`vendor`, vendor);
   }
 
   update = (vendor: Vendor): Observable<Vendor> => {
-    return this.httpPut<Vendor>(`api/vendor/${vendor.id}`, vendor);
+    return this.httpPut<Vendor>(`vendor/${vendor.id}`, vendor);
   }
 
   delete = (id: string): Observable<Vendor> => {
-    return this.httpDelete(`api/vendor/${id}`);
+    return this.httpDelete(`vendor/${id}`);
   }
 }

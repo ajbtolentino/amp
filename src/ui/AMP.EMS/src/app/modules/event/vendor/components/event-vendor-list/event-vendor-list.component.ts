@@ -51,7 +51,7 @@ export class EventVendorListComponent implements OnInit {
   }
 
   loadVendorType = (vendors: Vendor[]): Observable<Vendor[]> => {
-    if (!vendors.length) return of<Vendor[]>();
+    if (!vendors.length) return of<Vendor[]>(vendors);
 
     return this.lookupService.getByIds('vendortype', vendors.map(_ => _.vendorTypeId!))
       .pipe(
@@ -78,7 +78,7 @@ export class EventVendorListComponent implements OnInit {
   }
 
   loadEventVendorContractStates = (eventVendorContracts: EventVendorContract[]): Observable<EventVendorContract[]> => {
-    if (!eventVendorContracts?.filter(_ => _.eventVendorContractStateId).length) return of<EventVendorContract[]>([]);
+    if (!eventVendorContracts?.filter(_ => _.eventVendorContractStateId).length) return of<EventVendorContract[]>(eventVendorContracts);
 
     return this.lookupService.getByIds('eventVendorContractState', eventVendorContracts.map(_ => _.eventVendorContractStateId!))
       .pipe(

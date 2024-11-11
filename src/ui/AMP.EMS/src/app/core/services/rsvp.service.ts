@@ -9,14 +9,14 @@ import { BaseApiService } from './base.api.service';
 })
 export class RsvpService extends BaseApiService {
     getItemsByIds = (ids: string[]): Observable<EventGuestInvitationRsvpItem[]> => {
-        return this.httpGet(`api/rsvp/getitemsbyids`, { params: { ids: ids } });
+        return this.httpGet(`rsvp/getitemsbyids`, { params: { ids: ids } });
     }
 
     getByEventGuestInvitationIds = (eventGuestInvitationIds: string[]): Observable<EventGuestInvitationRsvp[]> => {
-        return this.httpGet(`api/rsvp/getbyeventguestinvitationids`, { params: { eventGuestInvitationIds: eventGuestInvitationIds } });
+        return this.httpGet(`rsvp/getbyeventguestinvitationids`, { params: { eventGuestInvitationIds: eventGuestInvitationIds } });
     }
 
     add = (rsvp: EventGuestInvitationRsvp): Observable<EventGuestInvitationRsvp> => {
-        return this.httpPost(`api/rsvp`, rsvp);
+        return this.httpPost(`rsvp`, rsvp);
     }
 }

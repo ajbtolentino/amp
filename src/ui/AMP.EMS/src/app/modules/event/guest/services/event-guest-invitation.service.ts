@@ -14,26 +14,26 @@ export interface EventGuestInvitationResponse {
 })
 export class EventGuestInvitationService extends BaseApiService {
     getByEventGuestIds = (eventGuestIds: string[]): Observable<EventGuestInvitation[]> => {
-        return this.httpGet(`api/eventguestinvitation/getbyeventguestids`, { params: { eventGuestIds: eventGuestIds } });
+        return this.httpGet(`eventguestinvitation/getbyeventguestids`, { params: { eventGuestIds: eventGuestIds } });
     }
 
     getByEventInvitationIds = (eventInvitationIds: string[]): Observable<EventGuestInvitation[]> => {
-        return this.httpGet(`api/eventguestinvitation/getbyeventinvitationids`, { params: { eventInvitationIds: eventInvitationIds } });
+        return this.httpGet(`eventguestinvitation/getbyeventinvitationids`, { params: { eventInvitationIds: eventInvitationIds } });
     }
 
     add = (eventGuestInvitation: EventGuestInvitation): Observable<EventGuestInvitation> => {
-        return this.httpPost(`api/eventguestinvitation/`, eventGuestInvitation);
+        return this.httpPost(`eventguestinvitation/`, eventGuestInvitation);
     }
 
     update = (id: string, eventGuestInvitation: EventGuestInvitation): Observable<EventGuestInvitation> => {
-        return this.httpPut(`api/eventguestinvitation/${id}`, eventGuestInvitation);
+        return this.httpPut(`eventguestinvitation/${id}`, eventGuestInvitation);
     }
 
     delete = (id: string): Observable<EventGuestInvitation> => {
-        return this.httpDelete(`api/eventguestinvitation/${id}`);
+        return this.httpDelete(`eventguestinvitation/${id}`);
     }
 
     rsvp = (code: string): Observable<EventGuestInvitation> => {
-        return this.httpGet(`api/eventguestinvitation/${code}/rsvp`);
+        return this.httpGet(`eventguestinvitation/${code}/rsvp`);
     }
 }
