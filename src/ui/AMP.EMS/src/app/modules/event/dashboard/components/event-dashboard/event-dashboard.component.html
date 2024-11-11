@@ -3,7 +3,7 @@
         <div class="card mb-0" *ngIf="!guestInvitations.loading">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Invited Guests</span>
+                    <span class="block text-500 font-medium mb-3">Main Guests</span>
                     <div class="text-900 font-medium text-xl">{{guestInvitations.value?.totalMainGuests|| 0}}
                         <div class="text-500 text-sm"></div>
                     </div>
@@ -14,14 +14,13 @@
                     <i class="pi pi-users text-blue-500 text-xl"></i>
                 </div>
             </div>
-            <span class="text-blue-500 font-medium">{{guestInvitations.value?.totalAccepted || 0}} accepted
+            <span class="text-green-500 font-medium">{{guestInvitations.value?.totalAccepted || 0}} Going
             </span>
-            <span class="text-green-500 font-medium">+ {{guestInvitations.value?.totalSecondaryGuests || 0}} secondary
+            <span class="text-blue-500 font-medium">+ {{guestInvitations.value?.totalSecondaryGuests || 0}} secondary
             </span>
         </div>
         <div class="card mb-0 text-center" *ngIf="guestInvitations.loading">
-            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
-                animationDuration=".5s" />
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" />
         </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3" *ngIf="guestInvitations$ | withStatus | async as guestInvitations">
@@ -47,8 +46,7 @@
             </span>
         </div>
         <div class="card mb-0 text-center" *ngIf="guestInvitations.loading">
-            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
-                animationDuration=".5s" />
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" />
         </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3" *ngIf="budgets$ | withStatus | async as budget">
@@ -64,29 +62,46 @@
                     <i class="pi pi-calculator text-green-500 text-xl"></i>
                 </div>
             </div>
-            <span class="text-orange-500 font-medium">{{budget.value.totalVendorTypes}} Vendor Types</span>
-            <span class="text-500"></span>
+            <span class="text-green-500 font-medium">{{budget.value.totalAmountDue | currency : 'PHP'}}
+            </span>
+            <span class="text-500">Total Cost</span>
+            <ng-container
+                *ngIf="{totalUsed: (budget.value.totalAmountDue) / budget.value.totalAmount | absoluteValue} as data">
+                <span
+                    [ngClass]="{'text-green-500 ': data.totalUsed < 1, 'text-red-500 ': data.totalUsed > 1, 'text-blue-500': data.totalUsed === 1}"
+                    class="font-medium">
+                    {{data.totalUsed | percent}}
+                </span>
+                <span class="text-blue-500" *ngIf="data.totalUsed === 1">Used</span>
+                <span class="text-green-500" *ngIf="data.totalUsed < 1">Used</span>
+                <span class="text-red-500" *ngIf="data.totalUsed > 1">Overbudget</span>
+            </ng-container>
         </div>
         <div class="card mb-0 text-center" *ngIf="budget.loading">
-            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
-                animationDuration=".5s" />
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" />
         </div>
     </div>
 
-    <div class="col-12 lg:col-6 xl:col-3">
-        <div class="card mb-0">
+    <div class="col-12 lg:col-6 xl:col-3" *ngIf="expenses$ | withStatus | async as expenses">
+        <div class="card mb-0" *ngIf="!expenses.loading">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Total Expenses</span>
-                    <div class="text-900 font-medium text-xl">P5,100</div>
+                    <span class="block text-500 font-medium mb-3">Total Payments</span>
+                    <div class="text-900 font-medium text-xl">{{expenses.value.totalExpenses | currency : 'PHP'}}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
                     [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
                     <i class="pi pi-wallet text-orange-500 text-xl"></i>
                 </div>
             </div>
-            <span class="text-green-500 font-medium">80% </span>
-            <span class="text-500"> last week</span>
+            <span
+                [ngClass]="{'text-orange-500': expenses.value.totalUnsettledTransactions > 0, 'text-green-500': expenses.value.totalUnsettledTransactions <= 0}"
+                class="font-medium">{{expenses.value.totalUnsettledTransactions | currency :
+                'PHP'}}</span>
+            <span class="text-500"> Outstanding Balance</span>
+        </div>
+        <div class="card mb-0 text-center" *ngIf="expenses.loading">
+            <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" />
         </div>
     </div>
 
