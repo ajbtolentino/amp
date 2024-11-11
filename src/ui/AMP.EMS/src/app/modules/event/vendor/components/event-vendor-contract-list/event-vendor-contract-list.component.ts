@@ -44,7 +44,8 @@ export class EventVendorContractListComponent implements OnInit {
 
   loadEventVendorContracts = () => {
     return this.eventService.getVendorContracts(this.eventId).pipe(
-      switchMap(eventVendorContracts => this.loadVendors(eventVendorContracts))
+      switchMap(eventVendorContracts => this.loadVendors(eventVendorContracts)),
+      switchMap(eventVendorContracts => this.loadEventVendorContractStates(eventVendorContracts))
     );
   }
 
@@ -52,6 +53,7 @@ export class EventVendorContractListComponent implements OnInit {
     return this.lookupService.getByIds('eventVendorContractState', eventVendorContracts.map(_ => _.eventVendorContractStateId!))
       .pipe(
         map(eventVendorContractStates => {
+          (eventVendorContractStates)
           return eventVendorContracts.map(eventVendorContract => ({
             ...eventVendorContract,
             eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId)

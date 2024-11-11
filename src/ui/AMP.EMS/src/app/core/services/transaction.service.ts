@@ -8,26 +8,26 @@ import { BaseApiService } from './base.api.service';
 })
 export class TransactionService extends BaseApiService {
   get = (id: string): Observable<Transaction> => {
-    return this.httpGet<Transaction>(`api/transaction/${id}`);
+    return this.httpGet<Transaction>(`transaction/${id}`);
   }
 
   getByIds = (ids: string[]): Observable<Transaction[]> => {
-    return this.httpGet<Transaction[]>(`api/transaction/getbyids`, { params: { ids: ids } });
+    return this.httpGet<Transaction[]>(`transaction/getbyids`, { params: { ids: ids } });
   }
 
   getAll = (): Observable<Transaction[]> => {
-    return this.httpGet<Transaction[]>(`api/transaction/`);
+    return this.httpGet<Transaction[]>(`transaction/`);
   }
 
   add = (transaction: Transaction): Observable<Transaction> => {
-    return this.httpPost<Transaction>(`api/transaction/`, transaction);
+    return this.httpPost<Transaction>(`transaction/`, transaction);
   }
 
   update = (transaction: Transaction): Observable<Transaction> => {
-    return this.httpPut<Transaction>(`api/transaction/${transaction.id}`, transaction);
+    return this.httpPut<Transaction>(`transaction/${transaction.id}`, transaction);
   }
 
   delete = (id: string): Observable<Transaction> => {
-    return this.httpDelete(`api/event/${id}`);
+    return this.httpDelete(`event/${id}`);
   }
 }

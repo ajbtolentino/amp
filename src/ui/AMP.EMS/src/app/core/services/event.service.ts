@@ -11,58 +11,58 @@ import { BaseApiService } from './base.api.service';
 })
 export class EventService extends BaseApiService {
     get = (id: string): Observable<Event> => {
-        return this.httpGet(`api/event/${id}`);
+        return this.httpGet(`event/${id}`);
     }
 
     getRoles = (id: string): Observable<EventGuestRole[]> => {
-        return this.httpGet<EventGuestRole[]>(`api/event/${id}/roles`);
+        return this.httpGet<EventGuestRole[]>(`event/${id}/roles`);
     }
 
     getInvitations = (id: string): Observable<EventInvitation[]> => {
-        return this.httpGet<EventInvitation[]>(`api/event/${id}/invitations`);
+        return this.httpGet<EventInvitation[]>(`event/${id}/invitations`);
     }
 
     getGuests = (id: string): Observable<EventGuest[]> => {
-        return this.httpGet<EventGuest[]>(`api/event/${id}/guests`);
+        return this.httpGet<EventGuest[]>(`event/${id}/guests`);
     }
 
     getVendorContracts = (id: string): Observable<EventVendorContract[]> => {
-        return this.httpGet<EventVendorContract[]>(`api/event/${id}/vendorcontracts`);
+        return this.httpGet<EventVendorContract[]>(`event/${id}/vendorcontracts`);
     }
 
     getVendorContractStates = (id: string): Observable<Lookup[]> => {
-        return this.httpGet<Lookup[]>(`api/event/${id}/vendorcontractstates`);
+        return this.httpGet<Lookup[]>(`event/${id}/vendorcontractstates`);
     }
 
     getVendorContractPaymentTypes = (id: string): Observable<Lookup[]> => {
-        return this.httpGet<Lookup[]>(`api/event/${id}/vendorcontractpaymenttypes`);
+        return this.httpGet<Lookup[]>(`event/${id}/vendorcontractpaymenttypes`);
     }
 
     getVendorContractPaymentStates = (id: string): Observable<Lookup[]> => {
-        return this.httpGet<Lookup[]>(`api/event/${id}/vendorcontractpaymentstates`);
+        return this.httpGet<Lookup[]>(`event/${id}/vendorcontractpaymentstates`);
     }
 
     getVendorTypeBudgets = (id: string): Observable<Lookup[]> => {
-        return this.httpGet<Lookup[]>(`api/event/${id}/vendortypebudgets`);
+        return this.httpGet<Lookup[]>(`event/${id}/vendortypebudgets`);
     }
 
     getAll = (): Observable<Event[]> => {
-        return this.httpGet<Event[]>(`api/event/`);
+        return this.httpGet<Event[]>(`event/`);
     }
 
     add = (event: Event): Observable<Event> => {
-        return this.httpPost(`api/event`, event);
+        return this.httpPost(`event`, event);
     }
 
     update = (event: Event): Observable<Event> => {
-        return this.httpPut(`api/event/${event.id}`, event);
+        return this.httpPut(`event/${event.id}`, event);
     }
 
     delete = async (id: string) => {
-        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/event/${id}`, { headers: this.headers }));
+        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/event/${id}`, { headers: this.headers }));
     }
 
     deleteSelected = async (ids: string[]) => {
-        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/api/event`, { headers: this.headers, body: ids }));
+        return await lastValueFrom(this.httpClient.delete<any>(`${this.API_URL}/event`, { headers: this.headers, body: ids }));
     }
 }

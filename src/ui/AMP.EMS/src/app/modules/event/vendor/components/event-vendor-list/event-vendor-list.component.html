@@ -19,7 +19,7 @@
                     <ng-template let-vendors pTemplate="listItem">
                         <div class="grid grid-nogutter">
                             <div class="col-12" *ngFor="let vendor of vendors; let first = first">
-                                <div class="flex flex-column md:flex-row align-items-start p-3 w-full"
+                                <div class="flex flex-column md:flex-row align-items-center md:align-items-start p-3 w-full"
                                     [ngClass]="{ 'border-top-1 surface-border': !first }">
                                     <div class="flex flex-column text-center md:text-left w-10rem">
                                         <span class="font-medium text-secondary text-sm">{{

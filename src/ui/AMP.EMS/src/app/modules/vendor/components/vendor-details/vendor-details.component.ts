@@ -41,7 +41,6 @@ export class VendorDetailsComponent implements OnInit {
         this.vendor$ = this.vendorService.add(vendor)
           .pipe(
             tap(vendor => {
-              console.log(vendor);
               this.router.navigate([`/vendors/${vendor.id}/edit`])
             }));
       }

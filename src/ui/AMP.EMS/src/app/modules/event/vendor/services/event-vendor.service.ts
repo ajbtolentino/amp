@@ -8,22 +8,22 @@ import { Observable } from 'rxjs';
 })
 export class EventVendorService extends BaseApiService {
     get = (id: string): Observable<EventVendor> => {
-        return this.httpGet<EventVendor>(`api/eventvendor/${id}`);
+        return this.httpGet<EventVendor>(`eventvendor/${id}`);
     }
 
     getAll = (): Observable<EventVendor[]> => {
-        return this.httpGet<EventVendor[]>(`api/eventvendor/`);
+        return this.httpGet<EventVendor[]>(`eventvendor/`);
     }
 
     add = (vendor: Vendor): Observable<EventVendor> => {
-        return this.httpPost<EventVendor>(`api/eventvendor`, vendor);
+        return this.httpPost<EventVendor>(`eventvendor`, vendor);
     }
 
     update = (eventVendor: EventVendor): Observable<EventVendor> => {
-        return this.httpPut<EventVendor>(`api/eventvendor`, eventVendor);
+        return this.httpPut<EventVendor>(`eventvendor`, eventVendor);
     }
 
     delete = (id: string): Observable<EventVendor> => {
-        return this.httpDelete(`api/eventvendor/${id}`);
+        return this.httpDelete(`eventvendor/${id}`);
     }
 }

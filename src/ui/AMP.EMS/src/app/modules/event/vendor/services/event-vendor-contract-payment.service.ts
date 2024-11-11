@@ -8,26 +8,26 @@ import { Observable } from 'rxjs';
 })
 export class EventVendorContractPaymentService extends BaseApiService {
     get = (id: string): Observable<EventVendorContractPayment> => {
-        return this.httpGet<EventVendorContractPayment>(`api/eventVendorContractPayment/${id}`);
+        return this.httpGet<EventVendorContractPayment>(`eventVendorContractPayment/${id}`);
     }
 
     getAll = (): Observable<EventVendorContractPayment[]> => {
-        return this.httpGet<EventVendorContractPayment[]>(`api/eventVendorContractPayment/`);
+        return this.httpGet<EventVendorContractPayment[]>(`eventVendorContractPayment/`);
     }
 
     add = (eventVendorContractPayment: EventVendorContractPayment): Observable<EventVendorContractPayment> => {
-        return this.httpPost<EventVendorContractPayment>(`api/eventVendorContractPayment`, eventVendorContractPayment);
+        return this.httpPost<EventVendorContractPayment>(`eventVendorContractPayment`, eventVendorContractPayment);
     }
 
     addTransaction = (id: string, transaction: Transaction): Observable<EventVendorContractPayment> => {
-        return this.httpPost<EventVendorContractPayment>(`api/eventVendorContractPayment/${id}/transaction`, transaction);
+        return this.httpPost<EventVendorContractPayment>(`eventVendorContractPayment/${id}/transaction`, transaction);
     }
 
     update = (eventVendorContractPayment: EventVendorContractPayment): Observable<EventVendorContractPayment> => {
-        return this.httpPut<EventVendorContractPayment>(`api/eventVendorContractPayment/${eventVendorContractPayment.id}`, eventVendorContractPayment);
+        return this.httpPut<EventVendorContractPayment>(`eventVendorContractPayment/${eventVendorContractPayment.id}`, eventVendorContractPayment);
     }
 
     delete = (id: string): Observable<EventVendorContractPayment> => {
-        return this.httpDelete(`api/eventVendorContractPayment/${id}`);
+        return this.httpDelete(`eventVendorContractPayment/${id}`);
     }
 }

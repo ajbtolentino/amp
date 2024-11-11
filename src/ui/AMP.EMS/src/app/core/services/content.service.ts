@@ -8,22 +8,22 @@ import { BaseApiService } from './base.api.service';
 })
 export class ContentService extends BaseApiService {
     get = (id: string): Observable<Content> => {
-        return this.httpGet<Content>(`api/content/${id}`);
+        return this.httpGet<Content>(`content/${id}`);
     }
 
     getAll = (): Observable<Content[]> => {
-        return this.httpGet<Content[]>(`api/content/`);
+        return this.httpGet<Content[]>(`content/`);
     }
 
     add = (content: Content): Observable<Content> => {
-        return this.httpPost<Content>(`api/content`, content);
+        return this.httpPost<Content>(`content`, content);
     }
 
     update = (content: Content): Observable<Content> => {
-        return this.httpPut<Content>(`api/content`, content);
+        return this.httpPut<Content>(`content`, content);
     }
 
     delete = (id: string): Observable<Content> => {
-        return this.httpDelete(`api/content/${id}`);
+        return this.httpDelete(`content/${id}`);
     }
 }

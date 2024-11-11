@@ -8,30 +8,30 @@ import { Observable } from 'rxjs';
 })
 export class EventGuestRoleService extends BaseApiService {
     get = (id: string): Observable<EventGuestRole> => {
-        return this.httpGet(`api/guest/${id}`);
+        return this.httpGet(`guest/${id}`);
     }
 
     getAll = (): Observable<EventGuestRole[]> => {
-        return this.httpGet<EventGuestRole[]>(`api/eventGuestRole`);
+        return this.httpGet<EventGuestRole[]>(`eventGuestRole`);
     }
 
     getByEventGuestIds = (eventGuestIds: string[]) => {
-        return this.httpGet<EventGuestRole[]>(`api/eventGuestRole/getbyeventguestids`, { params: { eventGuestIds: eventGuestIds } });
+        return this.httpGet<EventGuestRole[]>(`eventGuestRole/getbyeventguestids`, { params: { eventGuestIds: eventGuestIds } });
     }
 
     getByIds = (ids: string[]) => {
-        return this.httpGet<EventGuestRole[]>(`api/eventGuestRole/getbyids`, { params: { ids: ids } });
+        return this.httpGet<EventGuestRole[]>(`eventGuestRole/getbyids`, { params: { ids: ids } });
     }
 
     add = (eventGuestRole: EventGuestRole): Observable<EventGuestRole> => {
-        return this.httpPost(`api/eventGuestRole/`, eventGuestRole);
+        return this.httpPost(`eventGuestRole/`, eventGuestRole);
     }
 
     update = (eventGuestRole: EventGuestRole): Observable<EventGuestRole> => {
-        return this.httpPut(`api/eventguestinvitation/${eventGuestRole.id}`, eventGuestRole);
+        return this.httpPut(`eventguestinvitation/${eventGuestRole.id}`, eventGuestRole);
     }
 
     delete = (id: string): Observable<EventGuestRole> => {
-        return this.httpDelete(`api/eventguestinvitation/${id}`);
+        return this.httpDelete(`eventguestinvitation/${id}`);
     }
 }

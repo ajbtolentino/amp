@@ -6,7 +6,7 @@ import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { EventGuestRoleService, EventGuestService, GuestService } from '@modules/event/guest';
 import { EventGuest, EventGuestRole, Guest } from '@shared/models';
-import { lastValueFrom, map, Observable, of, switchMap, tap } from 'rxjs';
+import { lastValueFrom, map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-guests',
@@ -36,7 +36,6 @@ export class EventGuestListComponent implements OnInit {
   refreshGrid = () => {
     this.eventGuests$ = this.eventService.getGuests(this.eventId).pipe(
       switchMap(eventGuests => this.loadGuest(eventGuests)),
-      tap(eventGuests => console.log(eventGuests)),
       switchMap(eventGuests => this.loadEventGuestRole(eventGuests))
     );
   }

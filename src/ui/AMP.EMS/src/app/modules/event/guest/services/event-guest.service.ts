@@ -8,19 +8,19 @@ import { Observable } from 'rxjs';
 })
 export class EventGuestService extends BaseApiService {
     get = (id: string): Observable<EventGuest> => {
-        return this.httpGet(`api/eventguest/${id}`);
+        return this.httpGet(`eventguest/${id}`);
     }
 
     getAll = (): Observable<EventGuest[]> => {
-        return this.httpGet<EventGuest[]>(`api/eventguest`);
+        return this.httpGet<EventGuest[]>(`eventguest`);
     }
 
     getInvitations = (eventGuestId: string): Observable<EventGuestInvitation[]> => {
-        return this.httpGet(`api/eventguest/${eventGuestId}/invitations`);
+        return this.httpGet(`eventguest/${eventGuestId}/invitations`);
     }
 
     add = (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]): Observable<EventGuest> => {
-        return this.httpPost(`api/eventguest`, {
+        return this.httpPost(`eventguest`, {
             ...eventGuest,
             eventRoleIds: eventRoleIds,
             eventInvitationIds: eventInvitationIds
@@ -28,7 +28,7 @@ export class EventGuestService extends BaseApiService {
     }
 
     update = (eventGuest: EventGuest, eventRoleIds: string[], eventInvitationIds: string[]): Observable<EventGuest> => {
-        return this.httpPut(`api/eventguest/${eventGuest.id}`, {
+        return this.httpPut(`eventguest/${eventGuest.id}`, {
             ...eventGuest,
             eventRoleIds: eventRoleIds,
             eventInvitationIds: eventInvitationIds
@@ -36,10 +36,10 @@ export class EventGuestService extends BaseApiService {
     }
 
     delete = (id: string): Observable<EventGuest> => {
-        return this.httpDelete<EventGuest>(`api/eventguest/${id}`);
+        return this.httpDelete<EventGuest>(`eventguest/${id}`);
     }
 
     deleteSelected = (ids: string[]): Observable<EventGuest[]> => {
-        return this.httpDeleteSelected(`api/eventguest`, ids);
+        return this.httpDeleteSelected(`eventguest`, ids);
     }
 }

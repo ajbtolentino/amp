@@ -9,30 +9,30 @@ import { Observable } from 'rxjs';
 })
 export class EventInvitationService extends BaseApiService {
     getAll = (): Observable<EventInvitation[]> => {
-        return this.httpGet(`api/eventinvitation`);
+        return this.httpGet(`eventinvitation`);
     }
 
     get = (id: string): Observable<EventInvitation> => {
-        return this.httpGet(`api/eventinvitation/${id}`);
+        return this.httpGet(`eventinvitation/${id}`);
     }
 
     getGuests = (id: string): Observable<EventGuestInvitation[]> => {
-        return this.httpGet(`api/eventinvitation/${id}/guests`);
+        return this.httpGet(`eventinvitation/${id}/guests`);
     }
 
     add = (invitation: EventInvitation, content: Content): Observable<EventInvitation> => {
-        return this.httpPost(`api/eventinvitation`, { ...invitation, html: content.htmlContent });
+        return this.httpPost(`eventinvitation`, { ...invitation, html: content.htmlContent });
     }
 
     update = (invitation: EventInvitation, content: Content): Observable<EventInvitation> => {
-        return this.httpPut(`api/eventinvitation/${invitation.id}`, { ...invitation, html: content.htmlContent });
+        return this.httpPut(`eventinvitation/${invitation.id}`, { ...invitation, html: content.htmlContent });
     }
 
     delete = (id: string): Observable<EventInvitation[]> => {
-        return this.httpDelete(`api/eventinvitation/${id}`);
+        return this.httpDelete(`eventinvitation/${id}`);
     }
 
     deleteSelected = (ids: string[]): Observable<EventInvitation[]> => {
-        return this.httpDeleteSelected(`api/eventinvitation`, ids);
+        return this.httpDeleteSelected(`eventinvitation`, ids);
     }
 }
