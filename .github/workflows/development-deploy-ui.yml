@@ -7,6 +7,8 @@ on:
   push:
     paths: 
       - 'src/ui/**'
+    branches:
+      - 'development'
   workflow_dispatch:
 
 jobs:
