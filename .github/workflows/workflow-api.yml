@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
-name: API
+name: API Workflow 
 
 on:
   push:
@@ -15,9 +15,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-test-package:
+  Build-Test-Package:
     name: Build, Test and Package
     runs-on: ubuntu-latest
+
     permissions: write-all
       
     steps:    
@@ -75,8 +76,10 @@ jobs:
     needs: set-environment
     if: ${{ needs.set-environment.outputs.environment_name }} != ''
     runs-on: ubuntu-latest
+    needs: Build-Test-Package
+    if: github.event_name == 'workflow_dispatch'
     environment:
-      name: ${{ needs.set-environment.outputs.environment_name }}
+      name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
@@ -90,7 +93,50 @@ jobs:
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
         with:
-          files: './appsettings*.json'
+          files: './artifact/appsettings*.json'
+        env:
+          ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
+          Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
+          Serilog.WriteTo.0.Args.serverUrl: ${{vars.SEQ_URL}}
+          DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_SUBSCRIPTIONID }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: '${{vars.EMS_AZUREAPPSERVICE_APPNAME}}'
+          slot-name: 'Production'
+          package: .
+          target-path: '/home/site/wwwroot/api'
+
+  Deploy-Production:
+    name: Deploy EMS API to Production
+    runs-on: ubuntu-latest
+    needs: Build-Test-Package
+    if: github.event_name == 'workflow_dispatch'
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: ems-api
+
+      - name: Substitute appsettings
+        uses: microsoft/variable-substitution@v1 
+        with:
+          files: './artifact/appsettings*.json'
         env:
           ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
           Authority: ${{vars.IDP_AUTHORITY_HTTPS_URL}}/
