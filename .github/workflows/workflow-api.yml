@@ -66,11 +66,11 @@ jobs:
             echo "::set-output name=environment_name::${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}"
 
   deploy:
-    name: Deploy to ${{ steps.build-test-package.outputs.environment_name }}
-    runs-on: ubuntu-latest
+    name: Deploy to ${{ needs.build-test-package.outputs.environment_name }}
     needs: build-test-package
+    runs-on: ubuntu-latest
     environment:
-      name: ${{ steps.build-test-package.outputs.environment_name }}
+      name: ${{ needs.build-test-package.outputs.environment_name }}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
