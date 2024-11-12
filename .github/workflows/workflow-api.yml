@@ -37,7 +37,7 @@ jobs:
   build-test-package:
     name: Build, Test and Package
     runs-on: ubuntu-latest
-
+    needs: set-environment
     permissions: write-all
 
     steps:
@@ -80,7 +80,7 @@ jobs:
           name: ems-api
           path: ${{env.DOTNET_ROOT}}/ems-a
 
-  deploy-production:
+  deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
     environment:
