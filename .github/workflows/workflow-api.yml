@@ -61,7 +61,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/ems-api
 
   deploy-production:
-    name: Deploy to Production
+    name: Deploy to ${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}
     runs-on: ubuntu-latest
     needs: build-test-package
     environment:
