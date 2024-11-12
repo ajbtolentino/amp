@@ -28,7 +28,7 @@ jobs:
   build-test-package:
     name: Build, Test and Package
     needs: set-environment
-    if: ${{ steps.set-environment.outputs.environment_name }} != ''
+    if: ${{ needs.set-environment.outputs.environment_name }} != ''
     runs-on: ubuntu-latest
     permissions: write-all
 
