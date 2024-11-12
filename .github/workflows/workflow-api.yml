@@ -61,16 +61,16 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/ems-api
 
       - name: Set Environment
-        run: echo "Set environment to ${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}"
-        env:
-          ENV_NAME: ${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}
+        id: set-output-defaults
+        run: |    
+            echo "::set-output name=environment_name::${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}"
 
   deploy:
-    name: Deploy to ${{ env.ENV_NAME }}
+    name: Deploy to ${{ steps.build-test-package.outputs.environment_name }}
     runs-on: ubuntu-latest
     needs: build-test-package
     environment:
-      name: ${{ steps.build-test-package.outputs.ENV_NAME }}
+      name: ${{ steps.build-test-package.outputs.environment_name }}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
