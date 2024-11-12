@@ -24,6 +24,7 @@ jobs:
       
     steps:
       - id: output-environment-name
+        name: Set Environment
         run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
     
       - name: Checkout
