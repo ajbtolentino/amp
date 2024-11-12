@@ -73,7 +73,7 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/ems-api
 
   deploy:
-    name: Deploy to ${{ steps.build-test-package.outputs.environment_name }}
+    name: Deploy to ${{ needs.build-test-package.outputs.environment_name }}
     needs: build-test-package
     runs-on: ubuntu-latest
     environment:
