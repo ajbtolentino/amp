@@ -33,7 +33,11 @@ jobs:
             echo "Unknown branch; skipping deployment."
             exit 1
           fi
-    
+          
+    environment:
+      name: ${{ steps.outputs.env_name }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      
   build-test-package:
     name: Build, Test and Package
     runs-on: ubuntu-latest
@@ -84,9 +88,6 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     needs: build-test-package
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
     
