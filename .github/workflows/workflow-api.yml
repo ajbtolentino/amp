@@ -65,7 +65,7 @@ jobs:
     needs: build-test-package
     runs-on: ubuntu-latest
     outputs:
-      environment_name: ${{ steps.step1.outputs.environment_name }}
+      environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
 
     steps:
       - id: output-environment-name
