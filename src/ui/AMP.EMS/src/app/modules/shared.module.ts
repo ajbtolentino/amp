@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
+import { AbsoluteValuePipe, FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
@@ -30,7 +30,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
-  declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe],
+  declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe, AbsoluteValuePipe],
   imports: [
     CardModule,
     CommonModule,
@@ -63,6 +63,7 @@ import { TooltipModule } from 'primeng/tooltip';
     TimelineModule
   ],
   exports: [
+    AbsoluteValuePipe,
     CardModule,
     WithStatusPipe,
     FindItemPipe,

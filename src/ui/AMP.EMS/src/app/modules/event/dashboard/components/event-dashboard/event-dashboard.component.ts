@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventDashboardService } from '@modules/event/dashboard';
 import { PrimeIcons } from 'primeng/api';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-dashboard',
@@ -16,6 +16,7 @@ export class EventDashboardComponent implements OnInit {
 
   guestInvitations$: Observable<any> = new Observable<any>();
   budgets$: Observable<any> = new Observable<any>();
+  expenses$: Observable<any> = new Observable<any>();
 
   events1: any[] = [];
 
@@ -25,9 +26,9 @@ export class EventDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.initChart();
-    const eventId = this.route.snapshot.parent?.paramMap.get("eventId") || '';
-    this.guestInvitations$ = this.eventDashboardService.guestInvitations(eventId);
-    this.budgets$ = this.eventDashboardService.budget(eventId);
+    this.guestInvitations$ = this.route.parent?.paramMap.pipe(switchMap(params => this.eventDashboardService.guestInvitations(params.get('eventId')!)))!;
+    this.budgets$ = this.route.parent?.paramMap.pipe(switchMap(params => this.eventDashboardService.budget(params.get('eventId')!)))!;
+    this.expenses$ = this.route.parent?.paramMap.pipe(switchMap(params => this.eventDashboardService.expenses(params.get('eventId')!)))!;
 
     this.events1 = [
       { status: 'Delivered', date: '16/10/2020 10:00', icon: PrimeIcons.CHECK, color: '#607D8B' },
