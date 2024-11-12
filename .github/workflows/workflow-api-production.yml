@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
-name: API Workflow 
+name: API Production Workflow 
 
 on:
   push:
@@ -11,16 +11,6 @@ on:
       - 'src/common/**'
     branches:
       - 'master'
-      - 'development'
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Select environment'
-        required: true
-        type: choice
-        options:
-          - Development
-          - Production
 
 jobs:
   build-test-package:
@@ -70,12 +60,11 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/ems-api
 
   deploy:
-    name: Deploy - ${{ github.event.inputs.environment }}
+    name: Deploy to Production
     runs-on: ubuntu-latest
     needs: build-test-package
-    if: github.event_name == 'workflow_dispatch'  # Only run on manual trigger
     environment: 
-      name: ${{ github.event.inputs.environment }}
+      name: Production
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
