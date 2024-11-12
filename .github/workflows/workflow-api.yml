@@ -77,7 +77,7 @@ jobs:
     needs: build-test-package
     runs-on: ubuntu-latest
     environment:
-      name: ${{ steps.build-test-package.outputs.environment_name }}
+      name: ${{ needs.build-test-package.outputs.environment_name }}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
