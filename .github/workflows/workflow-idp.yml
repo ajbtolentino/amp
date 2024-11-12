@@ -47,6 +47,15 @@ jobs:
         with:
           trx_files: "${{ github.workspace }}/**/*.trx"
 
+      - name: Publish Identity Provider
+        run: dotnet publish ./src/admin/AMP.Identity/AMP.Identity.csproj -c Release -o ${{env.DOTNET_ROOT}}/idp
+        
+      - name: Package Identity Provider
+        uses: actions/upload-artifact@v4
+        with:
+          name: idp
+          path: ${{env.DOTNET_ROOT}}/idp
+
   set-environment:
     name: Set Environment
     needs: build-test-package
