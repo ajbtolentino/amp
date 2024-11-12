@@ -14,9 +14,21 @@ on:
       - 'development'
   workflow_dispatch:
 
-jobs:      
+jobs:
+  set-environment:
+    name: Set Environment
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set Environment
+        id: set-output-defaults
+        run: |    
+            echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
+
   build-test-package:
     name: Build, Test and Package
+    needs: set-environment
+    if: ${{ steps.set-environment.outputs.environment_name }} != ''
     runs-on: ubuntu-latest
     permissions: write-all
 
@@ -60,17 +72,12 @@ jobs:
           name: ems-api
           path: ${{env.DOTNET_ROOT}}/ems-api
 
-      - name: Set Environment
-        id: set-output-defaults
-        run: |    
-            echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
-
   deploy:
-    name: Deploy to ${{ needs.build-test-package.outputs.environment_name }}
+    name: Deploy to ${{ steps.build-test-package.outputs.environment_name }}
     needs: build-test-package
     runs-on: ubuntu-latest
     environment:
-      name: ${{ needs.build-test-package.outputs.environment_name }}
+      name: ${{ steps.build-test-package.outputs.environment_name }}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
