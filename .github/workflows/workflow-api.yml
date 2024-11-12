@@ -19,8 +19,13 @@ jobs:
     name: Build, Test and Package
     runs-on: ubuntu-latest
     permissions: write-all
-
+    outputs:
+      environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
+      
     steps:
+      - id: output-environment-name
+        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
+    
       - name: Checkout
         uses: actions/checkout@v4
         
@@ -60,20 +65,9 @@ jobs:
           name: ems-api
           path: ${{env.DOTNET_ROOT}}/ems-api
 
-  set-environment:
-    name: Set Environment
-    needs: build-test-package
-    runs-on: ubuntu-latest
-    outputs:
-      environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
-
-    steps:
-      - id: output-environment-name
-        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
-
   deploy:
     name: Deploy to ${{ needs.set-environment.outputs.environment_name }}
-    needs: set-environment
+    needs: build-test-package
     if: ${{ needs.set-environment.outputs.environment_name }} != ''
     runs-on: ubuntu-latest
     environment:
