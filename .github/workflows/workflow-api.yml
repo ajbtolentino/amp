@@ -60,22 +60,28 @@ jobs:
           name: ems-api
           path: ${{env.DOTNET_ROOT}}/ems-api
 
-  deploy:
-    name: Deploy to ${{ steps.output-environment-name.outputs.environment_name }}
+  set-environment:
+    name: Set Environment
     needs: build-test-package
-    if: ${{ steps.output-environment-name.outputs.environment_name }} != ''
+    runs-on: ubuntu-latest
+    outputs:
+      environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
+    steps:
+      - id: output-environment-name
+        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    name: Deploy to ${{ needs.set-environment.outputs.environment_name }}
+    needs: set-environment
+    if: ${{ needs.set-environment.outputs.environment_name }} != ''
     runs-on: ubuntu-latest
     environment:
-      name: ${{ steps.output-environment-name.outputs.environment_name }}
+      name: ${{ needs.set-environment.outputs.environment_name }}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
     
-    steps:
-      - id: output-environment-name
-        name: Set Environment
-        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
-    
+    steps:   
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
