@@ -27,7 +27,7 @@ jobs:
     environment:
       name: ${{ needs.set-environment.outputs.environment_name }}
     outputs:
-      environment_name: ${{ needs.sett-environment.outputs.environment_name }}
+      environment_name: ${{ needs.set-environment.outputs.environment_name }}
     defaults:
       run:
          working-directory: ./src/ui/AMP.EMS
@@ -67,7 +67,7 @@ jobs:
         path: ./src/ui/AMP.EMS/dist
 
   deploy:
-    name: Deploy to 
+    name: Deploy to ${{ needs.build.outputs.environment_name }}
     runs-on: ubuntu-latest
     needs: build
     environment:
