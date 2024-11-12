@@ -24,19 +24,15 @@ jobs:
         id: set-environment
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            echo "Deploying to Production"
-            echo "ENV_NAME=production" >> $GITHUB_ENV
+            echo "environment_name=production" >> $GITHUB_ENV
+            echo "::set-output name=env_name::production"
           elif [[ "${{ github.ref }}" == "refs/heads/development" ]]; then
-            echo "Deploying to Development"
-            echo "ENV_NAME=development" >> $GITHUB_ENV
+            echo "environment_name=development" >> $GITHUB_ENV
+            echo "::set-output name=env_name::development"
           else
-            echo "Unknown branch. Skipping deployment."
+            echo "Unknown branch; skipping deployment."
             exit 1
           fi
-
-    environment:
-      name: ${{ env.ENV_NAME }}
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
   build-test-package:
     name: Build, Test and Package
@@ -88,6 +84,9 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     needs: build-test-package
+    environment:
+      name: ${{ steps.set-env.outputs.env_name }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
     
