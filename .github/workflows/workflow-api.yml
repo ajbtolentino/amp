@@ -84,7 +84,7 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     environment:
-      name: ${{ env.environment }}
+      name: ${{env.environment}}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     needs: build-test-package
     permissions:
