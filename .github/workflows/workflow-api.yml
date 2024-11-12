@@ -63,7 +63,7 @@ jobs:
       - name: Set Environment
         id: set-output-defaults
         run: |    
-            echo "::set-output name=environment_name::${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}"
+            echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy to ${{ needs.build-test-package.outputs.environment_name }}
