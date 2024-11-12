@@ -64,12 +64,12 @@ jobs:
     name: Set Environment
     needs: build-test-package
     runs-on: ubuntu-latest
-    
+    outputs:
+      environment_name: ${{ steps.step1.outputs.environment_name }}
+
     steps:
-      - name: Set Environment
-        id: set-output-defaults
-        run: |    
-            echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
+      - id: output-environment-name
+        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Deploy to ${{ needs.set-environment.outputs.environment_name }}
