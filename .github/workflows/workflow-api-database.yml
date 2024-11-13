@@ -64,12 +64,15 @@ jobs:
 
       - name: Migrate
         if: ${{ github.event.inputs.action == 'Migrate' }}
-        run: dotnet run --project 'amp/src/api/AMP.EMS.API/AMP.EMS.API.csproj' /migrate
+        working-directory: src/api/AMP.EMS.API
+        run: dotnet run /migrate
 
       - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' }}
-        run: dotnet run --project 'amp/src/api/AMP.EMS.API/AMP.EMS.API.csproj' /seed
+        working-directory: src/api/AMP.EMS.API
+        run: dotnet run /seed
 
       - name: Migrate and Seed
         if: ${{ github.event.inputs.action == 'Migrate and Seed' }}
-        run: dotnet run --project 'amp/src/api/AMP.EMS.API/AMP.EMS.API.csproj' /migrate /seed
+        working-directory: src/api/AMP.EMS.API
+        run: dotnet run /migrate /seed
