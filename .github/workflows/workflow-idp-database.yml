@@ -38,7 +38,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore './src/admin/AMP.Identity/AMP.Identity.csproj'
 
       - name: Substitute appsettings in AMP.Identity
         uses: microsoft/variable-substitution@v1 
@@ -50,4 +50,4 @@ jobs:
 
       - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' }}
-        run: dotnet run ./src/admin/AMP.Identity/AMP.Identity.csproj /seed
+        run: dotnet run 'src/admin/AMP.Identity/AMP.Identity.csproj' /seed
