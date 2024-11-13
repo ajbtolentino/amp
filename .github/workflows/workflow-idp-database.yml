@@ -45,10 +45,9 @@ jobs:
           ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
           IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
 
-      - name: Run dotnet commands
+      - name: Build
+        run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj
+
+      - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' }}
-        working-directory: src/api/AMP.EMS.API/
-        run: |
-          dotnet restore
-          dotnet build
-          dotnet run /seed
+        run: dotnet run 'amp/src/admin/AMP.Identity/AMP.Identity.csproj' /seed
