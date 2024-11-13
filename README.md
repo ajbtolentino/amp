@@ -2,5 +2,5 @@
 A mini project
 - Event Management System
 - Angular
-- Identity
+- IdentityServer
 - EF Core
