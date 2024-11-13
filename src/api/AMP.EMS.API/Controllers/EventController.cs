@@ -10,38 +10,38 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     : ApiBaseController<Event, Guid>(unitOfWork, logger)
 {
     [HttpGet]
-    [Route("{eventId:guid}/roles")]
-    public IActionResult GetRoles(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult Roles(Guid eventId)
     {
-        var eventRoles = UnitOfWork.Set<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
+        var roles = UnitOfWork.Set<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<Role>>(string.Empty) { Data = eventRoles });
+        return Ok(new OkResponse<IEnumerable<Role>>(string.Empty) { Data = roles });
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/guests")]
-    public IActionResult GetGuests(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult Guests(Guid eventId)
     {
-        var eventGuests = UnitOfWork.Set<EventGuest>().GetAll()
-            .Where(eventGuest => eventGuest.EventId == eventId)
+        var guests = UnitOfWork.Set<Guest>().GetAll()
+            .Where(guest => guest.EventId == eventId)
             .AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<EventGuest>>(string.Empty) { Data = eventGuests });
+        return Ok(new OkResponse<IEnumerable<Guest>>(string.Empty) { Data = guests });
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/invitations")]
-    public IActionResult GetInvitations(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult Invitations(Guid eventId)
     {
-        var eventInvitations = UnitOfWork.Set<EventInvitation>().GetAll().AsNoTracking()
-            .Where(eventInvitation => eventInvitation.EventId == eventId);
+        var invitations = UnitOfWork.Set<Invitation>().GetAll().AsNoTracking()
+            .Where(invitation => invitation.EventId == eventId);
 
-        return Ok(new OkResponse<IEnumerable<EventInvitation>>(string.Empty) { Data = eventInvitations });
+        return Ok(new OkResponse<IEnumerable<Invitation>>(string.Empty) { Data = invitations });
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/vendorContracts")]
-    public IActionResult GetVendorContracts(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult VendorContracts(Guid eventId)
     {
         var eventVendorContracts = UnitOfWork.Set<EventVendorContract>().GetAll()
             .Where(eventVendorContract => eventVendorContract.EventId == eventId).AsNoTracking();
@@ -50,8 +50,8 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/vendorContractStates")]
-    public IActionResult GetVendorContractStates(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult VendorContractStates(Guid eventId)
     {
         var eventVendorContractStates = UnitOfWork.Set<EventVendorContractState>().GetAll()
             .Where(eventVendorContractState => eventVendorContractState.EventId == eventId).AsNoTracking();
@@ -61,8 +61,8 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/vendorContractPaymentTypes")]
-    public IActionResult GetVendorContractPaymentTypes(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult VendorContractPaymentTypes(Guid eventId)
     {
         var eventVendorContractPaymentTypes = UnitOfWork.Set<EventVendorContractPaymentType>().GetAll()
             .Where(eventVendorContractPaymentType => eventVendorContractPaymentType.EventId == eventId)
@@ -73,8 +73,8 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/vendorContractPaymentStates")]
-    public IActionResult GetVendorContractPaymentStates(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult VendorContractPaymentStates(Guid eventId)
     {
         var eventVendorContractPaymentState = UnitOfWork.Set<EventVendorContractPaymentState>().GetAll()
             .Where(eventVendorContractPaymentState => eventVendorContractPaymentState.EventId == eventId)
@@ -85,8 +85,8 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     }
 
     [HttpGet]
-    [Route("{eventId:guid}/vendorTypeBudgets")]
-    public IActionResult GetVendorTypeBudgets(Guid eventId)
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult VendorTypeBudgets(Guid eventId)
     {
         var eventVendorTypeBudgets = UnitOfWork.Set<EventVendorTypeBudget>().GetAll()
             .Where(eventVendorContractPaymentState => eventVendorContractPaymentState.EventId == eventId)

@@ -8,7 +8,7 @@ public class RoleController(IUnitOfWork unitOfWork, ILogger<RoleController> logg
     : ApiBaseController<Role, Guid>(unitOfWork, logger)
 {
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] EventRoleData request)
+    public async Task<IActionResult> Post([FromBody] RoleRequest request)
     {
         ArgumentException.ThrowIfNullOrEmpty(request.Name);
 
@@ -22,7 +22,7 @@ public class RoleController(IUnitOfWork unitOfWork, ILogger<RoleController> logg
 
     [HttpPut]
     [Route("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] EventRoleData request)
+    public async Task<IActionResult> Put(Guid id, [FromBody] RoleRequest request)
     {
         ArgumentException.ThrowIfNullOrEmpty(request.Name);
 
@@ -37,5 +37,5 @@ public class RoleController(IUnitOfWork unitOfWork, ILogger<RoleController> logg
         return await base.Put(guestRole);
     }
 
-    public record EventRoleData(Guid EventId, string? Name, string? Description);
+    public record RoleRequest(Guid EventId, string? Name, string? Description);
 }

@@ -11,34 +11,34 @@ using Newtonsoft.Json.Converters;
 namespace AMP.EMS.API.Controllers;
 
 public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logger)
-    : ApiBaseController<EventGuestInvitationRsvp, Guid>(unitOfWork, logger)
+    : ApiBaseController<GuestInvitationRsvp, Guid>(unitOfWork, logger)
 {
     [HttpGet]
-    [Route(nameof(GetByEventGuestInvitationIds))]
-    public virtual IActionResult GetByEventGuestInvitationIds([FromQuery] List<Guid> eventGuestInvitationIds)
+    [Route("[action]")]
+    public virtual IActionResult GetByGuestInvitationIds([FromQuery] List<Guid> guestInvitationIds)
     {
-        var eventGuestInvitationRsvps =
-            EntityRepository.GetAll().Where(entity => eventGuestInvitationIds.Contains(entity.EventGuestInvitationId));
+        var guestInvitationRsvps =
+            EntityRepository.GetAll().Where(entity => guestInvitationIds.Contains(entity.GuestInvitationId));
 
-        return Ok(new OkResponse<IEnumerable<EventGuestInvitationRsvp>>(string.Empty)
-            { Data = eventGuestInvitationRsvps });
+        return Ok(new OkResponse<IEnumerable<GuestInvitationRsvp>>(string.Empty)
+            { Data = guestInvitationRsvps });
     }
 
     [HttpGet(nameof(GetItemsByIds))]
     public virtual IActionResult GetItemsByIds([FromQuery] List<Guid> ids)
     {
-        var eventGuestInvitationRsvpItems = UnitOfWork.Set<EventGuestInvitationRsvpItem>().GetAll().AsNoTracking()
-            .Where(_ => ids.Contains(_.EventGuestInvitationRsvpId));
+        var guestInvitationRsvpItems = UnitOfWork.Set<GuestInvitationRsvpItem>().GetAll().AsNoTracking()
+            .Where(_ => ids.Contains(_.GuestInvitationRsvpId));
 
-        return Ok(new OkResponse<IEnumerable<EventGuestInvitationRsvpItem>>(string.Empty)
-            { Data = eventGuestInvitationRsvpItems });
+        return Ok(new OkResponse<IEnumerable<GuestInvitationRsvpItem>>(string.Empty)
+            { Data = guestInvitationRsvpItems });
     }
 
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Post([FromBody] RsvpRequest request)
     {
-        var guestInvitation = await UnitOfWork.Set<EventGuestInvitation>().Get(request.EventGuestInvitationId);
+        var guestInvitation = await UnitOfWork.Set<GuestInvitation>().Get(request.GuestInvitationId);
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
 
@@ -46,25 +46,25 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
         {
             UnitOfWork.BeginTransaction();
 
-            var rsvpEntity = new EventGuestInvitationRsvp
+            var rsvpEntity = new GuestInvitationRsvp
             {
                 Response = request.Response
             };
 
             foreach (var item in request.GuestNames?.Where(_ => !string.IsNullOrEmpty(_)))
-                rsvpEntity.EventGuestInvitationRsvpItems.Add(new EventGuestInvitationRsvpItem
+                rsvpEntity.GuestInvitationRsvpItems.Add(new GuestInvitationRsvpItem
                 {
                     Name = item
                 });
 
-            await UnitOfWork.Set<EventGuestInvitationRsvp>().Add(rsvpEntity);
+            await UnitOfWork.Set<GuestInvitationRsvp>().Add(rsvpEntity);
 
-            guestInvitation.EventGuestInvitationRsvps.Add(rsvpEntity);
+            guestInvitation.GuestInvitationRsvps.Add(rsvpEntity);
 
             await UnitOfWork.SaveChangesAsync();
             await UnitOfWork.CommitTransactionAsync();
 
-            return Ok(new OkResponse<EventGuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
+            return Ok(new OkResponse<GuestInvitationRsvp>(string.Empty) { Data = rsvpEntity });
         }
         catch (Exception ex)
         {
@@ -75,7 +75,7 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
     }
 
     public record RsvpRequest(
-        Guid EventGuestInvitationId,
+        Guid GuestInvitationId,
         [JsonConverter(typeof(StringEnumConverter))]
         RsvpResponse Response,
         string? PhoneNumber,

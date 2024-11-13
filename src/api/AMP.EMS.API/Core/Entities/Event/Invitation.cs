@@ -2,7 +2,7 @@ using AMP.Infrastructure.Entity;
 
 namespace AMP.EMS.API.Core.Entities;
 
-public class EventInvitation : FullAuditableEntity<Guid>
+public class Invitation : FullAuditableEntity<Guid>
 {
     public required Guid EventId { get; set; }
     public Guid? ContentId { get; set; }
@@ -12,5 +12,5 @@ public class EventInvitation : FullAuditableEntity<Guid>
 
     public virtual Event? Event { get; set; }
     public virtual Content? Content { get; set; }
-    public virtual ICollection<EventGuestInvitation> EventGuestInvitations { get; set; } = [];
+    public virtual ICollection<GuestInvitation> GuestInvitations { get; set; } = [];
 }

@@ -15,39 +15,39 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
     [HttpGet("{eventId:guid}/[action]")]
     public async Task<IActionResult> GuestInvitations(Guid eventId)
     {
-        var eventInvitationIds = unitOfWork.Set<EventInvitation>().GetAll().AsNoTracking()
+        var invitationIds = unitOfWork.Set<Invitation>().GetAll().AsNoTracking()
             .Where(_ => _.EventId == eventId).Select(_ => _.Id);
 
-        var eventGuests = unitOfWork.Set<EventGuest>().GetAll().Where(_ => _.EventId == eventId).AsNoTracking();
+        var mainGuests = unitOfWork.Set<Guest>().GetAll().Where(_ => _.EventId == eventId).AsNoTracking();
 
-        var eventGuestInvitations = unitOfWork.Set<EventGuestInvitation>().GetAll().AsNoTracking()
-            .Where(_ => eventInvitationIds.Contains(_.EventInvitationId));
+        var guestInvitations = unitOfWork.Set<GuestInvitation>().GetAll().AsNoTracking()
+            .Where(_ => invitationIds.Contains(_.InvitationId));
 
-        var eventGuestInvitationIds = eventGuestInvitations.Select(_ => _.Id);
+        var guestInvitationIds = guestInvitations.Select(_ => _.Id);
 
-        var eventGuestInvitationRsvps = unitOfWork.Set<EventGuestInvitationRsvp>().GetAll().AsNoTracking()
-            .Where(_ => eventGuestInvitationIds.Contains(_.EventGuestInvitationId))
-            .GroupBy(_ => _.EventGuestInvitationId);
+        var guestInvitationRsvps = unitOfWork.Set<GuestInvitationRsvp>().GetAll().AsNoTracking()
+            .Where(_ => guestInvitationIds.Contains(_.GuestInvitationId))
+            .GroupBy(_ => _.GuestInvitationId);
 
-        var accepted = await eventGuestInvitationRsvps.Where(_ =>
+        var accepted = await guestInvitationRsvps.Where(_ =>
                 _.OrderByDescending(__ => __.DateCreated).FirstOrDefault().Response == RsvpResponse.ACCEPT)
             .Select(_ => _.OrderByDescending(__ => __.DateCreated).FirstOrDefault().Id).ToListAsync();
 
-        var declined = eventGuestInvitationRsvps.Where(_ =>
+        var declined = guestInvitationRsvps.Where(_ =>
             _.OrderByDescending(__ => __.DateCreated).FirstOrDefault().Response == RsvpResponse.DECLINE);
 
-        var secondaryGuests = await unitOfWork.Set<EventGuestInvitationRsvpItem>().GetAll().AsNoTracking()
-            .Where(_ => accepted.Contains(_.EventGuestInvitationRsvpId))
-            .GroupBy(_ => _.EventGuestInvitationRsvpId)
+        var secondaryGuests = await unitOfWork.Set<GuestInvitationRsvpItem>().GetAll().AsNoTracking()
+            .Where(_ => accepted.Contains(_.GuestInvitationRsvpId))
+            .GroupBy(_ => _.GuestInvitationRsvpId)
             .ToListAsync();
 
         return Ok(new
         {
             data = new
             {
-                totalMainGuests = eventGuests.Count(),
+                totalMainGuests = mainGuests.Count(),
                 totalSecondaryGuests = secondaryGuests.Sum(_ => _.Skip(1).Count()),
-                totalEventGuestInvitations = eventGuestInvitations.Count(),
+                totalGuestInvitations = guestInvitations.Count(),
                 totalAccepted = accepted.Count(),
                 totalDeclined = declined.Count()
             }
