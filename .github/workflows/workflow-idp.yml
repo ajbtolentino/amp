@@ -12,15 +12,7 @@ on:
       - 'master'
       - 'development'
   workflow_dispatch:
-    inputs:
-      action:
-        description: 'Select Action'
-        required: true
-        default: 'Deploy'
-        type: choice
-        options:
-          - 'Deploy'
-          - 'Seed'
+
 jobs:
   build-test-package:
     name: Build, Test and Package
@@ -147,38 +139,3 @@ jobs:
             slot-name: 'Production'
             package: .
             target-path: '/home/site/wwwroot/idp'
-
-  update-database:
-    name: Update Database ${{ needs.set-environment.outputs.environment_name }}
-    needs: set-environment
-    if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Seed') && needs.set-environment.outputs.environment_name != '' }}
-    environment:
-      name: ${{ needs.set-environment.outputs.environment_name }}
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
-    steps:    
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Substitute appsettings in AMP.Identity
-        uses: microsoft/variable-substitution@v1 
-        with:
-          files: './appsettings*.json'
-        env:
-          ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
-          IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
-
-      - name: Seed
-        if: ${{ github.event.inputs.action == 'Seed' }}
-        run: dotnet run ./src/admin/AMP.Identity/AMP.Identity.csproj /seed
