@@ -13,6 +13,17 @@ on:
       - 'master'
       - 'development'
   workflow_dispatch:
+    inputs:
+      action:
+        description: 'Select Action'
+        required: true
+        default: 'Deploy'
+        type: choice
+        options:
+          - 'Deploy'
+          - 'Migrate Database'
+          - 'Seed Database'
+          - 'Migrate and Seed Database'
 
 jobs:
   build-test-package:
@@ -73,7 +84,7 @@ jobs:
   deploy:
     name: Deploy to ${{ needs.set-environment.outputs.environment_name }}
     needs: set-environment
-    if: ${{ needs.set-environment.outputs.environment_name }} != ''
+    if: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy' )) && needs.set-environment.outputs.environment_name != '' }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ needs.set-environment.outputs.environment_name }}
@@ -112,3 +123,46 @@ jobs:
           slot-name: 'Production'
           package: .
           target-path: '/home/site/wwwroot/api'
+
+  update-database:
+    name: Update Database ${{ needs.set-environment.outputs.environment_name }}
+    needs: set-environment
+    if: ${{ github.event_name == 'workflow_dispatch' && needs.set-environment.outputs.environment_name != '' }}
+    environment:
+      name: ${{ needs.set-environment.outputs.environment_name }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:    
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Substitute appsettings
+        uses: microsoft/variable-substitution@v1 
+        with:
+          files: './src/api/AMP.EMS.API/appsettings*.json'
+        env:
+          ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
+          DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
+
+      - name: Migrate
+        if: ${{ github.event.inputs.action == 'Migrate' }}
+        run: dotnet run ./src/api/AMP.EMS.API/AMP.EMS.API.csproj /migrate
+
+      - name: Seed
+        if: ${{ github.event.inputs.action == 'Seed' }}
+        run: dotnet run ./src/api/AMP.EMS.API/AMP.EMS.API.csproj /seed
+
+      - name: Migrate and Seed
+        if: ${{ github.event.inputs.action == 'Migrate and Seed' }}
+        run: dotnet run ./src/api/AMP.EMS.API/AMP.EMS.API.csproj /migrate /seed

@@ -86,11 +86,23 @@ builder.Host.ConfigureLogger();
 
 var app = builder.Build();
 
+var migrate = args.Any(x => x == "/migrate");
+if (migrate) app.Services.Migrate<EmsDbContext>(config);
+
+var seed = args.Any(x => x == "/seed");
+if (seed)
+{
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<EmsDbContext>();
+    var seedData = new SeedData(context);
+    seedData.Seed();
+}
+
+if (seed || migrate) return;
+
 app.UseRequestLogging();
 
 app.UseCors(cors => cors.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
-app.Services.Migrate<EmsDbContext>(config);
 
 //Add Middleware
 app.UseMiddleware<RequestPipelineMiddleware>();
