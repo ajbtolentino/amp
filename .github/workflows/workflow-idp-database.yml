@@ -37,9 +37,6 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Restore dependencies
-        run: dotnet restore './src/admin/AMP.Identity/AMP.Identity.csproj'
-
       - name: Substitute appsettings in AMP.Identity
         uses: microsoft/variable-substitution@v1 
         with:
@@ -48,6 +45,10 @@ jobs:
           ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
           IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
 
-      - name: Seed
+      - name: Run dotnet commands
         if: ${{ github.event.inputs.action == 'Seed' }}
-        run: dotnet run --project 'AMP.Identity.csproj' /seed
+        working-directory: src/api/AMP.EMS.API/
+        run: |
+          dotnet restore
+          dotnet build
+          dotnet run /seed

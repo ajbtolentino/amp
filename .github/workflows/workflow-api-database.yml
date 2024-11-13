@@ -49,7 +49,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore './src/api/AMP.EMS.API/AMP.EMS.API.csproj'
+        run: dotnet restore './src/api/AMP.EMS.API/AMP.EMS.API.csproj'       
 
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
@@ -59,14 +59,17 @@ jobs:
           ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
           DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
 
+      - name: Build
+        run: dotnet build ./src/api/AMP.EMS.API/AMP.EMS.API.csproj
+
       - name: Migrate
         if: ${{ github.event.inputs.action == 'Migrate' }}
-        run: dotnet run --project 'AMP.EMS.API.csproj' /migrate
+        run: dotnet run 'src/api/AMP.EMS.API/AMP.EMS.API.csproj' /migrate
 
       - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' }}
-        run: dotnet run --project 'AMP.EMS.API.csproj' /seed
+        run: dotnet run 'src/api/AMP.EMS.API/AMP.EMS.API.csproj' /seed
 
       - name: Migrate and Seed
         if: ${{ github.event.inputs.action == 'Migrate and Seed' }}
-        run: dotnet run --project 'AMP.EMS.API.csproj' /migrate /seed
+        run: dotnet run 'src/api/AMP.EMS.API/AMP.EMS.API.csproj' /migrate /seed
