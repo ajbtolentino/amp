@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
-name: Identity Provider Database
+name: Database - Identity Provider
 
 on:
   workflow_dispatch:
@@ -44,9 +44,6 @@ jobs:
         env:
           ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
           IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
-
-      - name: Build
-        run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj
 
       - name: Seed
         working-directory: src/admin/AMP.Identity

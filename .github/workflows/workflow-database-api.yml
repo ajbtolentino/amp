@@ -3,7 +3,7 @@
 # https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
 
 
-name: API Database
+name: Database - API
 
 on:
   workflow_dispatch:
@@ -58,9 +58,6 @@ jobs:
         env:
           ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
           DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
-
-      - name: Build
-        run: dotnet build ./src/api/AMP.EMS.API/AMP.EMS.API.csproj
 
       - name: Migrate
         if: ${{ github.event.inputs.action == 'Migrate' }}
