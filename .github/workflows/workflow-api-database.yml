@@ -49,7 +49,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore './src/api/AMP.EMS.API/appsettings*.json'
+        run: dotnet restore './src/api/AMP.EMS.API/AMP.EMS.API.csproj'
 
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
@@ -61,7 +61,7 @@ jobs:
 
       - name: Migrate
         if: ${{ github.event.inputs.action == 'Migrate' }}
-        run: dotnet run AMP.EMS.API.csproj /migrate
+        run: dotnet run './src/api/AMP.EMS.API/AMP.EMS.API.csproj' /migrate
 
       - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' }}
