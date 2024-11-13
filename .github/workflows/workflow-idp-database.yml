@@ -49,6 +49,5 @@ jobs:
         run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj
 
       - name: Seed
-        if: ${{ github.event.inputs.action == 'Seed' }}
         working-directory: src/admin/AMP.Identity
         run: dotnet run /seed
