@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { EventService } from '@core/services';
 import { RsvpService } from '@core/services/rsvp.service';
-import { EventGuestInvitationService, EventGuestService } from '@modules/event/guest';
+import { EventGuestService, GuestInvitationService } from '@modules/event/guest';
 import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventInvitationService } from '@modules/event/invitation';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
@@ -93,7 +93,7 @@ import { HomeComponent } from './pages/home/home.component';
         ),
         EventService,
         EventGuestService,
-        EventGuestInvitationService,
+        GuestInvitationService,
         EventInvitationService,
         MessageService,
         ConfirmationService,

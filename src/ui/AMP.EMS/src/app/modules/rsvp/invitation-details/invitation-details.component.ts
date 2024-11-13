@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { ContentService } from '@core/services/content.service';
-import { EventGuestInvitationService, EventGuestService, GuestService } from '@modules/event/guest';
+import { EventGuestService, GuestInvitationService, GuestService } from '@modules/event/guest';
 import { EventInvitationService } from '@modules/event/invitation';
-import { EventGuestInvitation, EventGuestInvitationRsvp, Guest } from '@shared/models';
+import { EventGuestInvitationRsvp, Guest, GuestInvitation } from '@shared/models';
 import { Content } from '@shared/models/content.model';
 import { lastValueFrom, Observable, switchMap, tap } from 'rxjs';
 
@@ -14,11 +14,11 @@ import { lastValueFrom, Observable, switchMap, tap } from 'rxjs';
   styleUrl: './invitation-details.component.scss'
 })
 export class InvitationDetailsComponent {
-  eventGuestInvitation$: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
+  eventGuestInvitation$: Observable<GuestInvitation> = new Observable<GuestInvitation>();
   content$: Observable<Content> = new Observable<Content>();
   guest$: Observable<Guest> = new Observable<Guest>();
 
-  constructor(private eventGuestInvitationService: EventGuestInvitationService,
+  constructor(private eventGuestInvitationService: GuestInvitationService,
     private eventInvitation: EventInvitationService,
     private eventGuestService: EventGuestService,
     private guestService: GuestService,
@@ -34,7 +34,7 @@ export class InvitationDetailsComponent {
               tap(eventInvitation => {
                 eventGuestInvitation.eventInvitation = eventInvitation;
               }));
-          this.guest$ = this.eventGuestService.get(eventGuestInvitation.eventGuestId!)
+          this.guest$ = this.eventGuestService.get(eventGuestInvitation.guestId!)
             .pipe(switchMap(eventGuest => this.guestService.get(eventGuest.guestId!)));
         })
       );

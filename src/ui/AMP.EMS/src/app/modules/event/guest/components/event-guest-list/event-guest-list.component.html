@@ -1,14 +1,14 @@
-<ng-container *ngIf="eventGuests$ | withStatus | async as eventGuests">
+<ng-container *ngIf="guests$ | withStatus | async as guests">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
         </ng-template>
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="eventGuests.loading!" routerLink="/event/{{eventId}}/guests/add"></button>
+                    [loading]="guests.loading!" routerLink="/event/{{eventId}}/guests/add"></button>
 
                 <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                    [loading]="eventGuests.loading!" (click)="deleteSelectedItems()"
+                    [loading]="guests.loading!" (click)="deleteSelectedItems()"
                     [disabled]="!selectedItems || !selectedItems.length"></button>
             </div>
         </ng-template>
@@ -17,21 +17,21 @@
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <p-table #dt [value]="eventGuests.value!" [rows]="10" [paginator]="true"
+                <p-table #dt [value]="guests.value!" [rows]="10" [paginator]="true"
                     [globalFilterFields]="['firstName','lastName']" editMode="row" [(selection)]="selectedItems"
-                    [rowHover]="true" dataKey="id" [loading]="eventGuests.loading" [showLoader]="false">
+                    [rowHover]="true" dataKey="id" [loading]="guests.loading" [showLoader]="false">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
-                            <th pSortableColumn="guest.firstName">
+                            <th pSortableColumn="firstName">
                                 <div class="flex justify-content-between align-items-center">
                                     First Name
                                     <p-sortIcon field="guest.firstName"></p-sortIcon>
                                 </div>
                             </th>
-                            <th pSortableColumn="guest.lastName">
+                            <th pSortableColumn="lastName">
                                 <div class="flex justify-content-between align-items-center">
                                     Last Name
                                     <p-sortIcon field="guest.lastName"></p-sortIcon>
@@ -54,8 +54,8 @@
                     <ng-template pTemplate="body" let-item>
                         <tr [pEditableRow]="item">
                             <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
-                            <td>{{item.guest?.firstName}}</td>
-                            <td>{{item.guest?.lastName}}</td>
+                            <td>{{item.firstName}}</td>
+                            <td>{{item.lastName}}</td>
                             <td>{{item.seats}}</td>
                             <td class="text-center">
                                 <span *ngFor='let eventGuestRole of item.eventGuestRoles; let i = index'>

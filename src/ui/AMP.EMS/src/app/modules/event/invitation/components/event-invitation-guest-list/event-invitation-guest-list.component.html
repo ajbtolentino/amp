@@ -1,8 +1,8 @@
 <div class="grid" *ngIf="eventInvitation$ | withStatus | async as eventInvitation">
     <div class="col-12">
-        <div class="card" *ngIf="eventGuests$ | withStatus | async as eventGuests">
+        <div class="card" *ngIf="guests$ | withStatus | async as guests">
             <h5>{{eventInvitation.value?.name}} - Manage Guests</h5>
-            <p-table [value]="eventGuests.value!" dataKey="id" [loading]="eventGuests.loading || eventGuests.loading"
+            <p-table [value]="guests.value!" dataKey="id" [loading]="guests.loading || guests.loading"
                 [showLoader]="false">
                 <ng-template pTemplate="header">
                     <tr>

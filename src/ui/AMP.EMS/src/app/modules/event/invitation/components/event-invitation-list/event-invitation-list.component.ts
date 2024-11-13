@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { EventGuestInvitationService } from '@modules/event/guest';
+import { GuestInvitationService } from '@modules/event/guest';
 import { EventInvitationService } from '@modules/event/invitation/services/event-invitation.service';
-import { EventGuestInvitation, EventInvitation } from '@shared/models';
+import { GuestInvitation, Invitation } from '@shared/models';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { map, Observable, of, switchMap } from 'rxjs';
@@ -16,9 +16,9 @@ import { map, Observable, of, switchMap } from 'rxjs';
 export class EventInvitationListComponent implements OnInit {
   eventId!: string;
 
-  eventInvitations$: Observable<EventInvitation[]> = new Observable<EventInvitation[]>();
+  eventInvitations$: Observable<Invitation[]> = new Observable<Invitation[]>();
 
-  selectedItems: EventInvitation[] | null = [];
+  selectedItems: Invitation[] | null = [];
 
   @ViewChild('dt') table!: Table;
 
@@ -26,7 +26,7 @@ export class EventInvitationListComponent implements OnInit {
 
   constructor(private eventService: EventService,
     private eventInvitationService: EventInvitationService,
-    private eventGuestInvitationService: EventGuestInvitationService,
+    private eventGuestInvitationService: GuestInvitationService,
     private rsvpService: RsvpService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
@@ -42,8 +42,8 @@ export class EventInvitationListComponent implements OnInit {
     );
   }
 
-  loadEventGuestInvitation = (eventInvitations: EventInvitation[]): Observable<EventInvitation[]> => {
-    return this.eventGuestInvitationService.getByEventInvitationIds(eventInvitations.map(_ => _.id!))
+  loadEventGuestInvitation = (eventInvitations: Invitation[]): Observable<Invitation[]> => {
+    return this.eventGuestInvitationService.getByInvitationIds(eventInvitations.map(_ => _.id!))
       .pipe(
         switchMap(eventGuestInvitations => this.loadRsvp(eventGuestInvitations)),
         map(eventGuestInvitations => {
@@ -57,8 +57,8 @@ export class EventInvitationListComponent implements OnInit {
       );
   }
 
-  loadRsvp = (eventGuestInvitations: EventGuestInvitation[]): Observable<EventGuestInvitation[]> => {
-    if (!eventGuestInvitations.length) return of<EventGuestInvitation[]>([]);
+  loadRsvp = (eventGuestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
+    if (!eventGuestInvitations.length) return of<GuestInvitation[]>([]);
 
     return this.rsvpService.getByEventGuestInvitationIds(eventGuestInvitations.map(_ => _.id!))
       .pipe(
@@ -72,7 +72,7 @@ export class EventInvitationListComponent implements OnInit {
         }))
   }
 
-  getTotalAccepted = (eventGuestInvitation: EventGuestInvitation): boolean => {
+  getTotalAccepted = (eventGuestInvitation: GuestInvitation): boolean => {
     if (!eventGuestInvitation?.eventGuestInvitationRsvps?.length)
       return false;
 
@@ -86,7 +86,7 @@ export class EventInvitationListComponent implements OnInit {
   }
 
 
-  getTotalDeclined = (eventGuestInvitation: EventGuestInvitation): boolean => {
+  getTotalDeclined = (eventGuestInvitation: GuestInvitation): boolean => {
     if (!eventGuestInvitation?.eventGuestInvitationRsvps?.length)
       return false;
 
@@ -99,7 +99,7 @@ export class EventInvitationListComponent implements OnInit {
     return items[0].response === "DECLINE";
   }
 
-  delete = (invitation: EventInvitation) => {
+  delete = (invitation: Invitation) => {
     if (invitation.id) {
       this.confirmationService.confirm({
         message: 'Are you sure you want to delete?',

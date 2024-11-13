@@ -1,5 +1,5 @@
-import { EventGuestRole } from "./event-guest-role.model";
 import { EventType } from "./event-type.model";
+import { GuestRole } from "./guest-role.model";
 
 export interface Event {
     id?: string;
@@ -9,6 +9,6 @@ export interface Event {
     startDate?: Date;
     endDate?: Date;
     seats?: number;
-    eventRoles?: EventGuestRole[];
+    eventRoles?: GuestRole[];
     description?: string;
 }

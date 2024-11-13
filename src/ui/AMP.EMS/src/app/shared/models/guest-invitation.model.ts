@@ -1,15 +1,15 @@
-import { EventGuest } from "./event-guest.model";
 import { EventGuestInvitationRsvp } from "./event-guest-invitation-rsvp.model";
-import { EventInvitation } from "./event-invitation.model";
+import { Guest } from "./guest.model";
+import { Invitation } from "./invitation.model";
 
-export interface EventGuestInvitation {
+export interface GuestInvitation {
     id?: string;
-    eventGuestId?: string;
+    guestId?: string;
     eventInvitationId?: string;
     maxGuests?: number;
     code?: string;
-    eventInvitation?: EventInvitation;
+    eventInvitation?: Invitation;
     eventGuestInvitationRsvps?: EventGuestInvitationRsvp[];
-    eventGuest?: EventGuest;
+    guest?: Guest;
     dateCreated?: Date;
 }

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@core/services/content.service';
 import { EventInvitationService } from '@modules/event/invitation';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
-import { EventInvitation } from '@shared/models';
+import { Invitation } from '@shared/models';
 import { Content } from '@shared/models/content.model';
 import { Observable, of, tap } from 'rxjs';
 
@@ -51,7 +51,7 @@ import { Observable, of, tap } from 'rxjs';
 })
 export class EventInvitationDetailsComponent implements OnInit {
   eventInvitationId: string | null | undefined;
-  eventInvitation$: Observable<EventInvitation> = new Observable<EventInvitation>();
+  eventInvitation$: Observable<Invitation> = new Observable<Invitation>();
   content$: Observable<Content> = new Observable<Content>();
 
   loading: boolean = false;
@@ -94,7 +94,7 @@ export class EventInvitationDetailsComponent implements OnInit {
   }
 
   loadEventInvitation = () => {
-    this.eventInvitation$ = of<EventInvitation>({ eventId: this.eventId });
+    this.eventInvitation$ = of<Invitation>({ eventId: this.eventId });
     this.content$ = of<Content>({ htmlContent: '' });
 
     if (this.eventInvitationId) {
@@ -116,7 +116,7 @@ export class EventInvitationDetailsComponent implements OnInit {
     content.htmlContent = e;
   }
 
-  save = (eventInvitation: EventInvitation, content: Content) => {
+  save = (eventInvitation: Invitation, content: Content) => {
     if (eventInvitation?.name?.trim()) {
       if (eventInvitation.id) {
         this.eventInvitation$ = this.eventInvitationService.update(

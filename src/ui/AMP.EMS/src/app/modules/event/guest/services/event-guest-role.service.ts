@@ -1,37 +1,37 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '@core/services/base.api.service';
-import { EventGuestRole } from '@shared/models';
+import { GuestRole } from '@shared/models';
 import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EventGuestRoleService extends BaseApiService {
-    get = (id: string): Observable<EventGuestRole> => {
+    get = (id: string): Observable<GuestRole> => {
         return this.httpGet(`guest/${id}`);
     }
 
-    getAll = (): Observable<EventGuestRole[]> => {
-        return this.httpGet<EventGuestRole[]>(`eventGuestRole`);
+    getAll = (): Observable<GuestRole[]> => {
+        return this.httpGet<GuestRole[]>(`guestRole`);
     }
 
-    getByEventGuestIds = (eventGuestIds: string[]) => {
-        return this.httpGet<EventGuestRole[]>(`eventGuestRole/getbyeventguestids`, { params: { eventGuestIds: eventGuestIds } });
+    getByEventGuestIds = (guestids: string[]) => {
+        return this.httpGet<GuestRole[]>(`guestrole/getbyguestids`, { params: { guestIds: guestids } });
     }
 
     getByIds = (ids: string[]) => {
-        return this.httpGet<EventGuestRole[]>(`eventGuestRole/getbyids`, { params: { ids: ids } });
+        return this.httpGet<GuestRole[]>(`guestrole/getbyids`, { params: { ids: ids } });
     }
 
-    add = (eventGuestRole: EventGuestRole): Observable<EventGuestRole> => {
-        return this.httpPost(`eventGuestRole/`, eventGuestRole);
+    add = (eventGuestRole: GuestRole): Observable<GuestRole> => {
+        return this.httpPost(`guestrole/`, eventGuestRole);
     }
 
-    update = (eventGuestRole: EventGuestRole): Observable<EventGuestRole> => {
-        return this.httpPut(`eventguestinvitation/${eventGuestRole.id}`, eventGuestRole);
+    update = (eventGuestRole: GuestRole): Observable<GuestRole> => {
+        return this.httpPut(`guestinvitation/${eventGuestRole.id}`, eventGuestRole);
     }
 
-    delete = (id: string): Observable<EventGuestRole> => {
-        return this.httpDelete(`eventguestinvitation/${id}`);
+    delete = (id: string): Observable<GuestRole> => {
+        return this.httpDelete(`guestinvitation/${id}`);
     }
 }

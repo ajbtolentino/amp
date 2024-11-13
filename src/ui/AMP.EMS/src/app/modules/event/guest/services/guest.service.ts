@@ -19,12 +19,20 @@ export class GuestService extends BaseApiService {
         return this.httpGet<Guest[]>(`guest/getbyids`, { params: { ids: ids } });
     }
 
-    add = (guest: Guest): Observable<Guest> => {
-        return this.httpPost(`guest`, guest);
+    add = (guest: Guest, roleIds: string[], invitationIds: string[]): Observable<Guest> => {
+        return this.httpPost(`guest`, {
+            ...guest,
+            roleIds: roleIds,
+            invitationIds: invitationIds
+        });
     }
 
-    update = (guest: Guest): Observable<Guest> => {
-        return this.httpPut(`guest/${guest.id}`,);
+    update = (guest: Guest, eventRoleIds: string[], eventInvitationIds: string[]): Observable<Guest> => {
+        return this.httpPut(`guest/${guest.id}`, {
+            ...guest,
+            eventRoleIds: eventRoleIds,
+            eventInvitationIds: eventInvitationIds
+        });
     }
 
     delete = (id: string): Observable<Guest> => {

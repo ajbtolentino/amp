@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, RsvpService } from '@core/services';
-import { EventGuestInvitationService, GuestService } from '@modules/event/guest';
+import { GuestInvitationService, GuestService } from '@modules/event/guest';
 import { EventInvitationService } from '@modules/event/invitation';
-import { EventGuest, EventGuestInvitation, EventGuestInvitationRsvp, EventInvitation } from '@shared/models';
+import { EventGuestInvitationRsvp, Guest, GuestInvitation, Invitation } from '@shared/models';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { map, Observable, switchMap } from 'rxjs';
@@ -51,11 +51,11 @@ export class EventInvitationGuestListComponent implements OnInit {
   eventId!: string;
   eventInvitationId!: string;
 
-  eventInvitation$: Observable<EventInvitation> = new Observable<EventInvitation>();
-  eventGuests$: Observable<EventGuest[]> = new Observable<EventGuest[]>();
-  eventGuestInvitations: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
+  eventInvitation$: Observable<Invitation> = new Observable<Invitation>();
+  guests$: Observable<Guest[]> = new Observable<Guest[]>();
+  eventGuestInvitations: Observable<GuestInvitation> = new Observable<GuestInvitation>();
 
-  selectedItems: EventGuestInvitation[] | null = [];
+  selectedItems: GuestInvitation[] | null = [];
 
   maxGuestsCollection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -68,7 +68,7 @@ export class EventInvitationGuestListComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private guestService: GuestService,
-    private eventGuestInvitationService: EventGuestInvitationService,
+    private eventGuestInvitationService: GuestInvitationService,
     private rsvpService: RsvpService,
     private eventInvitationService: EventInvitationService,
     private messageService: MessageService,
@@ -78,35 +78,35 @@ export class EventInvitationGuestListComponent implements OnInit {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
     this.eventInvitationId = this.route.snapshot.paramMap.get('eventInvitationId') || '';
     this.eventInvitation$ = this.loadInvitation();
-    this.eventGuests$ = this.loadEventGuests();
+    this.guests$ = this.loadEventGuests();
   }
 
-  loadInvitation = (): Observable<EventInvitation> => {
+  loadInvitation = (): Observable<Invitation> => {
     return this.eventInvitationService.get(this.eventInvitationId);
   }
 
   loadEventGuests = () => {
     return this.eventService.getGuests(this.eventId)
       .pipe(
-        switchMap(eventGuests => this.loadEventGuestInvitations(eventGuests)),
+        switchMap(eventGuests => this.loadGuestInvitations(eventGuests)),
         switchMap(eventGuests => this.loadGuest(eventGuests))
       );
   }
 
-  loadEventGuestInvitations = (eventGuests: EventGuest[]): Observable<EventGuest[]> => {
-    return this.eventGuestInvitationService.getByEventGuestIds(eventGuests.map(_ => _.id!))
+  loadGuestInvitations = (eventGuests: Guest[]): Observable<Guest[]> => {
+    return this.eventGuestInvitationService.getByGuestIds(eventGuests.map(_ => _.id!))
       .pipe(
         switchMap(eventGuestInvitations => this.loadEventGuestInvitationRsvps(eventGuestInvitations)),
         map(eventGuestInvitations => {
           return eventGuests.map(eventGuest => ({
             ...eventGuest,
-            eventGuestInvitations: eventGuestInvitations.filter(_ => _.eventGuestId === eventGuest.id)
+            eventGuestInvitations: eventGuestInvitations.filter(_ => _.guestId === eventGuest.id)
           }))
         })
       );
   }
 
-  loadEventGuestInvitationRsvps = (eventGuestInvitations: EventGuestInvitation[]): Observable<EventGuestInvitation[]> => {
+  loadEventGuestInvitationRsvps = (eventGuestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
     return this.rsvpService.getByEventGuestInvitationIds(eventGuestInvitations.map(_ => _.id!))
       .pipe(
         switchMap(eventGuestInvitationRsvps => this.loadEventGuestInvitationRsvpItems(eventGuestInvitationRsvps)),
@@ -131,11 +131,11 @@ export class EventInvitationGuestListComponent implements OnInit {
       )
   }
 
-  loadGuest = (eventGuests: EventGuest[]): Observable<EventGuest[]> => {
-    return this.guestService.getByIds(eventGuests.map(_ => _.guestId!))
+  loadGuest = (guests: Guest[]): Observable<Guest[]> => {
+    return this.guestService.getByIds(guests.map(_ => _.guestId!))
       .pipe(
         map(guests => {
-          return eventGuests.map(eventGuest => {
+          return guests.map(eventGuest => {
             return {
               ...eventGuest,
               guest: guests.find(_ => _.id === eventGuest.guestId)
@@ -146,8 +146,8 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   add = async (eventGuestId: string) => {
-    this.eventGuests$ = this.eventGuestInvitationService.add({
-      eventGuestId: eventGuestId,
+    this.guests$ = this.eventGuestInvitationService.add({
+      guestId: eventGuestId,
       eventInvitationId: this.eventInvitationId
     }).pipe(
       switchMap(() => this.loadEventGuests())
@@ -155,7 +155,7 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   delete = async (id: string) => {
-    this.eventGuests$ = this.eventGuestInvitationService.delete(id)
+    this.guests$ = this.eventGuestInvitationService.delete(id)
       .pipe(
         switchMap(() => this.loadEventGuests())
       );

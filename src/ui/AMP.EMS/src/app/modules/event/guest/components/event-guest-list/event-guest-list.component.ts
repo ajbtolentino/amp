@@ -5,7 +5,7 @@ import { ConfirmationService } from 'primeng/api';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { EventGuestRoleService, EventGuestService, GuestService } from '@modules/event/guest';
-import { EventGuest, EventGuestRole, Guest } from '@shared/models';
+import { Guest, GuestRole } from '@shared/models';
 import { lastValueFrom, map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ import { lastValueFrom, map, Observable, of, switchMap } from 'rxjs';
 export class EventGuestListComponent implements OnInit {
   eventId!: string;
 
-  eventGuests$: Observable<EventGuest[]> = new Observable<EventGuest[]>();
+  guests$: Observable<Guest[]> = new Observable<Guest[]>();
 
   selectedItems: Guest[] | null = [];
 
@@ -34,17 +34,16 @@ export class EventGuestListComponent implements OnInit {
   }
 
   refreshGrid = () => {
-    this.eventGuests$ = this.eventService.getGuests(this.eventId).pipe(
-      switchMap(eventGuests => this.loadGuest(eventGuests)),
-      switchMap(eventGuests => this.loadEventGuestRole(eventGuests))
+    this.guests$ = this.eventService.getGuests(this.eventId).pipe(
+      switchMap(eventGuests => this.loadGuestRole(eventGuests))
     );
   }
 
-  loadGuest = (eventGuests: EventGuest[]): Observable<EventGuest[]> => {
-    return this.guestService.getByIds(eventGuests.filter(_ => _.guestId).map(_ => _.guestId!)
+  loadGuest = (guests: Guest[]): Observable<Guest[]> => {
+    return this.guestService.getByIds(guests.filter(_ => _.guestId).map(_ => _.guestId!)
     ).pipe(
       map(guests => {
-        return eventGuests.map(eventGuest => {
+        return guests.map(eventGuest => {
           return {
             ...eventGuest,
             guest: guests.find(_ => _.id === eventGuest.guestId)
@@ -54,7 +53,7 @@ export class EventGuestListComponent implements OnInit {
       ));
   }
 
-  loadEventGuestRole = (eventGuests: EventGuest[]): Observable<EventGuest[]> => {
+  loadGuestRole = (eventGuests: Guest[]): Observable<Guest[]> => {
     return this.eventGuestRoleService.getByEventGuestIds(eventGuests.filter(_ => _.id).map(_ => _.id!))
       .pipe(
         switchMap(eventGuestRoles => this.loadRole(eventGuestRoles)),
@@ -62,14 +61,14 @@ export class EventGuestListComponent implements OnInit {
           return eventGuests.map(eventGuest => {
             return {
               ...eventGuest,
-              eventGuestRoles: eventGuestRoles.filter(_ => _.eventGuestId === eventGuest.id)
+              eventGuestRoles: eventGuestRoles.filter(_ => _.guestId === eventGuest.id)
             }
           })
         }));
   }
 
-  loadRole = (eventGuestRoles: EventGuestRole[]): Observable<EventGuestRole[]> => {
-    if (!eventGuestRoles.length) return of<EventGuestRole[]>(eventGuestRoles);
+  loadRole = (eventGuestRoles: GuestRole[]): Observable<GuestRole[]> => {
+    if (!eventGuestRoles.length) return of<GuestRole[]>(eventGuestRoles);
 
     return this.lookupService.getByIds('role', eventGuestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
       .pipe(
@@ -87,7 +86,7 @@ export class EventGuestListComponent implements OnInit {
     return item.eventGuestInvitations?.filter((_: any) => _.rsvps?.length ?? false).length ?? false;
   }
 
-  delete = (eventGuest: EventGuest) => {
+  delete = (eventGuest: Guest) => {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${eventGuest.guest?.firstName} ${eventGuest.guest?.lastName}?`,
       header: 'Confirm',
@@ -108,7 +107,7 @@ export class EventGuestListComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.eventGuests$ = this.eventGuestService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventService.getGuests(this.eventId)));
+        this.guests$ = this.eventGuestService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventService.getGuests(this.eventId)));
       }
     });
   }
