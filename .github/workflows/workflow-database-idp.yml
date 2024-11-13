@@ -1,0 +1,50 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# https://seankilleen.com/2024/03/beautiful-net-test-reports-using-github-actions/
+
+name: Database - Identity Provider
+
+on:
+  workflow_dispatch:
+
+jobs:
+  set-environment:
+    name: Set Environment
+    runs-on: ubuntu-latest
+    outputs:
+      environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
+    steps:
+      - id: output-environment-name
+        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
+
+  update-database:
+    name: Seed ${{ needs.set-environment.outputs.environment_name }}
+    needs: set-environment
+    if: ${{ needs.set-environment.outputs.environment_name != '' }}
+    environment:
+      name: ${{ needs.set-environment.outputs.environment_name }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:    
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Substitute appsettings in AMP.Identity
+        uses: microsoft/variable-substitution@v1 
+        with:
+          files: './src/admin/AMP.Identity/appsettings*.json'
+        env:
+          ConnectionStrings.DefaultConnection: ${{secrets.IDP_DB_CONNECTION_STRING}}
+          IdentityServer.Key.StorageKind: ${{vars.IDP_STORAGE_KIND}}
+
+      - name: Seed
+        working-directory: src/admin/AMP.Identity
+        run: dotnet run /seed

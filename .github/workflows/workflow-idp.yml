@@ -29,7 +29,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore './src/admin/AMP.Identity/AMP.Identity.csproj'
       
       - name: Build Identity Provider
         run: dotnet build ./src/admin/AMP.Identity/AMP.Identity.csproj --configuration Release
