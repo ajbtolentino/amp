@@ -5,64 +5,21 @@
 name: API
 
 on:
-  push:
-    paths: 
-      - 'src/api/**'
-      - 'src/common/**'
-    branches:
-      - 'master'
-      - 'development'
   workflow_dispatch:
+    inputs:
+      action:
+        description: 'Database Action'
+        required: true
+        default: 'Deploy'
+        type: choice
+        options:
+          - 'Migrate'
+          - 'Seed'
+          - 'Migrate and Seed'
 
 jobs:
-  build-test-package:
-    name: Build, Test and Package
-    runs-on: ubuntu-latest
-    permissions: write-all
-      
-    steps:    
-      - name: Checkout
-        uses: actions/checkout@v4
-        
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-
-      - name: Restore dependencies
-        run: dotnet restore
-      
-      - name: Build
-        run: dotnet build ./src/api/AMP.EMS.API/AMP.EMS.API.csproj --configuration Release
-
-      - name: Test
-        run: dotnet test ./tests/api/AMP.EMS.API.Tests --verbosity normal --logger trx --collect:"XPlat Code Coverage"
-
-      - name: Upload Test Result
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: ${{ github.workspace }}/**/TestResults/**/*
-          retention-days: 5
-        
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.16.1
-        if: always()
-        with:
-          trx_files: "${{ github.workspace }}/**/*.trx"
-
-      - name: Publish EMS API
-        run: dotnet publish ./src/api/AMP.EMS.API/AMP.EMS.API.csproj -c Release -o ${{env.DOTNET_ROOT}}/ems-api
-
-      - name: Upload EMS API Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ems-api
-          path: ${{env.DOTNET_ROOT}}/ems-api
-
   set-environment:
     name: Set Environment
-    needs: build-test-package
     runs-on: ubuntu-latest
     outputs:
       environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
@@ -73,7 +30,7 @@ jobs:
   deploy:
     name: Deploy to ${{ needs.set-environment.outputs.environment_name }}
     needs: set-environment
-    if: ${{ needs.set-environment.outputs.environment_name != '' }}
+    if: ${{ (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'Deploy' )) && needs.set-environment.outputs.environment_name != '' }}
     runs-on: ubuntu-latest
     environment:
       name: ${{ needs.set-environment.outputs.environment_name }}
@@ -112,3 +69,46 @@ jobs:
           slot-name: 'Production'
           package: .
           target-path: '/home/site/wwwroot/api'
+
+  update-database:
+    name: ${{ github.event.inputs.action }} ${{ needs.set-environment.outputs.environment_name }} Database
+    needs: set-environment
+    if: ${{ github.event_name == 'workflow_dispatch' && needs.set-environment.outputs.environment_name != '' }}
+    environment:
+      name: ${{ needs.set-environment.outputs.environment_name }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:    
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Substitute appsettings
+        uses: microsoft/variable-substitution@v1 
+        with:
+          files: './src/api/AMP.EMS.API/appsettings*.json'
+        env:
+          ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
+          DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
+
+      - name: Migrate
+        if: ${{ github.event.inputs.action == 'Migrate' }}
+        run: dotnet run ./src/api/AMP.EMS.API/AMP.EMS.API.csproj /migrate
+
+      - name: Seed
+        if: ${{ github.event.inputs.action == 'Seed' }}
+        run: dotnet run ./src/api/AMP.EMS.API/AMP.EMS.API.csproj /seed
+
+      - name: Migrate and Seed
+        if: ${{ github.event.inputs.action == 'Migrate and Seed' }}
+        run: dotnet run ./src/api/AMP.EMS.API/AMP.EMS.API.csproj /migrate /seed

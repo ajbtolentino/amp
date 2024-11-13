@@ -8,6 +8,9 @@ on:
   push:
     paths: 
       - 'src/admin/**'
+    branches:
+      - 'master'
+      - 'development'
   workflow_dispatch:
 
 jobs:
