@@ -44,13 +44,13 @@ public static class ServiceProviderExtensions
         {
             case DatabaseType.SqlServer:
                 services.AddDbContext<TDbContext>(options =>
-                    options.UseSqlServer(connectionString, o => o.MigrationsAssembly(migrationAssembly))
+                    options.UseSqlServer(connectionString)
                         .ConfigureWarnings(warnings =>
                             warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
                 break;
             case DatabaseType.Sqlite:
                 services.AddDbContext<TDbContext>(options =>
-                    options.UseSqlite(connectionString, o => o.MigrationsAssembly(migrationAssembly)));
+                    options.UseSqlite(connectionString));
                 break;
             case DatabaseType.MongoDb:
                 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
