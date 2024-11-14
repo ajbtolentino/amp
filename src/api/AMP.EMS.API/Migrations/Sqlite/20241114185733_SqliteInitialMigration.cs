@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace AMP.EMS.API.Migrations
+namespace AMP.EMS.API.Migrations.Sqlite
 {
     /// <inheritdoc />
-    public partial class InitialDb : Migration
+    public partial class SqliteInitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
