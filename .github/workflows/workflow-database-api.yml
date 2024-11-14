@@ -8,6 +8,10 @@ name: Database - API
 on:
   workflow_dispatch:
     inputs:
+      azure-login:
+        description: 'Login to Azure'
+        required: false
+        type: boolean
       action:
         description: 'Database Action'
         required: true
@@ -58,6 +62,14 @@ jobs:
         env:
           ConnectionStrings.DefaultConnection: ${{secrets.EMS_API_DB_CONNECTION_STRING}}
           DatabaseConfiguration.Type: ${{vars.EMS_API_DB_TYPE}}
+
+      - name: Login to Azure
+        if: ${{ github.event.inputs.azure-login == 'true' }}
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Migrate
         if: ${{ github.event.inputs.action == 'Migrate' }}
