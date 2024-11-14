@@ -4,8 +4,6 @@ export * from './ems-response.model';
 export * from './event-guest-invitation-rsvp.model';
 export * from './event-invitation-info.model';
 export * from './event-type.model';
-export * from './event-vendor-contract-payment.model';
-export * from './event-vendor-contract.model';
 export * from './event-vendor.model';
 export * from './event.model';
 export * from './guest-invitation.model';
@@ -16,5 +14,7 @@ export * from './role.model';
 export * from './transaction-type.model';
 export * from './transaction.model';
 export * from './vendor-account.model';
+export * from './vendor-contract-payment.model';
+export * from './vendor-contract.model';
 export * from './vendor.model';
 

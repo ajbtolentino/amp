@@ -1,7 +1,7 @@
 import { Base } from "./base.model";
-import { EventVendorContract } from "./event-vendor-contract.model";
 import { EventVendor } from "./event-vendor.model";
 import { VendorAccount } from "./vendor-account.model";
+import { VendorContract } from "./vendor-contract.model";
 import { VendorType } from "./vendor-type.model";
 
 export interface Vendor extends Base {
@@ -12,7 +12,7 @@ export interface Vendor extends Base {
     address?: string;
 
     vendorType?: VendorType;
-    eventVendorContracts?: EventVendorContract[];
+    eventVendorContracts?: VendorContract[];
     eventVendors?: EventVendor[];
     vendorAccounts?: VendorAccount[];
 }

@@ -1,52 +1,52 @@
-<ng-container *ngIf="eventVendorContract$ | withStatus | async as eventVendorContract">
+<ng-container *ngIf="vendorContract$ | withStatus | async as vendorContract">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
         </ng-template>
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
-                    (click)="save(eventVendorContract.value!)" [loading]="eventVendorContract.loading!"></button>
+                    (click)="save(vendorContract.value!)" [loading]="vendorContract.loading!"></button>
             </div>
         </ng-template>
     </p-toolbar>
 
     <div class="card">
-        <div class="font-medium text-3xl text-900 mb-3">{{eventVendorContract.value?.vendor?.name}}</div>
-        <div class="text-500 mb-5">{{eventVendorContract.value?.vendor?.description}}
-            <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+        <div class="font-medium text-3xl text-900 mb-3">{{vendorContract.value?.vendor?.name}}</div>
+        <div class="text-500 mb-5">{{vendorContract.value?.vendor?.description}}
+            <p-skeleton *ngIf="vendorContract.loading"></p-skeleton>
         </div>
         <div class="text-500 mb-5">
-            <span *ngIf="!eventVendorContract.loading">
+            <span *ngIf="!vendorContract.loading">
                 <i class="pi pi-warehouse"></i>
-                {{eventVendorContract.value?.vendor?.address || '-'}}
+                {{vendorContract.value?.vendor?.address || '-'}}
             </span>
-            <span *ngIf="!eventVendorContract.loading">
+            <span *ngIf="!vendorContract.loading">
                 <i class="pi pi-phone"></i>
-                {{eventVendorContract.value?.vendor?.contactInformation}}
+                {{vendorContract.value?.vendor?.contactInformation}}
             </span>
-            <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+            <p-skeleton *ngIf="vendorContract.loading"></p-skeleton>
         </div>
         <ul class="list-none p-0 m-0">
             <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                 <div class="text-500 w-6 md:w-2 font-medium">Amount</div>
                 <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
-                    <p-inputNumber *ngIf="!eventVendorContract.loading" id="amount" currency="PHP" mode="currency"
-                        locale="en-US" [(ngModel)]="eventVendorContract.value!.amount!" />
-                    <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+                    <p-inputNumber *ngIf="!vendorContract.loading" id="amount" currency="PHP" mode="currency"
+                        locale="en-US" [(ngModel)]="vendorContract.value!.amount!" />
+                    <p-skeleton *ngIf="vendorContract.loading"></p-skeleton>
                 </div>
                 <div class="w-6 md:w-2 flex justify-content-end">
                 </div>
             </li>
             <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap"
-                *ngIf="eventVendorContractStates$ | withStatus | async as eventVendorContractStates">
+                *ngIf="vendorContractStates$ | withStatus | async as vendorContractStates">
                 <div class="text-500 w-6 md:w-2 font-medium">State</div>
                 <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1">
-                    <p-dropdown *ngIf="!eventVendorContract.loading" [options]="eventVendorContractStates.value"
-                        [loading]="eventVendorContractStates.loading"
-                        [(ngModel)]="eventVendorContract.value!.eventVendorContractStateId" optionValue="id"
-                        optionLabel="name" placeholder="Select a state"></p-dropdown>
+                    <p-dropdown *ngIf="!vendorContract.loading" [options]="vendorContractStates.value"
+                        [loading]="vendorContractStates.loading"
+                        [(ngModel)]="vendorContract.value!.vendorContractStateId" optionValue="id" optionLabel="name"
+                        placeholder="Select a state"></p-dropdown>
 
-                    <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+                    <p-skeleton *ngIf="vendorContract.loading"></p-skeleton>
                 </div>
                 <div class="w-6 md:w-2 flex justify-content-end">
                 </div>
@@ -54,25 +54,24 @@
             <li class="flex align-items-center py-3 px-2 border-top-1 surface-border flex-wrap">
                 <div class="text-500 w-6 md:w-2 font-medium align-items-start">Details</div>
                 <div class="text-900 w-full md:w-8 md:flex-order-0 flex-order-1 line-height-3">
-                    <textarea rows="20" cols="50" pInputTextarea *ngIf="!eventVendorContract.loading" id="description"
-                        [(ngModel)]="eventVendorContract.value!.details"
-                        [value]="eventVendorContract.value!.details"></textarea>
+                    <textarea rows="20" cols="50" pInputTextarea *ngIf="!vendorContract.loading" id="description"
+                        [(ngModel)]="vendorContract.value!.details" [value]="vendorContract.value!.details"></textarea>
 
-                    <p-skeleton *ngIf="eventVendorContract.loading"></p-skeleton>
+                    <p-skeleton *ngIf="vendorContract.loading"></p-skeleton>
                 </div>
                 <div class="w-6 md:w-2 flex justify-content-end">
                 </div>
             </li>
         </ul>
     </div>
-    <div class="card" *ngIf="eventVendorContract.value?.id && {
-        eventVendorContractPaymentTypes: eventVendorContractPaymentTypes$ | withStatus | async,
-        eventVendorContractPaymentStates: eventVendorContractPaymentStates$ | withStatus | async } as lookup">
+    <div class="card" *ngIf="vendorContract.value?.id && {
+        vendorContractPaymentTypes: vendorContractPaymentTypes$ | withStatus | async,
+        vendorContractPaymentStates: vendorContractPaymentStates$ | withStatus | async } as lookup">
         <div class="font-medium text-3xl text-500 mb-3">Payments</div>
-        <p-table #dt *ngIf="eventVendorContractPayments$ | withStatus | async as eventVendorContractPayments"
-            [value]="eventVendorContractPayments.value!" [rows]="10" [paginator]="true" editMode="row" [rowHover]="true"
-            [loading]="eventVendorContractPayments.loading" [showLoader]="false" dataKey="id"
-            [loading]="eventVendorContractPayments.loading" [showLoader]="false">
+        <p-table #dt *ngIf="vendorContractPayments$ | withStatus | async as vendorContractPayments"
+            [value]="vendorContractPayments.value!" [rows]="10" [paginator]="true" editMode="row" [rowHover]="true"
+            [loading]="vendorContractPayments.loading" [showLoader]="false" dataKey="id"
+            [loading]="vendorContractPayments.loading" [showLoader]="false">
             <ng-template pTemplate="header">
                 <tr>
                     <th>
@@ -106,16 +105,16 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown *ngIf="!lookup.eventVendorContractPaymentTypes!.loading" appendTo="body"
-                                    [options]="lookup.eventVendorContractPaymentTypes!.value"
-                                    [loading]="lookup.eventVendorContractPaymentTypes!.loading"
-                                    [(ngModel)]="item.eventVendorContractPaymentTypeId" optionValue="id"
-                                    optionLabel="name" placeholder="Select a state"></p-dropdown>
+                                <p-dropdown *ngIf="!lookup.vendorContractPaymentTypes!.loading" appendTo="body"
+                                    [options]="lookup.vendorContractPaymentTypes!.value"
+                                    [loading]="lookup.vendorContractPaymentTypes!.loading"
+                                    [(ngModel)]="item.vendorContractPaymentTypeId" optionValue="id" optionLabel="name"
+                                    placeholder="Select a state"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                <ng-container *ngIf="!lookup.eventVendorContractPaymentTypes!.loading">
-                                    {{(lookup.eventVendorContractPaymentTypes!.value!| findItem :
-                                    item.eventVendorContractPaymentTypeId : 'id')?.name
+                                <ng-container *ngIf="!lookup.vendorContractPaymentTypes!.loading">
+                                    {{(lookup.vendorContractPaymentTypes!.value!| findItem :
+                                    item.vendorContractPaymentTypeId : 'id')?.name
                                     || '-'}}
                                 </ng-container>
                             </ng-template>
@@ -144,16 +143,16 @@
                     <td>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <p-dropdown *ngIf="!lookup.eventVendorContractPaymentStates!.loading" appendTo="body"
-                                    [options]="lookup.eventVendorContractPaymentStates!.value"
-                                    [loading]="lookup.eventVendorContractPaymentStates!.loading"
-                                    [(ngModel)]="item.eventVendorContractPaymentStateId" optionValue="id"
-                                    optionLabel="name" placeholder="Select a state"></p-dropdown>
+                                <p-dropdown *ngIf="!lookup.vendorContractPaymentStates!.loading" appendTo="body"
+                                    [options]="lookup.vendorContractPaymentStates!.value"
+                                    [loading]="lookup.vendorContractPaymentStates!.loading"
+                                    [(ngModel)]="item.vendorContractPaymentStateId" optionValue="id" optionLabel="name"
+                                    placeholder="Select a state"></p-dropdown>
                             </ng-template>
                             <ng-template pTemplate="output">
-                                <ng-container *ngIf="!lookup.eventVendorContractPaymentStates!.loading">
-                                    {{(lookup.eventVendorContractPaymentStates!.value | findItem :
-                                    item.eventVendorContractPaymentStateId : 'id')?.name
+                                <ng-container *ngIf="!lookup.vendorContractPaymentStates!.loading">
+                                    {{(lookup.vendorContractPaymentStates!.value | findItem :
+                                    item.vendorContractPaymentStateId : 'id')?.name
                                     || '-'}}
                                 </ng-container>
                             </ng-template>
@@ -216,7 +215,7 @@
     </div>
 </ng-container>
 
-<p-dialog *ngIf="eventVendorContractPaymentTransaction$ | withStatus| async as eventVendorContractPaymentTransaction"
+<p-dialog *ngIf="vendorContractPaymentTransaction$ | withStatus| async as vendorContractPaymentTransaction"
     [(visible)]="showTransactionDialog" [style]="{width: '450px'}" header="Transaction Details" [modal]="true"
     class="p-fluid">
 
@@ -224,21 +223,21 @@
         <div class="field">
             <label for="amount">Amount</label>
             <p-inputNumber id="amount" currency="PHP" mode="currency"
-                [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.amount" [disabled]="true" />
+                [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.amount" [disabled]="true" />
         </div>
         <div class="field">
             <label for="date">Reference Number</label>
-            <input pInputText [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.referenceNumber" />
+            <input pInputText [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.referenceNumber" />
         </div>
         <div class="field">
             <label for="date">Date</label>
-            <p-calendar [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.transactionDate"
+            <p-calendar [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.transactionDate"
                 appendTo="body" />
         </div>
         <div class="field">
             <label for="type">Type</label>
             <p-dropdown *ngIf="transactionTypes$ | withStatus | async as transactionTypes"
-                [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.transactionTypeId"
+                [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.transactionTypeId"
                 inputId="inventoryStatus" optionValue="label" [options]="transactionTypes.value" optionLabel="name"
                 optionValue="id" placeholder="Select">
 
@@ -247,16 +246,16 @@
         <div class="field">
             <label for="description">Description</label>
             <textarea id="description" pInputTextarea
-                [(ngModel)]="eventVendorContractPaymentTransaction.value!.transaction!.description" rows="3"
+                [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.description" rows="3"
                 cols="20"></textarea>
         </div>
     </ng-template>
 
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
-            [loading]="eventVendorContractPaymentTransaction.loading!" (click)="closeTransactionDialog()"></button>
+            [loading]="vendorContractPaymentTransaction.loading!" (click)="closeTransactionDialog()"></button>
         <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
-            [loading]="eventVendorContractPaymentTransaction.loading!"
-            (click)="saveTransaction(eventVendorContractPaymentTransaction.value!)"></button>
+            [loading]="vendorContractPaymentTransaction.loading!"
+            (click)="saveTransaction(vendorContractPaymentTransaction.value!)"></button>
     </ng-template>
 </p-dialog>
