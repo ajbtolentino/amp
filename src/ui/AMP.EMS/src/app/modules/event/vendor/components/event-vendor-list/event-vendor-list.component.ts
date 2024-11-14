@@ -108,15 +108,15 @@ export class EventVendorListComponent implements OnInit {
       {
         vendorId: vendor.id!,
         eventId: this.eventId,
-      }).pipe(switchMap((eventVendorContract) => {
-        this.viewContract(eventVendorContract);
+      }).pipe(switchMap((vendorContract) => {
+        this.viewContract(vendorContract);
         return [];
       }
       ));
   }
 
-  viewContract = (eventVendorContract: VendorContract) => {
-    this.router.navigate([`/event/${this.eventId}/vendors/contracts/${eventVendorContract.id}`]);
+  viewContract = (vendorContract: VendorContract) => {
+    this.router.navigate([`/event/${this.eventId}/vendors/contracts/${vendorContract.id}`]);
   }
 
   onFilter(dv: DataView, event: Event) {

@@ -11,6 +11,6 @@ export interface Vendor extends Base {
     address?: string;
 
     vendorType?: VendorType;
-    eventVendorContracts?: VendorContract[];
+    vendorContracts?: VendorContract[];
     vendorAccounts?: VendorAccount[];
 }

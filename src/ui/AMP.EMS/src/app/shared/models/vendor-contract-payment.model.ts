@@ -11,7 +11,7 @@ export interface VendorContractPayment extends Base {
     dueAmount?: number;
     dueDate?: Date;
 
-    eventVendorContract?: VendorContract;
-    eventVendorContractPaymentState?: Lookup;
+    vendorContract?: VendorContract;
+    vendorContractPaymentState?: Lookup;
     transaction?: Transaction;
 }
