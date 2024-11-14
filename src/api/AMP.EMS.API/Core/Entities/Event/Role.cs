@@ -6,5 +6,5 @@ public class Role : LookupEntity<Guid>
 {
     public Guid EventId { get; set; }
     public virtual Event? Event { get; set; }
-    public virtual ICollection<EventGuestRole> EventGuestRoles { get; set; } = [];
+    public virtual ICollection<GuestRole> GuestRoles { get; set; } = [];
 }

@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { ContentService } from '@core/services/content.service';
-import { EventGuestInvitationService, EventGuestService, GuestService } from '@modules/event/guest';
+import { GuestInvitationService, GuestService } from '@modules/event/guest';
 import { EventInvitationService } from '@modules/event/invitation';
-import { EventGuestInvitation, EventGuestInvitationRsvp, Guest } from '@shared/models';
-import { Content } from '@shared/models/content.model';
-import { lastValueFrom, Observable, switchMap, tap } from 'rxjs';
+import { GuestInvitation, GuestInvitationRsvp, Invitation } from '@shared/models';
+import { lastValueFrom, map, Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-invitation-details',
@@ -14,33 +13,53 @@ import { lastValueFrom, Observable, switchMap, tap } from 'rxjs';
   styleUrl: './invitation-details.component.scss'
 })
 export class InvitationDetailsComponent {
-  eventGuestInvitation$: Observable<EventGuestInvitation> = new Observable<EventGuestInvitation>();
-  content$: Observable<Content> = new Observable<Content>();
-  guest$: Observable<Guest> = new Observable<Guest>();
+  guestInvitation$: Observable<GuestInvitation> = new Observable<GuestInvitation>();
 
-  constructor(private eventGuestInvitationService: EventGuestInvitationService,
+  constructor(private eventGuestInvitationService: GuestInvitationService,
     private eventInvitation: EventInvitationService,
-    private eventGuestService: EventGuestService,
     private guestService: GuestService,
     private contentService: ContentService,
     private rsvpService: RsvpService, private route: ActivatedRoute) {
     const code = this.route.snapshot.paramMap.get("code");
-    if (code) this.eventGuestInvitation$ = this.eventGuestInvitationService.rsvp(code)
+    if (code) this.guestInvitation$ = this.eventGuestInvitationService.rsvp(code)
       .pipe(
-        tap(eventGuestInvitation => {
-          this.content$ = this.eventInvitation.get(eventGuestInvitation.eventInvitationId!)
-            .pipe(
-              switchMap(eventInvitation => this.contentService.get(eventInvitation.contentId!)),
-              tap(eventInvitation => {
-                eventGuestInvitation.eventInvitation = eventInvitation;
-              }));
-          this.guest$ = this.eventGuestService.get(eventGuestInvitation.eventGuestId!)
-            .pipe(switchMap(eventGuest => this.guestService.get(eventGuest.guestId!)));
-        })
+        switchMap(guestInvitation => this.loadInvitation(guestInvitation)),
+        switchMap(guestInvitation => this.loadGuest(guestInvitation)),
       );
   }
 
-  onSubmit = async (rsvp: EventGuestInvitationRsvp) => {
+  loadInvitation = (guestInvitation: GuestInvitation): Observable<GuestInvitation> => {
+    return this.eventInvitation.get(guestInvitation.invitationId!)
+      .pipe(
+        switchMap(invitation => this.loadContent(invitation)),
+        map(invitation => ({
+          ...guestInvitation,
+          invitation: invitation
+        }))
+      );
+  }
+
+  loadContent = (invitation: Invitation): Observable<Invitation> => {
+    return this.contentService.get(invitation.contentId!)
+      .pipe(
+        map(content => ({
+          ...invitation,
+          content: content
+        }))
+      );
+  };
+
+  loadGuest = (guestInvitation: GuestInvitation): Observable<GuestInvitation> => {
+    return this.guestService.get(guestInvitation.guestId!)
+      .pipe(
+        map(guest => ({
+          ...guestInvitation,
+          guest: guest
+        }))
+      );
+  }
+
+  onSubmit = async (rsvp: GuestInvitationRsvp) => {
     await lastValueFrom(this.rsvpService.add(rsvp));
   }
 }

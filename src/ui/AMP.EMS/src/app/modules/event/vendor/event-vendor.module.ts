@@ -33,7 +33,7 @@ const routes: Routes = [
         component: EventVendorContractDetailsComponent
       },
       {
-        path: 'contracts/:eventVendorContractId',
+        path: 'contracts/:vendorContractId',
         component: EventVendorContractDetailsComponent
       }
     ]

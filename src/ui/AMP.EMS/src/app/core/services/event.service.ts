@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { lastValueFrom, Observable } from 'rxjs';
 
-import { Event, EventGuest, EventGuestRole, EventInvitation, EventVendorContract } from '@shared/models';
+import { Event, Guest, GuestRole, Invitation, VendorContract } from '@shared/models';
 import { Lookup } from '@shared/models/lookup.model';
 import { BaseApiService } from './base.api.service';
 
@@ -14,20 +14,20 @@ export class EventService extends BaseApiService {
         return this.httpGet(`event/${id}`);
     }
 
-    getRoles = (id: string): Observable<EventGuestRole[]> => {
-        return this.httpGet<EventGuestRole[]>(`event/${id}/roles`);
+    getRoles = (id: string): Observable<GuestRole[]> => {
+        return this.httpGet<GuestRole[]>(`event/${id}/roles`);
     }
 
-    getInvitations = (id: string): Observable<EventInvitation[]> => {
-        return this.httpGet<EventInvitation[]>(`event/${id}/invitations`);
+    getInvitations = (id: string): Observable<Invitation[]> => {
+        return this.httpGet<Invitation[]>(`event/${id}/invitations`);
     }
 
-    getGuests = (id: string): Observable<EventGuest[]> => {
-        return this.httpGet<EventGuest[]>(`event/${id}/guests`);
+    getGuests = (id: string): Observable<Guest[]> => {
+        return this.httpGet<Guest[]>(`event/${id}/guests`);
     }
 
-    getVendorContracts = (id: string): Observable<EventVendorContract[]> => {
-        return this.httpGet<EventVendorContract[]>(`event/${id}/vendorcontracts`);
+    getVendorContracts = (id: string): Observable<VendorContract[]> => {
+        return this.httpGet<VendorContract[]>(`event/${id}/vendorcontracts`);
     }
 
     getVendorContractStates = (id: string): Observable<Lookup[]> => {

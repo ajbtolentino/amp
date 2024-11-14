@@ -1,4 +1,5 @@
-import { EventGuestInvitation } from "./event-guest-invitation.model";
+import { GuestInvitation } from "./guest-invitation.model";
+import { GuestRole } from "./guest-role.model";
 
 export interface Guest {
     id?: string;
@@ -7,9 +8,11 @@ export interface Guest {
     lastName?: string;
     nickName?: string;
     maxGuests?: number;
-    eventRoles?: string[];
-    eventGuestInvitations?: EventGuestInvitation[];
     phoneNumber?: string;
-    dateCreated?: Date;
-    dateUpdated?: Date;
+    guestId?: string;
+    seats?: number;
+    guest?: Guest;
+
+    eventGuestInvitations?: GuestInvitation[];
+    eventGuestRoles?: GuestRole[];
 }

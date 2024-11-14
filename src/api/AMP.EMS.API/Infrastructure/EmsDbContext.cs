@@ -23,19 +23,18 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventAccount> EventAccounts { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<EventVendorTypeBudget> EventVendorTypeBudgets { get; set; }
-    public DbSet<EventGuest> EventGuests { get; set; }
-    public DbSet<EventGuestInvitation> EventGuestInvitations { get; set; }
-    public DbSet<EventGuestInvitationRsvp> EventGuestInvitationRsvps { get; set; }
-    public DbSet<EventGuestInvitationRsvpItem> EventGuestInvitationsRsvpItems { get; set; }
-    public DbSet<EventGuestRole> EventGuestRoles { get; set; }
-    public DbSet<EventInvitation> EventInvitations { get; set; }
+    public DbSet<GuestInvitation> GuestInvitations { get; set; }
+    public DbSet<GuestInvitationRsvp> GuestInvitationRsvps { get; set; }
+    public DbSet<GuestInvitationRsvpItem> GuestInvitationsRsvpItems { get; set; }
+    public DbSet<GuestRole> GuestRoles { get; set; }
+    public DbSet<Invitation> Invitations { get; set; }
     public DbSet<EventType> EventTypes { get; set; }
     public DbSet<EventTypeRole> EventTypeRoles { get; set; }
-    public DbSet<EventVendorContract> EventVendorContracts { get; set; }
-    public DbSet<EventVendorContractState> EventVendorContractStates { get; set; }
-    public DbSet<EventVendorContractPayment> EventVendorContractPayments { get; set; }
-    public DbSet<EventVendorContractPaymentType> EventVendorContractPaymentTypes { get; set; }
-    public DbSet<EventVendorContractPaymentState> EventVendorContractPaymentStates { get; set; }
+    public DbSet<VendorContract> VendorContracts { get; set; }
+    public DbSet<VendorContractState> VendorContractStates { get; set; }
+    public DbSet<VendorContractPayment> VendorContractPayments { get; set; }
+    public DbSet<VendorContractPaymentType> VendorContractPaymentTypes { get; set; }
+    public DbSet<VendorContractPaymentState> VendorContractPaymentStates { get; set; }
     public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; set; }
     public DbSet<Role> Roles { get; set; }

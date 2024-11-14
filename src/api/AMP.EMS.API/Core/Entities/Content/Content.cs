@@ -7,5 +7,5 @@ public class Content : FullAuditableEntity<Guid>
     public string HtmlContent { get; set; }
 
     public virtual ICollection<Event> Events { get; set; } = [];
-    public virtual ICollection<EventInvitation> EventInvitations { get; set; } = [];
+    public virtual ICollection<Invitation> Invitations { get; set; } = [];
 }

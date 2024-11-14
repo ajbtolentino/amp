@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { VendorService } from '@core/services/vendor.service';
-import { EventVendorContractService } from '@modules/event/vendor';
-import { EventVendorContract, Vendor } from '@shared/models';
+import { VendorContractService } from '@modules/event/vendor';
+import { Vendor, VendorContract } from '@shared/models';
 import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { map, Observable, of, switchMap } from 'rxjs';
@@ -24,7 +24,7 @@ export class EventVendorListComponent implements OnInit {
   constructor(private eventService: EventService,
     private vendorService: VendorService,
     private lookupService: LookupService,
-    private eventVendorContractService: EventVendorContractService,
+    private vendorContractService: VendorContractService,
     private route: ActivatedRoute,
     private router: Router) {
 
@@ -65,9 +65,9 @@ export class EventVendorListComponent implements OnInit {
   }
 
   loadEventVendorContracts = (vendors: Vendor[]): Observable<Vendor[]> => {
-    return this.eventVendorContractService.getByVendorIds(vendors.map(_ => _.id!))
+    return this.vendorContractService.getByVendorIds(vendors.map(_ => _.id!))
       .pipe(
-        switchMap(eventVendorContracts => this.loadEventVendorContractStates(eventVendorContracts)),
+        switchMap(eventVendorContracts => this.loadVendorContractStates(eventVendorContracts)),
         map(eventVendorContracts => {
           return vendors.map(vendor => ({
             ...vendor,
@@ -77,15 +77,15 @@ export class EventVendorListComponent implements OnInit {
       );
   }
 
-  loadEventVendorContractStates = (eventVendorContracts: EventVendorContract[]): Observable<EventVendorContract[]> => {
-    if (!eventVendorContracts?.filter(_ => _.eventVendorContractStateId).length) return of<EventVendorContract[]>(eventVendorContracts);
+  loadVendorContractStates = (vendorContracts: VendorContract[]): Observable<VendorContract[]> => {
+    if (!vendorContracts?.filter(_ => _.vendorContractStateId).length) return of<VendorContract[]>(vendorContracts);
 
-    return this.lookupService.getByIds('eventVendorContractState', eventVendorContracts.map(_ => _.eventVendorContractStateId!))
+    return this.lookupService.getByIds('vendorContractState', vendorContracts.map(_ => _.vendorContractStateId!))
       .pipe(
-        map(eventVendorContractStates => {
-          return eventVendorContracts.map(eventVendorContract => ({
-            ...eventVendorContract,
-            eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId)
+        map(vendorContractStates => {
+          return vendorContracts.map(vendorContract => ({
+            ...vendorContract,
+            eventVendorContractState: vendorContractStates.find(_ => _.id === vendorContract.vendorContractStateId)
           }))
         })
       )
@@ -104,19 +104,19 @@ export class EventVendorListComponent implements OnInit {
   }
 
   add = (vendor: Vendor) => {
-    this.vendors$ = this.eventVendorContractService.add(
+    this.vendors$ = this.vendorContractService.add(
       {
         vendorId: vendor.id!,
         eventId: this.eventId,
-      }).pipe(switchMap((eventVendorContract) => {
-        this.viewContract(eventVendorContract);
+      }).pipe(switchMap((vendorContract) => {
+        this.viewContract(vendorContract);
         return [];
       }
       ));
   }
 
-  viewContract = (eventVendorContract: EventVendorContract) => {
-    this.router.navigate([`/event/${this.eventId}/vendors/contracts/${eventVendorContract.id}`]);
+  viewContract = (vendorContract: VendorContract) => {
+    this.router.navigate([`/event/${this.eventId}/vendors/contracts/${vendorContract.id}`]);
   }
 
   onFilter(dv: DataView, event: Event) {

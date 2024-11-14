@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
-import { EventVendorContractService } from '@modules/event/vendor';
-import { EventVendorContract, Vendor } from '@shared/models';
+import { VendorContractService } from '@modules/event/vendor';
+import { Vendor, VendorContract } from '@shared/models';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
 import { Observable, map, of, switchMap } from 'rxjs';
@@ -14,7 +14,7 @@ import { Observable, map, of, switchMap } from 'rxjs';
 })
 export class EventVendorContractListComponent implements OnInit {
   eventId!: string;
-  eventVendorContracts: Observable<EventVendorContract[]> = new Observable<EventVendorContract[]>();
+  vendorContracts: Observable<VendorContract[]> = new Observable<VendorContract[]>();
 
   sortOptions: SelectItem[] = [];
   sortOrder: number = 0;
@@ -23,7 +23,7 @@ export class EventVendorContractListComponent implements OnInit {
   constructor(private eventService: EventService,
     private vendorService: VendorService,
     private lookupService: LookupService,
-    private eventVendorContractService: EventVendorContractService,
+    private vendorContractService: VendorContractService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private router: Router) {
@@ -33,7 +33,7 @@ export class EventVendorContractListComponent implements OnInit {
   ngOnInit(): void {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
 
-    this.eventVendorContracts = this.loadEventVendorContracts();
+    this.vendorContracts = this.loadVendorContracts();
 
     this.sortOptions = [
       { label: 'Name', value: 'vendor.name' },
@@ -42,36 +42,36 @@ export class EventVendorContractListComponent implements OnInit {
     ];
   }
 
-  loadEventVendorContracts = () => {
+  loadVendorContracts = () => {
     return this.eventService.getVendorContracts(this.eventId).pipe(
       switchMap(eventVendorContracts => this.loadVendors(eventVendorContracts)),
       switchMap(eventVendorContracts => this.loadEventVendorContractStates(eventVendorContracts))
     );
   }
 
-  loadEventVendorContractStates = (eventVendorContracts: EventVendorContract[]): Observable<EventVendorContract[]> => {
-    return this.lookupService.getByIds('eventVendorContractState', eventVendorContracts.map(_ => _.eventVendorContractStateId!))
+  loadEventVendorContractStates = (vendorContracts: VendorContract[]): Observable<VendorContract[]> => {
+    return this.lookupService.getByIds('vendorContractState', vendorContracts.map(_ => _.vendorContractStateId!))
       .pipe(
-        map(eventVendorContractStates => {
-          (eventVendorContractStates)
-          return eventVendorContracts.map(eventVendorContract => ({
-            ...eventVendorContract,
-            eventVendorContractState: eventVendorContractStates.find(_ => _.id === eventVendorContract.eventVendorContractStateId)
+        map(vendorContractStates => {
+          (vendorContractStates)
+          return vendorContracts.map(vendorContract => ({
+            ...vendorContract,
+            vendorContractState: vendorContractStates.find(_ => _.id === vendorContract.vendorContractStateId)
           }))
         })
       )
   }
 
-  loadVendors = (eventVendorContracts: EventVendorContract[]): Observable<EventVendorContract[]> => {
-    if (!eventVendorContracts.length) return of<EventVendorContract[]>([]);
+  loadVendors = (vendorContracts: VendorContract[]): Observable<VendorContract[]> => {
+    if (!vendorContracts.length) return of<VendorContract[]>([]);
 
-    return this.vendorService.getByIds(eventVendorContracts.map(_ => _.vendorId!))
+    return this.vendorService.getByIds(vendorContracts.map(_ => _.vendorId!))
       .pipe(
         switchMap(vendors => this.loadVendorType(vendors)),
         map(vendors => {
-          return eventVendorContracts.map(eventVendorContract => ({
-            ...eventVendorContract,
-            vendor: vendors.find(_ => _.id === eventVendorContract.vendorId)
+          return vendorContracts.map(vendorContract => ({
+            ...vendorContract,
+            vendor: vendors.find(_ => _.id === vendorContract.vendorId)
           }))
         })
       );
@@ -104,28 +104,28 @@ export class EventVendorContractListComponent implements OnInit {
   }
 
   add = (vendor: Vendor) => {
-    this.eventVendorContracts = this.eventVendorContractService.add(
+    this.vendorContracts = this.vendorContractService.add(
       {
         vendorId: vendor.id!,
         eventId: this.eventId,
       }).pipe(
-        switchMap(() => this.loadEventVendorContracts())
+        switchMap(() => this.loadVendorContracts())
       );
   }
 
-  viewContract = (eventVendorContract: EventVendorContract) => {
-    this.router.navigate([`/events/${this.eventId}/vendors/contracts/${eventVendorContract.id}`]);
+  viewContract = (vendorContract: VendorContract) => {
+    this.router.navigate([`/events/${this.eventId}/vendors/contracts/${vendorContract.id}`]);
   }
 
-  remove = (eventVendorContract: EventVendorContract) => {
+  remove = (vendorContract: VendorContract) => {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${eventVendorContract.vendor?.name}? This is not reversible!`,
+      message: `Are you sure you want to delete ${vendorContract.vendor?.name}? This is not reversible!`,
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        this.eventVendorContracts = this.eventVendorContractService.delete(eventVendorContract.id!)
+        this.vendorContracts = this.vendorContractService.delete(vendorContract.id!)
           .pipe(
-            switchMap(() => this.loadEventVendorContracts())
+            switchMap(() => this.loadVendorContracts())
           );
       }
     });

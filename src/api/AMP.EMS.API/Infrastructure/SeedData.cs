@@ -669,7 +669,7 @@ public class SeedData(EmsDbContext context)
 
         context.Roles.AddRange(roles);
 
-        var eventVendorContractState = new List<EventVendorContractState>
+        var vendorContractState = new List<VendorContractState>
         {
             new()
             {
@@ -771,9 +771,9 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.EventVendorContractStates.AddRange(eventVendorContractState);
+        context.VendorContractStates.AddRange(vendorContractState);
 
-        var eventVendorContractPaymentTypes = new List<EventVendorContractPaymentType>
+        var vendorContractPaymentTypes = new List<VendorContractPaymentType>
         {
             new()
             {
@@ -882,9 +882,9 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.EventVendorContractPaymentTypes.AddRange(eventVendorContractPaymentTypes);
+        context.VendorContractPaymentTypes.AddRange(vendorContractPaymentTypes);
 
-        var eventVendorContractPaymentStates = new List<EventVendorContractPaymentState>
+        var vendorContractPaymentStates = new List<VendorContractPaymentState>
         {
             new()
             {
@@ -958,7 +958,7 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.EventVendorContractPaymentStates.AddRange(eventVendorContractPaymentStates);
+        context.VendorContractPaymentStates.AddRange(vendorContractPaymentStates);
 
         var account = new Account
         {
