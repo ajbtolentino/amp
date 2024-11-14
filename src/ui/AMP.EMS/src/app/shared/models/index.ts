@@ -3,7 +3,6 @@ export * from './column';
 export * from './ems-response.model';
 export * from './event-invitation-info.model';
 export * from './event-type.model';
-export * from './event-vendor.model';
 export * from './event.model';
 export * from './guest-invitation-rsvp-item.model';
 export * from './guest-invitation-rsvp.model';
