@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { EventGuestInvitationRsvp, Guest } from '@shared/models';
+import { GuestInvitationRsvp } from '@shared/models';
 import { OnDynamicData, OnDynamicMount } from 'ngx-dynamic-hooks';
 
 @Component({
@@ -37,14 +37,13 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Input() requestDetailsMessage?: string;
   @Input() requestDetails?: boolean;
 
-  @Input() guest!: Guest;
   @Input() acceptLabel: string = 'Accept';
   @Input() declineLabel: string = 'Decline';
   @Input() submitButtonClass: string = "";
   @Output() onResponseChange: EventEmitter<any> = new EventEmitter();
   @Output() onSubmit: EventEmitter<any> = new EventEmitter();
 
-  eventGuestInvitationRsvp: EventGuestInvitationRsvp = { guestNames: [] };
+  guestInvitationRsvp: GuestInvitationRsvp = { guestNames: [] };
 
   rsvpForm!: FormGroup;
 
@@ -75,12 +74,12 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   }
 
   onDynamicMount(data: OnDynamicData): void {
-    const length = data.context.eventGuestInvitation.seats || 0;
+    const length = data.context.guestInvitation.seats || 0;
 
-    this.eventGuestInvitationRsvp.eventGuestInvitationId = data.context.eventGuestInvitation.id;
+    this.guestInvitationRsvp.guestInvitationId = data.context.guestInvitation.id;
 
-    if (data.context.eventGuestInvitation.eventInvitation.rsvpDeadline)
-      data.context.eventGuestInvitation.eventInvitation.rsvpDeadline = new Date(data.context.eventGuestInvitation.eventInvitation.rsvpDeadline);
+    if (data.context.guestInvitation.invitation.rsvpDeadline)
+      data.context.guestInvitation.invitation.rsvpDeadline = new Date(data.context.guestInvitation.invitation.rsvpDeadline);
 
     for (let i = 0; i < length; i++) {
       const guestNameControl = new FormControl(null);
@@ -90,9 +89,9 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
 
   onSendResponseClick() {
     if (this.rsvpForm.valid) {
-      this.eventGuestInvitationRsvp.guestNames = this.rsvpForm.value['guestNames'];
-      this.eventGuestInvitationRsvp.response = this.rsvpForm.value['response'];
-      this.onSubmit.emit(this.eventGuestInvitationRsvp);
+      this.guestInvitationRsvp.guestNames = this.rsvpForm.value['guestNames'];
+      this.guestInvitationRsvp.response = this.rsvpForm.value['response'];
+      this.onSubmit.emit(this.guestInvitationRsvp);
       this.rsvpForm.reset();
     } else {
       this.rsvpForm.markAllAsTouched();

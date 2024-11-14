@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { EventGuestRoleService, GuestInvitationService, GuestService } from '@modules/event/guest';
+import { GuestInvitationService, GuestRoleService, GuestService } from '@modules/event/guest';
 import { EventInvitationInfo, Guest, GuestRole, Invitation } from '@shared/models';
 import { MessageService } from 'primeng/api';
 import { map, Observable, of, switchMap } from 'rxjs';
@@ -26,7 +26,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private eventService: EventService,
     private eventGuestInvitationService: GuestInvitationService,
-    private eventGuestRoleService: EventGuestRoleService,
+    private eventGuestRoleService: GuestRoleService,
     private guestService: GuestService,
     private lookupService: LookupService,
     private messageService: MessageService,
@@ -50,7 +50,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
       switchMap(eventGuest => this.loadGuestInvitations(eventGuest)),
       map(response => {
         if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
-        if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.eventInvitationId).map(_ => _.eventInvitationId!);
+        if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.invitationId).map(_ => _.invitationId!);
         return response;
       }));
   }
@@ -73,7 +73,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadGuestRoles = (guest: Guest): Observable<Guest> => {
-    return this.eventGuestRoleService.getByEventGuestIds([guest.id!])
+    return this.eventGuestRoleService.getByGuestIds([guest.id!])
       .pipe(
         switchMap(eventGuestRoles => this.loadRoles(eventGuestRoles)),
         map(eventGuestRoles => (

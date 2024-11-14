@@ -4,7 +4,7 @@ import { ConfirmationService } from 'primeng/api';
 
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { EventGuestRoleService, EventGuestService, GuestService } from '@modules/event/guest';
+import { GuestRoleService, GuestService } from '@modules/event/guest';
 import { Guest, GuestRole } from '@shared/models';
 import { lastValueFrom, map, Observable, of, switchMap } from 'rxjs';
 
@@ -21,8 +21,7 @@ export class EventGuestListComponent implements OnInit {
   selectedItems: Guest[] | null = [];
 
   constructor(private eventService: EventService,
-    private eventGuestService: EventGuestService,
-    private eventGuestRoleService: EventGuestRoleService,
+    private guestRoleService: GuestRoleService,
     private guestService: GuestService,
     private lookupService: LookupService,
     private confirmationService: ConfirmationService,
@@ -54,7 +53,7 @@ export class EventGuestListComponent implements OnInit {
   }
 
   loadGuestRole = (eventGuests: Guest[]): Observable<Guest[]> => {
-    return this.eventGuestRoleService.getByEventGuestIds(eventGuests.filter(_ => _.id).map(_ => _.id!))
+    return this.guestRoleService.getByGuestIds(eventGuests.filter(_ => _.id).map(_ => _.id!))
       .pipe(
         switchMap(eventGuestRoles => this.loadRole(eventGuestRoles)),
         map(eventGuestRoles => {
@@ -67,16 +66,16 @@ export class EventGuestListComponent implements OnInit {
         }));
   }
 
-  loadRole = (eventGuestRoles: GuestRole[]): Observable<GuestRole[]> => {
-    if (!eventGuestRoles.length) return of<GuestRole[]>(eventGuestRoles);
+  loadRole = (guestRoles: GuestRole[]): Observable<GuestRole[]> => {
+    if (!guestRoles.length) return of<GuestRole[]>(guestRoles);
 
-    return this.lookupService.getByIds('role', eventGuestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
+    return this.lookupService.getByIds('role', guestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
       .pipe(
         map(roles => {
-          return eventGuestRoles.map(eventGuestRole => {
+          return guestRoles.map(guestRole => {
             return {
-              ...eventGuestRole,
-              role: roles.find(_ => _.id === eventGuestRole.roleId)
+              ...guestRole,
+              role: roles.find(_ => _.id === guestRole.roleId)
             }
           })
         }));
@@ -93,7 +92,7 @@ export class EventGuestListComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
         if (eventGuest.id) {
-          await lastValueFrom(this.eventGuestService.delete(eventGuest.id));
+          await lastValueFrom(this.guestService.delete(eventGuest.id));
 
           this.refreshGrid();
         }
@@ -107,7 +106,7 @@ export class EventGuestListComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.guests$ = this.eventGuestService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventService.getGuests(this.eventId)));
+        this.guests$ = this.guestService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventService.getGuests(this.eventId)));
       }
     });
   }

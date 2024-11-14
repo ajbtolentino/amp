@@ -50,7 +50,7 @@ export class EventInvitationListComponent implements OnInit {
           return eventInvitations.map(eventInvitation => {
             return {
               ...eventInvitation,
-              eventGuestInvitations: eventGuestInvitations.filter(_ => _.eventInvitationId === eventInvitation.id)
+              eventGuestInvitations: eventGuestInvitations.filter(_ => _.invitationId === eventInvitation.id)
             }
           })
         })
@@ -60,13 +60,13 @@ export class EventInvitationListComponent implements OnInit {
   loadRsvp = (eventGuestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
     if (!eventGuestInvitations.length) return of<GuestInvitation[]>([]);
 
-    return this.rsvpService.getByEventGuestInvitationIds(eventGuestInvitations.map(_ => _.id!))
+    return this.rsvpService.getByGuestInvitationIds(eventGuestInvitations.map(_ => _.id!))
       .pipe(
         map(eventGuestInvitationRsvps => {
           return eventGuestInvitations.map(eventGuestInvitation => {
             return {
               ...eventGuestInvitation,
-              eventGuestInvitationRsvps: eventGuestInvitationRsvps.filter(_ => _.eventGuestInvitationId === eventGuestInvitation.id)
+              eventGuestInvitationRsvps: eventGuestInvitationRsvps.filter(_ => _.guestInvitationId === eventGuestInvitation.id)
             }
           })
         }))

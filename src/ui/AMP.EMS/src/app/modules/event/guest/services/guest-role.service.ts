@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class EventGuestRoleService extends BaseApiService {
+export class GuestRoleService extends BaseApiService {
     get = (id: string): Observable<GuestRole> => {
         return this.httpGet(`guest/${id}`);
     }
@@ -15,7 +15,7 @@ export class EventGuestRoleService extends BaseApiService {
         return this.httpGet<GuestRole[]>(`guestRole`);
     }
 
-    getByEventGuestIds = (guestids: string[]) => {
+    getByGuestIds = (guestids: string[]) => {
         return this.httpGet<GuestRole[]>(`guestrole/getbyguestids`, { params: { guestIds: guestids } });
     }
 
