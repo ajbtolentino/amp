@@ -3,6 +3,7 @@ using AMP.Infrastructure.Configurations;
 using AMP.Infrastructure.Decorators;
 using AMP.Infrastructure.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -41,7 +42,9 @@ public static class ServiceProviderExtensions
         switch (dbType)
         {
             case DatabaseType.SqlServer:
-                services.AddDbContext<TDbContext>(options => options.UseSqlServer(connectionString));
+                services.AddDbContext<TDbContext>(options =>
+                    options.UseSqlServer(connectionString).ConfigureWarnings(warnings =>
+                        warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
                 break;
             case DatabaseType.Sqlite:
                 services.AddDbContext<TDbContext>(options => options.UseSqlite(connectionString));
