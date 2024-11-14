@@ -15,6 +15,7 @@ public class TransactionController(IUnitOfWork unitOfWork, ILogger<TransactionCo
 
         ArgumentNullException.ThrowIfNull(transaction);
 
+        transaction.Amount = request.Amount;
         transaction.ReferenceNumber = request.ReferenceNumber;
         transaction.Description = request.Description;
         transaction.TransactionDate = request.TransactionDate;
