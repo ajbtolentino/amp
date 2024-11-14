@@ -31,14 +31,13 @@ public static class ServiceProviderExtensions
     }
 
     public static IServiceCollection AddDbContext<TDbContext>(this IServiceCollection services,
-        IConfigurationManager configurationManager, string migrationsAssemblyRoot)
+        IConfigurationManager configurationManager)
         where TDbContext : DbContext
     {
         var dbType =
             configurationManager.GetValue<DatabaseType>(
                 $"{nameof(DatabaseConfiguration)}:{nameof(DatabaseConfiguration.Type)}");
         var connectionString = configurationManager.GetConnectionString("DefaultConnection")!;
-        var migrationAssembly = $"{migrationsAssemblyRoot}.{dbType}";
 
         switch (dbType)
         {

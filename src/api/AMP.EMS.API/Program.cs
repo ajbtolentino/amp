@@ -72,7 +72,7 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EmsDbContext>(config, "AMP.EMS.API.Migrations");
+builder.Services.AddDbContext<EmsDbContext>(config);
 
 builder.Services.AddHttpContextAccessor();
 

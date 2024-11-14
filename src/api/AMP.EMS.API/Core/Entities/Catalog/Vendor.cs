@@ -13,5 +13,5 @@ public class Vendor : FullAuditableEntity<Guid>
     public virtual VendorType VendorType { get; set; }
     public virtual ICollection<VendorAccount> VendorAccounts { get; set; } = [];
     public virtual ICollection<EventVendorTransaction> EventVendorTransactions { get; set; } = [];
-    public virtual ICollection<VendorContract> EventVendorContracts { get; set; } = [];
+    public virtual ICollection<VendorContract> VendorContracts { get; set; } = [];
 }

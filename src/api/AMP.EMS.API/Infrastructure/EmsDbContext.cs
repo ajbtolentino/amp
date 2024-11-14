@@ -54,35 +54,51 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         ConfigurePrimaryKeys(modelBuilder);
     }
 
-    public void ConfigureRelationships(ModelBuilder modelBuilder)
+    private void ConfigureRelationships(ModelBuilder modelBuilder)
     {
-        var entityTypes = typeof(EmsDbContext).Assembly.GetTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && t.BaseType == typeof(object));
+        var entityTypes = typeof(EmsDbContext).GetProperties().Where(_ => _.PropertyType.IsGenericType)
+            .Select(_ => _.PropertyType.GenericTypeArguments[0]).ToList();
+
+        Console.WriteLine($"Found {entityTypes.Count()} entities");
 
         foreach (var entityType in entityTypes)
         {
             // Configure HasMany relationships
-            var collectionProperties = entityType.GetProperties()
-                .Where(p => p.PropertyType.IsGenericType &&
-                            p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>));
+            var collectionProperties = entityType.GetProperties();
+
+            Console.WriteLine(
+                $"Configuring Relationships for {entityType.Name} with {collectionProperties.Count()} properties");
 
             foreach (var collectionProperty in collectionProperties)
             {
+                if (collectionProperty.PropertyType.Name != typeof(ICollection<>).Name) continue;
+                if (collectionProperty.Name == nameof(Account.DebitTransactions) ||
+                    collectionProperty.Name == nameof(Account.CreditTransactions)) continue;
+
+                Console.WriteLine(
+                    $"-Configuring {entityType.Name}.{collectionProperty.Name}...");
+
                 var targetEntityType = collectionProperty.PropertyType.GetGenericArguments()[0];
 
                 // Assuming that the foreign key is named as <TargetEntityName>Id
-                var foreignKeyName = $"{targetEntityType.Name}Id";
-                var foreignKeyProperty = entityType.GetProperty(foreignKeyName);
+                var foreignKeyName = $"{entityType.Name}Id";
+
+                Console.WriteLine($"-Target Collection Entity {targetEntityType.Name}...");
+
+                var foreignKeyProperty = targetEntityType.GetProperty(foreignKeyName);
+
+                Console.WriteLine($"-Found {foreignKeyProperty.Name} foreign key in {targetEntityType.Name}");
 
                 if (foreignKeyProperty != null && foreignKeyProperty.PropertyType == typeof(Guid))
                 {
                     // Configure HasMany relationship
-                    var hasManyMethod = modelBuilder.Entity(entityType)
-                        .HasMany(collectionProperty.Name);
-
-                    hasManyMethod.WithOne(targetEntityType.Name + "s")
+                    modelBuilder.Entity(entityType)
+                        .HasMany(targetEntityType.Name + "s")
+                        .WithOne(entityType.Name)
                         .HasForeignKey(foreignKeyName)
                         .OnDelete(DeleteBehavior.Restrict); // General case
+
+                    Console.WriteLine($"-Done configuring {entityType.Name} HasMany {foreignKeyProperty.Name}...");
                 }
             }
 
@@ -95,18 +111,26 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
             {
                 var targetEntityType = referenceProperty.PropertyType;
 
+                Console.WriteLine(
+                    $"-Configuring {entityType.Name}.{referenceProperty.Name}...");
+
                 // Assuming the foreign key property is named as <TargetEntityName>Id
                 var foreignKeyName = $"{targetEntityType.Name}Id";
                 var foreignKeyProperty = entityType.GetProperty(foreignKeyName);
 
-                if (foreignKeyProperty != null && foreignKeyProperty.PropertyType == typeof(Guid))
+                Console.WriteLine($"-Configuring {entityType.Name} HasOne {foreignKeyName}");
+
+                if (foreignKeyProperty != null && foreignKeyProperty.PropertyType == typeof(Guid) &&
+                    targetEntityType.GetProperties().Any(_ => _.Name == referenceProperty.Name + "Id"))
                 {
                     // Configure HasOne relationship
-                    var hasOneMethod = modelBuilder.Entity(entityType)
+                    modelBuilder.Entity(entityType)
                         .HasOne(referenceProperty.Name)
-                        .WithMany(targetEntityType.Name + "s")
+                        .WithOne(targetEntityType.Name)
                         .HasForeignKey(foreignKeyName)
                         .OnDelete(DeleteBehavior.Restrict); // Set delete behavior as needed
+
+                    Console.WriteLine($"-Done configuring {referenceProperty.Name} HasOne {targetEntityType.Name}...");
                 }
             }
 
@@ -117,9 +141,13 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
             if (primaryKeyProperty != null)
                 modelBuilder.Entity(entityType)
                     .HasKey(primaryKeyProperty.Name); // Set the primary key
+
+
+            Console.WriteLine(
+                $"Finished configuring {entityType.Name}...");
         }
 
-        // Configure Account -> Transaction relationships
+        //Configure Account->Transaction relationships
         modelBuilder.Entity<Account>()
             .HasMany(a => a.CreditTransactions)
             .WithOne(t => t.CreditAccount)

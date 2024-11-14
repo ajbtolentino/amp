@@ -16,11 +16,13 @@ public class Event : FullAuditableEntity<Guid>
     public virtual EventType? EventType { get; set; }
     public virtual Content Content { get; set; }
     public virtual ICollection<EventAccount> EventAccounts { get; set; } = [];
-    public virtual ICollection<EventVendorTypeBudget> EventBudgets { get; set; } = [];
+    public virtual ICollection<EventVendorTypeBudget> EventVendorTypeBudgets { get; set; } = [];
     public virtual ICollection<Guest> Guests { get; set; } = [];
     public virtual ICollection<Invitation> Invitations { get; set; } = [];
     public virtual ICollection<Role> Roles { get; set; } = [];
-    public virtual ICollection<VendorContract> EventVendorContracts { get; set; } = [];
+    public virtual ICollection<VendorContract> VendorContracts { get; set; } = [];
     public virtual ICollection<EventVendorTransaction> EventVendorTransactions { get; set; } = [];
-    public virtual ICollection<VendorContractState> EventVendorContractStates { get; set; } = [];
+    public virtual ICollection<VendorContractState> VendorContractStates { get; set; } = [];
+    public virtual ICollection<VendorContractPaymentState> VendorContractPaymentStates { get; set; } = [];
+    public virtual ICollection<VendorContractPaymentType> VendorContractPaymentTypes { get; set; } = [];
 }

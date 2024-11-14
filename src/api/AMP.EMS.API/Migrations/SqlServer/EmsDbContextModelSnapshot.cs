@@ -1139,7 +1139,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.AccountType", "AccountType")
                         .WithMany("Accounts")
                         .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AccountType");
@@ -1154,7 +1154,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.EventType", "EventType")
                         .WithMany("Events")
                         .HasForeignKey("EventTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Content");
@@ -1167,13 +1167,13 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Account", "Account")
                         .WithMany("EventAccounts")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
                         .WithMany("EventAccounts")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -1186,7 +1186,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.EventType", "EventType")
                         .WithMany("EventTypeRoles")
                         .HasForeignKey("EventTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("EventType");
@@ -1197,19 +1197,19 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
                         .WithMany("EventVendorTransactions")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Transaction", "Transaction")
                         .WithMany("EventVendorTransactions")
                         .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Vendor", "Vendor")
                         .WithMany("EventVendorTransactions")
                         .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1222,15 +1222,15 @@ namespace AMP.EMS.API.Migrations.SqlServer
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorTypeBudget", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany("EventBudgets")
+                        .WithMany("EventVendorTypeBudgets")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.VendorType", "VendorType")
                         .WithMany("EventVendorTypeBudgets")
                         .HasForeignKey("VendorTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1243,7 +1243,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
                         .WithMany("Guests")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1254,13 +1254,13 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Guest", "Guest")
                         .WithMany("GuestInvitations")
                         .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Invitation", "Invitation")
                         .WithMany("GuestInvitations")
                         .HasForeignKey("InvitationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Guest");
@@ -1273,7 +1273,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.GuestInvitation", "GuestInvitation")
                         .WithMany("GuestInvitationRsvps")
                         .HasForeignKey("GuestInvitationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("GuestInvitation");
@@ -1284,7 +1284,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.GuestInvitationRsvp", "GuestInvitationRsvp")
                         .WithMany("GuestInvitationRsvpItems")
                         .HasForeignKey("GuestInvitationRsvpId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("GuestInvitationRsvp");
@@ -1295,13 +1295,13 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Guest", "Guest")
                         .WithMany("GuestRoles")
                         .HasForeignKey("GuestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Role", "Role")
                         .WithMany("GuestRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Guest");
@@ -1318,7 +1318,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
                         .WithMany("Invitations")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Content");
@@ -1331,7 +1331,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.ProductType", "ProductType")
                         .WithMany("Products")
                         .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ProductType");
@@ -1342,7 +1342,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
                         .WithMany("Roles")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1363,7 +1363,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.TransactionType", "TransactionType")
                         .WithMany("Transactions")
                         .HasForeignKey("TransactionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CreditAccount");
@@ -1378,7 +1378,7 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.VendorType", "VendorType")
                         .WithMany("Vendors")
                         .HasForeignKey("VendorTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("VendorType");
@@ -1389,13 +1389,13 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.Account", "Account")
                         .WithMany("VendorAccounts")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Vendor", "Vendor")
                         .WithMany("VendorAccounts")
                         .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Account");
@@ -1406,9 +1406,9 @@ namespace AMP.EMS.API.Migrations.SqlServer
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContract", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany("EventVendorContracts")
+                        .WithMany("VendorContracts")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.VendorContractState", "VendorContractState")
@@ -1416,9 +1416,9 @@ namespace AMP.EMS.API.Migrations.SqlServer
                         .HasForeignKey("VendorContractStateId");
 
                     b.HasOne("AMP.EMS.API.Core.Entities.Vendor", "Vendor")
-                        .WithMany("EventVendorContracts")
+                        .WithMany("VendorContracts")
                         .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1437,19 +1437,19 @@ namespace AMP.EMS.API.Migrations.SqlServer
                     b.HasOne("AMP.EMS.API.Core.Entities.VendorContract", "VendorContract")
                         .WithMany("VendorContractPayments")
                         .HasForeignKey("VendorContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.VendorContractPaymentState", "VendorContractPaymentState")
                         .WithMany("VendorContractPayments")
                         .HasForeignKey("VendorContractPaymentStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AMP.EMS.API.Core.Entities.VendorContractPaymentType", "VendorContractPaymentType")
                         .WithMany("VendorContractPayments")
                         .HasForeignKey("VendorContractPaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Transaction");
@@ -1464,9 +1464,9 @@ namespace AMP.EMS.API.Migrations.SqlServer
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentState", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany()
+                        .WithMany("VendorContractPaymentStates")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1475,9 +1475,9 @@ namespace AMP.EMS.API.Migrations.SqlServer
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentType", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany()
+                        .WithMany("VendorContractPaymentTypes")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1486,9 +1486,9 @@ namespace AMP.EMS.API.Migrations.SqlServer
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractState", b =>
                 {
                     b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany("EventVendorContractStates")
+                        .WithMany("VendorContractStates")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -1521,19 +1521,23 @@ namespace AMP.EMS.API.Migrations.SqlServer
                 {
                     b.Navigation("EventAccounts");
 
-                    b.Navigation("EventBudgets");
-
-                    b.Navigation("EventVendorContractStates");
-
-                    b.Navigation("EventVendorContracts");
-
                     b.Navigation("EventVendorTransactions");
+
+                    b.Navigation("EventVendorTypeBudgets");
 
                     b.Navigation("Guests");
 
                     b.Navigation("Invitations");
 
                     b.Navigation("Roles");
+
+                    b.Navigation("VendorContractPaymentStates");
+
+                    b.Navigation("VendorContractPaymentTypes");
+
+                    b.Navigation("VendorContractStates");
+
+                    b.Navigation("VendorContracts");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventType", b =>
@@ -1587,11 +1591,11 @@ namespace AMP.EMS.API.Migrations.SqlServer
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Vendor", b =>
                 {
-                    b.Navigation("EventVendorContracts");
-
                     b.Navigation("EventVendorTransactions");
 
                     b.Navigation("VendorAccounts");
+
+                    b.Navigation("VendorContracts");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContract", b =>
