@@ -30,11 +30,11 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<Invitation> Invitations { get; set; }
     public DbSet<EventType> EventTypes { get; set; }
     public DbSet<EventTypeRole> EventTypeRoles { get; set; }
-    public DbSet<EventVendorContract> EventVendorContracts { get; set; }
-    public DbSet<EventVendorContractState> EventVendorContractStates { get; set; }
-    public DbSet<EventVendorContractPayment> EventVendorContractPayments { get; set; }
-    public DbSet<EventVendorContractPaymentType> EventVendorContractPaymentTypes { get; set; }
-    public DbSet<EventVendorContractPaymentState> EventVendorContractPaymentStates { get; set; }
+    public DbSet<VendorContract> VendorContracts { get; set; }
+    public DbSet<VendorContractState> VendorContractStates { get; set; }
+    public DbSet<VendorContractPayment> VendorContractPayments { get; set; }
+    public DbSet<VendorContractPaymentType> VendorContractPaymentTypes { get; set; }
+    public DbSet<VendorContractPaymentState> VendorContractPaymentStates { get; set; }
     public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; set; }
     public DbSet<Role> Roles { get; set; }

@@ -61,13 +61,13 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
             .Where(_ => _.EventId == eventId)
             .ToListAsync();
 
-        var vendorContracts = await unitOfWork.Set<EventVendorContract>().GetAll().AsNoTracking()
+        var vendorContracts = await unitOfWork.Set<VendorContract>().GetAll().AsNoTracking()
             .Where(_ => _.EventId == eventId)
             .Select(_ => _.Id)
             .ToListAsync();
 
-        var totalAmountDue = await unitOfWork.Set<EventVendorContractPayment>().GetAll().AsNoTracking()
-            .Where(_ => vendorContracts.Contains(_.EventVendorContractId))
+        var totalAmountDue = await unitOfWork.Set<VendorContractPayment>().GetAll().AsNoTracking()
+            .Where(_ => vendorContracts.Contains(_.VendorContractId))
             .Select(_ => _.DueAmount)
             .ToListAsync();
 
@@ -85,18 +85,18 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
     [HttpGet("{eventId:guid}/[action]")]
     public async Task<IActionResult> Expenses(Guid eventId)
     {
-        var vendorContracts = await unitOfWork.Set<EventVendorContract>().GetAll().AsNoTracking()
+        var vendorContracts = await unitOfWork.Set<VendorContract>().GetAll().AsNoTracking()
             .Where(_ => _.EventId == eventId)
             .Select(_ => _.Id)
             .ToListAsync();
 
-        var settledTransactions = await unitOfWork.Set<EventVendorContractPayment>().GetAll().AsNoTracking()
-            .Where(_ => vendorContracts.Contains(_.EventVendorContractId) && _.TransactionId.HasValue)
+        var settledTransactions = await unitOfWork.Set<VendorContractPayment>().GetAll().AsNoTracking()
+            .Where(_ => vendorContracts.Contains(_.VendorContractId) && _.TransactionId.HasValue)
             .Select(_ => _.TransactionId)
             .ToListAsync();
 
-        var unsettledTransactions = await unitOfWork.Set<EventVendorContractPayment>().GetAll().AsNoTracking()
-            .Where(_ => vendorContracts.Contains(_.EventVendorContractId) && !_.TransactionId.HasValue)
+        var unsettledTransactions = await unitOfWork.Set<VendorContractPayment>().GetAll().AsNoTracking()
+            .Where(_ => vendorContracts.Contains(_.VendorContractId) && !_.TransactionId.HasValue)
             .Select(_ => _.DueAmount)
             .ToListAsync();
 

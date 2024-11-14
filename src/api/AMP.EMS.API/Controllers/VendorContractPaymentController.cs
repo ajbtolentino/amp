@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMP.EMS.API.Controllers;
 
-public class EventVendorContractPaymentController(
+public class VendorContractPaymentController(
     IUnitOfWork unitOfWork,
-    ILogger<EventVendorContractPaymentStateController> logger)
-    : ApiBaseController<EventVendorContractPayment, Guid>(unitOfWork, logger)
+    ILogger<VendorContractPaymentStateController> logger)
+    : ApiBaseController<VendorContractPayment, Guid>(unitOfWork, logger)
 {
     [HttpPost("{id:guid}/transaction")]
     public async Task<IActionResult> ContractTransaction(Guid id, [FromBody] PaymentTransactionRequest request)
@@ -22,8 +22,8 @@ public class EventVendorContractPaymentController(
 
             ArgumentNullException.ThrowIfNull(eventVendorContractPayment);
 
-            var eventVendorContract = await UnitOfWork.Set<EventVendorContract>()
-                .Get(eventVendorContractPayment.EventVendorContractId);
+            var eventVendorContract = await UnitOfWork.Set<VendorContract>()
+                .Get(eventVendorContractPayment.VendorContractId);
 
             ArgumentNullException.ThrowIfNull(eventVendorContract);
 
@@ -55,7 +55,7 @@ public class EventVendorContractPaymentController(
             await UnitOfWork.SaveChangesAsync();
             await UnitOfWork.CommitTransactionAsync();
 
-            return Ok(new OkResponse<EventVendorContractPayment>(string.Empty) { Data = eventVendorContractPayment });
+            return Ok(new OkResponse<VendorContractPayment>(string.Empty) { Data = eventVendorContractPayment });
         }
         catch (Exception e)
         {
@@ -66,13 +66,13 @@ public class EventVendorContractPaymentController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] EventVendorContractPaymentRequest request)
+    public async Task<IActionResult> Post([FromBody] VendorContractPaymentRequest request)
     {
-        return await base.Post(new EventVendorContractPayment
+        return await base.Post(new VendorContractPayment
         {
-            EventVendorContractId = request.EventVendorContractId,
-            EventVendorContractPaymentTypeId = request.EventVendorContractPaymentTypeId,
-            EventVendorContractPaymentStateId = request.EventVendorContractPaymentStateId,
+            VendorContractId = request.VendorContractId,
+            VendorContractPaymentTypeId = request.VendorContractPaymentTypeId,
+            VendorContractPaymentStateId = request.VendorContractPaymentStateId,
             DueDate = request.DueDate,
             DueAmount = request.DueAmount
         });
@@ -80,24 +80,24 @@ public class EventVendorContractPaymentController(
 
     [HttpPut]
     [Route("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] EventVendorContractPaymentRequest request)
+    public async Task<IActionResult> Put(Guid id, [FromBody] VendorContractPaymentRequest request)
     {
         var eventVendorContractPayment = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(eventVendorContractPayment);
 
-        eventVendorContractPayment.EventVendorContractPaymentTypeId = request.EventVendorContractPaymentTypeId;
-        eventVendorContractPayment.EventVendorContractPaymentStateId = request.EventVendorContractPaymentStateId;
+        eventVendorContractPayment.VendorContractPaymentTypeId = request.VendorContractPaymentTypeId;
+        eventVendorContractPayment.VendorContractPaymentStateId = request.VendorContractPaymentStateId;
         eventVendorContractPayment.DueAmount = request.DueAmount;
         eventVendorContractPayment.DueDate = request.DueDate;
 
         return await base.Put(eventVendorContractPayment);
     }
 
-    public record EventVendorContractPaymentRequest(
-        Guid EventVendorContractId,
-        Guid EventVendorContractPaymentTypeId,
-        Guid EventVendorContractPaymentStateId,
+    public record VendorContractPaymentRequest(
+        Guid VendorContractId,
+        Guid VendorContractPaymentTypeId,
+        Guid VendorContractPaymentStateId,
         decimal DueAmount,
         DateTime DueDate);
 

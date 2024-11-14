@@ -43,20 +43,20 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/[action]")]
     public IActionResult VendorContracts(Guid eventId)
     {
-        var eventVendorContracts = UnitOfWork.Set<EventVendorContract>().GetAll()
+        var eventVendorContracts = UnitOfWork.Set<VendorContract>().GetAll()
             .Where(eventVendorContract => eventVendorContract.EventId == eventId).AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<EventVendorContract>>(string.Empty) { Data = eventVendorContracts });
+        return Ok(new OkResponse<IEnumerable<VendorContract>>(string.Empty) { Data = eventVendorContracts });
     }
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
     public IActionResult VendorContractStates(Guid eventId)
     {
-        var eventVendorContractStates = UnitOfWork.Set<EventVendorContractState>().GetAll()
+        var eventVendorContractStates = UnitOfWork.Set<VendorContractState>().GetAll()
             .Where(eventVendorContractState => eventVendorContractState.EventId == eventId).AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<EventVendorContractState>>(string.Empty)
+        return Ok(new OkResponse<IEnumerable<VendorContractState>>(string.Empty)
             { Data = eventVendorContractStates });
     }
 
@@ -64,11 +64,11 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/[action]")]
     public IActionResult VendorContractPaymentTypes(Guid eventId)
     {
-        var eventVendorContractPaymentTypes = UnitOfWork.Set<EventVendorContractPaymentType>().GetAll()
+        var eventVendorContractPaymentTypes = UnitOfWork.Set<VendorContractPaymentType>().GetAll()
             .Where(eventVendorContractPaymentType => eventVendorContractPaymentType.EventId == eventId)
             .AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<EventVendorContractPaymentType>>(string.Empty)
+        return Ok(new OkResponse<IEnumerable<VendorContractPaymentType>>(string.Empty)
             { Data = eventVendorContractPaymentTypes });
     }
 
@@ -76,11 +76,11 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/[action]")]
     public IActionResult VendorContractPaymentStates(Guid eventId)
     {
-        var eventVendorContractPaymentState = UnitOfWork.Set<EventVendorContractPaymentState>().GetAll()
+        var eventVendorContractPaymentState = UnitOfWork.Set<VendorContractPaymentState>().GetAll()
             .Where(eventVendorContractPaymentState => eventVendorContractPaymentState.EventId == eventId)
             .AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<EventVendorContractPaymentState>>(string.Empty)
+        return Ok(new OkResponse<IEnumerable<VendorContractPaymentState>>(string.Empty)
             { Data = eventVendorContractPaymentState });
     }
 

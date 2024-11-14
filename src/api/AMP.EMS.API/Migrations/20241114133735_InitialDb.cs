@@ -315,78 +315,6 @@ namespace AMP.EMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventVendorContractPaymentStates",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventVendorContractPaymentStates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContractPaymentStates_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventVendorContractPaymentTypes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventVendorContractPaymentTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContractPaymentTypes_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventVendorContractStates",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventVendorContractStates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContractStates_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EventVendorTypeBudgets",
                 columns: table => new
                 {
@@ -500,6 +428,78 @@ namespace AMP.EMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VendorContractPaymentStates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VendorContractPaymentStates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VendorContractPaymentStates_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VendorContractPaymentTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VendorContractPaymentTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VendorContractPaymentTypes_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VendorContractStates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VendorContractStates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VendorContractStates_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "VendorAccounts",
                 columns: table => new
                 {
@@ -558,44 +558,6 @@ namespace AMP.EMS.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_EventVendorTransactions_Vendors_VendorId",
-                        column: x => x.VendorId,
-                        principalTable: "Vendors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventVendorContracts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    VendorId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventVendorContractStateId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    EventVendorContractPaymentStateId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    Details = table.Column<string>(type: "TEXT", nullable: false),
-                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventVendorContracts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContracts_EventVendorContractStates_EventVendorContractStateId",
-                        column: x => x.EventVendorContractStateId,
-                        principalTable: "EventVendorContractStates",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_EventVendorContracts_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContracts_Vendors_VendorId",
                         column: x => x.VendorId,
                         principalTable: "Vendors",
                         principalColumn: "Id",
@@ -663,16 +625,16 @@ namespace AMP.EMS.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventVendorContractPayments",
+                name: "VendorContracts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventVendorContractId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventVendorContractPaymentStateId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    EventVendorContractPaymentTypeId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TransactionId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    DueAmount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    EventId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VendorId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VendorContractStateId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    VendorContractPaymentStateId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    Details = table.Column<string>(type: "TEXT", nullable: false),
+                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -680,30 +642,24 @@ namespace AMP.EMS.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventVendorContractPayments", x => x.Id);
+                    table.PrimaryKey("PK_VendorContracts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EventVendorContractPayments_EventVendorContractPaymentStates_EventVendorContractPaymentStateId",
-                        column: x => x.EventVendorContractPaymentStateId,
-                        principalTable: "EventVendorContractPaymentStates",
+                        name: "FK_VendorContracts_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventVendorContractPayments_EventVendorContractPaymentTypes_EventVendorContractPaymentTypeId",
-                        column: x => x.EventVendorContractPaymentTypeId,
-                        principalTable: "EventVendorContractPaymentTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContractPayments_EventVendorContracts_EventVendorContractId",
-                        column: x => x.EventVendorContractId,
-                        principalTable: "EventVendorContracts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EventVendorContractPayments_Transactions_TransactionId",
-                        column: x => x.TransactionId,
-                        principalTable: "Transactions",
+                        name: "FK_VendorContracts_VendorContractStates_VendorContractStateId",
+                        column: x => x.VendorContractStateId,
+                        principalTable: "VendorContractStates",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_VendorContracts_Vendors_VendorId",
+                        column: x => x.VendorId,
+                        principalTable: "Vendors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -726,6 +682,50 @@ namespace AMP.EMS.API.Migrations
                         name: "FK_GuestInvitationRsvps_GuestInvitations_GuestInvitationId",
                         column: x => x.GuestInvitationId,
                         principalTable: "GuestInvitations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VendorContractPayments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VendorContractId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VendorContractPaymentStateId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    VendorContractPaymentTypeId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TransactionId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    DueAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    UpdatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VendorContractPayments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_VendorContractPayments_Transactions_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transactions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_VendorContractPayments_VendorContractPaymentStates_VendorContractPaymentStateId",
+                        column: x => x.VendorContractPaymentStateId,
+                        principalTable: "VendorContractPaymentStates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VendorContractPayments_VendorContractPaymentTypes_VendorContractPaymentTypeId",
+                        column: x => x.VendorContractPaymentTypeId,
+                        principalTable: "VendorContractPaymentTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VendorContractPayments_VendorContracts_VendorContractId",
+                        column: x => x.VendorContractId,
+                        principalTable: "VendorContracts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -782,56 +782,6 @@ namespace AMP.EMS.API.Migrations
                 name: "IX_EventTypeRoles_EventTypeId",
                 table: "EventTypeRoles",
                 column: "EventTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractPayments_EventVendorContractId",
-                table: "EventVendorContractPayments",
-                column: "EventVendorContractId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractPayments_EventVendorContractPaymentStateId",
-                table: "EventVendorContractPayments",
-                column: "EventVendorContractPaymentStateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractPayments_EventVendorContractPaymentTypeId",
-                table: "EventVendorContractPayments",
-                column: "EventVendorContractPaymentTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractPayments_TransactionId",
-                table: "EventVendorContractPayments",
-                column: "TransactionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractPaymentStates_EventId",
-                table: "EventVendorContractPaymentStates",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractPaymentTypes_EventId",
-                table: "EventVendorContractPaymentTypes",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContracts_EventId",
-                table: "EventVendorContracts",
-                column: "EventId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContracts_EventVendorContractStateId",
-                table: "EventVendorContracts",
-                column: "EventVendorContractStateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContracts_VendorId",
-                table: "EventVendorContracts",
-                column: "VendorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventVendorContractStates_EventId",
-                table: "EventVendorContractStates",
-                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventVendorTransactions_EventId",
@@ -939,6 +889,56 @@ namespace AMP.EMS.API.Migrations
                 column: "VendorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_VendorContractPayments_TransactionId",
+                table: "VendorContractPayments",
+                column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContractPayments_VendorContractId",
+                table: "VendorContractPayments",
+                column: "VendorContractId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContractPayments_VendorContractPaymentStateId",
+                table: "VendorContractPayments",
+                column: "VendorContractPaymentStateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContractPayments_VendorContractPaymentTypeId",
+                table: "VendorContractPayments",
+                column: "VendorContractPaymentTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContractPaymentStates_EventId",
+                table: "VendorContractPaymentStates",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContractPaymentTypes_EventId",
+                table: "VendorContractPaymentTypes",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContracts_EventId",
+                table: "VendorContracts",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContracts_VendorContractStateId",
+                table: "VendorContracts",
+                column: "VendorContractStateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContracts_VendorId",
+                table: "VendorContracts",
+                column: "VendorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VendorContractStates_EventId",
+                table: "VendorContractStates",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vendors_VendorTypeId",
                 table: "Vendors",
                 column: "VendorTypeId");
@@ -952,9 +952,6 @@ namespace AMP.EMS.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "EventTypeRoles");
-
-            migrationBuilder.DropTable(
-                name: "EventVendorContractPayments");
 
             migrationBuilder.DropTable(
                 name: "EventVendorTransactions");
@@ -975,16 +972,7 @@ namespace AMP.EMS.API.Migrations
                 name: "VendorAccounts");
 
             migrationBuilder.DropTable(
-                name: "EventVendorContractPaymentStates");
-
-            migrationBuilder.DropTable(
-                name: "EventVendorContractPaymentTypes");
-
-            migrationBuilder.DropTable(
-                name: "EventVendorContracts");
-
-            migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "VendorContractPayments");
 
             migrationBuilder.DropTable(
                 name: "GuestInvitationRsvps");
@@ -996,10 +984,19 @@ namespace AMP.EMS.API.Migrations
                 name: "ProductTypes");
 
             migrationBuilder.DropTable(
-                name: "EventVendorContractStates");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
-                name: "Vendors");
+                name: "VendorContractPaymentStates");
+
+            migrationBuilder.DropTable(
+                name: "VendorContractPaymentTypes");
+
+            migrationBuilder.DropTable(
+                name: "VendorContracts");
+
+            migrationBuilder.DropTable(
+                name: "GuestInvitations");
 
             migrationBuilder.DropTable(
                 name: "Accounts");
@@ -1008,19 +1005,22 @@ namespace AMP.EMS.API.Migrations
                 name: "TransactionTypes");
 
             migrationBuilder.DropTable(
-                name: "GuestInvitations");
+                name: "VendorContractStates");
 
             migrationBuilder.DropTable(
-                name: "VendorTypes");
-
-            migrationBuilder.DropTable(
-                name: "AccountTypes");
+                name: "Vendors");
 
             migrationBuilder.DropTable(
                 name: "Guests");
 
             migrationBuilder.DropTable(
                 name: "Invitations");
+
+            migrationBuilder.DropTable(
+                name: "AccountTypes");
+
+            migrationBuilder.DropTable(
+                name: "VendorTypes");
 
             migrationBuilder.DropTable(
                 name: "Events");

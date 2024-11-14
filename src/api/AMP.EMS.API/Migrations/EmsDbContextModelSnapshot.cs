@@ -279,221 +279,6 @@ namespace AMP.EMS.API.Migrations
                     b.ToTable("EventTypeRoles");
                 });
 
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContract", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EventVendorContractPaymentStateId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EventVendorContractStateId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("VendorId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("EventVendorContractStateId");
-
-                    b.HasIndex("VendorId");
-
-                    b.ToTable("EventVendorContracts");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPayment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("DueAmount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventVendorContractId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventVendorContractPaymentStateId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventVendorContractPaymentTypeId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("TransactionId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventVendorContractId");
-
-                    b.HasIndex("EventVendorContractPaymentStateId");
-
-                    b.HasIndex("EventVendorContractPaymentTypeId");
-
-                    b.HasIndex("TransactionId");
-
-                    b.ToTable("EventVendorContractPayments");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventVendorContractPaymentStates");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventVendorContractPaymentTypes");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractState", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("DateUpdated")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UpdatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventVendorContractStates");
-                });
-
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorTransaction", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1096,6 +881,221 @@ namespace AMP.EMS.API.Migrations
                     b.ToTable("VendorAccounts");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContract", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("VendorContractPaymentStateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("VendorContractStateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VendorId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("VendorContractStateId");
+
+                    b.HasIndex("VendorId");
+
+                    b.ToTable("VendorContracts");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPayment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DueAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("TransactionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VendorContractId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VendorContractPaymentStateId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VendorContractPaymentTypeId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransactionId");
+
+                    b.HasIndex("VendorContractId");
+
+                    b.HasIndex("VendorContractPaymentStateId");
+
+                    b.HasIndex("VendorContractPaymentTypeId");
+
+                    b.ToTable("VendorContractPayments");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("VendorContractPaymentStates");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("VendorContractPaymentTypes");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DateUpdated")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("VendorContractStates");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1185,97 +1185,6 @@ namespace AMP.EMS.API.Migrations
                         .IsRequired();
 
                     b.Navigation("EventType");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContract", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany("EventVendorContracts")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContractState", "EventVendorContractState")
-                        .WithMany("EventVendorContracts")
-                        .HasForeignKey("EventVendorContractStateId");
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.Vendor", "Vendor")
-                        .WithMany("EventVendorContracts")
-                        .HasForeignKey("VendorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("EventVendorContractState");
-
-                    b.Navigation("Vendor");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPayment", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContract", "EventVendorContract")
-                        .WithMany("EventVendorContractPayments")
-                        .HasForeignKey("EventVendorContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", "EventVendorContractPaymentState")
-                        .WithMany("EventVendorContractPayments")
-                        .HasForeignKey("EventVendorContractPaymentStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.EventVendorContractPaymentType", "EventVendorContractPaymentType")
-                        .WithMany("EventVendorContractPayments")
-                        .HasForeignKey("EventVendorContractPaymentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AMP.EMS.API.Core.Entities.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionId");
-
-                    b.Navigation("EventVendorContract");
-
-                    b.Navigation("EventVendorContractPaymentState");
-
-                    b.Navigation("EventVendorContractPaymentType");
-
-                    b.Navigation("Transaction");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentType", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractState", b =>
-                {
-                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
-                        .WithMany("EventVendorContractStates")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorTransaction", b =>
@@ -1489,6 +1398,97 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("Vendor");
                 });
 
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContract", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
+                        .WithMany("EventVendorContracts")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.VendorContractState", "VendorContractState")
+                        .WithMany("VendorContracts")
+                        .HasForeignKey("VendorContractStateId");
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.Vendor", "Vendor")
+                        .WithMany("EventVendorContracts")
+                        .HasForeignKey("VendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Vendor");
+
+                    b.Navigation("VendorContractState");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPayment", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.VendorContract", "VendorContract")
+                        .WithMany("VendorContractPayments")
+                        .HasForeignKey("VendorContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.VendorContractPaymentState", "VendorContractPaymentState")
+                        .WithMany("VendorContractPayments")
+                        .HasForeignKey("VendorContractPaymentStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AMP.EMS.API.Core.Entities.VendorContractPaymentType", "VendorContractPaymentType")
+                        .WithMany("VendorContractPayments")
+                        .HasForeignKey("VendorContractPaymentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Transaction");
+
+                    b.Navigation("VendorContract");
+
+                    b.Navigation("VendorContractPaymentState");
+
+                    b.Navigation("VendorContractPaymentType");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentState", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentType", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractState", b =>
+                {
+                    b.HasOne("AMP.EMS.API.Core.Entities.Event", "Event")
+                        .WithMany("EventVendorContractStates")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Account", b =>
                 {
                     b.Navigation("CreditTransactions");
@@ -1536,26 +1536,6 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("EventTypeRoles");
 
                     b.Navigation("Events");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContract", b =>
-                {
-                    b.Navigation("EventVendorContractPayments");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentState", b =>
-                {
-                    b.Navigation("EventVendorContractPayments");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractPaymentType", b =>
-                {
-                    b.Navigation("EventVendorContractPayments");
-                });
-
-            modelBuilder.Entity("AMP.EMS.API.Core.Entities.EventVendorContractState", b =>
-                {
-                    b.Navigation("EventVendorContracts");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.Guest", b =>
@@ -1607,6 +1587,26 @@ namespace AMP.EMS.API.Migrations
                     b.Navigation("EventVendorTransactions");
 
                     b.Navigation("VendorAccounts");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContract", b =>
+                {
+                    b.Navigation("VendorContractPayments");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentState", b =>
+                {
+                    b.Navigation("VendorContractPayments");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractPaymentType", b =>
+                {
+                    b.Navigation("VendorContractPayments");
+                });
+
+            modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorContractState", b =>
+                {
+                    b.Navigation("VendorContracts");
                 });
 
             modelBuilder.Entity("AMP.EMS.API.Core.Entities.VendorType", b =>
