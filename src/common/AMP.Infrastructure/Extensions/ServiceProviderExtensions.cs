@@ -31,23 +31,26 @@ public static class ServiceProviderExtensions
     }
 
     public static IServiceCollection AddDbContext<TDbContext>(this IServiceCollection services,
-        IConfigurationManager configurationManager)
+        IConfigurationManager configurationManager, string migrationsAssemblyRoot)
         where TDbContext : DbContext
     {
         var dbType =
             configurationManager.GetValue<DatabaseType>(
                 $"{nameof(DatabaseConfiguration)}:{nameof(DatabaseConfiguration.Type)}");
         var connectionString = configurationManager.GetConnectionString("DefaultConnection")!;
+        var migrationAssembly = $"{migrationsAssemblyRoot}.{dbType}";
 
         switch (dbType)
         {
             case DatabaseType.SqlServer:
                 services.AddDbContext<TDbContext>(options =>
-                    options.UseSqlServer(connectionString).ConfigureWarnings(warnings =>
-                        warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
+                    options.UseSqlServer(connectionString, o => o.MigrationsAssembly(migrationAssembly))
+                        .ConfigureWarnings(warnings =>
+                            warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
                 break;
             case DatabaseType.Sqlite:
-                services.AddDbContext<TDbContext>(options => options.UseSqlite(connectionString));
+                services.AddDbContext<TDbContext>(options =>
+                    options.UseSqlite(connectionString, o => o.MigrationsAssembly(migrationAssembly)));
                 break;
             case DatabaseType.MongoDb:
                 BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
