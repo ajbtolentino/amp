@@ -74,7 +74,7 @@ jobs:
       - name: Run EF Core Migrations
         if: ${{ github.event.inputs.action == 'Migrate' || github.event.inputs.action == 'Migrate and Seed' }}
         working-directory: src/api/AMP.EMS.API
-        run: dotnet ef database update --project AMP.EMS.API.csproj --context EmsDbContext --provider SqlServer
+        run: dotnet ef database update --context EmsDbContext -- --provider ${{vars.EMS_API_DB_TYPE}}
 
       - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' || github.event.inputs.action == 'Migrate and Seed' }}
