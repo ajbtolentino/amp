@@ -52,8 +52,8 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Restore dependencies
-        run: dotnet restore './src/api/AMP.EMS.API/AMP.EMS.API.csproj'       
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef 
 
       - name: Substitute appsettings
         uses: microsoft/variable-substitution@v1 
@@ -71,10 +71,10 @@ jobs:
           tenant-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Migrate ${{vars.EMS_API_DB_TYPE}} Database
+      - name: Run EF Core Migrations
         if: ${{ github.event.inputs.action == 'Migrate' || github.event.inputs.action == 'Migrate and Seed' }}
         working-directory: src/api/AMP.EMS.API
-        run: dotnet ef database update
+        run: dotnet ef database update --project AMP.EMS.API.csproj
 
       - name: Seed
         if: ${{ github.event.inputs.action == 'Seed' || github.event.inputs.action == 'Migrate and Seed' }}
