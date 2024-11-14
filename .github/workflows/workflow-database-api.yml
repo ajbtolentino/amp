@@ -71,17 +71,12 @@ jobs:
           tenant-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_TENANTID }}
           subscription-id: ${{ secrets.EMS_API_AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Migrate
-        if: ${{ github.event.inputs.action == 'Migrate' }}
+      - name: Migrate ${{vars.EMS_API_DB_TYPE}} Database
+        if: ${{ github.event.inputs.action == 'Migrate' || github.event.inputs.action == 'Migrate and Seed' }}
         working-directory: src/api/AMP.EMS.API
-        run: dotnet run /migrate
+        run: dotnet ef database update
 
       - name: Seed
-        if: ${{ github.event.inputs.action == 'Seed' }}
+        if: ${{ github.event.inputs.action == 'Seed' || github.event.inputs.action == 'Migrate and Seed' }}
         working-directory: src/api/AMP.EMS.API
         run: dotnet run /seed
-
-      - name: Migrate and Seed
-        if: ${{ github.event.inputs.action == 'Migrate and Seed' }}
-        working-directory: src/api/AMP.EMS.API
-        run: dotnet run /migrate /seed
