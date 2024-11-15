@@ -86,7 +86,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.EventTypes.AddRange(_eventTypes);
+        if (!context.EventTypes.Any())
+            context.EventTypes.AddRange(_eventTypes);
     }
 
     private void SeedAccountTypes()
@@ -100,30 +101,32 @@ public class SeedData(EmsDbContext context)
             new() { Id = Guid.NewGuid(), Name = "Checking" }
         };
 
-        context.AccountTypes.AddRange(_accountTypes);
+        if (!context.AccountTypes.Any())
+            context.AccountTypes.AddRange(_accountTypes);
     }
 
     private void SeedTransactionTypes()
     {
-        context.TransactionTypes.AddRange(
-            new TransactionType
-            {
-                Id = Guid.NewGuid(), Name = "Payment",
-                Description =
-                    "A general payment or debit from a user’s account, often for non-purchase activities, such as bill payments or installment payments."
-            },
-            new TransactionType
-            {
-                Id = Guid.NewGuid(), Name = "Deposit",
-                Description = "Represents adding funds to an account, usually as a top-up or a prepayment."
-            },
-            new TransactionType
-            {
-                Id = Guid.NewGuid(), Name = "Refund",
-                Description =
-                    "Represents money returned to the user for a previous purchase, usually due to a return or an issue with the product/service."
-            }
-        );
+        if (!context.TransactionTypes.Any())
+            context.TransactionTypes.AddRange(
+                new TransactionType
+                {
+                    Id = Guid.NewGuid(), Name = "Payment",
+                    Description =
+                        "A general payment or debit from a user’s account, often for non-purchase activities, such as bill payments or installment payments."
+                },
+                new TransactionType
+                {
+                    Id = Guid.NewGuid(), Name = "Deposit",
+                    Description = "Represents adding funds to an account, usually as a top-up or a prepayment."
+                },
+                new TransactionType
+                {
+                    Id = Guid.NewGuid(), Name = "Refund",
+                    Description =
+                        "Represents money returned to the user for a previous purchase, usually due to a return or an issue with the product/service."
+                }
+            );
     }
 
     private void SeedVendors()
@@ -302,7 +305,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.VendorTypes.AddRange(vendorTypes);
+        if (!context.VendorTypes.Any())
+            context.VendorTypes.AddRange(vendorTypes);
 
         var vendors = new List<Vendor>
         {
@@ -412,7 +416,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.Vendors.AddRange(vendors);
+        if (!context.Vendors.Any())
+            context.Vendors.AddRange(vendors);
 
         var account = new Account
         {
@@ -422,7 +427,8 @@ public class SeedData(EmsDbContext context)
             AccountTypeId = _accountTypes[0].Id
         };
 
-        context.Accounts.AddRange(account);
+        if (!context.Accounts.Any())
+            context.Accounts.AddRange(account);
 
         var vendorAccounts = new List<VendorAccount>();
 
@@ -434,118 +440,120 @@ public class SeedData(EmsDbContext context)
                 AccountId = account.Id
             });
 
-        context.VendorAccounts.AddRange(vendorAccounts);
+        if (!context.VendorAccounts.Any())
+            context.VendorAccounts.AddRange(vendorAccounts);
     }
 
     private void SeedProductTypes()
     {
-        context.ProductTypes.AddRange(
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Catering",
-                Description = "Food and beverage services, including full-course meals, buffets, and bar services."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Venue",
-                Description = "Locations for wedding ceremonies, receptions, and other related events."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Photography",
-                Description = "Professional photography services for capturing wedding moments."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Videography",
-                Description = "Video recording services to capture and document the wedding day."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Floristry",
-                Description = "Floral arrangements, bouquets, and other decorative flower services."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Decor",
-                Description =
-                    "Decorative items and setup services, including centerpieces, lighting, and table settings."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Music & Entertainment",
-                Description = "Entertainment services, including live bands, DJs, and performers."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Wedding Planning",
-                Description = "Coordination and planning services to manage the entire wedding event."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Transportation",
-                Description =
-                    "Transportation services for the wedding party and guests, such as limousines and shuttles."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Cake & Confectionery",
-                Description = "Wedding cakes, desserts, and other sweets for the reception."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Attire & Accessories",
-                Description = "Wedding attire rentals or purchases, including dresses, suits, and accessories."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Hair & Makeup",
-                Description = "Beauty services for the bridal party, including hairstyling and makeup."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Stationery & Invitations",
-                Description =
-                    "Design and printing services for wedding invitations, save-the-dates, and other stationery."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Officiant Services",
-                Description = "Professional officiants to conduct the wedding ceremony."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Rentals",
-                Description = "Rental of items like furniture, tableware, tents, and dance floors."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Jewelry",
-                Description = "Wedding rings, bridal jewelry, and other related accessories."
-            },
-            new ProductType
-            {
-                Id = Guid.NewGuid(),
-                Name = "Favors & Gifts",
-                Description = "Gifts and party favors for guests."
-            }
-        );
+        if (!context.ProductTypes.Any())
+            context.ProductTypes.AddRange(
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Catering",
+                    Description = "Food and beverage services, including full-course meals, buffets, and bar services."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Venue",
+                    Description = "Locations for wedding ceremonies, receptions, and other related events."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Photography",
+                    Description = "Professional photography services for capturing wedding moments."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Videography",
+                    Description = "Video recording services to capture and document the wedding day."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Floristry",
+                    Description = "Floral arrangements, bouquets, and other decorative flower services."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Decor",
+                    Description =
+                        "Decorative items and setup services, including centerpieces, lighting, and table settings."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Music & Entertainment",
+                    Description = "Entertainment services, including live bands, DJs, and performers."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Wedding Planning",
+                    Description = "Coordination and planning services to manage the entire wedding event."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Transportation",
+                    Description =
+                        "Transportation services for the wedding party and guests, such as limousines and shuttles."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Cake & Confectionery",
+                    Description = "Wedding cakes, desserts, and other sweets for the reception."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Attire & Accessories",
+                    Description = "Wedding attire rentals or purchases, including dresses, suits, and accessories."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Hair & Makeup",
+                    Description = "Beauty services for the bridal party, including hairstyling and makeup."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Stationery & Invitations",
+                    Description =
+                        "Design and printing services for wedding invitations, save-the-dates, and other stationery."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Officiant Services",
+                    Description = "Professional officiants to conduct the wedding ceremony."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Rentals",
+                    Description = "Rental of items like furniture, tableware, tents, and dance floors."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Jewelry",
+                    Description = "Wedding rings, bridal jewelry, and other related accessories."
+                },
+                new ProductType
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Favors & Gifts",
+                    Description = "Gifts and party favors for guests."
+                }
+            );
     }
 
     private void SeedEvents()
@@ -559,7 +567,8 @@ public class SeedData(EmsDbContext context)
             Location = "Ph"
         };
 
-        context.Events.AddRange(@event);
+        if (!context.Events.Any())
+            context.Events.AddRange(@event);
 
         var roles = new List<Role>
         {
@@ -667,7 +676,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.Roles.AddRange(roles);
+        if (!context.Roles.Any())
+            context.Roles.AddRange(roles);
 
         var vendorContractState = new List<VendorContractState>
         {
@@ -771,7 +781,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.VendorContractStates.AddRange(vendorContractState);
+        if (!context.VendorContractStates.Any())
+            context.VendorContractStates.AddRange(vendorContractState);
 
         var vendorContractPaymentTypes = new List<VendorContractPaymentType>
         {
@@ -882,7 +893,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.VendorContractPaymentTypes.AddRange(vendorContractPaymentTypes);
+        if (!context.VendorContractPaymentTypes.Any())
+            context.VendorContractPaymentTypes.AddRange(vendorContractPaymentTypes);
 
         var vendorContractPaymentStates = new List<VendorContractPaymentState>
         {
@@ -958,7 +970,8 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.VendorContractPaymentStates.AddRange(vendorContractPaymentStates);
+        if (!context.VendorContractPaymentStates.Any())
+            context.VendorContractPaymentStates.AddRange(vendorContractPaymentStates);
 
         var account = new Account
         {
@@ -968,7 +981,8 @@ public class SeedData(EmsDbContext context)
             AccountTypeId = _accountTypes[0].Id
         };
 
-        context.Accounts.AddRange(account);
+        if (!context.Accounts.Any())
+            context.Accounts.AddRange(account);
 
         var eventAccounts = new List<EventAccount>
         {
@@ -980,6 +994,7 @@ public class SeedData(EmsDbContext context)
             }
         };
 
-        context.EventAccounts.AddRange(eventAccounts);
+        if (!context.EventAccounts.Any())
+            context.EventAccounts.AddRange(eventAccounts);
     }
 }

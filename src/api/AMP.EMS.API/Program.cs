@@ -4,6 +4,7 @@ using AMP.Infrastructure.Extensions;
 using AMP.Infrastructure.Middlewares;
 using AMP.Infrastructure.Repository;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 
@@ -99,6 +100,14 @@ if (seed)
 }
 
 if (seed || migrate) return;
+
+var dbContext = app.Services.CreateScope().ServiceProvider.GetRequiredService<EmsDbContext>();
+if (dbContext.Database.IsSqlite())
+{
+    dbContext.Database.EnsureCreated();
+
+    new SeedData(dbContext).Seed();
+}
 
 app.UseRequestLogging();
 
