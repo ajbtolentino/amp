@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { EventDetailsComponent } from '@modules/event/settings';
+import { EventDetailsComponent } from '@modules/event';
 import { SharedModule } from '@modules/shared.module';
-import { HomeComponent } from '../../pages/home/home.component';
-import { EventListComponent } from './event-list/event-list.component';
+import { EventListComponent } from '../event/components/event-list/event-list.component';
 import { AppSettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
@@ -30,8 +29,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    EventListComponent,
-    HomeComponent,
     AppSettingsComponent,
   ],
   imports: [

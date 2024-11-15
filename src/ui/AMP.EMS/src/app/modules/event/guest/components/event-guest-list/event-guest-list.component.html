@@ -5,7 +5,7 @@
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="guests.loading!" routerLink="/event/{{eventId}}/guests/add"></button>
+                    [loading]="guests.loading!" [routerLink]="['add']"></button>
 
                 <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
                     [loading]="guests.loading!" (click)="deleteSelectedItems()"
@@ -66,8 +66,8 @@
                             <td>
                                 <div class="flex">
                                     <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                        routerLink="/event/{{eventId}}/guests/{{item.id}}/edit"
-                                        class="p-button-text p-button-success mr-2" pTooltip="Edit">
+                                        [routerLink]="[item.id,'edit']" class="p-button-text p-button-success mr-2"
+                                        pTooltip="Edit">
                                     </button>
                                     <button pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
                                         (click)="delete(item)" pTooltip="Delete"></button>

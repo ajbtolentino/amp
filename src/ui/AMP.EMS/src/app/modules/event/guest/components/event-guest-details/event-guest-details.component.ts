@@ -118,7 +118,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   }
 
   redirect = (item: any) => {
-    this.router.navigate([`/event/${this.eventId}/guests/${item.id}/edit`]);
+    this.router.navigate(['events', this.eventId, `guests`, `${item.id}`, `edit`]);
   }
 
   copyLink = (code: string) => {

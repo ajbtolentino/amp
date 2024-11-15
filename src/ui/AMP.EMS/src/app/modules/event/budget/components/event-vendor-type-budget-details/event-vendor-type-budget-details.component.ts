@@ -60,7 +60,7 @@ export class EventVendorTypeBudgetDetailsComponent implements OnInit {
       this.eventVendorTypeBudget$ = this.eventVendorTypeBudgetService.add(eventVendorTypeBudget).
         pipe(
           tap(eventVendorTypeBudget => {
-            this.router.navigate([`/event/${eventVendorTypeBudget.eventId}/budgets/${eventVendorTypeBudget.id}/edit`]);
+            this.router.navigate(['events', eventVendorTypeBudget.eventId, 'budgets', eventVendorTypeBudget.id, 'edit']);
           })
         );
     }

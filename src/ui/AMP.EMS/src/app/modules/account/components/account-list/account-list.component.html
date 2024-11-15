@@ -5,7 +5,7 @@
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="accounts.loading!" routerLink="/event/{{eventId}}/accounts/add"></button>
+                    [loading]="accounts.loading!" [routerLink]="['add']"></button>
             </div>
         </ng-template>
     </p-toolbar>

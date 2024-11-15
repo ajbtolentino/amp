@@ -26,6 +26,7 @@ const routes: Routes = [
     title: 'Budgets',
     data: { breadcrumb: null },
     component: EventVendorTypeBudgetDetailsComponent,
+
   },
 ];
 

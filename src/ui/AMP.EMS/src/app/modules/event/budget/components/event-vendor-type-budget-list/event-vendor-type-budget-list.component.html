@@ -5,7 +5,7 @@
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="eventVendorTypeBudgets.loading!" routerLink="/event/{{eventId}}/budgets/add"></button>
+                    [loading]="eventVendorTypeBudgets.loading!" [routerLink]="['add']"></button>
             </div>
         </ng-template>
     </p-toolbar>
@@ -42,8 +42,8 @@
                             <td>
                                 <div class="flex">
                                     <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                        routerLink="/event/{{this.eventId}}/budgets/{{item.id}}/edit"
-                                        class="p-button-text p-button-success mr-2" pTooltip="Edit">
+                                        [routerLink]="[item.id,'edit']" class="p-button-text p-button-success mr-2"
+                                        pTooltip="Edit">
                                     </button>
                                     <button pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
                                         pTooltip="Delete"></button>

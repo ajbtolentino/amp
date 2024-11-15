@@ -1,8 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AccountDetailsComponent, AccountListComponent } from '@modules/account';
 import { SharedModule } from '@modules/shared.module';
+
+const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    component: AccountListComponent
+  }
+]
 
 @NgModule({
   declarations: [
@@ -11,7 +19,9 @@ import { SharedModule } from '@modules/shared.module';
   imports: [
     CommonModule,
     SharedModule,
+    RouterModule.forChild(routes)
   ],
-  exports: [AccountListComponent, RouterModule]
+  exports: [AccountListComponent, AccountDetailsComponent, RouterModule]
 })
+
 export class AccountModule { }

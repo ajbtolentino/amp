@@ -6,6 +6,7 @@ import { EventService } from '@core/services';
 import { RsvpService } from '@core/services/rsvp.service';
 import { GuestInvitationService } from '@modules/event/guest';
 import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventInvitationService } from '@modules/event/invitation';
+import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { provideDynamicHooks } from 'ngx-dynamic-hooks';
@@ -21,7 +22,6 @@ import { AppLayoutModule } from '../app/layout/app.layout.module';
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { AuthConfigModule } from './core/auth-config.module';
 import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
-import { EventLayoutComponent } from './layout/event-layout/event-layout.component';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
 import { HomeComponent } from './pages/home/home.component';
 
@@ -33,6 +33,7 @@ import { HomeComponent } from './pages/home/home.component';
         DividerModule,
         ToastModule,
         RouterOutlet,
+        SharedModule,
         ConfirmDialogModule,
         CodeEditorModule.forRoot(),
     ],
@@ -60,14 +61,6 @@ import { HomeComponent } from './pages/home/home.component';
                     path: 'events',
                     title: 'Events',
                     canActivate: [autoLoginPartialRoutesGuard],
-                    component: EventsLayoutComponent,
-                    loadChildren: () => import('@modules/events/events.module').then(m => m.EventsModule)
-                },
-                {
-                    path: 'event/:eventId',
-                    title: 'Event',
-                    component: EventLayoutComponent,
-                    canActivate: [autoLoginPartialRoutesGuard],
                     loadChildren: () => import('@modules/event/event.module').then(m => m.EventModule)
                 },
                 {
@@ -81,11 +74,13 @@ import { HomeComponent } from './pages/home/home.component';
                     title: 'Invitation',
                     loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
-                {
-                    path: 'accounts',
-                    title: 'Accounts',
-                    loadChildren: () => import('@modules/account/account.module').then(m => m.AccountModule)
-                },
+                // {
+                //     path: 'accounts',
+                //     pathMatch: 'full',
+                //     title: 'Accounts',
+                //     component: EventsLayoutComponent,
+                //     loadChildren: () => import('@modules/account/account.module').then(m => m.AccountModule)
+                // },
                 {
                     path: 'unauthorized',
                     component: UnauthorizedComponent
@@ -102,7 +97,7 @@ import { HomeComponent } from './pages/home/home.component';
         ConfirmationService,
         RsvpService
     ],
-    declarations: [AppComponent],
+    declarations: [AppComponent, HomeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
