@@ -1,6 +1,7 @@
 export * from './account.model';
 export * from './column';
 export * from './ems-response.model';
+export * from './event-account.model';
 export * from './event-invitation-info.model';
 export * from './event-type.model';
 export * from './event.model';

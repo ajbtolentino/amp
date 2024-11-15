@@ -18,7 +18,6 @@ import { RadioButton } from 'primeng/radiobutton';
 import { ToastModule } from 'primeng/toast';
 import { AppComponent } from '../app/app.component';
 import { AppLayoutModule } from '../app/layout/app.layout.module';
-import { NotfoundComponent } from '../app/pages/notfound/notfound.component';
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { AuthConfigModule } from './core/auth-config.module';
 import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
@@ -83,11 +82,16 @@ import { HomeComponent } from './pages/home/home.component';
                     loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
                 {
+                    path: 'accounts',
+                    title: 'Accounts',
+                    loadChildren: () => import('@modules/account/account.module').then(m => m.AccountModule)
+                },
+                {
                     path: 'unauthorized',
                     component: UnauthorizedComponent
                 },
-                { path: 'notfound', component: NotfoundComponent },
-                { path: '**', redirectTo: '/notfound' },
+                // { path: 'notfound', component: NotfoundComponent },
+                // { path: '**', redirectTo: '/notfound' },
             ],
             withEnabledBlockingInitialNavigation()
         ),

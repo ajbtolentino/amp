@@ -70,6 +70,10 @@ export class EventMenuComponent implements OnInit {
                                     routerLink: [`/event/${this.eventId}/transactions`]
                                 }
                             ]
+                        },
+                        {
+                            label: 'Accounts',
+                            routerLink: [`/event/${this.eventId}/accounts`]
                         }
                     ]
                 },
