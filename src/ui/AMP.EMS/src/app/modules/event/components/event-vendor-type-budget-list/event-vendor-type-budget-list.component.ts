@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService } from '@core/services';
+import { EventVendorTypeBudgetService } from '@modules/event';
 import { EventVendorTypeBudget } from '@shared/models/event-vendor-type-budget.model';
+import { ConfirmationService } from 'primeng/api';
 import { Observable, map, switchMap } from 'rxjs';
 
 @Component({
@@ -13,7 +15,11 @@ export class EventVendorTypeBudgetListComponent implements OnInit {
   eventId!: string;
   eventVendorTypeBudgets$: Observable<EventVendorTypeBudget[]> = new Observable<EventVendorTypeBudget[]>()
 
-  constructor(private eventService: EventService, private lookupService: LookupService, private route: ActivatedRoute) {
+  constructor(private eventService: EventService,
+    private eventVendorBudgetTypeService: EventVendorTypeBudgetService,
+    private confirmationService: ConfirmationService,
+    private lookupService: LookupService,
+    private route: ActivatedRoute) {
 
   }
 
@@ -37,5 +43,19 @@ export class EventVendorTypeBudgetListComponent implements OnInit {
           vendorType: vendorTypes.find(_ => _.id === eventVendorTypeBudget.vendorTypeId)
         })))
       );
+  }
+
+  remove = (eventVendorTypeBudget: EventVendorTypeBudget) => {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete? This is not reversible!`,
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: async () => {
+        this.eventVendorTypeBudgets$ = this.eventVendorBudgetTypeService.delete(eventVendorTypeBudget.id!)
+          .pipe(
+            switchMap(() => this.loadEventVendorTypeBudgets())
+          )
+      }
+    });
   }
 }

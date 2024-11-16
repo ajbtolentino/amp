@@ -155,6 +155,19 @@
     </div>
 
     <div class="col-12 xl:col-6">
+        <div class="card flex flex-column align-items-center"
+            *ngIf="contractsChart$ | withStatus | async as contractsChart">
+            <h5 class="text-left w-full">Vendor Contracts Chart</h5>
+            <ng-container *ngIf="!contractsChart.loading">
+                <p-chart *ngIf="contractsChart.value" type="pie" [data]="contractsChart.value"
+                    [options]="pieChartOptions"></p-chart>
+                <span *ngIf="!contractsChart.value">No data available</span>
+            </ng-container>
+            <ng-container *ngIf="contractsChart.loading">
+                <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)" />
+            </ng-container>
+        </div>
+
         <div class=" card">
             <h5>Timeline</h5>
             <p-timeline [value]="events1" align="alternate" styleClass="customized-timeline">

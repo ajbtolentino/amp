@@ -77,7 +77,8 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
             {
                 totalAmount = budgets.Sum(_ => _.Amount),
                 totalVendorTypes = budgets.Select(_ => _.VendorTypeId).Distinct().Count(),
-                totalAmountDue = totalAmountDue.Sum(_ => _)
+                totalAmountDue = totalAmountDue.Sum(_ => _),
+                data = budgets
             }
         });
     }
