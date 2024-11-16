@@ -39,7 +39,12 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
         var guestInvitation = UnitOfWork.Set<GuestInvitation>()
             .GetAll()
             .AsNoTracking()
-            .FirstOrDefault(_ => _.Code == code);
+            .AsSplitQuery()
+            .Where(_ => _.Code == code)
+            .Include(_ => _.Invitation).ThenInclude(_ => _.Content)
+            .Include(_ => _.Guest)
+            .Include(_ => _.GuestInvitationRsvps)
+            .FirstOrDefault();
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
 
@@ -82,6 +87,40 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
         guestInvitation.Seats = request.Seats;
 
         return await base.Put(guestInvitation);
+    }
+
+    public override async Task<IActionResult> Delete(Guid id)
+    {
+        try
+        {
+            UnitOfWork.BeginTransaction();
+
+            var guestInvitationRsvps = UnitOfWork.Set<GuestInvitationRsvp>()
+                .GetAll().AsNoTracking().AsSplitQuery()
+                .Where(_ => _.GuestInvitationId == id)
+                .Include(_ => _.GuestInvitationRsvpItems);
+
+            foreach (var guestInvitationRsvp in guestInvitationRsvps)
+            {
+                UnitOfWork.Set<GuestInvitationRsvp>().Delete(guestInvitationRsvp.Id);
+
+                foreach (var guestInvitationRsvpItem in guestInvitationRsvp.GuestInvitationRsvpItems)
+                    UnitOfWork.Set<GuestInvitationRsvpItem>().Delete(guestInvitationRsvpItem.Id);
+            }
+
+            EntityRepository.Delete(id);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
+        }
     }
 
     public record GuestInvitationRequest(Guid InvitationId, Guid GuestId, string? Code, int Seats);

@@ -9,8 +9,7 @@
                         <th style="width: 3rem"></th>
                         <th>Guest</th>
                         <th>Code</th>
-                        <th>Seats</th>
-                        <th>Secondary Guests</th>
+                        <th>Going / Allocated Seats</th>
                         <th>Response</th>
                         <th></th>
                     </tr>
@@ -18,7 +17,6 @@
                 <ng-template pTemplate="loadingbody">
                     <tr *ngFor="let i of [].constructor(5)">
                         <td></td>
-                        <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
                         <td><p-skeleton /></td>
@@ -39,13 +37,24 @@
                         </td>
                         <td>{{eventGuest.firstName}} {{eventGuest.lastName}}</td>
                         <td>{{guestInvitation.code}}</td>
-                        <td>{{guestInvitation.seats}}</td>
                         <td>
-                            <span
-                                *ngIf="guestInvitation.id && guestInvitation.guestInvitationRsvps.length && guestInvitation.guestInvitationRsvps | orderBy: 'dateCreated': 'desc' as guestInvitationRsvps">
-                                {{guestInvitationRsvps[0].guestInvitationRsvpItems.length ?
-                                guestInvitationRsvps[0].guestInvitationRsvpItems.length - 1 : "N/A"}}
-                            </span>
+                            <ng-container *ngIf="guestInvitation?.id">
+                                <span
+                                    *ngIf="guestInvitation.id && guestInvitation.guestInvitationRsvps.length && guestInvitation.guestInvitationRsvps | orderBy: 'dateCreated': 'desc' as guestInvitationRsvps">
+                                    {{guestInvitationRsvps[0].guestInvitationRsvpItems.length ?
+                                    guestInvitationRsvps[0].guestInvitationRsvpItems.length - 1 : "0"}}
+                                </span>
+                                <span *ngIf="!guestInvitation?.guestInvitationRsvps?.length">
+                                    0
+                                </span>
+                                /
+                                <span *ngIf="guestInvitation.seats">
+                                    {{guestInvitation.seats}}
+                                </span>
+                                <span *ngIf="!guestInvitation.seats">
+                                    0
+                                </span>
+                            </ng-container>
                         </td>
                         <td>
                             <span
@@ -69,7 +78,7 @@
                             </button>
                             <button *ngIf="guestInvitation.id" pButton pRipple type="button"
                                 icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"
-                                pTooltip="Remove Guest" (click)="delete(guestInvitation.id)">
+                                pTooltip="Remove Guest" (click)="delete(guestInvitation)">
                             </button>
                         </td>
                     </tr>
@@ -106,7 +115,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td [colSpan]="4">
+                <td [colSpan]="5">
                     No invitations found
                 </td>
             </tr>

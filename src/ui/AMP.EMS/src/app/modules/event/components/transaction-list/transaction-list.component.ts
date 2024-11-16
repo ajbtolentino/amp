@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService } from '@core/services';
 import { Transaction } from '@shared/models';
-import { Observable, of, switchMap } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-list',
@@ -24,6 +24,21 @@ export class TransactionListComponent implements OnInit {
   }
 
   loadTransactions = (eventId: string): Observable<Transaction[]> => {
-    return this.eventService.getTransactions(eventId);
+    return this.eventService.getTransactions(eventId)
+      .pipe(
+        switchMap(transactions => this.loadTransactionTypes(transactions))
+      );
+  }
+
+  loadTransactionTypes = (transactions: Transaction[]): Observable<Transaction[]> => {
+    return this.lookupService.getByIds('transactiontype', transactions.filter(_ => _.transactionTypeId).map(_ => _.transactionTypeId!))
+      .pipe(
+        map(transactionTypes => transactions.map(
+          transaction => ({
+            ...transaction,
+            transactionType: transactionTypes.find(_ => _.id === transaction.transactionTypeId)
+          })
+        ))
+      )
   }
 }

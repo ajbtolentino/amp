@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService, RsvpService } from '@core/services';
 import { EventInvitationService, GuestInvitationService, GuestService } from '@modules/event';
 import { Guest, GuestInvitation, GuestInvitationRsvp, Invitation } from '@shared/models';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { map, Observable, switchMap } from 'rxjs';
 
@@ -71,6 +71,7 @@ export class EventInvitationGuestListComponent implements OnInit {
     private rsvpService: RsvpService,
     private eventInvitationService: EventInvitationService,
     private messageService: MessageService,
+    private confirmationService: ConfirmationService,
     private route: ActivatedRoute) { }
 
   async ngOnInit() {
@@ -152,15 +153,35 @@ export class EventInvitationGuestListComponent implements OnInit {
     );
   }
 
-  delete = async (id: string) => {
-    this.guests$ = this.guestInvitationService.delete(id)
-      .pipe(
-        switchMap(() => this.loadEventGuests())
-      );
+  delete = async (guestInvitation: GuestInvitation) => {
+    if (guestInvitation.guestInvitationRsvps?.length) {
+      this.confirmationService.confirm({
+        message: `This guest has already responded. Are you sure you want to delete and all related records? This is irreversible!`,
+        header: 'Confirm',
+        icon: 'pi pi-exclamation-triangle',
+        accept: async () => {
+          this.guests$ = this.guestInvitationService.delete(guestInvitation.id!)
+            .pipe(
+              switchMap(() => this.loadEventGuests())
+            );
+        }
+      });
+    }
+    else {
+      this.guests$ = this.guestInvitationService.delete(guestInvitation.id!)
+        .pipe(
+          switchMap(() => this.loadEventGuests())
+        );
+    }
   }
 
   copyLink = (code: string) => {
-    const url = `${location.protocol}//${location.host}/invitation/${code}`;
+    let url = `${location.protocol}//${location.host}`;
+    if (!url.includes('localhost'))
+      url += '/client';
+
+    url += `/invitation/${code}`;
+
     navigator.clipboard.writeText(url);
     this.messageService.add({ severity: "info", summary: "Success", detail: "Link copied!" });
   }

@@ -59,7 +59,20 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
         var transactions = UnitOfWork.Set<Transaction>().GetAll().AsNoTracking()
             .Where(_ => (_.CreditAccountId.HasValue && eventAccountIds.Contains(_.CreditAccountId.Value)) ||
-                        (_.DebitAccountId.HasValue && eventAccountIds.Contains(_.DebitAccountId.Value)));
+                        (_.DebitAccountId.HasValue && eventAccountIds.Contains(_.DebitAccountId.Value)))
+            .Select(_ => new Transaction
+            {
+                Id = _.Id,
+                CreditAccountId = _.CreditAccountId,
+                DebitAccountId = _.DebitAccountId,
+                TransactionDate = _.TransactionDate,
+                Description = _.Description,
+                ReferenceNumber = _.ReferenceNumber,
+                TransactionTypeId = _.TransactionTypeId,
+                Amount = _.CreditAccountId.HasValue && eventAccountIds.Contains(_.CreditAccountId.Value)
+                    ? _.Amount
+                    : _.Amount * -1
+            });
 
         return Ok(new OkResponse<IEnumerable<Transaction>>(string.Empty) { Data = transactions });
     }

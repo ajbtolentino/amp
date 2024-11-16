@@ -73,10 +73,10 @@ export class EventInvitationListComponent implements OnInit {
   }
 
   getTotalAccepted = (eventGuestInvitation: GuestInvitation): boolean => {
-    if (!eventGuestInvitation?.eventGuestInvitationRsvps?.length)
+    if (!eventGuestInvitation?.guestInvitationRsvps?.length)
       return false;
 
-    let items = eventGuestInvitation?.eventGuestInvitationRsvps.filter(_ => _.dateCreated);
+    let items = eventGuestInvitation?.guestInvitationRsvps.filter(_ => _.dateCreated);
 
     items = items.sort((a, b) => {
       return new Date(b.dateCreated!).getTime() - new Date(a.dateCreated!).getTime()
@@ -87,10 +87,10 @@ export class EventInvitationListComponent implements OnInit {
 
 
   getTotalDeclined = (eventGuestInvitation: GuestInvitation): boolean => {
-    if (!eventGuestInvitation?.eventGuestInvitationRsvps?.length)
+    if (!eventGuestInvitation?.guestInvitationRsvps?.length)
       return false;
 
-    let items = eventGuestInvitation?.eventGuestInvitationRsvps.filter(_ => _.dateCreated);
+    let items = eventGuestInvitation?.guestInvitationRsvps.filter(_ => _.dateCreated);
 
     items = items.sort((a, b) => {
       return new Date(b.dateCreated!).getTime() - new Date(a.dateCreated!).getTime()

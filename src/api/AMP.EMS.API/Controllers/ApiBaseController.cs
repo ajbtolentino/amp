@@ -87,7 +87,7 @@ public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork, ILogger lo
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> Delete(TKey id)
+    public virtual async Task<IActionResult> Delete(TKey id)
     {
         try
         {

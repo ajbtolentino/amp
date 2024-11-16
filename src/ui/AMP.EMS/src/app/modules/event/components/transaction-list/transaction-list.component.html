@@ -1,15 +1,4 @@
 <ng-container *ngIf="transactions$ | withStatus | async as transactions">
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-        </ng-template>
-        <ng-template pTemplate="right">
-            <div class="my-2">
-                <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="transactions.loading!" [routerLink]="['add']"></button>
-            </div>
-        </ng-template>
-    </p-toolbar>
-
     <div class="grid">
         <div class="col-12">
             <div class="card">
@@ -54,14 +43,22 @@
                     <ng-template pTemplate="body" let-item>
                         <tr [pEditableRow]="item">
                             <td>
-                                {{item.vendorType.name}}
+                                {{item.referenceNumber}}
+                            </td>
+                            <td>
+                                {{item.description}}
+                            </td>
+                            <td>
+                                {{item.transactionDate | date : 'medium'}}
+                            </td>
+                            <td>
+                                {{item.transactionType.name}}
                             </td>
                             <td>{{item.amount | currency : 'PHP'}}</td>
                             <td>
                                 <div class="flex">
                                     <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                        [routerLink]="[item.id,'edit']" class="p-button-text p-button-success mr-2"
-                                        pTooltip="Edit">
+                                        class="p-button-text p-button-success mr-2" pTooltip="Edit">
                                     </button>
                                     <button pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
                                         pTooltip="Delete"></button>

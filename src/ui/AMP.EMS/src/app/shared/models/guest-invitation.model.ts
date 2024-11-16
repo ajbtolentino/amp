@@ -9,7 +9,7 @@ export interface GuestInvitation {
     maxGuests?: number;
     code?: string;
     invitation?: Invitation;
-    eventGuestInvitationRsvps?: GuestInvitationRsvp[];
+    guestInvitationRsvps?: GuestInvitationRsvp[];
     guest?: Guest;
     dateCreated?: Date;
 }
