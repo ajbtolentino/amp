@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '@core/services';
-import { EventVendorTypeBudgetService } from '@modules/event/budget';
+import { EventVendorTypeBudgetService } from '@modules/event';
 import { EventVendorTypeBudget } from '@shared/models/event-vendor-type-budget.model';
 import { Lookup } from '@shared/models/lookup.model';
 import { map, Observable, of, switchMap, tap } from 'rxjs';

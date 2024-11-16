@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { GuestInvitationService } from '@modules/event/guest';
-import { EventInvitationService } from '@modules/event/invitation/services/event-invitation.service';
+import { GuestInvitationService } from '@modules/event';
 import { GuestInvitation, Invitation } from '@shared/models';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { map, Observable, of, switchMap } from 'rxjs';
+import { EventInvitationService } from '../../services/event-invitation.service';
 
 @Component({
   selector: 'app-event-invitation-list',

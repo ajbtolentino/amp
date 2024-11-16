@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { VendorService } from '@core/services/vendor.service';
-import { VendorContractService } from '@modules/event/vendor';
+import { VendorContractService } from '@modules/event';
 import { Vendor, VendorContract } from '@shared/models';
 import { SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';

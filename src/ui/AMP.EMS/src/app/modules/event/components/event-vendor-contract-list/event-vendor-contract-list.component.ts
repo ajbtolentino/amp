@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
-import { VendorContractService } from '@modules/event/vendor';
+import { VendorContractService } from '@modules/event';
 import { Vendor, VendorContract } from '@shared/models';
 import { ConfirmationService, SelectItem } from 'primeng/api';
 import { DataView } from 'primeng/dataview';
@@ -101,20 +101,6 @@ export class EventVendorContractListComponent implements OnInit {
       this.sortOrder = 1;
       this.sortField = value;
     }
-  }
-
-  add = (vendor: Vendor) => {
-    this.vendorContracts = this.vendorContractService.add(
-      {
-        vendorId: vendor.id!,
-        eventId: this.eventId,
-      }).pipe(
-        switchMap(() => this.loadVendorContracts())
-      );
-  }
-
-  viewContract = (vendorContract: VendorContract) => {
-    this.router.navigate([`/events/${this.eventId}/vendors/contracts/${vendorContract.id}`]);
   }
 
   remove = (vendorContract: VendorContract) => {

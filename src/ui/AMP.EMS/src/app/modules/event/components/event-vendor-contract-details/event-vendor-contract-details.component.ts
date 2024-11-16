@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService, LookupService, TransactionService, VendorService } from '@core/services';
-import { VendorContractPaymentService, VendorContractService } from '@modules/event/vendor';
+import { VendorContractPaymentService, VendorContractService } from '@modules/event';
 import { Transaction, TransactionType, Vendor, VendorContract, VendorContractPayment } from '@shared/models';
 import { Lookup } from '@shared/models/lookup.model';
 import { ConfirmationService } from 'primeng/api';

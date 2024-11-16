@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { ContentService } from '@core/services/content.service';
-import { GuestInvitationService, GuestService } from '@modules/event/guest';
-import { EventInvitationService } from '@modules/event/invitation';
+import { EventInvitationService, GuestInvitationService, GuestService } from '@modules/event';
 import { GuestInvitation, GuestInvitationRsvp, Invitation } from '@shared/models';
 import { lastValueFrom, map, Observable, switchMap } from 'rxjs';
 

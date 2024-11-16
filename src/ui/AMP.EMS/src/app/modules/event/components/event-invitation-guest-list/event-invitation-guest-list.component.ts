@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, RsvpService } from '@core/services';
-import { GuestInvitationService, GuestService } from '@modules/event/guest';
-import { EventInvitationService } from '@modules/event/invitation';
+import { EventInvitationService, GuestInvitationService, GuestService } from '@modules/event';
 import { Guest, GuestInvitation, GuestInvitationRsvp, Invitation } from '@shared/models';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';

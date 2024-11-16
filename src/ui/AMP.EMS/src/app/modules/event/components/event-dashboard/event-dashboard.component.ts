@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventDashboardService } from '@modules/event/dashboard';
+import { EventDashboardService } from '@modules/event';
 import { PrimeIcons } from 'primeng/api';
 import { Observable, switchMap } from 'rxjs';
 

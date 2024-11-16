@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContentService } from '@core/services/content.service';
-import { EventInvitationService } from '@modules/event/invitation';
+import { EventInvitationService } from '@modules/event';
 import { CodeEditorComponent, CodeModel } from '@ngstack/code-editor';
 import { Invitation } from '@shared/models';
 import { Content } from '@shared/models/content.model';

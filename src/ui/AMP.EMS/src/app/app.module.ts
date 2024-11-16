@@ -2,10 +2,8 @@ import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@an
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { EventService } from '@core/services';
 import { RsvpService } from '@core/services/rsvp.service';
-import { GuestInvitationService } from '@modules/event/guest';
-import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventInvitationService } from '@modules/event/invitation';
+import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from '@modules/event';
 import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
@@ -74,13 +72,12 @@ import { HomeComponent } from './pages/home/home.component';
                     title: 'Invitation',
                     loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
-                // {
-                //     path: 'accounts',
-                //     pathMatch: 'full',
-                //     title: 'Accounts',
-                //     component: EventsLayoutComponent,
-                //     loadChildren: () => import('@modules/account/account.module').then(m => m.AccountModule)
-                // },
+                {
+                    path: 'accounts',
+                    title: 'Accounts',
+                    component: EventsLayoutComponent,
+                    loadChildren: () => import('@modules/account/account.module').then(m => m.AccountModule)
+                },
                 {
                     path: 'unauthorized',
                     component: UnauthorizedComponent
@@ -90,9 +87,6 @@ import { HomeComponent } from './pages/home/home.component';
             ],
             withEnabledBlockingInitialNavigation()
         ),
-        EventService,
-        GuestInvitationService,
-        EventInvitationService,
         MessageService,
         ConfirmationService,
         RsvpService

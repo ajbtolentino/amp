@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
-import { GuestInvitationService, GuestRoleService, GuestService } from '@modules/event/guest';
+import { GuestInvitationService, GuestRoleService, GuestService } from '@modules/event';
 import { EventInvitationInfo, Guest, GuestRole, Invitation } from '@shared/models';
 import { MessageService } from 'primeng/api';
 import { map, Observable, of, switchMap } from 'rxjs';

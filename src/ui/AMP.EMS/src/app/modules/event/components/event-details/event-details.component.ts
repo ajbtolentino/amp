@@ -59,6 +59,6 @@ export class EventDetailsComponent implements OnInit {
   }
 
   redirect = (item: any) => {
-    this.router.navigate([item.id]);
+    this.router.navigate(['events', item.id]);
   }
 }
