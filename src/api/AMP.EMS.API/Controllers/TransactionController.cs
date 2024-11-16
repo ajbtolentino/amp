@@ -15,7 +15,7 @@ public class TransactionController(IUnitOfWork unitOfWork, ILogger<TransactionCo
 
         ArgumentNullException.ThrowIfNull(transaction);
 
-        transaction.Amount = request.Amount;
+        transaction.Amount = Math.Abs(request.Amount);
         transaction.ReferenceNumber = request.ReferenceNumber;
         transaction.Description = request.Description;
         transaction.TransactionDate = request.TransactionDate;
@@ -29,5 +29,6 @@ public class TransactionController(IUnitOfWork unitOfWork, ILogger<TransactionCo
         decimal Amount,
         DateTime TransactionDate,
         string? Description,
-        string? ReferenceNumber);
+        string? ReferenceNumber,
+        VendorContractPaymentController.PaymentType PaymentType);
 }

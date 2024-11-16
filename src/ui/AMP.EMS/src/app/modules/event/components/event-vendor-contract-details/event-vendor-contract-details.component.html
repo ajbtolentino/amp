@@ -164,8 +164,9 @@
                                 class="w-full p-button-info mr-2" pTooltip="Add a transaction"
                                 (click)="openTransaction(item)" label="Add"></button>
                             <button *ngIf="item.transaction" pButton pRipple type="button"
-                                (click)="openTransaction(item)" class="w-full p-button-text p-button-success mr-2"
-                                pTooltip="Click to edit transaction"
+                                (click)="openTransaction(item)" class="w-full p-button-text mr-2"
+                                [ngClass]="{'p-button-success' : item.transaction.amount >= 0, 'p-button-danger' : item.transaction.amount < 0}"
+                                pTooltip="Click to edit transactions"
                                 label="{{item.transaction.transactionType.name}}"></button>
                         </div>
                     </td>
@@ -222,8 +223,25 @@
     <ng-template pTemplate="content">
         <div class="field">
             <label for="amount">Amount</label>
-            <p-inputNumber id="amount" currency="PHP" mode="currency"
+            <p-inputNumber [disabled]="true" id="amount" currency="PHP" mode="currency"
                 [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.amount" />
+        </div>
+        <div class="field">
+            <label class="mb-3">Payment Type</label>
+            <div class="formgrid grid">
+                <div class="field-radiobutton col-6">
+                    <p-radioButton id="debit" name="debit" value="Debit"
+                        [disabled]="vendorContractPaymentTransaction.value?.transactionId || false"
+                        [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.paymentType"></p-radioButton>
+                    <label for="debit">Debit</label>
+                </div>
+                <div class="field-radiobutton col-6">
+                    <p-radioButton id="credit" name="credit" value="Credit"
+                        [disabled]="vendorContractPaymentTransaction.value?.transactionId || false"
+                        [(ngModel)]="vendorContractPaymentTransaction.value!.transaction!.paymentType"></p-radioButton>
+                    <label for="credit">Credit</label>
+                </div>
+            </div>
         </div>
         <div class="field">
             <label for="date">Reference Number</label>

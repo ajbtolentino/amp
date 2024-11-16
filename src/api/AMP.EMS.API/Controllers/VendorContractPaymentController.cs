@@ -11,6 +11,37 @@ public class VendorContractPaymentController(
     ILogger<VendorContractPaymentStateController> logger)
     : ApiBaseController<VendorContractPayment, Guid>(unitOfWork, logger)
 {
+    public enum PaymentType
+    {
+        Debit,
+        Credit
+    }
+
+    [HttpGet("{id:guid}/transaction")]
+    public async Task<IActionResult> Transaction(Guid id)
+    {
+        var vendorContractPayment = await EntityRepository.Get(id);
+
+        ArgumentNullException.ThrowIfNull(vendorContractPayment);
+
+        var vendorContract = await UnitOfWork.Set<VendorContract>().Get(vendorContractPayment.VendorContractId);
+
+        ArgumentNullException.ThrowIfNull(vendorContract);
+
+        var eventAccountIds = UnitOfWork.Set<EventAccount>()
+            .GetAll().AsNoTracking().Where(_ => _.EventId == vendorContract.EventId).Select(_ => _.AccountId);
+
+        var transaction = await UnitOfWork.Set<Transaction>().Get(vendorContractPayment.TransactionId);
+
+        ArgumentNullException.ThrowIfNull(transaction);
+
+        transaction.Amount = eventAccountIds.Contains(transaction.CreditAccountId.Value)
+            ? transaction.Amount
+            : -1 * transaction.Amount;
+
+        return Ok(new OkResponse<Transaction>(string.Empty) { Data = transaction });
+    }
+
     [HttpPost("{id:guid}/transaction")]
     public async Task<IActionResult> ContractTransaction(Guid id, [FromBody] PaymentTransactionRequest request)
     {
@@ -39,9 +70,13 @@ public class VendorContractPaymentController(
 
             var transaction = await UnitOfWork.Set<Transaction>().Add(new Transaction
             {
-                DebitAccountId = eventAccount.AccountId,
-                CreditAccountId = vendorAccount.AccountId,
-                Amount = eventVendorContractPayment.DueAmount,
+                DebitAccountId = request.PaymentType == PaymentType.Debit
+                    ? eventAccount.AccountId
+                    : vendorAccount.AccountId,
+                CreditAccountId = request.PaymentType == PaymentType.Debit
+                    ? vendorAccount.AccountId
+                    : eventAccount.AccountId,
+                Amount = Math.Abs(eventVendorContractPayment.DueAmount),
                 TransactionDate = request.TransactionDate,
                 ReferenceNumber = request.ReferenceNumber,
                 Description = request.Description,
@@ -106,5 +141,6 @@ public class VendorContractPaymentController(
         decimal Amount,
         DateTime TransactionDate,
         string? Description,
-        string? ReferenceNumber);
+        string? ReferenceNumber,
+        PaymentType PaymentType);
 }

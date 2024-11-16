@@ -49,23 +49,22 @@
                             [showButtons]="true" inputId="seats" />
                         <p-skeleton *ngIf="guest.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6" *ngIf="eventRoles$ | withStatus | async as eventRoles">
+                    <div class="field col-12 md:col-6" *ngIf="roles$ | withStatus | async as eventRoles">
                         <label htmlFor="role">Role</label>
                         <p-multiSelect #rolemultiselect *ngIf="!eventRoles.loading && !guest.loading" inputId="role"
                             placeholder="Select Role" [options]="eventRoles.value" optionLabel="name" optionValue="id"
-                            [loading]="eventRoles.loading" [(ngModel)]="selectedEventRoleIds" />
+                            [loading]="eventRoles.loading" [(ngModel)]="selectedRoleIds" />
 
                         <p-skeleton *ngIf="eventRoles.loading || guest.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6"
-                        *ngIf="eventInvitations$ | withStatus | async as eventInvitations">
+                    <div class="field col-12 md:col-6" *ngIf="invitations$ | withStatus | async as invitations">
                         <label htmlFor="invitations">Invitations</label>
-                        <p-multiSelect *ngIf="!eventInvitations.loading && !guest.loading" optionLabel="name"
+                        <p-multiSelect *ngIf="!invitations.loading && !guest.loading" optionLabel="name"
                             inputId="invitations" optionValue="id" placeholder="Select Invitations"
-                            [options]="eventInvitations.value" [loading]="eventInvitations.loading  && guest.loading"
-                            optionLabel="name" [(ngModel)]="selectedEventInvitationIds" />
+                            [options]="invitations.value" [loading]="invitations.loading  && guest.loading"
+                            optionLabel="name" [(ngModel)]="selectedInvitationIds" />
 
-                        <p-skeleton *ngIf="eventInvitations.loading || guest.loading"></p-skeleton>
+                        <p-skeleton *ngIf="invitations.loading || guest.loading"></p-skeleton>
                     </div>
                 </div>
             </div>

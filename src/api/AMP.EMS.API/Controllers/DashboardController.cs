@@ -95,7 +95,7 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
             .Select(_ => _.TransactionId)
             .ToListAsync();
 
-        var unsettledTransactions = await unitOfWork.Set<VendorContractPayment>().GetAll().AsNoTracking()
+        var unreconciledPayments = await unitOfWork.Set<VendorContractPayment>().GetAll().AsNoTracking()
             .Where(_ => vendorContracts.Contains(_.VendorContractId) && !_.TransactionId.HasValue)
             .Select(_ => _.DueAmount)
             .ToListAsync();
@@ -116,7 +116,7 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
             data = new
             {
                 totalExpenses = totalExpenses.Sum(_ => _),
-                totalUnsettledTransactions = unsettledTransactions.Sum(_ => _)
+                totalUnsettledTransactions = unreconciledPayments.Sum(_ => _)
             }
         });
     }

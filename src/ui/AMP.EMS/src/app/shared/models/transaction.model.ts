@@ -8,4 +8,6 @@ export interface Transaction extends Base {
     transactionTypeId?: string;
     transactionDate?: Date;
     transactionType?: TransactionType;
+
+    paymentType?: 'Debit' | 'Credit' | undefined | string;
 }

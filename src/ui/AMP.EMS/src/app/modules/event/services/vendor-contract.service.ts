@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseApiService } from '@core/services';
-import { VendorContractPayment } from '@shared/models';
+import { Transaction, VendorContractPayment } from '@shared/models';
 import { VendorContract } from '@shared/models/event-vendor-contract.model';
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,10 @@ import { Observable } from 'rxjs';
 export class VendorContractService extends BaseApiService {
     get = (id: string): Observable<VendorContract> => {
         return this.httpGet<VendorContract>(`vendorcontract/${id}`);
+    }
+
+    getTransactions = (id: string): Observable<Transaction[]> => {
+        return this.httpGet<Transaction[]>(`vendorcontract/${id}/transactions`);
     }
 
     getByVendorIds = (vendorIds: string[]): Observable<VendorContract[]> => {

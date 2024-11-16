@@ -87,7 +87,7 @@ export class EventVendorContractDetailsComponent implements OnInit {
   loadPayments = (eventVendorContractId: string) => {
     return this.vendorContractService.getPayments(eventVendorContractId)
       .pipe(
-        switchMap(eventVendorContractPayments => this.loadTransactions(eventVendorContractPayments)),
+        switchMap(eventVendorContractPayments => this.loadTransactions(eventVendorContractPayments, eventVendorContractId)),
         map(eventVendorContractPayments => [{ vendorContractId: eventVendorContractId }, ...eventVendorContractPayments.map(_ => {
           if (_.dueDate) _.dueDate = new Date(_.dueDate);
           return _;
@@ -95,13 +95,16 @@ export class EventVendorContractDetailsComponent implements OnInit {
         tap(eventVendorContractPayments => this.dt.initRowEdit(eventVendorContractPayments.at(0))));
   }
 
-  loadTransactions = (vendorContractPayments: VendorContractPayment[]): Observable<VendorContractPayment[]> => {
-    return this.transactionService.getByIds(vendorContractPayments.filter(_ => _.transactionId).map(_ => _.transactionId!))
+  loadTransactions = (vendorContractPayments: VendorContractPayment[], eventVendorContractId: string): Observable<VendorContractPayment[]> => {
+    return this.vendorContractService.getTransactions(eventVendorContractId)
       .pipe(
         switchMap(transactions => this.loadTransactionTypes(transactions)),
         map(transactions => vendorContractPayments.map(vendorContractPayment => ({
           ...vendorContractPayment,
-          transaction: transactions.find(_ => _.id === vendorContractPayment.transactionId)
+          transaction: transactions.map(_ => ({
+            ..._,
+            paymentType: !_.amount ? undefined : (_.amount >= 0 ? 'Credit' : 'Debit')
+          })).find(_ => _.id === vendorContractPayment.transactionId)
         })))
       )
   }
@@ -134,15 +137,17 @@ export class EventVendorContractDetailsComponent implements OnInit {
         ...vendorContractPayment,
         transaction: {
           transactionDate: new Date(),
-          amount: vendorContractPayment.dueAmount
+          amount: vendorContractPayment.dueAmount,
+          paymentType: 'Debit'
         }
       });
 
-    return this.transactionService.get(vendorContractPayment.transactionId!).pipe(map(transaction => ({
+    return this.vendorContractPaymentService.getTransaction(vendorContractPayment.id!).pipe(map(transaction => ({
       ...vendorContractPayment,
       transaction: {
         ...transaction,
-        transactionDate: new Date(transaction.transactionDate!)
+        transactionDate: new Date(transaction.transactionDate!),
+        paymentType: !transaction.amount ? undefined : (transaction.amount >= 0 ? 'Credit' : 'Debit')
       }
     })));
   }

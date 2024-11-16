@@ -1,5 +1,6 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,12 +28,17 @@ public class EventVendorTransactionController(IUnitOfWork unitOfWork, ILogger<Ev
                 TransactionDate = request.TransactionDate
             });
 
-            return await base.Post(new EventVendorTransaction
+            var eventVendorTransaction = await EntityRepository.Add(new EventVendorTransaction
             {
                 EventId = request.EventId,
                 VendorId = request.VendorId,
                 TransactionId = transaction.Id
             });
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<EventVendorTransaction>(string.Empty) { Data = eventVendorTransaction });
         }
         catch (Exception e)
         {

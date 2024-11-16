@@ -18,11 +18,11 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   guest$: Observable<Guest> = new Observable<Guest>();
   eventGuestInvitatins$: Observable<EventInvitationInfo[]> = new Observable<EventInvitationInfo[]>();
 
-  eventRoles$: Observable<GuestRole[]> = new Observable<GuestRole[]>();
-  eventInvitations$: Observable<Invitation[]> = new Observable<Invitation[]>();
+  roles$: Observable<GuestRole[]> = new Observable<GuestRole[]>();
+  invitations$: Observable<Invitation[]> = new Observable<Invitation[]>();
 
-  selectedEventInvitationIds: string[] = [];
-  selectedEventRoleIds: string[] = [];
+  selectedInvitationIds: string[] = [];
+  selectedRoleIds: string[] = [];
 
   constructor(private eventService: EventService,
     private eventGuestInvitationService: GuestInvitationService,
@@ -49,8 +49,8 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
       switchMap(eventGuest => this.loadGuestRoles(eventGuest)),
       switchMap(eventGuest => this.loadGuestInvitations(eventGuest)),
       map(response => {
-        if (response.eventGuestRoles?.length) this.selectedEventRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
-        if (response.eventGuestInvitations?.length) this.selectedEventInvitationIds = response.eventGuestInvitations?.filter(_ => _.invitationId).map(_ => _.invitationId!);
+        if (response.eventGuestRoles?.length) this.selectedRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
+        if (response.eventGuestInvitations?.length) this.selectedInvitationIds = response.eventGuestInvitations?.filter(_ => _.invitationId).map(_ => _.invitationId!);
         return response;
       }));
   }
@@ -99,18 +99,18 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadArray = () => {
-    this.eventRoles$ = this.eventService.getRoles(this.eventId);
-    this.eventInvitations$ = this.eventService.getInvitations(this.eventId);
+    this.roles$ = this.eventService.getRoles(this.eventId);
+    this.invitations$ = this.eventService.getInvitations(this.eventId);
   }
 
   save = async (item: Guest) => {
     if (item?.firstName?.trim() && item?.lastName?.trim())
       if (item.id) {
-        this.guest$ = this.guestService.update(item, this.selectedEventRoleIds, this.selectedEventInvitationIds).pipe(
+        this.guest$ = this.guestService.update(item, this.selectedRoleIds, this.selectedInvitationIds).pipe(
           switchMap(() => this.loadEventGuest()));
       }
       else {
-        this.guest$ = this.guestService.add(item, this.selectedEventRoleIds, this.selectedEventInvitationIds).pipe(map(eventGuest => {
+        this.guest$ = this.guestService.add(item, this.selectedRoleIds, this.selectedInvitationIds).pipe(map(eventGuest => {
           this.redirect(eventGuest);
           return eventGuest;
         }));

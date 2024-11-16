@@ -27,11 +27,11 @@ export class GuestService extends BaseApiService {
         });
     }
 
-    update = (guest: Guest, eventRoleIds: string[], eventInvitationIds: string[]): Observable<Guest> => {
+    update = (guest: Guest, roleIds: string[], invitationIds: string[]): Observable<Guest> => {
         return this.httpPut(`guest/${guest.id}`, {
             ...guest,
-            eventRoleIds: eventRoleIds,
-            eventInvitationIds: eventInvitationIds
+            roleIds: roleIds,
+            invitationIds: invitationIds
         });
     }
 

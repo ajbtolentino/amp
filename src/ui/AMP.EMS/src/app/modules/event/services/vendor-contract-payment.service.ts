@@ -11,6 +11,10 @@ export class VendorContractPaymentService extends BaseApiService {
         return this.httpGet<VendorContractPayment>(`vendorContractPayment/${id}`);
     }
 
+    getTransaction = (id: string): Observable<Transaction> => {
+        return this.httpGet<Transaction>(`vendorContractPayment/${id}/transaction`);
+    }
+
     getAll = (): Observable<VendorContractPayment[]> => {
         return this.httpGet<VendorContractPayment[]>(`vendorContractPayment/`);
     }

@@ -54,12 +54,13 @@
                             <td>
                                 {{item.transactionType.name}}
                             </td>
-                            <td>{{item.amount | currency : 'PHP'}}</td>
+                            <td>
+                                <span [ngClass]="{'text-green-500': item.amount > 0, 'text-red-500': item.amount < 0}">
+                                    {{item.amount | currency : 'PHP'}}
+                                </span>
+                            </td>
                             <td>
                                 <div class="flex">
-                                    <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                        class="p-button-text p-button-success mr-2" pTooltip="Edit">
-                                    </button>
                                     <button pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
                                         pTooltip="Delete"></button>
                                 </div>
