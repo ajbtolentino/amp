@@ -23,7 +23,7 @@
 
                             <div class="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
                                 <button pButton pRipple label="Launch" icon="pi pi-play"
-                                    routerLink="/event/{{event.id}}/dashboard"></button>
+                                    [routerLink]="[event.id]"></button>
                                 <button pButton pRipple icon="pi pi-trash" label="Delete"
                                     class="p-button-text p-button-danger" (click)="delete(event)"></button>
                             </div>
@@ -71,7 +71,7 @@
                             {{event.description}}&nbsp;
                         </div>
                         <div class="flex align-items-center justify-content-between">
-                            <button pButton pRipple label="Launch" routerLink="/event/{{event.id}}/dashboard"></button>
+                            <button pButton pRipple label="Launch" [routerLink]="[event.id]"></button>
                         </div>
                     </div>
                 </div>

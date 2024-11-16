@@ -14,6 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'add',
+    pathMatch: 'full',
     title: 'Add Guest',
     data: { breadcrumb: 'Add' },
     component: EventGuestDetailsComponent,

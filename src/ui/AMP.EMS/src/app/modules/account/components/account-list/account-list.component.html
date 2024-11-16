@@ -1,11 +1,11 @@
-<ng-container *ngIf="eventVendorTypeBudgets$ | withStatus | async as eventVendorTypeBudgets">
+<ng-container *ngIf="accounts$ | withStatus | async as accounts">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
         </ng-template>
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="eventVendorTypeBudgets.loading!" [routerLink]="['add']"></button>
+                    [loading]="accounts.loading!" [routerLink]="['add']"></button>
             </div>
         </ng-template>
     </p-toolbar>
@@ -13,21 +13,27 @@
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <p-table #dt [value]="eventVendorTypeBudgets.value!" [rows]="10" [paginator]="true"
-                    [globalFilterFields]="['name','type.name']" editMode="row" [rowHover]="true" dataKey="id"
-                    [loading]="eventVendorTypeBudgets.loading" [showLoader]="false">
+                <p-table #dt [value]="accounts.value!" [rows]="10" [paginator]="true"
+                    [globalFilterFields]="['account.name', 'account.accountNumber', 'account.accountType.name']"
+                    editMode="row" [rowHover]="true" dataKey="id" [loading]="accounts.loading" [showLoader]="false">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th pSortableColumn="vendorType.name">
+                            <th pSortableColumn="name">
                                 <div class="flex justify-content-between align-items-center">
-                                    Vendor Type
-                                    <p-sortIcon field="vendorType.name"></p-sortIcon>
+                                    Name
+                                    <p-sortIcon field="name"></p-sortIcon>
                                 </div>
                             </th>
-                            <th pSortableColumn="amount">
+                            <th pSortableColumn="accountNumber">
                                 <div class="flex justify-content-between align-items-center">
-                                    Amount
-                                    <p-sortIcon field="amount"></p-sortIcon>
+                                    Account Number
+                                    <p-sortIcon field="accountNumber"></p-sortIcon>
+                                </div>
+                            </th>
+                            <th pSortableColumn="accountType.name">
+                                <div class="flex justify-content-between align-items-center">
+                                    Account Type
+                                    <p-sortIcon field="accountType.name"></p-sortIcon>
                                 </div>
                             </th>
                             <th></th>
@@ -36,13 +42,18 @@
                     <ng-template pTemplate="body" let-item>
                         <tr [pEditableRow]="item">
                             <td>
-                                {{item.vendorType.name}}
+                                {{item.name}}
                             </td>
-                            <td>{{item.amount | currency : 'PHP'}}</td>
+                            <td>
+                                {{item.accountNumber}}
+                            </td>
+                            <td>
+                                {{item.accountType.name}}
+                            </td>
                             <td>
                                 <div class="flex">
                                     <button pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
-                                        [routerLink]="[item.id,'edit']" class="p-button-text p-button-success mr-2"
+                                        [routerLink]="[item.id, 'edit']" class="p-button-text p-button-success mr-2"
                                         pTooltip="Edit">
                                     </button>
                                     <button pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"

@@ -191,7 +191,7 @@ export class EventVendorContractDetailsComponent implements OnInit {
         amount: vendorContract.amount,
         details: vendorContract.details,
         vendorContractStateId: vendorContract.vendorContractStateId
-      }).pipe(tap((e) => this.router.navigate([`/event/${vendorContract.eventId}/vendors/${vendorContract.vendorId}/contracts/${e.id}`])));
+      }).pipe(tap((e) => this.router.navigate(['events', vendorContract.eventId, 'vendors', vendorContract.vendorId, 'contracts', e.id])));
     }
   }
 

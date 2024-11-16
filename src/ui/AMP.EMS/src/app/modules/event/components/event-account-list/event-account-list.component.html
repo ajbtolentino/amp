@@ -1,0 +1,3 @@
+<ng-container *ngIf="eventAccounts$ | withStatus | async as eventAccounts">
+    <app-account-list *ngIf="!eventAccounts.loading" [accountIds]="eventAccounts.value!"></app-account-list>
+</ng-container>

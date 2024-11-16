@@ -6,7 +6,7 @@
         <ng-template pTemplate="right">
             <div class="my-2">
                 <button pButton pRipple label="New" icon="pi pi-plus" [loading]="eventInvitations.loading!"
-                    class="p-button-success mr-2" routerLink="/event/{{eventId}}/invitations/add"></button>
+                    class="p-button-success mr-2" [routerLink]="['add']"></button>
                 <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
                     [loading]="eventInvitations.loading!" (click)="deleteSelectedItems()"
                     [disabled]="!selectedItems || !selectedItems.length"></button>
@@ -56,11 +56,10 @@
                             <td>
                                 <div class="flex">
                                     <button *ngIf="!editing" pButton pRipple type="button" icon="pi pi-pencil"
-                                        routerLink="/event/{{eventId}}/invitations/{{item.id}}/edit"
+                                        [routerLink]="[item.id,'edit']"
                                         class="p-button-text p-button-success mr-2 p-jc-end" pTooltip="Edit">
                                     </button>
-                                    <button *ngIf="!editing" pButton pRipple
-                                        routerLink="/event/{{eventId}}/invitations/{{item.id}}/guests"
+                                    <button *ngIf="!editing" pButton pRipple [routerLink]="[item.id, 'guests']"
                                         class="p-button-text p-button-info mr-2 p-jc-end" icon="pi pi-users"
                                         pTooltip="Manage Guests"></button>
                                     <button *ngIf="!editing" pButton pRipple

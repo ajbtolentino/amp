@@ -24,15 +24,22 @@ const routes: Routes = [
   {
     path: 'add',
     title: 'Add Invitation',
+    pathMatch: 'full',
     data: { breadcrumb: null },
     component: EventInvitationDetailsComponent,
   },
   {
-    path: ':eventInvitationId/edit',
-    pathMatch: 'full',
+    path: ':eventInvitationId',
     title: 'Invitation',
     data: { breadcrumb: null },
-    component: EventInvitationDetailsComponent,
+    children: [
+      {
+        path: 'edit',
+        pathMatch: 'full',
+        component: EventInvitationDetailsComponent,
+      }
+    ]
+
   },
   {
     path: ':eventInvitationId/guests',

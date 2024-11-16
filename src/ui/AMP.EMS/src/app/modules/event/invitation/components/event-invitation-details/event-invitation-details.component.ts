@@ -131,7 +131,7 @@ export class EventInvitationDetailsComponent implements OnInit {
   }
 
   redirect = (item: any) => {
-    this.router.navigate([`/event/${this.eventId}/invitations/${item.id}/edit`]);
+    this.router.navigate(['events', this.eventId, 'invitations', item.id, 'edit'], { replaceUrl: true });
   }
 
   onRsvpSubmit = () => {

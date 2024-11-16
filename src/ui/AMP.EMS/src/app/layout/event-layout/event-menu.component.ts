@@ -24,17 +24,17 @@ export class EventMenuComponent implements OnInit {
                         {
                             label: 'Dashboard',
                             icon: 'pi pi-fw pi-home',
-                            routerLink: [`/event/${this.eventId}/dashboard`]
+                            routerLink: [`dashboard`]
                         },
                         {
                             label: 'Guests',
                             icon: 'pi pi-fw pi-users',
-                            routerLink: [`/event/${this.eventId}/guests`]
+                            routerLink: [`guests`]
                         },
                         {
                             label: 'Invitations',
                             icon: 'pi pi-fw pi-envelope',
-                            routerLink: [`/event/${this.eventId}/invitations`],
+                            routerLink: [`invitations`],
                         },
                         {
                             label: 'Vendors',
@@ -43,17 +43,17 @@ export class EventMenuComponent implements OnInit {
                                 {
                                     label: 'Search',
                                     icon: 'pi pi-fw pi-search',
-                                    routerLink: [`/event/${this.eventId}/vendors`]
+                                    routerLink: [`vendors`]
                                 },
                                 {
                                     label: 'Contracts',
                                     icon: 'pi pi-fw pi-pencil',
-                                    routerLink: [`/event/${this.eventId}/vendors/contracts`]
+                                    routerLink: ['vendors', 'contracts']
                                 },
                                 {
                                     label: 'Transactions',
                                     icon: 'pi pi-fw pi-receipt',
-                                    routerLink: [`/event/${this.eventId}/vendors/transactions`]
+                                    routerLink: ['vendors', 'transactions']
                                 },
                             ]
                         },
@@ -63,13 +63,17 @@ export class EventMenuComponent implements OnInit {
                             items: [
                                 {
                                     label: 'Setup',
-                                    routerLink: [`/event/${this.eventId}/budgets`]
+                                    routerLink: ['budgets']
                                 },
                                 {
                                     label: 'Expense Tracking',
-                                    routerLink: [`/event/${this.eventId}/transactions`]
+                                    routerLink: ['transactions']
                                 }
                             ]
+                        },
+                        {
+                            label: 'Accounts',
+                            routerLink: ['accounts']
                         }
                     ]
                 },
@@ -79,7 +83,7 @@ export class EventMenuComponent implements OnInit {
                         {
                             label: 'Edit Event',
                             icon: 'pi pi-fw pi-cog',
-                            routerLink: [`/event/${this.eventId}/edit`]
+                            routerLink: ['edit']
                         },
                         {
                             label: 'Logout',

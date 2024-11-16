@@ -11,6 +11,16 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 {
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
+    public IActionResult Accounts(Guid eventId)
+    {
+        var eventAccounts = UnitOfWork.Set<EventAccount>().GetAll()
+            .Where(eventAccount => eventAccount.EventId == eventId).AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<EventAccount>>(string.Empty) { Data = eventAccounts });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
     public IActionResult Roles(Guid eventId)
     {
         var roles = UnitOfWork.Set<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
