@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
         config: {
             forbiddenRoute: '/forbidden',
             unauthorizedRoute: '/unauthorized',
-            logLevel: LogLevel.Debug,
+            logLevel: LogLevel.None,
             authority: environment.IDP_AUTHORITY_HTTPS_URL,
             redirectUrl: environment.EMS_SPA_REDIRECTURL,
             postLogoutRedirectUri: environment.EMS_SPA_REDIRECTURL,
