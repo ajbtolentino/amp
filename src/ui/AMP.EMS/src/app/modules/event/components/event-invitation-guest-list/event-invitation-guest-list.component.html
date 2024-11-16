@@ -57,19 +57,19 @@
                                 [class]="'invitation-badge status-not-assigned'">N/A</span>
                         </td>
                         <td>
-                            <button pTooltip="Copy" *ngIf="guestInvitation.code" pButton pRipple type="button"
-                                icon="pi pi-share-alt" (click)="copyLink(guestInvitation.code)"
+                            <button pTooltip="Copy Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
+                                icon="pi pi-fw pi-link" (click)="copyLink(guestInvitation.code)"
                                 class="p-button-text p-button-text"></button>
-                            <a pTooltip="View" *ngIf="guestInvitation.code" pButton pRipple type="button"
-                                icon="pi pi-eye" class="p-button-text p-button-text" target="_blank"
+                            <a pTooltip="Open Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
+                                icon="pi pi-fw pi-external-link" class="p-button-text p-button-text" target="_blank"
                                 routerLink="/invitation/{{guestInvitation.code}}"></a>
-                            <button *ngIf="!guestInvitation.id" pButton pRipple type="button" icon="pi pi-user-plus"
-                                class="p-button-text p-button-success mr-2 p-jc-end" pTooltip="Add"
-                                (click)="add(eventGuest.id)">
+                            <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
+                                icon="pi pi-fw pi-user-plus" class="p-button-text p-button-success mr-2 p-jc-end"
+                                pTooltip="Add Guest" (click)="add(eventGuest.id)">
                             </button>
-                            <button *ngIf="guestInvitation.id" pButton pRipple type="button" icon="pi pi-user-minus"
-                                class="p-button-text p-button-warning mr-2 p-jc-end" pTooltip="Remove"
-                                (click)="delete(guestInvitation.id)">
+                            <button *ngIf="guestInvitation.id" pButton pRipple type="button"
+                                icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"
+                                pTooltip="Remove Guest" (click)="delete(guestInvitation.id)">
                             </button>
                         </td>
                     </tr>

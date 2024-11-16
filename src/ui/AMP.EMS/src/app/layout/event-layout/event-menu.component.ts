@@ -47,33 +47,42 @@ export class EventMenuComponent implements OnInit {
                                 },
                                 {
                                     label: 'Contracts',
-                                    icon: 'pi pi-fw pi-pencil',
+                                    icon: 'pi pi-fw pi-file-edit',
                                     routerLink: ['vendors', 'contracts']
-                                },
-                                {
-                                    label: 'Transactions',
-                                    icon: 'pi pi-fw pi-receipt',
-                                    routerLink: ['vendors', 'transactions']
-                                },
-                            ]
-                        },
-                        {
-                            label: 'Budget',
-                            icon: 'pi pi-fw pi-calculator',
-                            items: [
-                                {
-                                    label: 'Setup',
-                                    routerLink: ['budgets']
-                                },
-                                {
-                                    label: 'Expense Tracking',
-                                    routerLink: ['transactions']
                                 }
                             ]
                         },
                         {
                             label: 'Accounts',
-                            routerLink: ['accounts']
+                            icon: 'pi pi-fw pi-id-card',
+                            routerLink: ['accounts'],
+                            items: [
+                                {
+                                    label: 'Manage',
+                                    icon: 'pi pi-fw pi-wrench',
+                                    routerLink: ['accounts']
+                                },
+                                {
+                                    label: 'Setup Budget',
+                                    icon: 'pi pi-fw pi-calculator',
+                                    routerLink: ['budgets']
+                                },
+                                {
+                                    label: 'Transactions',
+                                    icon: 'pi pi-fw pi-money-bill',
+                                    routerLink: ['transactions']
+                                }
+                            ]
+                        },
+                        {
+                            label: 'Scheduling',
+                            icon: 'pi pi-fw pi-calendar-clock',
+                            items: [
+                                {
+                                    label: 'Manage Timeline',
+                                    icon: 'pi pi-fw pi-list'
+                                }
+                            ]
                         }
                     ]
                 },

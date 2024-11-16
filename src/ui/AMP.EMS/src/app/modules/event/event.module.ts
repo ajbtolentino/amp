@@ -28,6 +28,7 @@ import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventLayoutComponent } from 'app/layout/event-layout/event-layout.component';
 import { EventsLayoutComponent } from 'app/layout/events-layout/events-layout.component';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
+import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 
 const routes: Routes = [
   {
@@ -235,6 +236,10 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+      {
+        path: 'transactions',
+        component: TransactionListComponent
       }
     ]
   },
@@ -262,6 +267,7 @@ const routes: Routes = [
     EventDetailsComponent,
     EventRolesComponent,
     EventAccountDetailsComponent,
+    TransactionListComponent,
   ],
   imports: [
     SharedModule,
@@ -285,6 +291,7 @@ const routes: Routes = [
     EventListComponent,
     EventDetailsComponent,
     EventRolesComponent,
+    TransactionListComponent,
     RouterModule]
 })
 

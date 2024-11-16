@@ -51,6 +51,21 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
+    public IActionResult Transactions(Guid eventId)
+    {
+        var eventAccountIds = UnitOfWork.Set<EventAccount>().GetAll().AsNoTracking()
+            .Where(eventAccount => eventAccount.EventId == eventId)
+            .Select(_ => _.AccountId);
+
+        var transactions = UnitOfWork.Set<Transaction>().GetAll().AsNoTracking()
+            .Where(_ => (_.CreditAccountId.HasValue && eventAccountIds.Contains(_.CreditAccountId.Value)) ||
+                        (_.DebitAccountId.HasValue && eventAccountIds.Contains(_.DebitAccountId.Value)));
+
+        return Ok(new OkResponse<IEnumerable<Transaction>>(string.Empty) { Data = transactions });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
     public IActionResult VendorContracts(Guid eventId)
     {
         var eventVendorContracts = UnitOfWork.Set<VendorContract>().GetAll()
