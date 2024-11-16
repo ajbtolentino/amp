@@ -22,6 +22,7 @@ import { AuthConfigModule } from './core/auth-config.module';
 import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
 import { HomeComponent } from './pages/home/home.component';
+import { NotfoundComponent } from './pages/notfound/notfound.component';
 
 @NgModule({
     imports: [
@@ -73,17 +74,17 @@ import { HomeComponent } from './pages/home/home.component';
                     loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
                 {
-                    path: 'accounts',
-                    title: 'Accounts',
+                    path: 'settings',
+                    canActivate: [autoLoginPartialRoutesGuard],
                     component: EventsLayoutComponent,
-                    loadChildren: () => import('@modules/account/account.module').then(m => m.AccountModule)
+                    loadChildren: () => import('@modules/settings/settings.module').then(m => m.SettingsModule)
                 },
                 {
                     path: 'unauthorized',
                     component: UnauthorizedComponent
                 },
-                // { path: 'notfound', component: NotfoundComponent },
-                // { path: '**', redirectTo: '/notfound' },
+                { path: 'notfound', component: NotfoundComponent },
+                { path: '**', redirectTo: '/notfound' },
             ],
             withEnabledBlockingInitialNavigation()
         ),

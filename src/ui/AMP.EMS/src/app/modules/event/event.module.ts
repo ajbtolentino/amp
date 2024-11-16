@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AccountDetailsComponent, AccountListComponent } from '@modules/account';
 import {
+  EventAccountDetailsComponent,
   EventAccountListComponent,
   EventDashboardComponent,
   EventDetailsComponent,
@@ -222,7 +222,7 @@ const routes: Routes = [
           {
             path: 'add',
             pathMatch: 'full',
-            component: AccountDetailsComponent
+            component: EventAccountDetailsComponent
           },
           {
             path: ':accountId',
@@ -230,7 +230,7 @@ const routes: Routes = [
               {
                 path: 'edit',
                 pathMatch: 'full',
-                component: AccountDetailsComponent
+                component: EventAccountDetailsComponent
               }
             ]
           }
@@ -261,8 +261,7 @@ const routes: Routes = [
     EventListComponent,
     EventDetailsComponent,
     EventRolesComponent,
-    AccountDetailsComponent,
-    AccountListComponent,
+    EventAccountDetailsComponent,
   ],
   imports: [
     SharedModule,
@@ -286,8 +285,6 @@ const routes: Routes = [
     EventListComponent,
     EventDetailsComponent,
     EventRolesComponent,
-    AccountDetailsComponent,
-    AccountListComponent,
     RouterModule]
 })
 

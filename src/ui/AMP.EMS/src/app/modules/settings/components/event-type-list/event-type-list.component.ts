@@ -1,17 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
-
-
 import { LookupService } from '@core/services';
 import { Column, EventType } from '@shared/models';
+import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { lastValueFrom, Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html'
+  selector: 'app-event-type-list',
+  templateUrl: './event-type-list.component.html',
+  styleUrl: './event-type-list.component.scss'
 })
-export class AppSettingsComponent implements OnInit {
+export class EventTypeListComponent implements OnInit {
   items!: Event[];
 
   selectedItems!: EventType[];

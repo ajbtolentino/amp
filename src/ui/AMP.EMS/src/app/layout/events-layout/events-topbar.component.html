@@ -11,17 +11,17 @@
     <div #topbarmenu class="layout-topbar-menu"
         [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
         <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Events"
-            [routerLink]="'/events'">
+            [routerLink]="['/events']">
             <i class="pi pi-calendar"></i>
             <span>Events</span>
         </button>
         <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Vendors"
-            [routerLink]="'/vendors'">
+            [routerLink]="['/vendors']">
             <i class="pi pi-warehouse"></i>
             <span>Vendors</span>
         </button>
         <button *ngIf="auth.value?.isAuthenticated" class="p-link layout-topbar-button" pTooltip="Settings"
-            routerLink="/events/settings">
+            [routerLink]="['/settings']">
             <i class="pi pi-cog"></i>
             <span>Settings</span>
         </button>

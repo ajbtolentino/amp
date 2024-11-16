@@ -48,7 +48,7 @@
                     <p-progressSpinner ariaLabel=" loading"
                         *ngIf="data.content?.loading || data.eventInvitation?.loading" />
                 </div>
-                <p-tabView orientation="left" *ngIf="!data.eventInvitation!.loading">
+                <p-tabView orientation="left" *ngIf="!data.content?.loading && !data.eventInvitation!.loading">
                     <p-tabPanel header="Template" class="line-height-3 m-0">
                         <div [style]="{height: '100vh !important' , overflow: 'auto'}">
                             <ngx-dynamic-hooks [content]="data.content!.value!.htmlContent" [context]="{

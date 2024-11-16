@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '@modules/shared.module';
@@ -18,8 +17,14 @@ const routes: Routes = [
     component: VendorDetailsComponent
   },
   {
-    path: ':vendorId/edit',
-    component: VendorDetailsComponent
+    path: ':vendorId',
+    children: [
+      {
+        path: 'edit',
+        pathMatch: 'full',
+        component: VendorDetailsComponent
+      }
+    ]
   },
 ];
 
@@ -29,7 +34,6 @@ const routes: Routes = [
     VendorListComponent
   ],
   imports: [
-    CommonModule,
     SharedModule,
     RouterModule.forChild(routes)
   ]
