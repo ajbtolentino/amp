@@ -178,8 +178,7 @@
     </div>
 
     <div class="col-12 xl:col-6">
-        <div class="card flex flex-column align-items-center"
-            *ngIf="contractsChart$ | withStatus | async as contractsChart">
+        <div class="card text-center" *ngIf="contractsChart$ | withStatus | async as contractsChart">
             <h5 class="text-left w-full">Cost Allocation</h5>
             <ng-container *ngIf="!contractsChart.loading">
                 <p-chart *ngIf="contractsChart.value?.labels?.length" type="pie" [data]="contractsChart.value"

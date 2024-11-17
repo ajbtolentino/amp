@@ -22,6 +22,8 @@ import {
   EventVendorTransactionListComponent,
   EventVendorTypeBudgetDetailsComponent,
   EventVendorTypeBudgetListComponent,
+  SeatAssignmentComponent,
+  SeatConfigurationComponent,
   SeatGroupComponent,
   TimelineListComponent,
   TransactionListComponent
@@ -32,8 +34,6 @@ import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventLayoutComponent } from 'app/layout/event-layout/event-layout.component';
 import { EventsLayoutComponent } from 'app/layout/events-layout/events-layout.component';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
-import { SeatAssignmentComponent } from './components/seat-assignment/seat-assignment.component';
-import { SeatConfigurationComponent } from './components/seat-configuration/seat-configuration.component';
 
 const routes: Routes = [
   {
@@ -302,25 +302,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [
-    EventInvitationListComponent,
-    EventInvitationDetailsComponent,
-    EventInvitationGuestListComponent,
-    EventGuestInvitationRSVPLabelComponent,
-    EventGuestInvitationRSVPDateComponent,
-    EventGuestInvitationRSVPFormComponent,
-    EventGuestListComponent,
-    EventGuestDetailsComponent,
-    EventDashboardComponent,
-    EventVendorTypeBudgetDetailsComponent,
-    EventVendorTypeBudgetListComponent,
-    EventAccountListComponent,
-    EventListComponent,
-    EventDetailsComponent,
-    EventRolesComponent,
-    TransactionListComponent,
-    SeatGroupComponent,
-    EventTaskListComponent,
-    TimelineListComponent,
     RouterModule]
 })
 

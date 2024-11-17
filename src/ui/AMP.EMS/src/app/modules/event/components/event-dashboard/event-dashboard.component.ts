@@ -183,9 +183,7 @@ export class EventDashboardComponent implements OnInit {
             usePointStyle: true,
             color: textColor,
           },
-          rtl: true,
-          align: 'end',
-          position: 'bottom'
+          position: 'left',
         }
       },
     };
