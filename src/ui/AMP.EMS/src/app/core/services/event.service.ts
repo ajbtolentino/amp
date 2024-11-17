@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { lastValueFrom, Observable } from 'rxjs';
 
-import { Account, Event, EventAccount, Guest, GuestRole, Invitation, Transaction, VendorContract } from '@shared/models';
+import { Account, Event, EventAccount, Guest, GuestRole, Invitation, Timeline, Transaction, VendorContract } from '@shared/models';
 import { Lookup } from '@shared/models/lookup.model';
 import { BaseApiService } from './base.api.service';
 
@@ -44,6 +44,10 @@ export class EventService extends BaseApiService {
 
     getVendorContractPaymentStates = (id: string): Observable<Lookup[]> => {
         return this.httpGet<Lookup[]>(`event/${id}/vendorcontractpaymentstates`);
+    }
+
+    getTimelines = (id: string): Observable<Timeline[]> => {
+        return this.httpGet<Account[]>(`event/${id}/timelines`);
     }
 
     getTransactions = (id: string): Observable<Transaction[]> => {

@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
@@ -21,9 +22,7 @@ export class EventDashboardComponent implements OnInit {
   budgets$: Observable<any> = new Observable<any>();
   expenses$: Observable<any> = new Observable<any>();
 
-  events1: any[] = [];
-
-  budgetPieData: any;
+  timelines$: Observable<any> = new Observable<any>();
 
   pieChartOptions: any;
 
@@ -50,12 +49,16 @@ export class EventDashboardComponent implements OnInit {
 
     this.initChart();
 
-    this.events1 = [
-      { status: 'Delivered', date: '16/10/2020 10:00', icon: PrimeIcons.CHECK, color: '#607D8B' },
-      { status: 'Ordered', date: '15/10/2020 10:30', icon: PrimeIcons.SHOPPING_CART, color: '#9C27B0', },
-      { status: 'Processing', date: '15/10/2020 14:00', icon: PrimeIcons.COG, color: '#673AB7' },
-      { status: 'Shipped', date: '15/10/2020 16:15', icon: PrimeIcons.ENVELOPE, color: '#FF9800' },
-    ];
+    this.timelines$ = this.route.parent?.paramMap.pipe(
+      switchMap(params => this.eventService.getTimelines(params.get("eventId")!)),
+      map(timelines => timelines.map(timeline => ({
+        name: timeline.name,
+        description: timeline.description,
+        date: formatDate(timeline.startDate!, 'medium', 'en-PH'),
+        icon: PrimeIcons.CALENDAR,
+        color: '#FF9800'
+      })))
+    )!;
   }
 
   loadVendors = (vendorContracts: VendorContract[]): Observable<VendorContract[]> => {

@@ -51,6 +51,17 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
+    public IActionResult Timelines(Guid eventId)
+    {
+        var timelines = UnitOfWork.Set<Timeline>().GetAll().AsNoTracking()
+            .Where(timeline => timeline.EventId == eventId)
+            .OrderBy(_ => _.StartDate);
+
+        return Ok(new OkResponse<IEnumerable<Timeline>>(string.Empty) { Data = timelines });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
     public IActionResult Transactions(Guid eventId)
     {
         var eventAccountIds = UnitOfWork.Set<EventAccount>().GetAll().AsNoTracking()

@@ -102,9 +102,32 @@
     </div>
 
     <div class="col-12 xl:col-6">
-        <div class="card">
-            <h5>Transactions</h5>
-            <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+        <div class="card align-items-center" *ngIf="timelines$ | withStatus | async as timelines">
+            <h5 class="text-left w-full">Timeline</h5>
+            <ng-container *ngIf="!timelines.loading">
+                <p-timeline *ngIf="timelines.value" align="alternate" [value]="timelines.value"
+                    styleClass="customized-timeline">
+                    <ng-template pTemplate="marker" let-timeline>
+                        <span
+                            class="flex z-1 w-2rem h-2rem align-items-center justify-content-center text-white border-circle shadow-2"
+                            [style.backgroundColor]="timeline.color">
+                            <i [ngClass]="timeline.icon"></i>
+                        </span>
+                    </ng-template>
+                    <ng-template pTemplate="content" let-timeline>
+                        <p-card [header]="timeline.name" [subheader]="timeline.date">
+                            <p class="line-height-3 my-3">{{timeline.description}}</p>
+                        </p-card>
+                    </ng-template>
+                </p-timeline>
+                <ng-container *ngIf="!timelines.loading && !timelines.value?.length">
+                    No Data Available
+                </ng-container>
+            </ng-container>
+            <ng-container>
+                <p-progressSpinner *ngIf="timelines.loading" styleClass="w-4rem h-6rem" strokeWidth="8"
+                    fill="var(--surface-ground)" />
+            </ng-container>
         </div>
 
         <div class="card">
@@ -159,33 +182,18 @@
             *ngIf="contractsChart$ | withStatus | async as contractsChart">
             <h5 class="text-left w-full">Vendor Contracts Chart</h5>
             <ng-container *ngIf="!contractsChart.loading">
-                <p-chart *ngIf="contractsChart.value" type="pie" [data]="contractsChart.value"
+                <p-chart *ngIf="contractsChart.value?.length" type="pie" [data]="contractsChart.value"
                     [options]="pieChartOptions"></p-chart>
-                <span *ngIf="!contractsChart.value">No data available</span>
+                <span *ngIf="!contractsChart.value?.length">No data available</span>
             </ng-container>
             <ng-container *ngIf="contractsChart.loading">
                 <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)" />
             </ng-container>
         </div>
 
-        <div class=" card">
-            <h5>Timeline</h5>
-            <p-timeline [value]="events1" align="alternate" styleClass="customized-timeline">
-                <ng-template pTemplate="marker" let-event>
-                    <span
-                        class="flex z-1 w-2rem h-2rem align-items-center justify-content-center text-white border-circle shadow-2"
-                        [style.backgroundColor]="event.color">
-                        <i [ngClass]="event.icon"></i>
-                    </span>
-                </ng-template>
-                <ng-template pTemplate="content" let-event>
-                    <p-card [header]="event.status" [subheader]="event.date">
-                        <img *ngIf="event.image" [src]="'assets/demo/images/product/' + event.image" [alt]="event.name"
-                            width="200" class="shadow-2" />
-                        <p class="line-height-3 my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                    </p-card>
-                </ng-template>
-            </p-timeline>
+        <div class="card">
+            <h5>Transactions</h5>
+            <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
         </div>
     </div>
 </div>

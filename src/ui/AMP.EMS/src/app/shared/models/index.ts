@@ -12,6 +12,7 @@ export * from './guest-role.model';
 export * from './guest.model';
 export * from './invitation.model';
 export * from './role.model';
+export * from './timeline.model';
 export * from './transaction-type.model';
 export * from './transaction.model';
 export * from './vendor-account.model';

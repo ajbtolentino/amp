@@ -1,1 +1,110 @@
-<p>timeline-list works!</p>
+<p-table #dt *ngIf="timelines$ | withStatus | async as timelines" [value]="timelines.value!" [rows]="10"
+    [paginator]="true" [globalFilterFields]="['name','description']" editMode="row" dataKey="id"
+    responsiveLayout="stack" [responsive]="true" [loading]="timelines.loading" [showLoader]="false">
+    <ng-template pTemplate="caption">
+        <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input class="w-full sm:w-auto" pInputText type="text"
+                    (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Search..." />
+            </span>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" *ngIf="!isCreating"
+                    [loading]="timelines.loading!" (click)="addRow(timelines.value!)"></button>
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+            <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+            <th pSortableColumn="startDate">Start Date <p-sortIcon field="startDate"></p-sortIcon></th>
+            <th pSortableColumn="endDate">End Date <p-sortIcon field="endDate"></p-sortIcon></th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let i of [].constructor(5)">
+            <td></td>
+            <td><p-skeleton /></td>
+            <td><p-skeleton /></td>
+            <td><p-skeleton /></td>
+            <td><p-skeleton /></td>
+            <td></td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item let-editing="editing">
+        <tr [pEditableRow]="item">
+            <td>
+                <p-tableCheckbox [value]="item"></p-tableCheckbox>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="item.name" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.name}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="item.description" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.description}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-calendar [(ngModel)]="item.startDate" appendTo="body" [showTime]="true"></p-calendar>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.startDate | date : 'medium'}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <p-calendar [(ngModel)]="item.endDate" appendTo="body" [showTime]="true"></p-calendar>
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{item.endDate | date : 'medium'}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <div class="flex">
+                    <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                        class="p-button-text p-button-success mr-2" pTooltip="Edit">
+                    </button>
+                    <button *ngIf="!editing" pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
+                        pTooltip="Delete"></button>
+
+                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                        class="p-button-text p-button-text p-button-success mr-2" (click)="save(item)">
+                    </button>
+                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                        class="p-button-text p-button-text p-button-danger">
+                    </button>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [colSpan]="6">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
