@@ -119,7 +119,6 @@ export class EventDashboardComponent implements OnInit {
             switchMap(vendorContracts => this.loadVendors(vendorContracts)),
             map(vendorContracts => {
               return {
-                ...vendorContracts,
                 labels: vendorContracts.map(_ => _.vendor?.name),
                 datasets: [
                   {
