@@ -22,7 +22,7 @@
             <div class="card">
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">Label</label>
                         <input *ngIf="!data.eventInvitation!.loading" pInputText id="name" type="text"
                             [(ngModel)]="data.eventInvitation!.value!.name" />
                         <p-skeleton *ngIf="data.eventInvitation!.loading"></p-skeleton>

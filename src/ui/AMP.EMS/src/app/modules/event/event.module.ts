@@ -15,12 +15,16 @@ import {
   EventInvitationListComponent,
   EventListComponent,
   EventRolesComponent,
+  EventTaskListComponent,
   EventVendorContractDetailsComponent,
   EventVendorContractListComponent,
   EventVendorListComponent,
   EventVendorTransactionListComponent,
   EventVendorTypeBudgetDetailsComponent,
-  EventVendorTypeBudgetListComponent
+  EventVendorTypeBudgetListComponent,
+  SeatGroupComponent,
+  TimelineListComponent,
+  TransactionListComponent
 } from '@modules/event';
 import { SharedModule } from '@modules/shared.module';
 import { VendorDetailsComponent } from '@modules/vendor/components/vendor-details/vendor-details.component';
@@ -28,7 +32,6 @@ import { CodeEditorModule } from '@ngstack/code-editor';
 import { EventLayoutComponent } from 'app/layout/event-layout/event-layout.component';
 import { EventsLayoutComponent } from 'app/layout/events-layout/events-layout.component';
 import { DynamicHooksComponent } from 'ngx-dynamic-hooks';
-import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 
 const routes: Routes = [
   {
@@ -240,7 +243,19 @@ const routes: Routes = [
       {
         path: 'transactions',
         component: TransactionListComponent
-      }
+      },
+      {
+        path: 'timeline',
+        component: TimelineListComponent
+      },
+      {
+        path: 'tasks',
+        component: EventTaskListComponent
+      },
+      {
+        path: 'seat-assignment',
+        component: SeatGroupComponent
+      },
     ]
   },
 ]
@@ -268,6 +283,9 @@ const routes: Routes = [
     EventRolesComponent,
     EventAccountDetailsComponent,
     TransactionListComponent,
+    SeatGroupComponent,
+    EventTaskListComponent,
+    TimelineListComponent,
   ],
   imports: [
     SharedModule,
@@ -292,6 +310,9 @@ const routes: Routes = [
     EventDetailsComponent,
     EventRolesComponent,
     TransactionListComponent,
+    SeatGroupComponent,
+    EventTaskListComponent,
+    TimelineListComponent,
     RouterModule]
 })
 

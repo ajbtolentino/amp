@@ -25,4 +25,7 @@ public class Event : FullAuditableEntity<Guid>
     public virtual ICollection<VendorContractState> VendorContractStates { get; set; } = [];
     public virtual ICollection<VendorContractPaymentState> VendorContractPaymentStates { get; set; } = [];
     public virtual ICollection<VendorContractPaymentType> VendorContractPaymentTypes { get; set; } = [];
+    public virtual ICollection<EventTask> EventTasks { get; set; } = [];
+    public virtual ICollection<SeatGroup> SeatGroups { get; set; } = [];
+    public virtual ICollection<Timeline> Timelines { get; set; } = [];
 }

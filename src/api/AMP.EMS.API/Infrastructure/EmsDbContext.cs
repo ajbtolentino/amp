@@ -22,6 +22,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     //Event
     public DbSet<EventAccount> EventAccounts { get; set; }
     public DbSet<Event> Events { get; set; }
+    public DbSet<EventTask> EventTasks { get; set; }
     public DbSet<EventVendorTypeBudget> EventVendorTypeBudgets { get; set; }
     public DbSet<GuestInvitation> GuestInvitations { get; set; }
     public DbSet<GuestInvitationRsvp> GuestInvitationRsvps { get; set; }
@@ -38,6 +39,10 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; set; }
     public DbSet<Role> Roles { get; set; }
+
+    public DbSet<SeatGroup> SeatGroups { get; set; }
+    public DbSet<SeatGroupAttendee> SeatGroupAttendees { get; set; }
+    public DbSet<Timeline> Timelines { get; set; }
 
     //Payment
     public DbSet<Account> Accounts { get; set; }

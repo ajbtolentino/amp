@@ -27,14 +27,41 @@ export class EventMenuComponent implements OnInit {
                             routerLink: [`dashboard`]
                         },
                         {
-                            label: 'Guests',
-                            icon: 'pi pi-fw pi-users',
-                            routerLink: [`guests`]
+                            label: 'Planning',
+                            icon: 'pi pi-fw pi-clipboard',
+                            items: [
+                                {
+                                    label: 'Timeline',
+                                    icon: 'pi pi-fw pi-calendar-clock',
+                                    routerLink: ['timeline']
+                                },
+                                {
+                                    label: 'Tasks',
+                                    icon: 'pi pi-fw pi-list-check',
+                                    routerLink: ['tasks']
+                                },
+                                {
+                                    label: 'Seat Assignments',
+                                    icon: 'pi pi-fw pi-sitemap',
+                                    routerLink: ['seat-assignment']
+                                }
+                            ]
                         },
                         {
-                            label: 'Invitations',
-                            icon: 'pi pi-fw pi-envelope',
-                            routerLink: [`invitations`],
+                            label: 'Guests',
+                            icon: 'pi pi-fw pi-users',
+                            items: [
+                                {
+                                    label: 'Manage',
+                                    icon: 'pi pi-fw pi-wrench',
+                                    routerLink: [`guests`]
+                                },
+                                {
+                                    label: 'Invitations',
+                                    icon: 'pi pi-fw pi-envelope',
+                                    routerLink: [`invitations`],
+                                }
+                            ]
                         },
                         {
                             label: 'Vendors',
@@ -71,16 +98,6 @@ export class EventMenuComponent implements OnInit {
                                     label: 'Transactions',
                                     icon: 'pi pi-fw pi-money-bill',
                                     routerLink: ['transactions']
-                                }
-                            ]
-                        },
-                        {
-                            label: 'Scheduling',
-                            icon: 'pi pi-fw pi-calendar-clock',
-                            items: [
-                                {
-                                    label: 'Manage Timeline',
-                                    icon: 'pi pi-fw pi-list'
                                 }
                             ]
                         }
