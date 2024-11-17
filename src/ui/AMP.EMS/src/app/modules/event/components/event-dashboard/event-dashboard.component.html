@@ -102,7 +102,7 @@
     </div>
 
     <div class="col-12 xl:col-6">
-        <div class="card align-items-center" *ngIf="timelines$ | withStatus | async as timelines">
+        <div class="card text-center" *ngIf=" timelines$ | withStatus | async as timelines">
             <h5 class="text-left w-full">Timeline</h5>
             <ng-container *ngIf="!timelines.loading">
                 <p-timeline *ngIf="timelines.value" align="alternate" [value]="timelines.value"
