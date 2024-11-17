@@ -100,6 +100,21 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
+    public IActionResult UnreconciledPayments(Guid eventId)
+    {
+        var vendorContractIds = UnitOfWork.Set<VendorContract>().GetAll()
+            .AsNoTracking()
+            .Where(eventVendorContract => eventVendorContract.EventId == eventId)
+            .Select(_ => _.Id);
+
+        var unreconciledPayments = UnitOfWork.Set<VendorContractPayment>().GetAll().AsNoTracking()
+            .Where(_ => vendorContractIds.Contains(_.VendorContractId) && !_.TransactionId.HasValue);
+
+        return Ok(new OkResponse<IEnumerable<VendorContractPayment>>(string.Empty) { Data = unreconciledPayments });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
     public IActionResult VendorContractStates(Guid eventId)
     {
         var eventVendorContractStates = UnitOfWork.Set<VendorContractState>().GetAll()
@@ -143,6 +158,18 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
         return Ok(new OkResponse<IEnumerable<EventVendorTypeBudget>>(string.Empty)
             { Data = eventVendorTypeBudgets });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult Tasks(Guid eventId)
+    {
+        var eventTasks = UnitOfWork.Set<EventTask>().GetAll()
+            .Where(eventTask => eventTask.EventId == eventId)
+            .AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<EventTask>>(string.Empty)
+            { Data = eventTasks });
     }
 
     [HttpPost]

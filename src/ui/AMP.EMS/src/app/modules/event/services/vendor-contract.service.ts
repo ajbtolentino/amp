@@ -20,6 +20,10 @@ export class VendorContractService extends BaseApiService {
         return this.httpGet<VendorContract[]>(`vendorcontract/getbyvendorids`, { params: { vendorIds: vendorIds } });
     }
 
+    getByIds = (ids: string[]): Observable<VendorContract[]> => {
+        return this.httpGet<VendorContract[]>(`vendorcontract/`, { params: { ids: ids } });
+    }
+
     getAll = (): Observable<VendorContract[]> => {
         return this.httpGet<VendorContract[]>(`vendorcontract/`);
     }

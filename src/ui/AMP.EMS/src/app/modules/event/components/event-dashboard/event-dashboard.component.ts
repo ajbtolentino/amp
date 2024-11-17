@@ -2,8 +2,8 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
-import { EventDashboardService } from '@modules/event';
-import { VendorContract } from '@shared/models';
+import { EventDashboardService, VendorContractService } from '@modules/event';
+import { Timeline, VendorContract, VendorContractPayment } from '@shared/models';
 import { EventVendorTypeBudget } from '@shared/models/event-vendor-type-budget.model';
 import { PrimeIcons } from 'primeng/api';
 import { map, Observable, of, shareReplay, switchMap } from 'rxjs';
@@ -33,6 +33,7 @@ export class EventDashboardComponent implements OnInit {
   constructor(private eventDashboardService: EventDashboardService,
     private eventService: EventService,
     private vendorService: VendorService,
+    private vendorContractService: VendorContractService,
     private lookupService: LookupService,
     private route: ActivatedRoute) {
 
@@ -50,13 +51,18 @@ export class EventDashboardComponent implements OnInit {
     this.initChart();
 
     this.timelines$ = this.route.parent?.paramMap.pipe(
-      switchMap(params => this.eventService.getTimelines(params.get("eventId")!)),
-      map(timelines => timelines.map(timeline => ({
+      switchMap(params => this.eventService.getTimelines(params.get("eventId")!)
+        .pipe(
+          switchMap(timelines => this.loadContractPayments(params.get("eventId")!).pipe(
+            map(paymentTimelines => [...timelines, ...paymentTimelines])
+          )),
+        )),
+      map(timelines => timelines.sort((a, b) => new Date(a.startDate!).getTime() - new Date(b.startDate!).getTime()).map((timeline: any) => ({
         name: timeline.name,
         description: timeline.description,
         date: formatDate(timeline.startDate!, 'medium', 'en-PH'),
-        icon: PrimeIcons.CALENDAR,
-        color: '#FF9800'
+        icon: timeline.isPayment ? PrimeIcons.DOLLAR : PrimeIcons.CALENDAR,
+        color: timeline.isPayment ? 'green' : '#FF9800'
       })))
     )!;
   }
@@ -82,6 +88,35 @@ export class EventDashboardComponent implements OnInit {
           }
         )))
       )
+  }
+
+  loadContractPayments = (eventId: string): Observable<Timeline[]> => {
+    return this.eventService.getUnreconciledPayments(eventId)
+      .pipe(
+        switchMap(vendorContractPayments => this.loadVendorContracts(vendorContractPayments)),
+        map(vendorContractPayments => vendorContractPayments.map(
+          vendorContractPayment => (
+            {
+              name: `Payment Due`,
+              description: `Payment of ${vendorContractPayment.dueAmount} for ${vendorContractPayment.vendorContract?.vendor?.name}`,
+              startDate: vendorContractPayment.dueDate,
+              isPayment: true
+            })
+        )
+        )
+      )
+  }
+
+  loadVendorContracts = (vendorContractPayments: VendorContractPayment[]): Observable<VendorContractPayment[]> => {
+    return this.vendorContractService.getByIds(vendorContractPayments.map(_ => _.vendorContractId!))
+      .pipe(
+        switchMap(vendorContracts => this.loadVendors(vendorContracts)),
+        map(vendorContracts => vendorContractPayments.map(
+          vendorContractPayment => ({
+            ...vendorContractPayment,
+            vendorContract: vendorContracts.find(_ => _.id === vendorContractPayment.vendorContractId)
+          }))
+        ));
   }
 
   initChart() {
@@ -147,8 +182,10 @@ export class EventDashboardComponent implements OnInit {
           labels: {
             usePointStyle: true,
             color: textColor,
-            position: 'bottom'
-          }
+          },
+          rtl: true,
+          align: 'end',
+          position: 'bottom'
         }
       },
     };

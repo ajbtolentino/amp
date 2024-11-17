@@ -18,7 +18,8 @@ export class TimelineListComponent implements OnInit {
 
   @ViewChild('dt') table!: Table;
 
-  constructor(private route: ActivatedRoute, private eventService: EventService,
+  constructor(private route: ActivatedRoute,
+    private eventService: EventService,
     private timelineService: TimelineService) {
 
   }

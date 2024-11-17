@@ -62,7 +62,7 @@
             </span>
             <span class="text-500">Total Cost</span>
             <ng-container
-                *ngIf="{totalUsed: (budget.value.totalAmountDue) / budget.value.totalAmount | absoluteValue} as data">
+                *ngIf="budget.value?.totalAmount && {totalUsed: (budget.value.totalAmountDue) / budget.value.totalAmount | absoluteValue} as data">
                 <span
                     [ngClass]="{'text-green-500 ': data.totalUsed < 1, 'text-red-500 ': data.totalUsed > 1, 'text-blue-500': data.totalUsed === 1}"
                     class="font-medium">
@@ -116,7 +116,7 @@
                     </ng-template>
                     <ng-template pTemplate="content" let-timeline>
                         <p-card [header]="timeline.name" [subheader]="timeline.date">
-                            <p class="line-height-3 my-3">{{timeline.description}}</p>
+                            <p *ngIf="timeline.description" class="line-height-3 my-3">{{timeline.description}}</p>
                         </p-card>
                     </ng-template>
                 </p-timeline>

@@ -41,9 +41,9 @@ export class EventMenuComponent implements OnInit {
                                     routerLink: ['tasks']
                                 },
                                 {
-                                    label: 'Seat Assignments',
-                                    icon: 'pi pi-fw pi-sitemap',
-                                    routerLink: ['seat-assignment']
+                                    label: 'Seat Configuration',
+                                    icon: 'pi pi-fw pi-wrench',
+                                    routerLink: ['seat-configuration']
                                 }
                             ]
                         },
@@ -60,6 +60,11 @@ export class EventMenuComponent implements OnInit {
                                     label: 'Invitations',
                                     icon: 'pi pi-fw pi-envelope',
                                     routerLink: [`invitations`],
+                                },
+                                {
+                                    label: 'Seat Assignments',
+                                    icon: 'pi pi-fw pi-sitemap',
+                                    routerLink: ['seat-assignment']
                                 }
                             ]
                         },

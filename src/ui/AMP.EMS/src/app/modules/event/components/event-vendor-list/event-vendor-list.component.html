@@ -50,7 +50,7 @@
                                             [routerLink]="[vendor.id, 'contracts','draft']"
                                             styleClass="mb-2 p-button-sm"></p-button>
                                         <p-button [text]="true" icon="pi pi-file-o" label="Review Contract"
-                                            *ngIf="vendor.eventVendorContracts?.length > 0" severity="help"
+                                            *ngIf="vendor.eventVendorContracts?.length > 0" severity="success"
                                             [routerLink]="[vendor.id, 'contracts', vendor.eventVendorContracts[0].id]"
                                             styleClass="mb-2 p-button-sm"></p-button>
                                     </div>
