@@ -41,8 +41,8 @@ export class EventMenuComponent implements OnInit {
                                     routerLink: ['tasks']
                                 },
                                 {
-                                    label: 'Seat Configuration',
-                                    icon: 'pi pi-fw pi-wrench',
+                                    label: 'Zones',
+                                    icon: 'pi pi-fw pi-map',
                                     routerLink: ['zones']
                                 }
                             ]

@@ -89,21 +89,24 @@ export class SeatAssignmentComponent implements OnInit {
       });
 
       this.guests$ = of<Guest[]>(unassignedGuests.filter(_ => _.id !== this.draggedGuest?.id));
+
+      this.save(zones);
     }
 
-    if (this.draggedZoneSeat) {
+    if (this.draggedZoneSeat && !zone.zoneSeats?.some(_ => _.guestId === this.draggedZoneSeat?.guestId)) {
       this.removeGuestFromSeat(this.draggedZoneSeat, zones);
 
       zone.zoneSeats?.push({
         guestId: this.draggedZoneSeat.guest?.id,
         guest: this.draggedZoneSeat.guest
       });
+
+      this.save(zones);
     }
 
     this.draggedGuest = null;
     this.draggedZoneSeat = null;
 
-    this.save(zones);
   }
 
   save = (zones: Zone[]) => {
