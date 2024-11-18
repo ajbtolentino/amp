@@ -9,6 +9,7 @@ import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
+import { DragDropModule } from 'primeng/dragdrop';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -18,6 +19,7 @@ import { MenuModule } from 'primeng/menu';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PanelModule } from 'primeng/panel';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { RippleModule } from 'primeng/ripple';
@@ -34,6 +36,7 @@ import { TooltipModule } from 'primeng/tooltip';
   imports: [
     CardModule,
     CommonModule,
+    DragDropModule,
     ButtonModule,
     DialogModule,
     DropdownModule,
@@ -60,11 +63,13 @@ import { TooltipModule } from 'primeng/tooltip';
     ToolbarModule,
     RadioButtonModule,
     StyleClassModule,
-    TimelineModule
+    TimelineModule,
+    PanelModule
   ],
   exports: [
     AbsoluteValuePipe,
     CardModule,
+    DragDropModule,
     WithStatusPipe,
     FindItemPipe,
     OrderByPipe,
@@ -97,7 +102,8 @@ import { TooltipModule } from 'primeng/tooltip';
     ToolbarModule,
     RadioButtonModule,
     StyleClassModule,
-    TimelineModule
+    TimelineModule,
+    PanelModule
   ]
 })
 export class SharedModule { }

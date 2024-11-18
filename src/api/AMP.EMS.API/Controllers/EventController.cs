@@ -41,6 +41,18 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
+    public IActionResult GuestsWithoutSeats(Guid eventId)
+    {
+        var guests = UnitOfWork.Set<Guest>().GetAll()
+            .Include(_ => _.ZoneSeats)
+            .Where(guest => guest.EventId == eventId && !guest.ZoneSeats.Any())
+            .AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<Guest>>(string.Empty) { Data = guests });
+    }
+
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
     public IActionResult Invitations(Guid eventId)
     {
         var invitations = UnitOfWork.Set<Invitation>().GetAll().AsNoTracking()
@@ -177,6 +189,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     public IActionResult Zones(Guid eventId)
     {
         var zones = UnitOfWork.Set<Zone>().GetAll()
+            .Include(_ => _.ZoneSeats).ThenInclude(_ => _.Guest)
             .Where(eventTask => eventTask.EventId == eventId)
             .AsNoTracking();
 

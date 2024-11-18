@@ -1,1 +1,61 @@
-<p>seat-assignment works!</p>
+<ng-container *ngIf="{
+    guests: guests$ | withStatus | async,
+    zones: zones$ | withStatus | async
+    } as data">
+    <!-- <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+        </ng-template>
+        <ng-template pTemplate="right">
+            <div class="my-2">
+                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
+                    [loading]="data.guests?.loading! || data.zones?.loading!"
+                    (click)="save(data.zones?.value!)"></button>
+            </div>
+        </ng-template>
+    </p-toolbar> -->
+
+    <div class="card flex  flex-column md:flex-row gap-2">
+        <div class="flex flex-column border-1 surface-border border-round col-12 md:col-3 text-center" pDroppable
+            (onDrop)="onUnassignedGuestDropped($event, data.guests?.value!, data.zones?.value!)">
+            <p class="text-center surface-border border-bottom-1">
+                <span class="font-bold">Guests</span>
+            </p>
+            <ul class="list-none flex flex-column gap-2 p-0 m-0 min-h-full" *ngIf="!data.guests?.loading">
+                <li *ngFor="let guest of data.guests?.value" class="p-2 border-round shadow-1 text-left flex gap-3"
+                    pDraggable (onDragStart)="dragGuestStart(guest)" (onDragEnd)="dragGuestEnd()">
+                    <i class="pi pi-user"></i>
+                    <span class="w-full text-left">{{guest.firstName}} {{guest.lastName}}</span>
+                    <span class="w-full text-right">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
+                </li>
+            </ul>
+            <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)"
+                *ngIf="data.guests?.loading" />
+        </div>
+
+        <div class="flex flex-wrap w-full col-12 md:col-9 gap-2 p-0 text-center" *ngIf=" !data.zones?.loading">
+            <div *ngFor="let zone of data.zones?.value"
+                class="border-1 surface-border border-round col-12 md:col-3 zone" pDroppable
+                (onDrop)="onZoneDropped($event, zone, data.guests?.value!, data.zones?.value!)">
+                <p class="text-center surface-border border-bottom-1" pTooltip="Max {{zone.capacity}} guests">
+                    <span class="font-bold">{{zone.name}}</span>&nbsp;
+                </p>
+                <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="zone.zoneSeats">
+                    <li *ngFor="let zoneSeat of zone.zoneSeats"
+                        class="p-2 border-round shadow-1 gap-3 flex align-items-start min-h-full" pDraggable
+                        (onDragStart)="dragZoneSeatStart(zoneSeat)">
+                        <i class="pi pi-user"></i>
+                        <span class="w-full text-left">{{ zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName
+                            }}</span>
+                        <span class="w-full text-right">+ {{zoneSeat.guest?.seats ? zoneSeat.guest?.seats! - 1 :
+                            0}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="flex flex-column border-1 surface-border border-round col-12 md:col-9 text-center justify-content-center"
+            *ngIf=" data.zones?.loading">
+            <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)"
+                *ngIf="data.zones?.loading" />
+        </div>
+    </div>
+</ng-container>

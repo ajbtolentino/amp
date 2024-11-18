@@ -30,6 +30,10 @@ export class EventService extends BaseApiService {
         return this.httpGet<Guest[]>(`event/${id}/guests`);
     }
 
+    guestsWithoutSeats = (id: string): Observable<Guest[]> => {
+        return this.httpGet<Guest[]>(`event/${id}/guestswithoutseats`);
+    }
+
     getVendorContracts = (id: string): Observable<VendorContract[]> => {
         return this.httpGet<VendorContract[]>(`event/${id}/vendorcontracts`);
     }

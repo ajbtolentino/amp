@@ -27,6 +27,10 @@ export class ZoneService extends BaseApiService {
         return this.httpPut(`zone/${zone.id}`, zone);
     }
 
+    updateZones = (zones: Zone[]): Observable<Zone[]> => {
+        return this.httpPut(`zone/updatezones`, zones);
+    }
+
     delete = (id: string): Observable<Zone> => {
         return this.httpDelete<Zone>(`zone/${id}`);
     }
