@@ -96,5 +96,5 @@ public class ZoneController(IUnitOfWork unitOfWork, ILogger<ZoneController> logg
         string Name,
         string? Configuration,
         int Capacity,
-        IEnumerable<ZoneSeatController.ZoneSeatRequest> ZoneSeats);
+        IEnumerable<ZoneSeatController.ZoneSeatRequest>? ZoneSeats);
 }
