@@ -39,10 +39,9 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventVendorTransaction> EventVendorTransactions { get; set; }
     public DbSet<Guest> Guests { get; set; }
     public DbSet<Role> Roles { get; set; }
-
-    public DbSet<SeatGroup> SeatGroups { get; set; }
-    public DbSet<SeatGroupAttendee> SeatGroupAttendees { get; set; }
     public DbSet<Timeline> Timelines { get; set; }
+    public DbSet<Zone> Zones { get; set; }
+    public DbSet<ZoneSeat> ZoneSeats { get; set; }
 
     //Payment
     public DbSet<Account> Accounts { get; set; }

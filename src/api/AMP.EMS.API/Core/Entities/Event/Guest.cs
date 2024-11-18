@@ -14,5 +14,5 @@ public class Guest : FullAuditableEntity<Guid>
     public virtual Event? Event { get; set; }
     public virtual ICollection<GuestInvitation> GuestInvitations { get; set; } = [];
     public virtual ICollection<GuestRole> GuestRoles { get; set; } = [];
-    public virtual ICollection<SeatGroupAttendee> SeatGroupAttendees { get; set; } = [];
+    public virtual ICollection<ZoneSeat> ZoneSeats { get; set; } = [];
 }
