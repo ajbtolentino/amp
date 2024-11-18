@@ -172,6 +172,18 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
             { Data = eventTasks });
     }
 
+    [HttpGet]
+    [Route("{eventId:guid}/[action]")]
+    public IActionResult Zones(Guid eventId)
+    {
+        var zones = UnitOfWork.Set<Zone>().GetAll()
+            .Where(eventTask => eventTask.EventId == eventId)
+            .AsNoTracking();
+
+        return Ok(new OkResponse<IEnumerable<Zone>>(string.Empty)
+            { Data = zones });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] EventRequest request)
     {

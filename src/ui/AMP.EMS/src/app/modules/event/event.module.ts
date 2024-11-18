@@ -23,10 +23,9 @@ import {
   EventVendorTypeBudgetDetailsComponent,
   EventVendorTypeBudgetListComponent,
   SeatAssignmentComponent,
-  SeatConfigurationComponent,
-  SeatGroupComponent,
   TimelineListComponent,
-  TransactionListComponent
+  TransactionListComponent,
+  ZoneListComponent
 } from '@modules/event';
 import { SharedModule } from '@modules/shared.module';
 import { VendorDetailsComponent } from '@modules/vendor/components/vendor-details/vendor-details.component';
@@ -255,8 +254,8 @@ const routes: Routes = [
         component: EventTaskListComponent
       },
       {
-        path: 'seat-configuration',
-        component: SeatConfigurationComponent
+        path: 'zones',
+        component: ZoneListComponent
       },
       {
         path: 'seat-assignment',
@@ -289,11 +288,10 @@ const routes: Routes = [
     EventRolesComponent,
     EventAccountDetailsComponent,
     TransactionListComponent,
-    SeatGroupComponent,
     EventTaskListComponent,
     TimelineListComponent,
-    SeatConfigurationComponent,
     SeatAssignmentComponent,
+    ZoneListComponent,
   ],
   imports: [
     SharedModule,

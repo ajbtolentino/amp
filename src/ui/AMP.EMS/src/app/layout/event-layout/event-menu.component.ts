@@ -43,7 +43,7 @@ export class EventMenuComponent implements OnInit {
                                 {
                                     label: 'Seat Configuration',
                                     icon: 'pi pi-fw pi-wrench',
-                                    routerLink: ['seat-configuration']
+                                    routerLink: ['zones']
                                 }
                             ]
                         },

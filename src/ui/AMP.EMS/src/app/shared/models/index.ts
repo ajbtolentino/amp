@@ -1,4 +1,5 @@
 export * from './account.model';
+export * from './base.model';
 export * from './column';
 export * from './ems-response.model';
 export * from './event-account.model';
@@ -19,4 +20,5 @@ export * from './vendor-account.model';
 export * from './vendor-contract-payment.model';
 export * from './vendor-contract.model';
 export * from './vendor.model';
-
+export * from './zone-seat.model';
+export * from './zone.model';
