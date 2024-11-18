@@ -18,7 +18,7 @@
         <div class="flex flex-column border-1 surface-border border-round col-12 md:col-3 text-center drop-zone"
             pDroppable (onDrop)="onUnassignedGuestDropped($event, data.guests?.value!, data.zones?.value!)">
             <p class="text-center surface-border border-bottom-1">
-                <span class="font-bold">Guests</span>
+                <span class="font-bold">Attendees</span>
             </p>
             <ul class="list-none flex flex-column gap-2 p-0 m-0 min-h-full" *ngIf="!data.guests?.loading">
                 <li *ngFor="let guest of data.guests?.value"
