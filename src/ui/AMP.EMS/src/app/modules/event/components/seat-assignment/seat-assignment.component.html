@@ -69,10 +69,11 @@
                 </ul>
                 <ng-template pTemplate="footer">
                     <div class="flex justify-content-between">
-                        <span
-                            [ngClass]="{'text-red-500': (zone.zoneSeats! | reduce : zoneSeatReducer : 0) > zone.capacity!}">Capacity:
+                        <span>Capacity:
                             {{zone.capacity}}</span>
-                        <span *ngIf="zone.zoneSeats">Total: {{ zone.zoneSeats | reduce : zoneSeatReducer : 0 }}</span>
+                        <span *ngIf="zone.zoneSeats"
+                            [ngClass]="{'text-red-500': (zone.zoneSeats! | reduce : zoneSeatReducer : 0) > zone.capacity!}">Total:
+                            {{ zone.zoneSeats | reduce : zoneSeatReducer : 0 }}</span>
                     </div>
                 </ng-template>
             </p-card>

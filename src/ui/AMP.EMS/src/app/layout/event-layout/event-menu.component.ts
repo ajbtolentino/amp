@@ -48,7 +48,7 @@ export class EventMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: 'Guests',
+                            label: 'Attendees',
                             icon: 'pi pi-fw pi-users',
                             items: [
                                 {

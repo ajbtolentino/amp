@@ -1,13 +1,13 @@
 <div class="grid" *ngIf="invitation$ | withStatus | async as invitation">
     <div class="col-12">
         <div class="card" *ngIf="guests$ | withStatus | async as guests">
-            <h5>{{invitation.value?.name}} - Manage Guests</h5>
+            <h5>{{invitation.value?.name}} - Manage Recipients</h5>
             <p-table [value]="guests.value!" dataKey="id" [loading]="guests.loading || guests.loading"
                 [showLoader]="false">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th>Guest</th>
+                        <th>Name</th>
                         <th>Code</th>
                         <th>Going / Allocated Seats</th>
                         <th>Response</th>
@@ -74,7 +74,7 @@
                                 routerLink="/invitation/{{guestInvitation.code}}"></a>
                             <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
                                 icon="pi pi-fw pi-user-plus" class="p-button-text p-button-success mr-2 p-jc-end"
-                                pTooltip="Add Guest" (click)="add(eventGuest.id)">
+                                pTooltip="Add Recipient" (click)="add(eventGuest.id)">
                             </button>
                             <button *ngIf="guestInvitation.id" pButton pRipple type="button"
                                 icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"

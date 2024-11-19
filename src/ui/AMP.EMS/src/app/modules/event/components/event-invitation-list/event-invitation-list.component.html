@@ -44,10 +44,10 @@
                         <tr [pEditableRow]="item">
                             <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                             <td>{{item?.name}}</td>
-                            <td pTooltip="Guests have received your invitation">
+                            <td pTooltip="Receipients have received your invitation">
                                 {{item.eventGuestInvitations.length}}
                             </td>
-                            <td pTooltip="Guests who accepted vs declined your invitation">
+                            <td pTooltip="Receipients who accepted vs declined your invitation">
                                 {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc' | filter:
                                 getTotalAccepted)?.length || 0}} /
                                 {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc'| filter:
@@ -61,7 +61,7 @@
                                     </button>
                                     <button *ngIf="!editing" pButton pRipple [routerLink]="[item.id, 'guests']"
                                         class="p-button-text p-button-info mr-2 p-jc-end" icon="pi pi-users"
-                                        pTooltip="Manage Guests"></button>
+                                        pTooltip="Manage Recipients"></button>
                                     <button *ngIf="!editing" pButton pRipple
                                         class="p-button-text p-button-warning mr-2 p-jc-end" icon="pi pi-trash"
                                         (click)="delete(item)" pTooltip="Delete"></button>
