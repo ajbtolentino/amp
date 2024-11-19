@@ -5,12 +5,4 @@ ul {
 .drop-zone {
     border: 1px solid transparent;
     transition: border-color .2s;
-
-    &.p-draggable-enter {
-        border-color: var(--primary-color) !important;
-    }
-}
-
-[pDraggable] {
-    cursor: move;
 }

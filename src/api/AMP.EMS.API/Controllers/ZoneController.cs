@@ -68,13 +68,23 @@ public class ZoneController(IUnitOfWork unitOfWork, ILogger<ZoneController> logg
                         UnitOfWork.Set<ZoneSeat>().Add(new ZoneSeat
                         {
                             ZoneId = zone.Id,
-                            Configuration = string.Empty,
+                            Configuration = zoneSeatRequest.Configuration,
                             GuestId = zoneSeatRequest.GuestId
                         });
 
                 foreach (var zoneSeat in zone.ZoneSeats)
                     if (!request.ZoneSeats.Any(_ => _.GuestId == zoneSeat.GuestId))
                         UnitOfWork.Set<ZoneSeat>().Delete(zoneSeat.Id);
+
+                foreach (var zoneSeat in zone.ZoneSeats)
+                {
+                    var updatedZoneSeat = request.ZoneSeats.FirstOrDefault(_ => _.GuestId == zoneSeat.GuestId);
+                    if (updatedZoneSeat != null && updatedZoneSeat.Configuration != zoneSeat.Configuration)
+                    {
+                        zoneSeat.Configuration = updatedZoneSeat.Configuration;
+                        UnitOfWork.Set<ZoneSeat>().Update(zoneSeat);
+                    }
+                }
             }
 
             await UnitOfWork.SaveChangesAsync();

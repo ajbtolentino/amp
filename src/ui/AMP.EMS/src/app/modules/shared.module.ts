@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,12 +10,12 @@ import { ChartModule } from 'primeng/chart';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
-import { DragDropModule } from 'primeng/dragdrop';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ListboxModule } from 'primeng/listbox';
 import { MenuModule } from 'primeng/menu';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
@@ -45,6 +46,7 @@ import { TooltipModule } from 'primeng/tooltip';
     InputTextModule,
     InputTextareaModule,
     InputNumberModule,
+    ListboxModule,
     MenuModule,
     MultiSelectModule,
     ChartModule,
@@ -103,7 +105,8 @@ import { TooltipModule } from 'primeng/tooltip';
     RadioButtonModule,
     StyleClassModule,
     TimelineModule,
-    PanelModule
+    PanelModule,
+    ListboxModule,
   ]
 })
 export class SharedModule { }

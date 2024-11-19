@@ -1,9 +1,10 @@
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services';
-import { GuestService, ZoneService } from '@modules/event';
-import { Guest, Zone, ZoneSeat } from '@shared/models';
-import { Observable, of, switchMap, tap } from 'rxjs';
+import { ZoneService } from '@modules/event';
+import { Guest, Zone } from '@shared/models';
+import { map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-seat-assignment',
@@ -15,11 +16,9 @@ export class SeatAssignmentComponent implements OnInit {
   zones$: Observable<Zone[]> = new Observable<Zone[]>();
 
   draggedGuest: Guest | undefined | null;
-  draggedZoneSeat: ZoneSeat | undefined | null;
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
-    private guestService: GuestService,
     private zoneService: ZoneService) {
 
   }
@@ -36,7 +35,18 @@ export class SeatAssignmentComponent implements OnInit {
 
 
   loadZones = (eventId: string): Observable<Zone[]> => {
-    return this.eventService.getZones(eventId);
+    return this.eventService.getZones(eventId)
+      .pipe(
+        map(
+          zones => zones.map(zone => {
+            zone.zoneSeats?.sort((a, b) =>
+              a.configuration && b.configuration ? JSON.parse(a.configuration!).position - JSON.parse(b.configuration!).position : 0
+            )
+
+            return zone;
+          })
+        ),
+      );
   }
 
   loadGuests = (eventId: string): Observable<Zone[]> => {
@@ -47,71 +57,71 @@ export class SeatAssignmentComponent implements OnInit {
     this.draggedGuest = guest;
   }
 
-  dragZoneSeatStart = (zoneSeat: ZoneSeat) => {
-    this.draggedZoneSeat = zoneSeat;
-  }
-
   dragGuestEnd() {
     this.draggedGuest = null;
   }
 
-  dragZoneSeatEnd = () => {
-    this.draggedZoneSeat = null;
-  }
-
-  onUnassignedGuestDropped = (event: any, guests: Guest[], zones: Zone[]) => {
-    if (this.draggedZoneSeat?.guest) {
-      this.guests$ = of<Guest[]>([...guests, this.draggedZoneSeat.guest]);
-
-      this.removeGuestFromSeat(this.draggedZoneSeat, zones);
-    }
-
-    this.draggedGuest = null;
-    this.draggedZoneSeat = null;
-
-    this.save(zones);
-  }
-
-  removeGuestFromSeat = (zoneSeat: ZoneSeat, zones: Zone[]) => {
-    zones.forEach(zone => {
-      zone.zoneSeats = zone.zoneSeats?.filter(_ => _.guest?.id !== zoneSeat.guest?.id);
-    });
-
-    this.zones$ = of<Zone[]>(zones);
-  }
-
-  onZoneDropped(event: any, zone: Zone, unassignedGuests: Guest[], zones: Zone[]): void {
-    // Avoid duplicate additions
+  onUnassignedGuestDropped = (event: any, zones: Zone[]) => {
     if (this.draggedGuest) {
-      zone.zoneSeats?.push({
-        guestId: this.draggedGuest.id,
-        guest: this.draggedGuest!
-      });
-
-      this.guests$ = of<Guest[]>(unassignedGuests.filter(_ => _.id !== this.draggedGuest?.id));
-
-      this.save(zones);
-    }
-
-    if (this.draggedZoneSeat && !zone.zoneSeats?.some(_ => _.guestId === this.draggedZoneSeat?.guestId)) {
-      this.removeGuestFromSeat(this.draggedZoneSeat, zones);
-
-      zone.zoneSeats?.push({
-        guestId: this.draggedZoneSeat.guest?.id,
-        guest: this.draggedZoneSeat.guest
-      });
-
+      this.removeGuestFromSeat(this.draggedGuest!, zones);
       this.save(zones);
     }
 
     this.draggedGuest = null;
-    this.draggedZoneSeat = null;
+  }
 
+  removeGuestFromSeat = (guest: Guest, zones: Zone[]) => {
+    zones.forEach(zone => {
+      zone.zoneSeats = zone.zoneSeats?.filter(_ => _.guest?.id !== guest.id);
+    });
+  }
+
+  onZoneDropped(event: any, zone: Zone, zones: Zone[]): void {
+    if (this.draggedGuest && event.container != event.previousContainer) {
+      this.removeGuestFromSeat(this.draggedGuest, zones);
+
+      zone.zoneSeats?.push({
+        zoneId: zone.id,
+        guestId: this.draggedGuest.id,
+        guest: this.draggedGuest!,
+        configuration: JSON.stringify({
+          position: event.currentIndex
+        })
+      });
+
+      this.save(zones);
+    }
+
+    if ((zone?.zoneSeats && event.container == event.previousContainer) &&
+      event.previousIndex != event.currentIndex) {
+      moveItemInArray(zone.zoneSeats!, event.previousIndex, event.currentIndex);
+
+      zone.zoneSeats = zone.zoneSeats.map((zoneSeat: any, index: any) => ({
+        zoneId: zone.id,
+        guestId: zoneSeat.guestId,
+        guest: zoneSeat.guest,
+        configuration: JSON.stringify({
+          position: index
+        })
+      }));
+
+      this.save(zones);
+    }
+
+    if (!event.isPointerOverContainer && this.draggedGuest) {
+      this.removeGuestFromSeat(this.draggedGuest, zones);
+      this.save(zones);
+    }
+
+    this.draggedGuest = null;
+  }
+
+  reOrder = (event: any) => {
+    console.log(event)
   }
 
   save = (zones: Zone[]) => {
     const eventId = this.route.snapshot.parent?.paramMap.get("eventId");
-    console.log(eventId)
     this.zones$ = this.zoneService.updateZones(zones)
       .pipe(
         switchMap(() => this.loadZones(eventId!)),
