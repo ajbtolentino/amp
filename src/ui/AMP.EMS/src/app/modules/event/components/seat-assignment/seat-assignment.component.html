@@ -14,47 +14,68 @@
         </ng-template>
     </p-toolbar> -->
 
-    <div class="card flex  flex-column md:flex-row gap-2" cdkDropListGroup>
-        <div class="flex flex-column border-1 surface-border border-round col-12 md:col-3 text-center drop-zone"
-            cdkDropList [cdkDropListData]="data.guests"
+    <div class="card flex  flex-column md:flex-row gap-2">
+        <p-card class="col-12 md:col-3 text-center drop-zone" cdkDropList [cdkDropListData]="data.guests"
+            [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
             (cdkDropListDropped)="onUnassignedGuestDropped($event, data.zones?.value!)">
-            <p class="text-center surface-border border-bottom-1">
-                <span class="font-bold">Attendees</span>
-            </p>
+            <ng-template pTemplate="header">
+                <p class="text-center surface-border border-bottom-1 p-3">
+                    <span class="font-bold">Attendees</span>
+                </p>
+            </ng-template>
             <ul id="guest-list" class="list-none flex flex-column gap-2 p-0 m-0 min-h-full"
                 *ngIf="!data.guests?.loading">
                 <li *ngFor="let guest of data.guests?.value"
                     class="p-2 border-round shadow-1 text-left flex gap-3 h-3rem align-items-center" cdkDrag
                     (cdkDragStarted)="dragGuestStart(guest)" [cdkDragData]="guest">
                     <i class="pi pi-user"></i>
-                    <span class="w-full text-left">{{guest.firstName}} {{guest.lastName}}</span>
-                    <span class="w-full text-right">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
+                    <div class="w-full flex justify-content-between">
+                        <span>{{guest.firstName}} {{guest.lastName}}</span>
+                        <span *ngIf="(guest?.seats! - 1) > 0">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
+                    </div>
                 </li>
             </ul>
             <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)"
                 *ngIf="data.guests?.loading" />
-        </div>
+        </p-card>
 
-        <div class="flex flex-wrap w-full col-12 md:col-9 gap-2 p-0 text-center" *ngIf="!data.zones?.loading">
-            <div *ngFor="let zone of data.zones?.value; let i = index"
-                class="border-1 surface-border border-round col-12 md:col-3 drop-zone" id="{{zone.id}}">
-                <p class="text-center surface-border border-bottom-1" pTooltip="Max {{zone.capacity}} guests">
-                    <span class="font-bold">{{zone.name}}</span>&nbsp;
-                </p>
-                <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="zone.zoneSeats" cdkDropList
-                    [cdkDropListData]="zone.zoneSeats"
+        <div class="flex flex-wrap w-full col-12 md:col-9 gap-2 p-0 text-center" *ngIf="!data.zones?.loading"
+            cdkDropList [cdkDropListData]="data.zones" cdkDropListOrientation="mixed"
+            (cdkDropListDropped)="zoneDropped($event, data.zones?.value!)">
+            <p-card *ngFor="let zone of data.zones?.value; let i = index" class="col-12 md:col-3 drop-zone" cdkDrag
+                [cdkDragData]="zone">
+                <ng-template pTemplate="header">
+                    <p class="text-center surface-border border-bottom-1 p-3" cdkDragHandle>
+                        <span class="font-bold">{{zone.name}}</span>
+                    </p>
+                </ng-template>
+                <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="zone.zoneSeats" cdkDropList [id]="zone.id!"
+                    [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds" [cdkDropListData]="zone.zoneSeats"
                     (cdkDropListDropped)="onZoneDropped($event, zone, data.zones?.value!)">
                     <li *ngFor="let zoneSeat of zone.zoneSeats"
                         class="p-2 border-round shadow-1 gap-3 flex align-items-start h-3rem align-items-center" cdkDrag
                         [cdkDragData]="zoneSeat.guest" (cdkDragStarted)="dragGuestStart(zoneSeat.guest!)">
                         <i class="pi pi-user"></i>
-                        <span class="w-full text-left">{{ zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName
-                            }}</span>
-                        <span class="w-full text-right">+ {{zoneSeat.guest?.seats ? zoneSeat.guest?.seats! - 1 :
-                            0}}</span>
+                        <div class="w-full flex justify-content-between">
+                            <span>{{ zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName
+                                }}</span>
+                            <span *ngIf="(zoneSeat.guest?.seats! - 1) > 0">+ {{zoneSeat.guest?.seats ?
+                                zoneSeat.guest?.seats!
+                                -
+                                1 :
+                                0}}</span>
+                        </div>
                     </li>
                 </ul>
-            </div>
+                <ng-template pTemplate="footer">
+                    <div class="flex justify-content-between">
+                        <span
+                            [ngClass]="{'text-red-500': (zone.zoneSeats! | reduce : zoneSeatReducer : 0) > zone.capacity!}">Capacity:
+                            {{zone.capacity}}</span>
+                        <span *ngIf="zone.zoneSeats">Total: {{ zone.zoneSeats | reduce : zoneSeatReducer : 0 }}</span>
+                    </div>
+                </ng-template>
+            </p-card>
         </div>
         <div class="flex flex-column border-1 surface-border border-round col-12 md:col-9 text-center justify-content-center"
             *ngIf="data.zones?.loading">

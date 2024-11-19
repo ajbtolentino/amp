@@ -7,7 +7,6 @@ export interface Guest {
     firstName?: string;
     lastName?: string;
     nickName?: string;
-    maxGuests?: number;
     phoneNumber?: string;
     guestId?: string;
     seats?: number;

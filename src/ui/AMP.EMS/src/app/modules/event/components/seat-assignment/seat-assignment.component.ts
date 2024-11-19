@@ -38,13 +38,19 @@ export class SeatAssignmentComponent implements OnInit {
     return this.eventService.getZones(eventId)
       .pipe(
         map(
-          zones => zones.map(zone => {
-            zone.zoneSeats?.sort((a, b) =>
-              a.configuration && b.configuration ? JSON.parse(a.configuration!).position - JSON.parse(b.configuration!).position : 0
-            )
+          zones => {
+            zones.map(zone => {
+              zone.zoneSeats?.sort((a, b) =>
+                a.configuration && b.configuration ? JSON.parse(a.configuration!).position - JSON.parse(b.configuration!).position : 0
+              )
 
-            return zone;
-          })
+              return zone;
+            })
+
+            zones.sort((a, b) => a.configuration && b.configuration ? JSON.parse(a.configuration!).position - JSON.parse(b.configuration!).position : 0);
+
+            return zones;
+          }
         ),
       );
   }
@@ -62,7 +68,7 @@ export class SeatAssignmentComponent implements OnInit {
   }
 
   onUnassignedGuestDropped = (event: any, zones: Zone[]) => {
-    if (this.draggedGuest) {
+    if (this.draggedGuest && event.container != event.previousContainer) {
       this.removeGuestFromSeat(this.draggedGuest!, zones);
       this.save(zones);
     }
@@ -70,10 +76,18 @@ export class SeatAssignmentComponent implements OnInit {
     this.draggedGuest = null;
   }
 
+  mapZoneIds = (zone: Zone) => {
+    return zone.id!;
+  }
+
   removeGuestFromSeat = (guest: Guest, zones: Zone[]) => {
     zones.forEach(zone => {
       zone.zoneSeats = zone.zoneSeats?.filter(_ => _.guest?.id !== guest.id);
     });
+  }
+
+  zoneSeatReducer = (acc: any, curr: any) => {
+    return acc + curr.guest?.seats;
   }
 
   onZoneDropped(event: any, zone: Zone, zones: Zone[]): void {
@@ -88,6 +102,8 @@ export class SeatAssignmentComponent implements OnInit {
           position: event.currentIndex
         })
       });
+
+      moveItemInArray(zone.zoneSeats!, event.previousIndex, event.currentIndex);
 
       this.save(zones);
     }
@@ -114,6 +130,19 @@ export class SeatAssignmentComponent implements OnInit {
     }
 
     this.draggedGuest = null;
+  }
+
+  zoneDropped = (event: any, zones: Zone[]) => {
+    moveItemInArray(zones, event.previousIndex, event.currentIndex);
+
+    zones = zones.map((zone, index) => ({
+      ...zone,
+      configuration: JSON.stringify({
+        position: index
+      })
+    }));
+
+    this.save(zones);
   }
 
   reOrder = (event: any) => {

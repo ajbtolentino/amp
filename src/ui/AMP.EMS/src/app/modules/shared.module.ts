@@ -2,7 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AbsoluteValuePipe, FilterPipe, FindItemPipe, OrderByPipe, WithStatusPipe } from '@shared/pipes';
+import { AbsoluteValuePipe, FilterPipe, FindItemPipe, MapPipe, OrderByPipe, ReducePipe, WithStatusPipe } from '@shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
@@ -33,7 +33,14 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
-  declarations: [WithStatusPipe, FindItemPipe, OrderByPipe, FilterPipe, AbsoluteValuePipe],
+  declarations: [
+    WithStatusPipe,
+    FindItemPipe,
+    OrderByPipe,
+    FilterPipe,
+    AbsoluteValuePipe,
+    ReducePipe,
+    MapPipe],
   imports: [
     CardModule,
     CommonModule,
@@ -76,6 +83,8 @@ import { TooltipModule } from 'primeng/tooltip';
     FindItemPipe,
     OrderByPipe,
     FilterPipe,
+    ReducePipe,
+    MapPipe,
     CommonModule,
     ButtonModule,
     DataViewModule,

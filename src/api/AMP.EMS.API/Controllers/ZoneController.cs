@@ -63,6 +63,12 @@ public class ZoneController(IUnitOfWork unitOfWork, ILogger<ZoneController> logg
 
                 ArgumentNullException.ThrowIfNull(zone);
 
+                if (zone.Configuration != request.Configuration)
+                {
+                    zone.Configuration = request.Configuration ?? string.Empty;
+                    EntityRepository.Update(zone);
+                }
+
                 foreach (var zoneSeatRequest in request.ZoneSeats)
                     if (!zone.ZoneSeats.Any(_ => _.GuestId == zoneSeatRequest.GuestId))
                         UnitOfWork.Set<ZoneSeat>().Add(new ZoneSeat
