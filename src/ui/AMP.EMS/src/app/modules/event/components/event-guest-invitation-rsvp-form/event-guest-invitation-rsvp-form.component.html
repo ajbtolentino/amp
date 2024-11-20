@@ -17,23 +17,22 @@
         </ng-container>
         <div *ngIf="requestDetails">
           <div>{{requestDetailsMessage}}</div>
-          <textarea pInputText id="request-details" rows="10" class="w-full"
-            [(ngModel)]="guestInvitationRsvp.details"></textarea>
+          <textarea pInputText id="request-details" rows="10" class="w-full" formControlName="details"></textarea>
         </div>
       </div>
       <div class="radiobutton-container flex flex-wrap gap-3">
         <div class="flex gap-3 align-items-center">
-          <p-radioButton inputId="response-accept" formControlName="response" value="ACCEPT" />
+          <p-radioButton pRipple inputId="response-accept" formControlName="response" value="ACCEPT" />
           <label class="ml-2" for="response-accept" class="accept-label">{{acceptLabel}}</label>
         </div>
 
         <div class="flex gap-3 align-items-center">
-          <p-radioButton inputId="response-decline" formControlName="response" value="DECLINE" />
+          <p-radioButton pRipple inputId="response-decline" formControlName="response" value="DECLINE" />
           <label class="ml-2" for="response-decline" class="decline-label">{{declineLabel}}</label>
         </div>
       </div>
       <div class="button-container flex flex-wrap gap-3" *ngIf="rsvpForm.value['response']">
-        <p-button severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()"
+        <p-button pRipple severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()"
           [disabled]="(rsvpForm.value['response'] === 'ACCEPT' && rsvpForm.get('guestNames')?.invalid)">Send
           Response</p-button>
 

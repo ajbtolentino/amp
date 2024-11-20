@@ -4,7 +4,7 @@ export interface GuestInvitationRsvp {
     id?: string;
     guestInvitationId?: string;
     guestNames?: string[];
-    details?: string;
+    data?: string;
     response?: 'ACCEPT' | 'DECLINE' | undefined;
     dateCreated?: Date;
     guestInvitationRsvpItems?: GuestInvitationRsvpItem[];

@@ -3,4 +3,10 @@
         [content]="guestInvitation.value?.invitation!.content!.htmlContent" [context]="{
             guestInvitation: guestInvitation!.value!,
             onSubmit: onSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
+
+    <div *ngIf="guestInvitation?.loading"
+        class="flex flex-column gap-3 align-items-center justify-content-center w-full h-screen">
+        <p-progressSpinner fill="var(--surface-ground)" animationDuration=".5s" />
+        <h5 class="loading">Loading</h5>
+    </div>
 </ng-container>

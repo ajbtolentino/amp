@@ -54,6 +54,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   ngOnInit(): void {
     this.rsvpForm! = this.formBuilder.group({
       guestNames: this.formBuilder.array([]),
+      details: [''],
       response: ['', [Validators.required]]
     });
 
@@ -91,6 +92,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
     if (this.rsvpForm.valid) {
       this.guestInvitationRsvp.guestNames = this.rsvpForm.value['guestNames'];
       this.guestInvitationRsvp.response = this.rsvpForm.value['response'];
+      this.guestInvitationRsvp.data = this.rsvpForm.value['details'];
       this.onSubmit.emit(this.guestInvitationRsvp);
       this.rsvpForm.reset();
     } else {

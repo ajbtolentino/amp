@@ -48,7 +48,8 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
 
             var rsvpEntity = new GuestInvitationRsvp
             {
-                Response = request.Response
+                Response = request.Response,
+                Data = request.Data ?? string.Empty
             };
 
             foreach (var item in request.GuestNames?.Where(_ => !string.IsNullOrEmpty(_)))
@@ -79,5 +80,6 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
         [JsonConverter(typeof(StringEnumConverter))]
         RsvpResponse Response,
         string? PhoneNumber,
+        string? Data,
         IEnumerable<string>? GuestNames);
 }

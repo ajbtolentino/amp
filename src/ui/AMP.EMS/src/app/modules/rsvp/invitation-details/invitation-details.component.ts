@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { GuestInvitationService } from '@modules/event';
 import { GuestInvitation, GuestInvitationRsvp } from '@shared/models';
-import { lastValueFrom, Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-invitation-details',
@@ -20,6 +20,7 @@ export class InvitationDetailsComponent {
   }
 
   onSubmit = async (rsvp: GuestInvitationRsvp) => {
-    await lastValueFrom(this.rsvpService.add(rsvp));
+    const code = this.route.snapshot.paramMap.get("code");
+    this.guestInvitation$ = this.rsvpService.add(rsvp).pipe(switchMap(() => this.guestInvitationService.rsvp(code!)))
   }
 }
