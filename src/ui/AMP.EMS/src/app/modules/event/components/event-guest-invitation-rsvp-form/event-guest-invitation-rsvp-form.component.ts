@@ -12,6 +12,16 @@ export class EventGuestInvitationRSVPLabelComponent {
 }
 
 @Component({
+  selector: 'app-event-guest-invitation-rsvp-pluralize-label',
+  template: `{{value === 0 || value > 1 ? plural : singular }}`
+})
+export class EventGuestInvitationRSVPPluralizeLabelComponent {
+  @Input() singular?: string | undefined | null | '';
+  @Input() plural?: string | undefined | null | '';
+  @Input() value: number = 0;
+}
+
+@Component({
   selector: 'app-event-guest-invitation-rsvp-date',
   template: `
   <ng-container *ngIf="dateFormat">

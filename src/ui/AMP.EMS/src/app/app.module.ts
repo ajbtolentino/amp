@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { RsvpService } from '@core/services/rsvp.service';
-import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent } from '@modules/event';
+import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent } from '@modules/event';
 import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
@@ -42,6 +42,7 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
             parsers: [EventGuestInvitationRSVPFormComponent,
                 EventGuestInvitationRSVPLabelComponent,
                 EventGuestInvitationRSVPDateComponent,
+                EventGuestInvitationRSVPPluralizeLabelComponent,
                 Button,
                 RadioButton,
                 Messages],
