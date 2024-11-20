@@ -43,8 +43,7 @@ public static class ServiceProviderExtensions
         {
             case DatabaseType.SqlServer:
                 services.AddDbContext<TDbContext>(options =>
-                    options.UseSqlServer(connectionString,
-                            sqlOptions => sqlOptions.EnableRetryOnFailure(20, TimeSpan.FromSeconds(60), null))
+                    options.UseSqlServer(connectionString)
                         .ConfigureWarnings(warnings =>
                             warnings.Ignore(RelationalEventId.PendingModelChangesWarning)));
                 break;
