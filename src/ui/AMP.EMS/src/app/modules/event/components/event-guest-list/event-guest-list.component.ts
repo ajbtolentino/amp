@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { GuestRoleService, GuestService } from '@modules/event';
-import { Guest, GuestRole } from '@shared/models';
-import { lastValueFrom, map, Observable, of, switchMap } from 'rxjs';
+import { Guest, GuestRole, PagedResult } from '@shared/models';
+import { Table } from 'primeng/table';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-guests',
@@ -16,9 +17,11 @@ import { lastValueFrom, map, Observable, of, switchMap } from 'rxjs';
 export class EventGuestListComponent implements OnInit {
   eventId!: string;
 
-  guests$: Observable<Guest[]> = new Observable<Guest[]>();
+  guests$: Observable<PagedResult<Guest>> = new Observable<PagedResult<Guest>>();
 
   selectedItems: Guest[] | null = [];
+
+  @ViewChild('dt') table!: Table;
 
   constructor(private eventService: EventService,
     private guestRoleService: GuestRoleService,
@@ -29,41 +32,39 @@ export class EventGuestListComponent implements OnInit {
 
   ngOnInit() {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
-    this.refreshGrid();
   }
 
-  refreshGrid = () => {
-    this.guests$ = this.eventService.getGuests(this.eventId).pipe(
+  refreshGrid = (event: any) => {
+    this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
+    const pageNumber = event.first / event.rows;
+
+    console.log(event);
+
+    this.guests$ = this.loadGuests(pageNumber, event.rows);
+  }
+
+  loadGuests = (pageNumber: number, rows: number) => {
+    return this.eventService.getGuests(this.eventId, pageNumber, rows).pipe(
       switchMap(eventGuests => this.loadGuestRole(eventGuests))
     );
   }
 
-  loadGuest = (guests: Guest[]): Observable<Guest[]> => {
-    return this.guestService.getByIds(guests.filter(_ => _.guestId).map(_ => _.guestId!)
-    ).pipe(
-      map(guests => {
-        return guests.map(eventGuest => {
-          return {
-            ...eventGuest,
-            guest: guests.find(_ => _.id === eventGuest.guestId)
-          }
-        });
-      }
-      ));
-  }
-
-  loadGuestRole = (eventGuests: Guest[]): Observable<Guest[]> => {
-    return this.guestRoleService.getByGuestIds(eventGuests.filter(_ => _.id).map(_ => _.id!))
+  loadGuestRole = (eventGuests: PagedResult<Guest>): Observable<PagedResult<Guest>> => {
+    return this.guestRoleService.getByGuestIds(eventGuests.result!.filter(_ => _.id).map(_ => _.id!))
       .pipe(
         switchMap(eventGuestRoles => this.loadRole(eventGuestRoles)),
-        map(eventGuestRoles => {
-          return eventGuests.map(eventGuest => {
+        map(eventGuestRoles => ({
+          pageNumber: eventGuests.pageNumber,
+          totalRecords: eventGuests.totalRecords,
+          result: eventGuests.result!.map(eventGuest => {
             return {
               ...eventGuest,
               eventGuestRoles: eventGuestRoles.filter(_ => _.guestId === eventGuest.id)
             }
           })
-        }));
+        })
+        )
+      ) || of<PagedResult<Guest>>({ result: [] });
   }
 
   loadRole = (guestRoles: GuestRole[]): Observable<GuestRole[]> => {
@@ -85,29 +86,43 @@ export class EventGuestListComponent implements OnInit {
     return item.eventGuestInvitations?.filter((_: any) => _.rsvps?.length ?? false).length ?? false;
   }
 
-  delete = (eventGuest: Guest) => {
+  delete = (guest: Guest) => {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${eventGuest.guest?.firstName} ${eventGuest.guest?.lastName}?`,
+      message: `Are you sure you want to delete ${guest.guest?.firstName} ${guest.guest?.lastName}? 
+                All associated records will also be deleted.`,
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: async () => {
-        if (eventGuest.id) {
-          await lastValueFrom(this.guestService.delete(eventGuest.id));
-
-          this.refreshGrid();
+        if (guest.id) {
+          this.guests$ = this.guestService.delete(guest.id)
+            .pipe(
+              switchMap(() => {
+                const pageNumber = this.table.first! / this.table.rows!;
+                return this.loadGuests(pageNumber, this.table.rows!);
+              })
+            )
         }
       }
     });
   }
 
   deleteSelectedItems = () => {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected items?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.guests$ = this.guestService.deleteSelected(this.selectedItems!.map(_ => _.id!)).pipe(switchMap(() => this.eventService.getGuests(this.eventId)));
-      }
-    });
+    if (this.selectedItems?.filter(_ => _.id).length) {
+      this.confirmationService.confirm({
+        message: `Are you sure you want to delete the selected guests? 
+                All associated records will also be deleted.`,
+        header: 'Confirm',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          this.guests$ = this.guestService.deleteSelected(this.selectedItems?.map(_ => _.id!)!)
+            .pipe(
+              switchMap(() => {
+                const pageNumber = this.table.first! / this.table.rows!;
+                return this.loadGuests(pageNumber, this.table.rows!);
+              })
+            )
+        }
+      });
+    }
   }
 }

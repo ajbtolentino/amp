@@ -2,8 +2,9 @@
     <div class="col-12">
         <div class="card" *ngIf="guests$ | withStatus | async as guests">
             <h5>{{invitation.value?.name}} - Manage Recipients</h5>
-            <p-table [value]="guests.value!" dataKey="id" [loading]="guests.loading || guests.loading"
-                [showLoader]="false">
+            <p-table #dt [value]="guests.value?.result!" dataKey="id" [loading]="guests.loading || guests.loading"
+                [showLoader]="false" [lazy]="true" [rows]="10" [paginator]="true" [lazyLoadOnInit]="true"
+                [totalRecords]="guests.value?.totalRecords!" (onLazyLoad)="refreshGrid($event)">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>

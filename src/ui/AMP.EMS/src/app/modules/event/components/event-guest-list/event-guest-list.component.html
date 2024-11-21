@@ -17,30 +17,28 @@
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <p-table #dt [value]="guests.value!" [rows]="10" [paginator]="true"
-                    [globalFilterFields]="['firstName','lastName']" editMode="row" [(selection)]="selectedItems"
-                    [rowHover]="true" dataKey="id" [loading]="guests.loading" [showLoader]="false">
+                <p-table #dt [value]="guests.value?.result!" [rows]="10" [totalRecords]="guests.value?.totalRecords!"
+                    (onLazyLoad)="refreshGrid($event)" [lazy]="true" [paginator]="true" editMode="row"
+                    [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="guests.loading"
+                    [showLoader]="false">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
-                            <th pSortableColumn="firstName">
+                            <th>
                                 <div class="flex justify-content-between align-items-center">
                                     First Name
-                                    <p-sortIcon field="guest.firstName"></p-sortIcon>
                                 </div>
                             </th>
-                            <th pSortableColumn="lastName">
+                            <th>
                                 <div class="flex justify-content-between align-items-center">
                                     Last Name
-                                    <p-sortIcon field="guest.lastName"></p-sortIcon>
                                 </div>
                             </th>
-                            <th pSortableColumn="seats">
+                            <th>
                                 <div class="flex justify-content-between align-items-center">
                                     Seats
-                                    <p-sortIcon field="seats"></p-sortIcon>
                                 </div>
                             </th>
                             <th>

@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, RsvpService } from '@core/services';
 import { EventInvitationService, GuestInvitationService, GuestService } from '@modules/event';
-import { Guest, GuestInvitation, GuestInvitationRsvp, Invitation } from '@shared/models';
+import { Guest, GuestInvitation, GuestInvitationRsvp, Invitation, PagedResult } from '@shared/models';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { map, Observable, switchMap } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-invitation-guest-list',
@@ -51,7 +51,7 @@ export class EventInvitationGuestListComponent implements OnInit {
   eventInvitationId!: string;
 
   invitation$: Observable<Invitation> = new Observable<Invitation>();
-  guests$: Observable<Guest[]> = new Observable<Guest[]>();
+  guests$: Observable<PagedResult<Guest>> = new Observable<PagedResult<Guest>>();
   eventGuestInvitations: Observable<GuestInvitation> = new Observable<GuestInvitation>();
 
   selectedItems: GuestInvitation[] | null = [];
@@ -78,30 +78,38 @@ export class EventInvitationGuestListComponent implements OnInit {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
     this.eventInvitationId = this.route.snapshot.paramMap.get('eventInvitationId') || '';
     this.invitation$ = this.loadInvitation();
-    this.guests$ = this.loadEventGuests();
+  }
+
+  refreshGrid = (event: any) => {
+    this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
+    let pageNumber = event.first / event.rows;
+
+    this.guests$ = this.loadGuests(pageNumber, event.rows);
   }
 
   loadInvitation = (): Observable<Invitation> => {
     return this.eventInvitationService.get(this.eventInvitationId);
   }
 
-  loadEventGuests = () => {
-    return this.eventService.getGuests(this.eventId)
+  loadGuests = (pageNumber: number, rows: number) => {
+    return this.eventService.getGuests(this.eventId, pageNumber, rows)
       .pipe(
-        switchMap(eventGuests => this.loadGuestInvitations(eventGuests)),
+        switchMap(guests => this.loadGuestInvitations(guests)),
       );
   }
 
-  loadGuestInvitations = (eventGuests: Guest[]): Observable<Guest[]> => {
-    return this.guestInvitationService.getByGuestIds(eventGuests.map(_ => _.id!))
+  loadGuestInvitations = (guests: PagedResult<Guest>): Observable<PagedResult<Guest>> => {
+    return this.guestInvitationService.getByGuestIds(guests.result!.map(_ => _.id!))
       .pipe(
         switchMap(eventGuestInvitations => this.loadGuestInvitationRsvps(eventGuestInvitations)),
-        map(eventGuestInvitations => {
-          return eventGuests.map(eventGuest => ({
-            ...eventGuest,
-            guestInvitations: eventGuestInvitations.filter(_ => _.guestId === eventGuest.id)
+        map(eventGuestInvitations => ({
+          totalRecords: guests.totalRecords,
+          pageNumber: guests.pageNumber,
+          result: guests.result!.map(guest => ({
+            ...guest,
+            guestInvitations: eventGuestInvitations.filter(_ => _.guestId === guest.id)
           }))
-        })
+        }))
       );
   }
 
@@ -144,25 +152,31 @@ export class EventInvitationGuestListComponent implements OnInit {
       );
   }
 
-  add = async (eventGuestId: string) => {
+  add = async (guestId: string) => {
     this.guests$ = this.guestInvitationService.add({
-      guestId: eventGuestId,
+      guestId: guestId,
       invitationId: this.eventInvitationId
     }).pipe(
-      switchMap(() => this.loadEventGuests())
+      switchMap(() => {
+        const pageNumber = this.table.first! / this.table.rows!;
+        return this.loadGuests(pageNumber, this.table.rows!);
+      })
     );
   }
 
   delete = async (guestInvitation: GuestInvitation) => {
     if (guestInvitation.guestInvitationRsvps?.length) {
       this.confirmationService.confirm({
-        message: `This guest has already responded. Are you sure you want to delete and all related records? This is irreversible!`,
+        message: `This guest has already responded. Are you sure you want to delete it and all related records? This is irreversible!`,
         header: 'Confirm',
         icon: 'pi pi-exclamation-triangle',
         accept: async () => {
           this.guests$ = this.guestInvitationService.delete(guestInvitation.id!)
             .pipe(
-              switchMap(() => this.loadEventGuests())
+              switchMap(() => {
+                const pageNumber = this.table.first! / this.table.rows!;
+                return this.loadGuests(pageNumber, this.table.rows!);
+              })
             );
         }
       });
@@ -170,7 +184,10 @@ export class EventInvitationGuestListComponent implements OnInit {
     else {
       this.guests$ = this.guestInvitationService.delete(guestInvitation.id!)
         .pipe(
-          switchMap(() => this.loadEventGuests())
+          switchMap(() => {
+            const pageNumber = this.table.first! / this.table.rows!;
+            return this.loadGuests(pageNumber, this.table.rows!);
+          })
         );
     }
   }

@@ -1,5 +1,6 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Pagination;
 using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,13 +31,22 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
-    public IActionResult Guests(Guid eventId)
+    public IActionResult Guests(Guid eventId, int pageNumber, int pageSize)
     {
+        var skip = pageNumber * pageSize;
+
         var guests = UnitOfWork.Set<Guest>().GetAll()
             .Where(guest => guest.EventId == eventId)
             .AsNoTracking();
 
-        return Ok(new OkResponse<IEnumerable<Guest>>(string.Empty) { Data = guests });
+        var pagedResult = new PagedResult<Guest>
+        {
+            PageNumber = pageNumber,
+            TotalRecords = guests.Count(),
+            Result = guests.Skip(skip).Take(pageSize)
+        };
+
+        return Ok(new OkResponse<PagedResult<Guest>>(string.Empty) { Data = pagedResult });
     }
 
     [HttpGet]
