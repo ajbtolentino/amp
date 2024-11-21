@@ -81,4 +81,24 @@ public static class ServiceProviderExtensions
                 dataContext.Database.Migrate();
         }
     }
+
+    public static IServiceCollection AddHealthCheck(this IServiceCollection services,
+        IConfigurationManager configurationManager)
+    {
+        var dbType =
+            configurationManager.GetValue<DatabaseType>(
+                $"{nameof(DatabaseConfiguration)}:{nameof(DatabaseConfiguration.Type)}");
+        var connectionString = configurationManager.GetConnectionString("DefaultConnection")!;
+
+        switch (dbType)
+        {
+            case DatabaseType.SqlServer:
+                services.AddHealthChecks()
+                    .AddSqlServer(connectionString,
+                        name: "SQL Database");
+                break;
+        }
+
+        return services;
+    }
 }
