@@ -2,6 +2,7 @@ using AMP.Core.Repository;
 using AMP.Infrastructure.Configurations;
 using AMP.Infrastructure.Decorators;
 using AMP.Infrastructure.Enums;
+using AMP.Infrastructure.Health;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -82,23 +83,14 @@ public static class ServiceProviderExtensions
         }
     }
 
-    public static IServiceCollection AddHealthCheck(this IServiceCollection services,
+    public static IServiceCollection AddHealthCheck<TDbContext>(this IServiceCollection services,
         IConfigurationManager configurationManager)
+        where TDbContext : DbContext
     {
-        var dbType =
-            configurationManager.GetValue<DatabaseType>(
-                $"{nameof(DatabaseConfiguration)}:{nameof(DatabaseConfiguration.Type)}");
-        var connectionString = configurationManager.GetConnectionString("DefaultConnection")!;
-
-        switch (dbType)
-        {
-            case DatabaseType.SqlServer:
-                services.AddHealthChecks()
-                    .AddSqlServer(connectionString,
-                        name: "SQL Database");
-                break;
-        }
-
+        services.AddHealthChecks()
+            .AddDbContextCheck<TDbContext>()
+            .AddCheck("Authority",
+                new ExternalApiHealthCheck(configurationManager.GetValue<string>("Authority") + "/healthz"));
         return services;
     }
 }

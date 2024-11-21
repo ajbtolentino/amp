@@ -75,11 +75,10 @@ builder.Services.AddAuthentication()
     });
 
 //Add DbContext
-builder.Services.AddDbContext<EmsDbContext>(config);
+builder.Services.AddDbContext<EmsDbContext>(config)
+    .AddHealthCheck<EmsDbContext>(config);
 
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddHealthCheck(config);
 
 //Add Unit of Work with Decorator
 builder.Services.ConfigureUnitOfWork<EFUnitOfWork>();
