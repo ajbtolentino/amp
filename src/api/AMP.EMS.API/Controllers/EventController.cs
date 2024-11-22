@@ -1,7 +1,10 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
+using AMP.Infrastructure.Enums;
+using AMP.Infrastructure.Extensions;
 using AMP.Infrastructure.Pagination;
 using AMP.Infrastructure.Responses;
+using AMP.Infrastructure.Sorting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,20 +34,25 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
-    public IActionResult Guests(Guid eventId, int pageNumber, int pageSize)
+    public IActionResult Guests(Guid eventId, int pageNumber, int pageSize, string? search, string? sortField,
+        SortDirection? sortDirection)
     {
-        var skip = pageNumber * pageSize;
-
         var guests = UnitOfWork.Set<Guest>().GetAll()
             .Where(guest => guest.EventId == eventId)
             .AsNoTracking();
 
-        var pagedResult = new PagedResult<Guest>
-        {
-            PageNumber = pageNumber,
-            TotalRecords = guests.Count(),
-            Result = guests.Skip(skip).Take(pageSize)
-        };
+        if (!string.IsNullOrEmpty(search))
+            guests = guests.Where(_ =>
+                EF.Functions.Like(_.FirstName, $"%{search}%") || EF.Functions.Like(_.LastName, $"%{search}%"));
+
+        if (!string.IsNullOrEmpty(sortField))
+            guests = guests.ApplySorting(new SortingParameters
+            {
+                SortField = sortField,
+                SortDirection = sortDirection ?? SortDirection.Ascending
+            });
+
+        var pagedResult = guests.ApplyPagination(pageNumber, pageSize);
 
         return Ok(new OkResponse<PagedResult<Guest>>(string.Empty) { Data = pagedResult });
     }

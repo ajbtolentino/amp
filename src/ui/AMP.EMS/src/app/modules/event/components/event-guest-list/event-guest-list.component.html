@@ -1,39 +1,45 @@
 <ng-container *ngIf="guests$ | withStatus | async as guests">
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-        </ng-template>
-        <ng-template pTemplate="right">
-            <div class="my-2">
-                <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                    [loading]="guests.loading!" [routerLink]="['add']"></button>
-
-                <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                    [loading]="guests.loading!" (click)="deleteSelectedItems()"
-                    [disabled]="!selectedItems || !selectedItems.length"></button>
-            </div>
-        </ng-template>
-    </p-toolbar>
-
     <div class="grid">
         <div class="col-12">
             <div class="card">
                 <p-table #dt [value]="guests.value?.result!" [rows]="10" [totalRecords]="guests.value?.totalRecords!"
                     (onLazyLoad)="refreshGrid($event)" [lazy]="true" [paginator]="true" editMode="row"
                     [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="guests.loading"
-                    [showLoader]="false">
+                    [globalFilterFields]="['firstName', 'lastName']" [showLoader]="false">
+                    <ng-template pTemplate="caption">
+                        <div class="flex justify-content-between">
+                            <div class="left">
+                                <span class="p-input-icon-left p-ml-auto">
+                                    <i class="pi pi-search"></i>
+                                    <input pInputText type="text" (input)="onSearch($event)"
+                                        placeholder="Search keyword" />
+                                </span>
+                            </div>
+                            <div class="right">
+                                <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+                                    [loading]="guests.loading!" [routerLink]="['add']"></button>
+
+                                <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
+                                    [loading]="guests.loading!" (click)="deleteSelectedItems()"
+                                    [disabled]="!selectedItems || !selectedItems.length"></button>
+                            </div>
+                        </div>
+                    </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
                             <th>
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
-                            <th>
+                            <th pSortableColumn="firstName">
                                 <div class="flex justify-content-between align-items-center">
                                     First Name
+                                    <p-sortIcon field="firstName"></p-sortIcon>
                                 </div>
                             </th>
-                            <th>
+                            <th pSortableColumn="lastName">
                                 <div class="flex justify-content-between align-items-center">
                                     Last Name
+                                    <p-sortIcon field="lastName"></p-sortIcon>
                                 </div>
                             </th>
                             <th>

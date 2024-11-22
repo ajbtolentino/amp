@@ -38,13 +38,11 @@ export class EventGuestListComponent implements OnInit {
     this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
     const pageNumber = event.first / event.rows;
 
-    console.log(event);
-
-    this.guests$ = this.loadGuests(pageNumber, event.rows);
+    this.guests$ = this.loadGuests(pageNumber, event.rows, event.filters?.global?.value, event.sortField, event.sortOrder == 1 ? 'Ascending' : 'Descending');
   }
 
-  loadGuests = (pageNumber: number, rows: number) => {
-    return this.eventService.getGuests(this.eventId, pageNumber, rows).pipe(
+  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending') => {
+    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection).pipe(
       switchMap(eventGuests => this.loadGuestRole(eventGuests))
     );
   }
@@ -65,6 +63,10 @@ export class EventGuestListComponent implements OnInit {
         })
         )
       ) || of<PagedResult<Guest>>({ result: [] });
+  }
+
+  onSearch = (event: any) => {
+    this.table.filterGlobal(event.target!.value, 'contains');
   }
 
   loadRole = (guestRoles: GuestRole[]): Observable<GuestRole[]> => {

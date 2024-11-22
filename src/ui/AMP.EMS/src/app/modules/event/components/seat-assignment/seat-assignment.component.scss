@@ -6,3 +6,7 @@ ul {
     border: 1px solid transparent;
     transition: border-color .2s;
 }
+
+.cdk-drag:hover {
+    cursor: pointer
+}

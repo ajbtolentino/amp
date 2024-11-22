@@ -5,10 +5,21 @@
             <p-table #dt [value]="guests.value?.result!" dataKey="id" [loading]="guests.loading || guests.loading"
                 [showLoader]="false" [lazy]="true" [rows]="10" [paginator]="true" [lazyLoadOnInit]="true"
                 [totalRecords]="guests.value?.totalRecords!" (onLazyLoad)="refreshGrid($event)">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="onSearch($event)" placeholder="Search name" />
+                    </span>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th>Name</th>
+                        <th pSortableColumn="firstName">
+                            <div class="flex justify-content-between align-items-center">
+                                Name
+                                <p-sortIcon field="firstName"></p-sortIcon>
+                            </div>
+                        </th>
                         <th>Code</th>
                         <th>Going / Allocated Seats</th>
                         <th>Response</th>

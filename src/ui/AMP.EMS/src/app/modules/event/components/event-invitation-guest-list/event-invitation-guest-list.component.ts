@@ -84,15 +84,15 @@ export class EventInvitationGuestListComponent implements OnInit {
     this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
     let pageNumber = event.first / event.rows;
 
-    this.guests$ = this.loadGuests(pageNumber, event.rows);
+    this.guests$ = this.loadGuests(pageNumber, event.rows, event.filters?.global?.value, event.sortField, event.sortOrder == 1 ? 'Ascending' : 'Descending');
   }
 
   loadInvitation = (): Observable<Invitation> => {
     return this.eventInvitationService.get(this.eventInvitationId);
   }
 
-  loadGuests = (pageNumber: number, rows: number) => {
-    return this.eventService.getGuests(this.eventId, pageNumber, rows)
+  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending') => {
+    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection)
       .pipe(
         switchMap(guests => this.loadGuestInvitations(guests)),
       );
@@ -159,7 +159,8 @@ export class EventInvitationGuestListComponent implements OnInit {
     }).pipe(
       switchMap(() => {
         const pageNumber = this.table.first! / this.table.rows!;
-        return this.loadGuests(pageNumber, this.table.rows!);
+        const globalFilter: any = this.table?.filters['global'];
+        return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'], this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
       })
     );
   }
@@ -175,7 +176,8 @@ export class EventInvitationGuestListComponent implements OnInit {
             .pipe(
               switchMap(() => {
                 const pageNumber = this.table.first! / this.table.rows!;
-                return this.loadGuests(pageNumber, this.table.rows!);
+                const globalFilter: any = this.table?.filters['global'];
+                return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'], this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
               })
             );
         }
@@ -186,10 +188,15 @@ export class EventInvitationGuestListComponent implements OnInit {
         .pipe(
           switchMap(() => {
             const pageNumber = this.table.first! / this.table.rows!;
-            return this.loadGuests(pageNumber, this.table.rows!);
+            const globalFilter: any = this.table?.filters['global'];
+            return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'], this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
           })
         );
     }
+  }
+
+  onSearch = (event: any) => {
+    this.table.filterGlobal(event.target!.value, 'contains');
   }
 
   copyLink = (code: string) => {
