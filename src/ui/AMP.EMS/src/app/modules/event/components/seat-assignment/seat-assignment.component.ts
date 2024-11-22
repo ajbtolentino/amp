@@ -1,4 +1,4 @@
-import { moveItemInArray } from '@angular/cdk/drag-drop';
+import { moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services';
@@ -14,8 +14,6 @@ import { map, Observable, of, switchMap, tap } from 'rxjs';
 export class SeatAssignmentComponent implements OnInit {
   guests$: Observable<Guest[]> = new Observable<Guest[]>();
   zones$: Observable<Zone[]> = new Observable<Zone[]>();
-
-  draggedGuest: Guest | undefined | null;
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
@@ -59,55 +57,38 @@ export class SeatAssignmentComponent implements OnInit {
     return this.eventService.guestsWithoutSeats(eventId);
   }
 
-  dragGuestStart = (guest: Guest) => {
-    this.draggedGuest = guest;
-  }
-
-  dragGuestEnd() {
-    this.draggedGuest = null;
-  }
-
-  onUnassignedGuestDropped = (event: any, zones: Zone[]) => {
-    if (this.draggedGuest && event.container != event.previousContainer) {
-      this.removeGuestFromSeat(this.draggedGuest!, zones);
-      this.save(zones);
-    }
-
-    this.draggedGuest = null;
-  }
-
   mapZoneIds = (zone: Zone) => {
     return zone.id!;
-  }
-
-  removeGuestFromSeat = (guest: Guest, zones: Zone[]) => {
-    zones.forEach(zone => {
-      zone.zoneSeats = zone.zoneSeats?.filter(_ => _.guest?.id !== guest.id);
-    });
   }
 
   zoneSeatReducer = (acc: any, curr: any) => {
     return acc + curr.guest?.seats;
   }
 
-  onZoneDropped(event: any, zone: Zone, zones: Zone[]): void {
-    if (this.draggedGuest && event.container != event.previousContainer) {
-      this.removeGuestFromSeat(this.draggedGuest, zones);
+  disableAttendeeDrop = () => {
+    return false;
+  }
 
-      zone.zoneSeats?.push({
+  seatAttendee(event: any, zone: Zone, zones: Zone[]): void {
+    //Transfer to zone
+    if (event.container != event.previousContainer) {
+      transferArrayItem(
+        event.previousContainer.data,
+        zone.zoneSeats!,
+        event.previousIndex,
+        event.currentIndex,
+      );
+
+      zone.zoneSeats = zone.zoneSeats!.map((zoneSeat: any, index: any) => ({
         zoneId: zone.id,
-        guestId: this.draggedGuest.id,
-        guest: this.draggedGuest!,
+        guestId: zoneSeat.guestId ?? event.item.data.id,
         configuration: JSON.stringify({
-          position: event.currentIndex
+          position: index
         })
-      });
-
-      moveItemInArray(zone.zoneSeats!, event.previousIndex, event.currentIndex);
-
-      this.save(zones);
+      }));
     }
 
+    //Re-arrange
     if ((zone?.zoneSeats && event.container == event.previousContainer) &&
       event.previousIndex != event.currentIndex) {
       moveItemInArray(zone.zoneSeats!, event.previousIndex, event.currentIndex);
@@ -120,19 +101,19 @@ export class SeatAssignmentComponent implements OnInit {
           position: index
         })
       }));
-
-      this.save(zones);
     }
 
-    if (!event.isPointerOverContainer && this.draggedGuest) {
-      this.removeGuestFromSeat(this.draggedGuest, zones);
-      this.save(zones);
+    //Remove from zone
+    if (!event.isPointerOverContainer) {
+      zones.forEach(zone => {
+        zone.zoneSeats = zone.zoneSeats?.filter(_ => _.guest?.id !== event.item.data.id);
+      });
     }
 
-    this.draggedGuest = null;
+    this.save(zones);
   }
 
-  zoneDropped = (event: any, zones: Zone[]) => {
+  reOrderZone = (event: any, zones: Zone[]) => {
     moveItemInArray(zones, event.previousIndex, event.currentIndex);
 
     zones = zones.map((zone, index) => ({
@@ -143,10 +124,6 @@ export class SeatAssignmentComponent implements OnInit {
     }));
 
     this.save(zones);
-  }
-
-  reOrder = (event: any) => {
-    console.log(event)
   }
 
   save = (zones: Zone[]) => {

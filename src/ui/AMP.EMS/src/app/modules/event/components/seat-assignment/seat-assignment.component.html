@@ -2,31 +2,15 @@
     guests: guests$ | withStatus | async,
     zones: zones$ | withStatus | async
     } as data">
-    <!-- <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-        </ng-template>
-        <ng-template pTemplate="right">
-            <div class="my-2">
-                <button pButton pRipple label="Save" icon="pi pi-save" class="p-button-success mr-2"
-                    [loading]="data.guests?.loading! || data.zones?.loading!"
-                    (click)="save(data.zones?.value!)"></button>
-            </div>
-        </ng-template>
-    </p-toolbar> -->
-
     <div class="card flex  flex-column md:flex-row gap-2">
-        <p-card class="col-12 md:col-3 text-center drop-zone" cdkDropList [cdkDropListData]="data.guests"
-            [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
-            (cdkDropListDropped)="onUnassignedGuestDropped($event, data.zones?.value!)">
-            <ng-template pTemplate="header">
-                <p class="text-center surface-border border-bottom-1 p-3">
-                    <span class="font-bold">Attendees</span>
-                </p>
-            </ng-template>
-            <p-listbox [options]="data.guests?.value!" [filter]="true" [filterFields]="['firstName', 'lastName']"
-                [listStyle]="{ 'max-height': '100vh' }" [draggable]="false">
+        <div class="col-12 md:col-3 text-center drop-zone p-0">
+            <p-listbox *ngIf="!data.guests?.loading" [options]="data.guests?.value!" [filter]="true"
+                [filterFields]="['firstName', 'lastName']" [listStyle]="{ 'max-height': '100vh' }" [draggable]="false"
+                filterPlaceHolder="Search Attendee" cdkDropList [cdkDropListData]="data.guests?.value!"
+                [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
+                [cdkDropListSortPredicate]="(disableAttendeeDrop)">
                 <ng-template let-guest pTemplate="item">
-                    <div class="w-full" cdkDrag (cdkDragStarted)="dragGuestStart(guest)" [cdkDragData]="guest">
+                    <div class="w-full" cdkDrag [cdkDragData]="guest">
                         <div class="w-full p-2 border-round shadow-1 text-left flex gap-3 h-3rem align-items-center">
                             <i class="pi pi-user"></i>
                             <div class="w-full flex justify-content-between">
@@ -37,25 +21,13 @@
                     </div>
                 </ng-template>
             </p-listbox>
-            <!-- <ul id="guest-list" class="list-none flex flex-column gap-2 p-0 m-0 min-h-full"
-                *ngIf="!data.guests?.loading">
-                <li *ngFor="let guest of data.guests?.value"
-                    class="p-2 border-round shadow-1 text-left flex gap-3 h-3rem align-items-center" cdkDrag
-                    (cdkDragStarted)="dragGuestStart(guest)" [cdkDragData]="guest">
-                    <i class="pi pi-user"></i>
-                    <div class="w-full flex justify-content-between">
-                        <span>{{guest.firstName}} {{guest.lastName}}</span>
-                        <span *ngIf="(guest?.seats! - 1) > 0">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
-                    </div>
-                </li>
-            </ul> -->
             <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)"
                 *ngIf="data.guests?.loading" />
-        </p-card>
+        </div>
 
         <div class="flex flex-wrap w-full h-full col-12 md:col-9 gap-2 p-0" *ngIf="!data.zones?.loading" cdkDropList
             [cdkDropListData]="data.zones" cdkDropListOrientation="mixed"
-            (cdkDropListDropped)="zoneDropped($event, data.zones?.value!)">
+            (cdkDropListDropped)="reOrderZone($event, data.zones?.value!)">
             <p-card *ngFor="let zone of data.zones?.value; let i = index" class="col-12 md:col-3 drop-zone" cdkDrag
                 [cdkDragData]="zone">
                 <ng-template pTemplate="header">
@@ -65,10 +37,10 @@
                 </ng-template>
                 <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="zone.zoneSeats" cdkDropList [id]="zone.id!"
                     [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds" [cdkDropListData]="zone.zoneSeats"
-                    (cdkDropListDropped)="onZoneDropped($event, zone, data.zones?.value!)">
+                    (cdkDropListDropped)="seatAttendee($event, zone, data.zones?.value!)">
                     <li *ngFor="let zoneSeat of zone.zoneSeats"
                         class="p-2 border-round shadow-1 gap-3 flex align-items-start h-3rem align-items-center" cdkDrag
-                        [cdkDragData]="zoneSeat.guest" (cdkDragStarted)="dragGuestStart(zoneSeat.guest!)">
+                        [cdkDragData]="zoneSeat.guest">
                         <i class="pi pi-user"></i>
                         <div class="w-full flex justify-content-between">
                             <span>{{ zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName

@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { RsvpService } from '@core/services/rsvp.service';
 import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent } from '@modules/event';
+import { VerifyComponent } from '@modules/guest/verify/verify.component';
 import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
 import { authInterceptor, autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
@@ -21,6 +22,7 @@ import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.co
 import { AuthConfigModule } from './core/auth-config.module';
 import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
+import { ErrorComponent } from './pages/error/error.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 
@@ -75,6 +77,10 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
                     loadChildren: () => import('@modules/rsvp/rsvp.module').then(m => m.RsvpModule)
                 },
                 {
+                    path: 'guest/verify',
+                    component: VerifyComponent
+                },
+                {
                     path: 'settings',
                     canActivate: [autoLoginPartialRoutesGuard],
                     component: EventsLayoutComponent,
@@ -83,6 +89,10 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
                 {
                     path: 'unauthorized',
                     component: UnauthorizedComponent
+                },
+                {
+                    path: 'error',
+                    component: ErrorComponent
                 },
                 { path: 'notfound', component: NotfoundComponent },
                 { path: '**', redirectTo: '/notfound' },

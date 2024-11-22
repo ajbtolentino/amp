@@ -159,8 +159,8 @@ export class EventInvitationGuestListComponent implements OnInit {
     }).pipe(
       switchMap(() => {
         const pageNumber = this.table.first! / this.table.rows!;
-        const globalFilter: any = this.table?.filters['global'];
-        return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'], this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
+        const globalFilter: any = this.table?.filters['global'] || '';
+        return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
       })
     );
   }
@@ -176,8 +176,8 @@ export class EventInvitationGuestListComponent implements OnInit {
             .pipe(
               switchMap(() => {
                 const pageNumber = this.table.first! / this.table.rows!;
-                const globalFilter: any = this.table?.filters['global'];
-                return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'], this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
+                const globalFilter: any = this.table?.filters['global'] || '';
+                return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
               })
             );
         }
@@ -188,8 +188,8 @@ export class EventInvitationGuestListComponent implements OnInit {
         .pipe(
           switchMap(() => {
             const pageNumber = this.table.first! / this.table.rows!;
-            const globalFilter: any = this.table?.filters['global'];
-            return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'], this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
+            const globalFilter: any = this.table?.filters['global'] || '';
+            return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
           })
         );
     }

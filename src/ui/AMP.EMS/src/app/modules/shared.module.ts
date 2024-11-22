@@ -31,6 +31,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { TimelineModule } from 'primeng/timeline';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
+import { VerifyComponent } from './guest/verify/verify.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TooltipModule } from 'primeng/tooltip';
     FilterPipe,
     AbsoluteValuePipe,
     ReducePipe,
-    MapPipe],
+    MapPipe,
+    VerifyComponent],
   imports: [
     CardModule,
     CommonModule,

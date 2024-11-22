@@ -69,6 +69,16 @@ public class ZoneController(IUnitOfWork unitOfWork, ILogger<ZoneController> logg
                     EntityRepository.Update(zone);
                 }
 
+                foreach (var zoneSeat in zone.ZoneSeats)
+                {
+                    var updatedZoneSeat = request.ZoneSeats.FirstOrDefault(_ => _.GuestId == zoneSeat.GuestId);
+                    if (updatedZoneSeat != null && updatedZoneSeat.Configuration != zoneSeat.Configuration)
+                    {
+                        zoneSeat.Configuration = updatedZoneSeat.Configuration;
+                        UnitOfWork.Set<ZoneSeat>().Update(zoneSeat);
+                    }
+                }
+
                 foreach (var zoneSeatRequest in request.ZoneSeats)
                     if (!zone.ZoneSeats.Any(_ => _.GuestId == zoneSeatRequest.GuestId))
                         UnitOfWork.Set<ZoneSeat>().Add(new ZoneSeat
@@ -81,16 +91,6 @@ public class ZoneController(IUnitOfWork unitOfWork, ILogger<ZoneController> logg
                 foreach (var zoneSeat in zone.ZoneSeats)
                     if (!request.ZoneSeats.Any(_ => _.GuestId == zoneSeat.GuestId))
                         UnitOfWork.Set<ZoneSeat>().Delete(zoneSeat.Id);
-
-                foreach (var zoneSeat in zone.ZoneSeats)
-                {
-                    var updatedZoneSeat = request.ZoneSeats.FirstOrDefault(_ => _.GuestId == zoneSeat.GuestId);
-                    if (updatedZoneSeat != null && updatedZoneSeat.Configuration != zoneSeat.Configuration)
-                    {
-                        zoneSeat.Configuration = updatedZoneSeat.Configuration;
-                        UnitOfWork.Set<ZoneSeat>().Update(zoneSeat);
-                    }
-                }
             }
 
             await UnitOfWork.SaveChangesAsync();

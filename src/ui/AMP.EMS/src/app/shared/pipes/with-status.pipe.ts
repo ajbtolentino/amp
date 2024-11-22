@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { isObservable, Observable, of } from 'rxjs';
-import { map, startWith, catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
 
 export interface WithStatusResult<T> {
     loading?: boolean;
@@ -24,7 +24,10 @@ export class WithStatusPipe implements PipeTransform {
                 };
             }),
             startWith({ loading: true }),
-            catchError(error => of({ loading: false, error: typeof error === 'string' ? error : defaultError }))
+            catchError(error => {
+                return of({ loading: false, error: typeof error?.error?.title === 'string' ? error.error.title : defaultError })
+            }
+            )
         );
     }
 }

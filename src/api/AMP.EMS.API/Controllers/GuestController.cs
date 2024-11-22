@@ -2,6 +2,7 @@ using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.EMS.API.Helpers;
 using AMP.Infrastructure.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -86,6 +87,27 @@ public class GuestController(IUnitOfWork unitOfWork, ILogger<GuestController> lo
             await UnitOfWork.RollbackTransactionAsync();
             return Problem(ex.Message);
         }
+    }
+
+    [AllowAnonymous]
+    [HttpGet("[action]")]
+    public IActionResult Verify(string name)
+    {
+        var guest = EntityRepository.GetAll().AsNoTracking()
+            .Where(_ => EF.Functions.Like(_.FirstName, $"%{name}%") ||
+                        EF.Functions.Like(_.LastName, $"%{name}%") ||
+                        EF.Functions.Like(_.NickName, $"%{name}%"));
+
+        if (!guest.Any() || guest.Count() > 1)
+            return BadRequest(new { Title = "Sorry, I could not find your name on the list..." });
+
+        var guestInvitation = UnitOfWork.Set<GuestInvitation>().GetAll().AsNoTracking()
+            .FirstOrDefault(_ => _.GuestId == guest.FirstOrDefault().Id);
+
+        if (guestInvitation == null)
+            return BadRequest(new { Title = "Sorry, there is no invitation associated with that name..." });
+
+        return Ok(new OkResponse<GuestInvitation>(string.Empty) { Data = guestInvitation });
     }
 
     private void UpdateGuestInvitations(Guest guest, IEnumerable<Guid> invitationIds)

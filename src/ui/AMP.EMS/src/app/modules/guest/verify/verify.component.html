@@ -1,0 +1,18 @@
+<div class="flex flex-column justify-content-center align-items-center h-screen w-screen">
+    <div class="col-12 md:col-3">
+        <div class="card p-fluid" *ngIf="result$ | withStatus | async as result">
+            <form (submit)="verify()">
+                <div class="field">
+                    <span class="p-float-label">
+                        <input type="text" id="name" name="name" pInputText [(ngModel)]="name">
+                        <label for="inputtext">Your name...</label>
+                    </span>
+                </div>
+                <button pButton pRipple label="Submit" type="submit" [loading]="result.loading!"
+                    [disabled]="!name"></button>
+            </form>
+            <p-messages *ngIf="result.error"
+                [value]="[{ severity: 'error', summary: 'Oops!', detail: result.error}]"></p-messages>
+        </div>
+    </div>
+</div>

@@ -42,4 +42,8 @@ export class GuestService extends BaseApiService {
     deleteSelected = (ids: string[]): Observable<Guest[]> => {
         return this.httpDeleteSelected(`guest`, ids);
     }
+
+    verify = (name: string): Observable<any> => {
+        return this.httpGet('guest/verify', { params: { name: name } });
+    }
 }
