@@ -36,86 +36,85 @@
                         <td></td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-eventGuest let-expanded="expanded">
+                <ng-template pTemplate="body" let-guest let-expanded="expanded">
                     <tr
-                        *ngIf="eventGuest.guestInvitations | findItem: invitation.value?.id! : 'invitationId' as guestInvitation">
-                        <td>
-                            <ng-container
-                                *ngIf="guestInvitation.guestInvitationRsvps?.length && guestInvitation.guestInvitationRsvps | orderBy: 'dateCreated': 'desc' as guestInvitationRsvps">
-                                <button *ngIf="guestInvitationRsvps[0].response === 'ACCEPT'" type="button" pButton
-                                    pRipple [pRowToggler]="eventGuest" class="p-button-text p-button-plain"
-                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                            </ng-container>
-                        </td>
-                        <td>{{eventGuest.firstName}} {{eventGuest.lastName}}</td>
-                        <td>{{guestInvitation.code}}</td>
-                        <td>
-                            <ng-container *ngIf="guestInvitation?.id">
-                                <span
-                                    *ngIf="guestInvitation.id && guestInvitation.guestInvitationRsvps.length && guestInvitation.guestInvitationRsvps | orderBy: 'dateCreated': 'desc' as guestInvitationRsvps">
-                                    {{guestInvitationRsvps[0].guestInvitationRsvpItems.length ?
-                                    guestInvitationRsvps[0].guestInvitationRsvpItems.length - 1 : "0"}}
-                                </span>
-                                <span *ngIf="!guestInvitation?.guestInvitationRsvps?.length">
-                                    0
-                                </span>
-                                /
-                                <span *ngIf="guestInvitation.seats">
-                                    {{guestInvitation.seats}}
-                                </span>
-                                <span *ngIf="!guestInvitation.seats">
-                                    0
-                                </span>
-                            </ng-container>
-                        </td>
-                        <td>
-                            <span
-                                *ngIf="guestInvitation.id && guestInvitation.guestInvitationRsvps.length && guestInvitation.guestInvitationRsvps | orderBy: 'dateCreated': 'desc' as guestInvitationRsvps"
-                                [class]="'invitation-badge status-' +guestInvitationRsvps[0].response">{{guestInvitationRsvps[0]?.response}}</span>
-                            <span *ngIf="guestInvitation.id && !guestInvitation.guestInvitationRsvps.length"
-                                [class]="'invitation-badge status-awaiting-response'">Awaiting Response</span>
-                            <span *ngIf="!guestInvitation.id"
-                                [class]="'invitation-badge status-not-assigned'">N/A</span>
-                        </td>
-                        <td>
-                            <button pTooltip="Copy Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
-                                icon="pi pi-fw pi-link" (click)="copyLink(guestInvitation.code)"
-                                class="p-button-text p-button-text"></button>
-                            <a pTooltip="Open Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
-                                icon="pi pi-fw pi-external-link" class="p-button-text p-button-text" target="_blank"
-                                routerLink="/invitation/{{guestInvitation.code}}"></a>
-                            <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
-                                icon="pi pi-fw pi-user-plus" class="p-button-text p-button-success mr-2 p-jc-end"
-                                pTooltip="Add Recipient" (click)="add(eventGuest.id)">
-                            </button>
-                            <button *ngIf="guestInvitation.id" pButton pRipple type="button"
-                                icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"
-                                pTooltip="Remove Guest" (click)="delete(guestInvitation)">
-                            </button>
-                        </td>
+                        *ngIf="guest.guestInvitations | findItem: invitation.value?.id! : 'invitationId' as guestInvitation">
+                        <ng-container *ngIf="guestInvitation.data | jsonParse as data">
+                            <td>
+                                <ng-container>
+                                    <button *ngIf="data.response === 'ACCEPT'" type="button" pButton pRipple
+                                        [pRowToggler]="guest" class="p-button-text p-button-plain"
+                                        [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </ng-container>
+                            </td>
+                            <td>{{guest.firstName}} {{guest.lastName}}</td>
+                            <td>{{guestInvitation.code}}</td>
+                            <td>
+                                <ng-container *ngIf="guestInvitation?.id">
+                                    <span *ngIf="guestInvitation.id">
+                                        {{data?.guestNames?.length ?
+                                        data?.guestNames?.length + 1 : "0"}}
+                                    </span>
+                                    /
+                                    <span *ngIf="guestInvitation.seats">
+                                        {{guestInvitation.seats}}
+                                    </span>
+                                    <span *ngIf="!guestInvitation.seats">
+                                        0
+                                    </span>
+                                </ng-container>
+                            </td>
+                            <td>
+                                <span *ngIf="guestInvitation.id && data.response"
+                                    [class]="'invitation-badge status-' +data.response">{{data.response}}</span>
+                                <span *ngIf="guestInvitation.id && !data.response"
+                                    [class]="'invitation-badge status-awaiting-response'">Awaiting Response</span>
+                                <span *ngIf="!guestInvitation.id"
+                                    [class]="'invitation-badge status-not-assigned'">N/A</span>
+                            </td>
+                            <td>
+                                <button pTooltip="Copy Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
+                                    icon="pi pi-fw pi-link" (click)="copyLink(guestInvitation.code)"
+                                    class="p-button-text p-button-text"></button>
+                                <a pTooltip="Open Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
+                                    icon="pi pi-fw pi-external-link" class="p-button-text p-button-text" target="_blank"
+                                    routerLink="/invitation/{{guestInvitation.code}}"></a>
+                                <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
+                                    icon="pi pi-fw pi-user-plus" class="p-button-text p-button-success mr-2 p-jc-end"
+                                    pTooltip="Add Recipient" (click)="add(guest.id)">
+                                </button>
+                                <button *ngIf="guestInvitation.id" pButton pRipple type="button"
+                                    icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"
+                                    pTooltip="Remove Guest" (click)="delete(guestInvitation)">
+                                </button>
+                            </td>
+                        </ng-container>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="rowexpansion" let-eventGuest>
+                <ng-template pTemplate="rowexpansion" let-guest>
+                    <tr
+                        *ngIf="guest.guestInvitations | findItem: invitation.value?.id! : 'invitationId' as guestInvitation">
+                        <ng-container *ngIf="guestInvitation.data | jsonParse as data">
+                            <td colspan="7">
+                                <div class="p-3" *ngIf="data.guestNames as guestNames">
+                                    <p-table *ngIf="data.response === 'ACCEPT'" [value]="data.guestNames" dataKey="id"
+                                        responsiveLayout="scroll">
+                                        <ng-template pTemplate="summary">
+                                            Response Details: {{data.details}}
+                                        </ng-template>
+                                        <ng-template pTemplate="header">
                     <tr>
-                        <td colspan="7">
-                            <div class="p-3"
-                                *ngIf="eventGuest.guestInvitations[0].guestInvitationRsvps | orderBy: 'dateCreated': 'desc' as guestInvitationRsvps">
-                                <p-table *ngIf="guestInvitationRsvps[0].response === 'ACCEPT'"
-                                    [value]="guestInvitationRsvps[0].guestInvitationRsvpItems" dataKey="id"
-                                    responsiveLayout="scroll">
-                                    <ng-template pTemplate="header">
-                    <tr>
-                        <th pSortableColumn="amount">Name</th>
+                        <th pSortableColumn="name">Secondary Guests</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rsvpItem>
+                <ng-template pTemplate="body" let-name>
                     <tr>
-                        <td>{{rsvpItem.name}}</td>
+                        <td>{{name}}</td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="6">There were no guest names recorded.
+                        <td colspan="6">There are no secondary guests recorded.
 
                         </td>
                     </tr>
@@ -123,6 +122,7 @@
             </p-table>
         </div>
         </td>
+        </ng-container>
         </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns>

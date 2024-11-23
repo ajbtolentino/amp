@@ -86,6 +86,8 @@ export class SeatAssignmentComponent implements OnInit {
           position: index
         })
       }));
+
+      this.save(zones);
     }
 
     //Re-arrange
@@ -101,6 +103,8 @@ export class SeatAssignmentComponent implements OnInit {
           position: index
         })
       }));
+
+      this.save(zones);
     }
 
     //Remove from zone
@@ -108,9 +112,9 @@ export class SeatAssignmentComponent implements OnInit {
       zones.forEach(zone => {
         zone.zoneSeats = zone.zoneSeats?.filter(_ => _.guest?.id !== event.item.data.id);
       });
-    }
 
-    this.save(zones);
+      this.save(zones);
+    }
   }
 
   reOrderZone = (event: any, zones: Zone[]) => {

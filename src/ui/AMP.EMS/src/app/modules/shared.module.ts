@@ -2,7 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AbsoluteValuePipe, FilterPipe, FindItemPipe, MapPipe, OrderByPipe, ReducePipe, WithStatusPipe } from '@shared/pipes';
+import { AbsoluteValuePipe, FilterPipe, FindItemPipe, JsonParsePipe, MapPipe, OrderByPipe, ReducePipe, WithStatusPipe } from '@shared/pipes';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
@@ -42,6 +42,7 @@ import { VerifyComponent } from './guest/verify/verify.component';
     AbsoluteValuePipe,
     ReducePipe,
     MapPipe,
+    JsonParsePipe,
     VerifyComponent],
   imports: [
     CardModule,
@@ -87,6 +88,7 @@ import { VerifyComponent } from './guest/verify/verify.component';
     FilterPipe,
     ReducePipe,
     MapPipe,
+    JsonParsePipe,
     CommonModule,
     ButtonModule,
     DataViewModule,

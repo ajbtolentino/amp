@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { RsvpService } from '@core/services/rsvp.service';
-import { EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent } from '@modules/event';
+import { EventGuestInvitationRSVPChangeableLabelComponent, EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent } from '@modules/event';
 import { VerifyComponent } from '@modules/guest/verify/verify.component';
 import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
@@ -45,6 +45,7 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
                 EventGuestInvitationRSVPLabelComponent,
                 EventGuestInvitationRSVPDateComponent,
                 EventGuestInvitationRSVPPluralizeLabelComponent,
+                EventGuestInvitationRSVPChangeableLabelComponent,
                 Button,
                 RadioButton,
                 Messages],

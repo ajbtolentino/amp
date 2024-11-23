@@ -1,5 +1,4 @@
 using AMP.Core.Repository;
-using AMP.EMS.API.Core.Constants;
 using AMP.EMS.API.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,33 +22,11 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
         var guestInvitations = unitOfWork.Set<GuestInvitation>().GetAll().AsNoTracking()
             .Where(_ => invitationIds.Contains(_.InvitationId));
 
-        var guestInvitationIds = guestInvitations.Select(_ => _.Id);
-
-        var guestInvitationRsvps = unitOfWork.Set<GuestInvitationRsvp>().GetAll().AsNoTracking()
-            .Where(_ => guestInvitationIds.Contains(_.GuestInvitationId))
-            .GroupBy(_ => _.GuestInvitationId);
-
-        var accepted = await guestInvitationRsvps.Where(_ =>
-                _.OrderByDescending(__ => __.DateCreated).FirstOrDefault().Response == RsvpResponse.ACCEPT)
-            .Select(_ => _.OrderByDescending(__ => __.DateCreated).FirstOrDefault().Id).ToListAsync();
-
-        var declined = guestInvitationRsvps.Where(_ =>
-            _.OrderByDescending(__ => __.DateCreated).FirstOrDefault().Response == RsvpResponse.DECLINE);
-
-        var secondaryGuests = await unitOfWork.Set<GuestInvitationRsvpItem>().GetAll().AsNoTracking()
-            .Where(_ => accepted.Contains(_.GuestInvitationRsvpId))
-            .GroupBy(_ => _.GuestInvitationRsvpId)
-            .ToListAsync();
-
         return Ok(new
         {
             data = new
             {
-                totalMainGuests = mainGuests.Count(),
-                totalSecondaryGuests = secondaryGuests.Sum(_ => _.Skip(1).Count()),
-                totalGuestInvitations = guestInvitations.Count(),
-                totalAccepted = accepted.Count(),
-                totalDeclined = declined.Count()
+                totalMainGuests = mainGuests.Count(), guestInvitations
             }
         });
     }

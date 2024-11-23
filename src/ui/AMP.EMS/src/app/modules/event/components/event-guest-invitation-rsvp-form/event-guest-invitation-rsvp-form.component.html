@@ -1,4 +1,19 @@
-<ng-container>
+<div class="change-response-container" *ngIf="checkIfResponded && this.guestInvitationRsvp.response">
+  <span *ngIf="checkIfRespondedMessage">
+    {{checkIfRespondedMessage}}
+  </span>
+  <span *ngIf="checkIfAcceptedMessage && guestInvitationRsvp?.response === 'ACCEPT'">
+    {{checkIfAcceptedMessage}}
+  </span>
+  <span *ngIf="checkIfDeclinedMessage && guestInvitationRsvp?.response === 'DECLINE'">
+    {{checkIfDeclinedMessage}}
+  </span>
+  <div class="change-response-button-container">
+    <p-button (click)="changeResponse()">Change my response</p-button>
+  </div>
+</div>
+
+<ng-container *ngIf="!(checkIfResponded && this.guestInvitationRsvp.response)">
   <ng-content></ng-content>
 
   <form [formGroup]="rsvpForm" (ngSubmit)="onSendResponseClick()">
@@ -6,10 +21,10 @@
       <div *ngIf="choiceMessage">{{choiceMessage}}</div>
       <div class="guest-names-container" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
         <div *ngIf="acceptMessage">{{acceptMessage}}</div>
+        <span *ngIf="secondaryGuestsLabel && guestNames.controls.length > 1">{{secondaryGuestsLabel}}</span>
         <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
-          <input id="guest-{{i}}" [formControl]="guestNameControl" pInputText type="text"
-            [ngClass]="{'ng-invalid': i === 0 && guestNameControl.invalid && guestNameControl.touched, 'w-full m-1': true }"
-            placeholder='{{i === 0 ? "Your name" : "Your companion\' s name"}}' />
+          <input *ngIf="i < guestNames.controls.length" id="guest-{{i}}" [formControl]="guestNameControl" pInputText
+            type="text" [ngClass]="{'w-full m-1': true }" placeholder='{{secondaryGuestsPlaceholder || "Name " + i}}' />
 
           <p-message *ngIf="i===0  && guestNameControl?.invalid && guestNameControl?.touched" severity="warn"
             class="w-full" text="Please enter your name">

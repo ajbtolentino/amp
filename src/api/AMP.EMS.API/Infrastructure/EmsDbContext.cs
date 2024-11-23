@@ -25,8 +25,6 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
     public DbSet<EventTask> EventTasks { get; set; }
     public DbSet<EventVendorTypeBudget> EventVendorTypeBudgets { get; set; }
     public DbSet<GuestInvitation> GuestInvitations { get; set; }
-    public DbSet<GuestInvitationRsvp> GuestInvitationRsvps { get; set; }
-    public DbSet<GuestInvitationRsvpItem> GuestInvitationsRsvpItems { get; set; }
     public DbSet<GuestRole> GuestRoles { get; set; }
     public DbSet<Invitation> Invitations { get; set; }
     public DbSet<EventType> EventTypes { get; set; }
@@ -68,14 +66,15 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
         foreach (var entityType in entityTypes)
         {
             // Configure HasMany relationships
-            var collectionProperties = entityType.GetProperties();
+            var collectionProperties =
+                entityType.GetProperties().Where(p =>
+                    p.PropertyType.Name == typeof(ICollection<>).Name && p.GetMethod != null && p.GetMethod.IsVirtual);
 
             Console.WriteLine(
                 $"Configuring Relationships for {entityType.Name} with {collectionProperties.Count()} properties");
 
             foreach (var collectionProperty in collectionProperties)
             {
-                if (collectionProperty.PropertyType.Name != typeof(ICollection<>).Name) continue;
                 if (collectionProperty.Name == nameof(Account.DebitTransactions) ||
                     collectionProperty.Name == nameof(Account.CreditTransactions)) continue;
 
@@ -109,7 +108,7 @@ public class EmsDbContext(DbContextOptions<EmsDbContext> options) : DbContext(op
             // Configure HasOne relationships
             var referenceProperties = entityType.GetProperties()
                 .Where(p => p.PropertyType.IsClass && p.PropertyType != typeof(string) &&
-                            !p.PropertyType.IsGenericType);
+                            !p.PropertyType.IsGenericType && p.GetMethod != null && p.GetMethod.IsVirtual);
 
             foreach (var referenceProperty in referenceProperties)
             {

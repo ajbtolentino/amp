@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GuestInvitationRsvp } from '@shared/models';
 import { OnDynamicData, OnDynamicMount } from 'ngx-dynamic-hooks';
 
@@ -12,6 +12,25 @@ export class EventGuestInvitationRSVPLabelComponent {
 }
 
 @Component({
+  selector: 'app-event-guest-invitation-rsvp-changeable-label',
+  template: `
+  <span *ngIf="isLabelShown" (click)="toggleLabel()">
+    {{text}}
+</span>
+<p-dropdown *ngIf="!isLabelShown" [options]="options!">
+</p-dropdown>`
+})
+export class EventGuestInvitationRSVPChangeableLabelComponent {
+  @Input() text?: string | undefined | null | '';
+  @Input() options!: string[];
+  isLabelShown: boolean = true;
+
+  toggleLabel = () => {
+    this.isLabelShown = !this.isLabelShown;
+  }
+}
+
+@Component({
   selector: 'app-event-guest-invitation-rsvp-pluralize-label',
   template: `{{value === 0 || value > 1 ? plural : singular }}`
 })
@@ -19,6 +38,16 @@ export class EventGuestInvitationRSVPPluralizeLabelComponent {
   @Input() singular?: string | undefined | null | '';
   @Input() plural?: string | undefined | null | '';
   @Input() value: number = 0;
+}
+
+@Component({
+  selector: 'app-event-guest-invitation-rsvp-change-response-form',
+  template: `<div>
+    {{text}}
+  </div>`
+})
+export class EventGuestInvitationRSVPChangeResponseFormComponent {
+  @Input() text?: string | undefined | null | '';
 }
 
 @Component({
@@ -47,12 +76,23 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Input() requestDetailsMessage?: string;
   @Input() requestDetails?: boolean;
 
+  @Input() secondaryGuestsLabel?: string;
+  @Input() secondaryGuestsPlaceholder?: string;
+
+  @Input() checkIfResponded?: boolean;
+  @Input() checkIfRespondedMessage?: string;
+  @Input() checkIfAcceptedMessage?: string;
+  @Input() checkIfDeclinedMessage?: string;
+
   @Input() acceptLabel: string = 'Accept';
   @Input() declineLabel: string = 'Decline';
   @Input() submitButtonClass: string = "";
   @Output() onResponseChange: EventEmitter<any> = new EventEmitter();
   @Output() onSubmit: EventEmitter<any> = new EventEmitter();
 
+  showRsvpForm: boolean = false;
+
+  guestInvitationId: string = '';
   guestInvitationRsvp: GuestInvitationRsvp = { guestNames: [] };
 
   rsvpForm!: FormGroup;
@@ -65,18 +105,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
     this.rsvpForm! = this.formBuilder.group({
       guestNames: this.formBuilder.array([]),
       details: [''],
-      response: ['', [Validators.required]]
-    });
-
-    this.rsvpForm.get('response')?.valueChanges.subscribe(response => {
-      const guestNameControl = this.guestNames.at(0);
-
-      if (response === 'ACCEPT') {
-        this.guestNames.at(0)?.setValidators(Validators.required);
-      }
-      else {
-        this.guestNames.at(0)?.clearValidators();
-      }
+      response: ['']
     });
   }
 
@@ -84,26 +113,36 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
     return this.rsvpForm.get('guestNames') as FormArray<FormControl>;
   }
 
+  changeResponse = () => {
+    this.guestInvitationRsvp.response = undefined;
+  }
+
   onDynamicMount(data: OnDynamicData): void {
     const length = data.context.guestInvitation.seats || 0;
 
-    this.guestInvitationRsvp.guestInvitationId = data.context.guestInvitation.id;
+    this.guestInvitationId = data.context.guestInvitation.id;
+    this.guestInvitationRsvp = data.context.guestInvitation.data ?
+      JSON.parse(data.context.guestInvitation.data) :
+      {};
 
     if (data.context.guestInvitation.invitation.rsvpDeadline)
       data.context.guestInvitation.invitation.rsvpDeadline = new Date(data.context.guestInvitation.invitation.rsvpDeadline);
 
-    for (let i = 0; i < length; i++) {
-      const guestNameControl = new FormControl(null);
+    for (let i = 0; i < length - 1; i++) {
+      const name = this.guestInvitationRsvp.guestNames && this.guestInvitationRsvp.guestNames ? this.guestInvitationRsvp.guestNames[i] : null;
+      const guestNameControl = new FormControl(name);
       this.guestNames.push(guestNameControl);
     }
+
+    this.rsvpForm.patchValue({ response: this.guestInvitationRsvp.response });
   }
 
   onSendResponseClick() {
     if (this.rsvpForm.valid) {
-      this.guestInvitationRsvp.guestNames = this.rsvpForm.value['guestNames'];
+      this.guestInvitationRsvp.guestNames = this.rsvpForm.value['guestNames']?.filter((_: any) => _);
       this.guestInvitationRsvp.response = this.rsvpForm.value['response'];
-      this.guestInvitationRsvp.data = this.rsvpForm.value['details'];
-      this.onSubmit.emit(this.guestInvitationRsvp);
+      this.guestInvitationRsvp.details = this.rsvpForm.value['details'];
+      this.onSubmit.emit({ guestInvitationId: this.guestInvitationId, data: this.guestInvitationRsvp });
       this.rsvpForm.reset();
     } else {
       this.rsvpForm.markAllAsTouched();

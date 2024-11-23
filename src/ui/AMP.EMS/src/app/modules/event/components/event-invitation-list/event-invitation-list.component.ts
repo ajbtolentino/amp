@@ -38,65 +38,44 @@ export class EventInvitationListComponent implements OnInit {
 
   refreshGrid = () => {
     this.eventInvitations$ = this.eventService.getInvitations(this.eventId).pipe(
-      switchMap(eventInvitations => this.loadEventGuestInvitation(eventInvitations))
+      switchMap(eventInvitations => this.loadGuestInvitation(eventInvitations))
     );
   }
 
-  loadEventGuestInvitation = (eventInvitations: Invitation[]): Observable<Invitation[]> => {
+  loadGuestInvitation = (eventInvitations: Invitation[]): Observable<Invitation[]> => {
     return this.eventGuestInvitationService.getByInvitationIds(eventInvitations.map(_ => _.id!))
       .pipe(
-        switchMap(eventGuestInvitations => this.loadRsvp(eventGuestInvitations)),
-        map(eventGuestInvitations => {
-          return eventInvitations.map(eventInvitation => {
+        switchMap(guestInvitations => this.loadRsvp(guestInvitations)),
+        map(guestInvitations => {
+          return eventInvitations.map(invitation => {
             return {
-              ...eventInvitation,
-              eventGuestInvitations: eventGuestInvitations.filter(_ => _.invitationId === eventInvitation.id)
+              ...invitation,
+              guestInvitations: guestInvitations.filter(_ => _.invitationId === invitation.id)
             }
           })
         })
       );
   }
 
-  loadRsvp = (eventGuestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
-    if (!eventGuestInvitations.length) return of<GuestInvitation[]>([]);
+  loadRsvp = (guestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
+    if (!guestInvitations.length) return of<GuestInvitation[]>([]);
 
-    return this.rsvpService.getByGuestInvitationIds(eventGuestInvitations.map(_ => _.id!))
-      .pipe(
-        map(eventGuestInvitationRsvps => {
-          return eventGuestInvitations.map(eventGuestInvitation => {
-            return {
-              ...eventGuestInvitation,
-              eventGuestInvitationRsvps: eventGuestInvitationRsvps.filter(_ => _.guestInvitationId === eventGuestInvitation.id)
-            }
-          })
-        }))
+    return of<GuestInvitation[]>(guestInvitations);
   }
 
-  getTotalAccepted = (eventGuestInvitation: GuestInvitation): boolean => {
-    if (!eventGuestInvitation?.guestInvitationRsvps?.length)
+  getTotalAccepted = (guestInvitation: GuestInvitation): boolean => {
+    if (!guestInvitation?.data)
       return false;
 
-    let items = eventGuestInvitation?.guestInvitationRsvps.filter(_ => _.dateCreated);
-
-    items = items.sort((a, b) => {
-      return new Date(b.dateCreated!).getTime() - new Date(a.dateCreated!).getTime()
-    });
-
-    return items[0].response === "ACCEPT";
+    return JSON.parse(guestInvitation.data).response === "ACCEPT";
   }
 
 
-  getTotalDeclined = (eventGuestInvitation: GuestInvitation): boolean => {
-    if (!eventGuestInvitation?.guestInvitationRsvps?.length)
+  getTotalDeclined = (guestInvitation: GuestInvitation): boolean => {
+    if (!guestInvitation?.data)
       return false;
 
-    let items = eventGuestInvitation?.guestInvitationRsvps.filter(_ => _.dateCreated);
-
-    items = items.sort((a, b) => {
-      return new Date(b.dateCreated!).getTime() - new Date(a.dateCreated!).getTime()
-    });
-
-    return items[0].response === "DECLINE";
+    return JSON.parse(guestInvitation.data).response === "DECLINE";
   }
 
   delete = (invitation: Invitation) => {

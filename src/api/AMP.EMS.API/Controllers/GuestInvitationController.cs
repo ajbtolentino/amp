@@ -43,13 +43,7 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
             .Where(_ => _.Code == code)
             .Include(_ => _.Invitation).ThenInclude(_ => _.Content)
             .Include(_ => _.Guest)
-            .Include(_ => _.GuestInvitationRsvps)
             .FirstOrDefault();
-
-        ArgumentNullException.ThrowIfNull(guestInvitation);
-
-        guestInvitation.GuestInvitationRsvps = guestInvitation.GuestInvitationRsvps
-            .OrderByDescending(_ => _.DateCreated).Take(1).AsEnumerable().ToList();
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
 
@@ -68,7 +62,8 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
             GuestId = request.GuestId,
             InvitationId = request.InvitationId,
             Code = InvitationHelper.GenerateCode(),
-            Seats = guest.Seats
+            Seats = guest.Seats,
+            Data = string.Empty
         });
     }
 
@@ -94,19 +89,6 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
         try
         {
             UnitOfWork.BeginTransaction();
-
-            var guestInvitationRsvps = UnitOfWork.Set<GuestInvitationRsvp>()
-                .GetAll().AsNoTracking().AsSplitQuery()
-                .Where(_ => _.GuestInvitationId == id)
-                .Include(_ => _.GuestInvitationRsvpItems);
-
-            foreach (var guestInvitationRsvp in guestInvitationRsvps)
-            {
-                UnitOfWork.Set<GuestInvitationRsvp>().Delete(guestInvitationRsvp.Id);
-
-                foreach (var guestInvitationRsvpItem in guestInvitationRsvp.GuestInvitationRsvpItems)
-                    UnitOfWork.Set<GuestInvitationRsvpItem>().Delete(guestInvitationRsvpItem.Id);
-            }
 
             EntityRepository.Delete(id);
 

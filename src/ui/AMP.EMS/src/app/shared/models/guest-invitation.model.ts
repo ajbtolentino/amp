@@ -1,4 +1,3 @@
-import { GuestInvitationRsvp } from "./guest-invitation-rsvp.model";
 import { Guest } from "./guest.model";
 import { Invitation } from "./invitation.model";
 
@@ -9,7 +8,8 @@ export interface GuestInvitation {
     maxGuests?: number;
     code?: string;
     invitation?: Invitation;
-    guestInvitationRsvps?: GuestInvitationRsvp[];
+    // guestInvitationRsvps?: GuestInvitationRsvp[];
     guest?: Guest;
+    data?: any;
     dateCreated?: Date;
 }

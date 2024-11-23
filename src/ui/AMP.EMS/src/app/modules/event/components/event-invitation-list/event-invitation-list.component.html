@@ -44,13 +44,13 @@
                         <tr [pEditableRow]="item">
                             <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                             <td>{{item?.name}}</td>
-                            <td pTooltip="Receipients have received your invitation">
-                                {{item.eventGuestInvitations.length}}
+                            <td pTooltip="Recipients have received your invitation">
+                                {{item.guestInvitations.length}}
                             </td>
-                            <td pTooltip="Receipients who accepted vs declined your invitation">
-                                {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc' | filter:
+                            <td pTooltip="Recipients who accepted vs declined your invitation">
+                                {{(item.guestInvitations | orderBy: 'dateCreated' : 'desc' | filter:
                                 getTotalAccepted)?.length || 0}} /
-                                {{(item.eventGuestInvitations | orderBy: 'dateCreated' : 'desc'| filter:
+                                {{(item.guestInvitations | orderBy: 'dateCreated' : 'desc'| filter:
                                 getTotalDeclined)?.length || 0}}
                             </td>
                             <td>

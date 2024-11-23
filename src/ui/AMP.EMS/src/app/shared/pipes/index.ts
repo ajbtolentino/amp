@@ -1,6 +1,7 @@
 export * from './absolute.pipe'
 export * from './filter.pipe'
 export * from './find-item.pipe'
+export * from './jsonParse.pipe'
 export * from './map.pipe'
 export * from './order-by.pipe'
 export * from './reduce.pipe'

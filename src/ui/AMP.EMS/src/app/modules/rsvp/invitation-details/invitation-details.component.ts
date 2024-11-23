@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { GuestInvitationService } from '@modules/event';
-import { GuestInvitation, GuestInvitationRsvp } from '@shared/models';
+import { GuestInvitation } from '@shared/models';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 
 @Component({
@@ -27,9 +27,9 @@ export class InvitationDetailsComponent {
         )
   }
 
-  onSubmit = async (rsvp: GuestInvitationRsvp) => {
+  onSubmit = async (event: { guestInvitationId: string, data: any }) => {
     const code = this.route.snapshot.paramMap.get("code");
-    this.guestInvitation$ = this.rsvpService.add(rsvp)
+    this.guestInvitation$ = this.rsvpService.update(event.guestInvitationId, JSON.stringify(event.data))
       .pipe(
         switchMap(() => this.guestInvitationService.rsvp(code!))
       )

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
 import { EventDashboardService, VendorContractService } from '@modules/event';
-import { Timeline, VendorContract, VendorContractPayment } from '@shared/models';
+import { GuestInvitation, Timeline, VendorContract, VendorContractPayment } from '@shared/models';
 import { EventVendorTypeBudget } from '@shared/models/event-vendor-type-budget.model';
 import { PrimeIcons } from 'primeng/api';
 import { map, Observable, of, shareReplay, switchMap } from 'rxjs';
@@ -65,6 +65,20 @@ export class EventDashboardComponent implements OnInit {
         color: timeline.isPayment ? 'green' : '#FF9800'
       })))
     )!;
+  }
+
+  isGoing = (guestInvitation: GuestInvitation): boolean => {
+    if (!guestInvitation?.data) return false;
+
+    return JSON.parse(guestInvitation?.data).response === "ACCEPT";
+  }
+
+  secondaryGuestReducer = (acc: any, guestInvitation: GuestInvitation): boolean => {
+    return acc + JSON.parse(guestInvitation?.data).guestNames.length;
+  }
+
+  hasResponded = (guestInvitation: GuestInvitation): boolean => {
+    return guestInvitation?.data;
   }
 
   loadVendors = (vendorContracts: VendorContract[]): Observable<VendorContract[]> => {

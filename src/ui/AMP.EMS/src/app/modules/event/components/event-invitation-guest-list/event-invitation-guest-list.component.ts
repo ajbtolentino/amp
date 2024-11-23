@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, RsvpService } from '@core/services';
 import { EventInvitationService, GuestInvitationService, GuestService } from '@modules/event';
-import { Guest, GuestInvitation, GuestInvitationRsvp, Invitation, PagedResult } from '@shared/models';
+import { Guest, GuestInvitation, Invitation, PagedResult } from '@shared/models';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { map, Observable, of, switchMap } from 'rxjs';
@@ -114,29 +114,20 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   loadGuestInvitationRsvps = (guestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
-    return this.rsvpService.getByGuestInvitationIds(guestInvitations.map(_ => _.id!))
-      .pipe(
-        switchMap(eventGuestInvitationRsvps => this.loadGuestInvitationRsvpItems(eventGuestInvitationRsvps)),
-        map(guestInvitationRsvps => {
-          return guestInvitations.map(guestInvitation => ({
-            ...guestInvitation,
-            guestInvitationRsvps: guestInvitationRsvps.filter(_ => _.guestInvitationId === guestInvitation.id)
-          }))
-        })
-      )
+    return of<GuestInvitation[]>(guestInvitations);
   }
 
-  loadGuestInvitationRsvpItems = (guestInvitationRsvps: GuestInvitationRsvp[]): Observable<GuestInvitationRsvp[]> => {
-    return this.rsvpService.getItemsByIds(guestInvitationRsvps.map(_ => _.id!))
-      .pipe(
-        map(guestInvitationRsvpItems => {
-          return guestInvitationRsvps.map(guestInvitationRsvp => ({
-            ...guestInvitationRsvp,
-            guestInvitationRsvpItems: guestInvitationRsvpItems.filter(_ => _.guestInvitationRsvpId === guestInvitationRsvp.id)
-          }))
-        })
-      )
-  }
+  // loadGuestInvitationRsvpItems = (guestInvitationRsvps: GuestInvitationRsvp[]): Observable<GuestInvitationRsvp[]> => {
+  //   return this.rsvpService.getItemsByIds(guestInvitationRsvps.map(_ => _.id!))
+  //     .pipe(
+  //       map(guestInvitationRsvpItems => {
+  //         return guestInvitationRsvps.map(guestInvitationRsvp => ({
+  //           ...guestInvitationRsvp,
+  //           guestInvitationRsvpItems: guestInvitationRsvpItems.filter(_ => _.guestInvitationRsvpId === guestInvitationRsvp.id)
+  //         }))
+  //       })
+  //     )
+  // }
 
   loadGuest = (guests: Guest[]): Observable<Guest[]> => {
     return this.guestService.getByIds(guests.map(_ => _.guestId!))
@@ -166,7 +157,7 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   delete = async (guestInvitation: GuestInvitation) => {
-    if (guestInvitation.guestInvitationRsvps?.length) {
+    if (guestInvitation.data) {
       this.confirmationService.confirm({
         message: `This guest has already responded. Are you sure you want to delete it and all related records? This is irreversible!`,
         header: 'Confirm',

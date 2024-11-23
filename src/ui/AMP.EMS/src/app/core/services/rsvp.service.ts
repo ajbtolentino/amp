@@ -15,7 +15,8 @@ export class RsvpService extends BaseApiService {
         return this.httpGet(`rsvp/getbyguestinvitationids`, { params: { guestInvitationIds: guestInvitationIds } });
     }
 
-    add = (rsvp: GuestInvitationRsvp): Observable<GuestInvitationRsvp> => {
-        return this.httpPost(`rsvp`, rsvp);
+    update = (id: string, data: string): Observable<GuestInvitationRsvp> => {
+        console.log(data);
+        return this.httpPut(`rsvp/${id}`, { data: data });
     }
 }

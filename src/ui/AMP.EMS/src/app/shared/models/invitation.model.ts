@@ -9,5 +9,5 @@ export interface Invitation {
     contentId?: string;
     rsvpDeadline?: Date
     content?: Content;
-    eventGuestInvitations?: GuestInvitation[];
+    guestInvitations?: GuestInvitation[];
 }
