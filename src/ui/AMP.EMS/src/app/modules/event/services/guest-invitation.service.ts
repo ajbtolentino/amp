@@ -25,8 +25,8 @@ export class GuestInvitationService extends BaseApiService {
         return this.httpPost(`guestinvitation/`, eventGuestInvitation);
     }
 
-    update = (id: string, eventGuestInvitation: GuestInvitation): Observable<GuestInvitation> => {
-        return this.httpPut(`guestinvitation/${id}`, eventGuestInvitation);
+    update = (id: string, guestInvitation: GuestInvitation): Observable<GuestInvitation> => {
+        return this.httpPut(`guestinvitation/${id}`, guestInvitation);
     }
 
     delete = (id: string): Observable<GuestInvitation> => {

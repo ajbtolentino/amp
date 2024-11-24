@@ -1,6 +1,5 @@
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
-using AMP.Infrastructure.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,25 +17,9 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
         ArgumentNullException.ThrowIfNull(guestInvitation);
         ArgumentException.ThrowIfNullOrWhiteSpace(request.Data);
 
-        try
-        {
-            UnitOfWork.BeginTransaction();
+        guestInvitation.Data = request.Data;
 
-            guestInvitation.Data = request.Data;
-
-            UnitOfWork.Set<GuestInvitation>().Update(guestInvitation);
-
-            await UnitOfWork.SaveChangesAsync();
-            await UnitOfWork.CommitTransactionAsync();
-
-            return Ok(new OkResponse<GuestInvitation>(string.Empty) { Data = guestInvitation });
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, ex.Message);
-            await UnitOfWork.RollbackTransactionAsync();
-            return Problem(ex.Message);
-        }
+        return await base.Put(guestInvitation);
     }
 
     public record RsvpRequest(string Data);

@@ -12,6 +12,7 @@ import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -54,6 +55,7 @@ import { VerifyComponent } from './guest/verify/verify.component';
     DropdownModule,
     EditorModule,
     FormsModule,
+    FloatLabelModule,
     InputTextModule,
     InputTextareaModule,
     InputNumberModule,
@@ -88,6 +90,7 @@ import { VerifyComponent } from './guest/verify/verify.component';
     FindItemPipe,
     OrderByPipe,
     FilterPipe,
+    FloatLabelModule,
     ReducePipe,
     MapPipe,
     JsonParsePipe,

@@ -21,7 +21,7 @@
                             </div>
                         </th>
                         <th>Code</th>
-                        <th>Going / Allocated Seats</th>
+                        <th>Going / Seats</th>
                         <th>Response</th>
                         <th></th>
                     </tr>
@@ -36,31 +36,30 @@
                         <td></td>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-guest let-expanded="expanded">
+                <ng-template pTemplate="body" let-guest let-expanded="expanded" let-editing="editing">
                     <tr
                         *ngIf="guest.guestInvitations | findItem: invitation.value?.id! : 'invitationId' as guestInvitation">
                         <ng-container *ngIf="guestInvitation.data | jsonParse as data">
                             <td>
                                 <ng-container>
-                                    <button *ngIf="data.response === 'ACCEPT'" type="button" pButton pRipple
-                                        [pRowToggler]="guest" class="p-button-text p-button-plain"
+                                    <button *ngIf="data.guestNames?.length && data.response === 'ACCEPT'" type="button"
+                                        pButton pRipple [pRowToggler]="guest" class="p-button-text p-button-plain"
                                         [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </ng-container>
                             </td>
                             <td>{{guest.firstName}} {{guest.lastName}}</td>
-                            <td>{{guestInvitation.code}}</td>
                             <td>
-                                <ng-container *ngIf="guestInvitation?.id">
+                                {{guestInvitation.code}}
+                            </td>
+                            <td>
+                                <ng-container *ngIf="guestInvitation?.id && data.response === 'ACCEPT'">
                                     <span *ngIf="guestInvitation.id">
                                         {{data?.guestNames?.length ?
-                                        data?.guestNames?.length + 1 : "0"}}
+                                        data?.guestNames?.length + 1 : 1}}
                                     </span>
                                     /
-                                    <span *ngIf="guestInvitation.seats">
-                                        {{guestInvitation.seats}}
-                                    </span>
-                                    <span *ngIf="!guestInvitation.seats">
-                                        0
+                                    <span>
+                                        {{guestInvitation?.seats || 0}}
                                     </span>
                                 </ng-container>
                             </td>
@@ -68,27 +67,36 @@
                                 <span *ngIf="guestInvitation.id && data.response"
                                     [class]="'invitation-badge status-' +data.response">{{data.response}}</span>
                                 <span *ngIf="guestInvitation.id && !data.response"
-                                    [class]="'invitation-badge status-awaiting-response'">Awaiting Response</span>
+                                    [class]="'invitation-badge status-awaiting-response'">Awaiting
+                                    Response</span>
                                 <span *ngIf="!guestInvitation.id"
                                     [class]="'invitation-badge status-not-assigned'">N/A</span>
                             </td>
                             <td>
-                                <button pTooltip="Copy Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
-                                    icon="pi pi-fw pi-link" (click)="copyLink(guestInvitation.code)"
-                                    class="p-button-text p-button-text"></button>
-                                <a pTooltip="Open Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
-                                    icon="pi pi-fw pi-external-link" class="p-button-text p-button-text" target="_blank"
-                                    routerLink="/invitation/{{guestInvitation.code}}"></a>
-                                <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
-                                    icon="pi pi-fw pi-user-plus" class="p-button-text p-button-success mr-2 p-jc-end"
-                                    pTooltip="{{guest.seats ? 'Add Recipient' : 'Attendee does not have an allocated seat'}}"
-                                    (click)="add(guest.id)" [disabled]="!guest.seats" style="pointer-events: auto">
-                                </button>
+                                <div class="flex">
+                                    <button *ngIf="guestInvitation.id" pButton pRipple type="button" icon="pi pi-pencil"
+                                        (click)="edit(guestInvitation)" class="p-button-text p-button-success mr-2"
+                                        pTooltip="Edit">
+                                    </button>
 
-                                <button *ngIf="guestInvitation.id" pButton pRipple type="button"
-                                    icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"
-                                    pTooltip="Remove Guest" (click)="delete(guestInvitation)">
-                                </button>
+                                    <button pTooltip="Copy Link" *ngIf="guestInvitation.code" pButton pRipple
+                                        type="button" icon="pi pi-fw pi-link" (click)="copyLink(guestInvitation.code)"
+                                        class="p-button-text p-button-text"></button>
+                                    <a pTooltip="Open Link" *ngIf="guestInvitation.code" pButton pRipple type="button"
+                                        icon="pi pi-fw pi-external-link" class="p-button-text p-button-text"
+                                        target="_blank" [routerLink]="['/invitation',guestInvitation.code]"></a>
+                                    <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
+                                        icon="pi pi-fw pi-user-plus"
+                                        class="p-button-text p-button-success mr-2 p-jc-end" pTooltip="Quick Add"
+                                        (click)="quickAdd(guest.id)">
+                                    </button>
+
+                                    <button *ngIf="guestInvitation.id" pButton pRipple type="button"
+                                        icon="pi pi-fw pi-user-minus"
+                                        class="p-button-text p-button-warning mr-2 p-jc-end" pTooltip="Remove Guest"
+                                        (click)="delete(guestInvitation)">
+                                    </button>
+                                </div>
                             </td>
                         </ng-container>
                     </tr>
@@ -138,3 +146,43 @@
     </div>
 </div>
 </div>
+
+<p-dialog *ngIf="editGuestInvitation" header="Edit Recipient" [modal]="true" [(visible)]="showEditGuestInvitationModal">
+    <ng-container *ngIf="editGuestInvitation.data | jsonParse as data">
+        <div class="flex align-items-center gap-3 mb-3">
+            <label for="code" class="font-semibold w-6rem">Code</label>
+            <input pInputText id="code" class="flex-auto" autocomplete="off" [(ngModel)]="editGuestInvitation.code" />
+        </div>
+        <div class="flex align-items-center gap-3 mb-3">
+            <label for="response" class="font-semibold w-6rem">Response</label>
+            <p-dropdown class="flex-auto" [options]="['ACCEPT', 'DECLINE']" appendTo="body" [(ngModel)]="data.response"
+                [showClear]="true">
+                <ng-template pTemplate="selectedItem">
+                    <span [class]="'invitation-badge status-' +data.response">{{data.response}}</span>
+                </ng-template>
+                <ng-template let-item pTemplate="item">
+                    <span [class]="'invitation-badge status-' +item">{{item}}</span>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="flex align-items-center gap-3 mb-3">
+            <label for="seats" class="font-semibold w-6rem">Seats</label>
+            <p-inputNumber id="seats" [showButtons]="true" [(ngModel)]="editGuestInvitation.seats"
+                (ngModelChange)="guestInvitationSeatChange($event, data)" [min]="1" buttonLayout="horizontal"
+                spinnerMode="horizontal" incrementButtonIcon="pi pi-plus"
+                decrementButtonIcon="pi pi-minus"></p-inputNumber>
+        </div>
+        <div class="flex flex-column align-items-start w-full gap-3 mb-5" *ngIf="data.guestNames?.length">
+            <div class="flex gap-3 align-items-center"
+                *ngFor="let item of data.guestNames; let i=index;trackBy: customTrackBy">
+                <label class="font-semibold" for="secondary-guest-{{i}}">Secondary Guest {{i + 1}}</label>
+                <input pInputText id="secondary-guest-{{i}}" class="flex-auto" autocomplete="off"
+                    [(ngModel)]="data.guestNames![i]" />
+            </div>
+        </div>
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Cancel" severity="secondary" (onClick)="showEditGuestInvitationModal = false" />
+            <p-button label="Save" (onClick)="save(data)" />
+        </div>
+    </ng-container>
+</p-dialog>

@@ -15,56 +15,55 @@
             <div class="card">
                 <h5>Attendee Details</h5>
                 <div class="p-fluid p-formgrid grid">
-                    <div class="field col-12 md:col-6">
+                    <div class="field col-12 md:col-2">
+                        <label htmlFor="firstName">Salutation</label>
+                        <p-dropdown *ngIf="!guest.loading" [options]="salutations" [(ngModel)]="guest.value!.salutation"
+                            [showClear]="true">
+                        </p-dropdown>
+                        <p-skeleton *ngIf="guest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-5">
                         <label htmlFor="firstName">First Name</label>
                         <input pInputText *ngIf="!guest.loading" id="firstName" type="text"
                             [(ngModel)]="guest.value!.firstName" [value]="guest.value?.firstName" />
 
                         <p-skeleton *ngIf="guest.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6">
+                    <div class="field col-12 md:col-5">
                         <label htmlFor="lastName">Last Name</label>
                         <input pInputText *ngIf="!guest.loading" id="lastName" rows="1" type="text"
                             [(ngModel)]="guest.value!.lastName" [value]="guest.value?.lastName" />
 
                         <p-skeleton *ngIf="guest.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6">
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="lastName">Middle Name</label>
+                        <input pInputText *ngIf="!guest.loading" id="middleName" rows="1" type="text"
+                            [(ngModel)]="guest.value!.middleName" [value]="guest.value?.middleName" />
+
+                        <p-skeleton *ngIf="guest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-2">
+                        <label htmlFor="nickName">Suffix</label>
+                        <p-dropdown *ngIf="!guest.loading" [options]="suffixes" [(ngModel)]="guest.value!.suffix"
+                            [showClear]="true">
+                        </p-dropdown>
+                        <p-skeleton *ngIf="guest.loading"></p-skeleton>
+                    </div>
+                    <div class="field col-12 md:col-2">
                         <label htmlFor="nickName">Nickname</label>
                         <input pInputText *ngIf="!guest.loading" id="nickName" rows="1" type="text"
                             [(ngModel)]="guest.value!.nickName" [value]="guest.value?.nickName" />
 
                         <p-skeleton *ngIf="guest.loading"></p-skeleton>
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <label htmlFor="phoneNumber">Phone Number</label>
-                        <input pInputText *ngIf="!guest.loading" id="phoneNumber" rows="1" type="text"
-                            [(ngModel)]="guest.value!.phoneNumber" [value]="guest.value?.phoneNumber" />
-
-                        <p-skeleton *ngIf="guest.loading"></p-skeleton>
-                    </div>
-                    <div class="field col-12 md:col-6">
-                        <label htmlFor="seats">Allocated Seats</label>
-                        <p-inputNumber *ngIf="!guest.loading" [(ngModel)]="guest.value!.seats" [min]="0" inputId="seats"
-                            [showButtons]="true" inputId="seats" />
-                        <p-skeleton *ngIf="guest.loading"></p-skeleton>
-                    </div>
-                    <div class="field col-12 md:col-6" *ngIf="roles$ | withStatus | async as eventRoles">
+                    <div class="field col-12 md:col-4" *ngIf="roles$ | withStatus | async as eventRoles">
                         <label htmlFor="role">Role</label>
                         <p-multiSelect #rolemultiselect *ngIf="!eventRoles.loading && !guest.loading" inputId="role"
                             placeholder="Select Role" [options]="eventRoles.value" optionLabel="name" optionValue="id"
                             [loading]="eventRoles.loading" [(ngModel)]="selectedRoleIds" />
 
                         <p-skeleton *ngIf="eventRoles.loading || guest.loading"></p-skeleton>
-                    </div>
-                    <div class="field col-12 md:col-6" *ngIf="invitations$ | withStatus | async as invitations">
-                        <label htmlFor="invitations">Invitations</label>
-                        <p-multiSelect *ngIf="!invitations.loading && !guest.loading" optionLabel="name"
-                            inputId="invitations" optionValue="id" placeholder="Select Invitations"
-                            [options]="invitations.value" [loading]="invitations.loading  && guest.loading"
-                            optionLabel="name" [(ngModel)]="selectedInvitationIds" />
-
-                        <p-skeleton *ngIf="invitations.loading || guest.loading"></p-skeleton>
                     </div>
                 </div>
             </div>

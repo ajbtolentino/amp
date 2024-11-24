@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventService, RsvpService } from '@core/services';
+import { EventService } from '@core/services';
 import { EventInvitationService, GuestInvitationService, GuestService } from '@modules/event';
 import { Guest, GuestInvitation, Invitation, PagedResult } from '@shared/models';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -64,11 +64,14 @@ export class EventInvitationGuestListComponent implements OnInit {
 
   templateCode!: string;
 
+  editGuestInvitation?: GuestInvitation;
+  editGuestInvitationNames?: { name: string }[];
+  showEditGuestInvitationModal: boolean = false;
+
   constructor(
     private eventService: EventService,
     private guestService: GuestService,
     private guestInvitationService: GuestInvitationService,
-    private rsvpService: RsvpService,
     private eventInvitationService: EventInvitationService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -101,7 +104,6 @@ export class EventInvitationGuestListComponent implements OnInit {
   loadGuestInvitations = (guests: PagedResult<Guest>): Observable<PagedResult<Guest>> => {
     return this.guestInvitationService.getByGuestIds(guests.result!.map(_ => _.id!))
       .pipe(
-        switchMap(eventGuestInvitations => this.loadGuestInvitationRsvps(eventGuestInvitations)),
         map(eventGuestInvitations => ({
           totalRecords: guests.totalRecords,
           pageNumber: guests.pageNumber,
@@ -112,22 +114,6 @@ export class EventInvitationGuestListComponent implements OnInit {
         }))
       );
   }
-
-  loadGuestInvitationRsvps = (guestInvitations: GuestInvitation[]): Observable<GuestInvitation[]> => {
-    return of<GuestInvitation[]>(guestInvitations);
-  }
-
-  // loadGuestInvitationRsvpItems = (guestInvitationRsvps: GuestInvitationRsvp[]): Observable<GuestInvitationRsvp[]> => {
-  //   return this.rsvpService.getItemsByIds(guestInvitationRsvps.map(_ => _.id!))
-  //     .pipe(
-  //       map(guestInvitationRsvpItems => {
-  //         return guestInvitationRsvps.map(guestInvitationRsvp => ({
-  //           ...guestInvitationRsvp,
-  //           guestInvitationRsvpItems: guestInvitationRsvpItems.filter(_ => _.guestInvitationRsvpId === guestInvitationRsvp.id)
-  //         }))
-  //       })
-  //     )
-  // }
 
   loadGuest = (guests: Guest[]): Observable<Guest[]> => {
     return this.guestService.getByIds(guests.map(_ => _.guestId!))
@@ -143,9 +129,10 @@ export class EventInvitationGuestListComponent implements OnInit {
       );
   }
 
-  add = async (guestId: string) => {
+  quickAdd = async (guestId: string) => {
     this.guests$ = this.guestInvitationService.add({
       guestId: guestId,
+      seats: 1,
       invitationId: this.eventInvitationId
     }).pipe(
       switchMap(() => {
@@ -154,6 +141,55 @@ export class EventInvitationGuestListComponent implements OnInit {
         return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
       })
     );
+  }
+
+  edit = (guestInvitation: GuestInvitation) => {
+    this.editGuestInvitation = { ...guestInvitation };
+
+    if (this.editGuestInvitation.data) {
+      const data = JSON.parse(this.editGuestInvitation.data);
+
+      if (data.guestNames && this.editGuestInvitation.seats)
+        data.guestNames.length = this.editGuestInvitation.seats - 1;
+
+      this.editGuestInvitation.data = JSON.stringify(data);
+    }
+
+    this.showEditGuestInvitationModal = true;
+  }
+
+  guestInvitationSeatChange = (event: any, data: any) => {
+    if (!data?.guestNames)
+      data.guestNames = [].constructor(event - 1);
+
+    data.guestNames.length = event - 1;
+
+    this.editGuestInvitation = {
+      ...this.editGuestInvitation,
+      data: JSON.stringify(data)
+    }
+  }
+
+  save = (data: any) => {
+    if (this.editGuestInvitation?.id) {
+      if (data.guestNames) data.guestNames = data.guestNames.filter((_: string) => _);
+      this.editGuestInvitation!.data = JSON.stringify(data);
+      this.guests$ = this.guestInvitationService.update(this.editGuestInvitation.id, this.editGuestInvitation)
+        .pipe(
+          switchMap(() => {
+            const pageNumber = this.table.first! / this.table.rows!;
+            const globalFilter: any = this.table?.filters['global'] || '';
+            return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
+          })
+        );
+    }
+
+    this.editGuestInvitation = undefined;
+    this.showEditGuestInvitationModal = false;
+  }
+
+  customTrackBy(index: number, obj: any): any {
+    return index;
   }
 
   delete = async (guestInvitation: GuestInvitation) => {

@@ -62,8 +62,8 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
             GuestId = request.GuestId,
             InvitationId = request.InvitationId,
             Code = InvitationHelper.GenerateCode(),
-            Seats = guest.Seats,
-            Data = string.Empty
+            Seats = request.Seats,
+            Data = request.Data ?? string.Empty
         });
     }
 
@@ -80,6 +80,7 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
 
         guestInvitation.InvitationId = request.InvitationId;
         guestInvitation.Seats = request.Seats;
+        guestInvitation.Data = request.Data ?? string.Empty;
 
         return await base.Put(guestInvitation);
     }
@@ -105,10 +106,5 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
         }
     }
 
-    public record GuestInvitationRequest(Guid InvitationId, Guid GuestId, string? Code, int Seats);
-
-    private record RsvpResponse(
-        Guest Guest,
-        GuestInvitation GuestInvitation,
-        Invitation Invitation);
+    public record GuestInvitationRequest(Guid InvitationId, Guid GuestId, string? Code, int Seats, string? Data);
 }

@@ -24,6 +24,28 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   selectedInvitationIds: string[] = [];
   selectedRoleIds: string[] = [];
 
+  salutations: string[] = [
+    "Mr.",
+    "Mrs.",
+    "Miss",
+    "Ms.",
+    "Dr.",
+    "Prof.",
+    "Rev.",
+    "Hon.",
+    "Sir",
+    "Madam",
+    "Engr."];
+
+  suffixes: string[] = [
+    "Jr.",
+    "Sr.",
+    "I",
+    "II",
+    "III",
+    "IV",
+  ]
+
   constructor(private eventService: EventService,
     private eventGuestInvitationService: GuestInvitationService,
     private eventGuestRoleService: GuestRoleService,
@@ -36,7 +58,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
     this.eventGuestId = this.route.snapshot.paramMap.get('eventGuestId');
-    this.guest$ = of<Guest>({ eventId: this.eventId, seats: 0 });
+    this.guest$ = of<Guest>({ eventId: this.eventId });
 
     this.loadArray();
 

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
 import { EventDashboardService, VendorContractService } from '@modules/event';
-import { Guest, GuestInvitation, Timeline, VendorContract, VendorContractPayment } from '@shared/models';
+import { GuestInvitation, Timeline, VendorContract, VendorContractPayment } from '@shared/models';
 import { EventVendorTypeBudget } from '@shared/models/event-vendor-type-budget.model';
 import { PrimeIcons } from 'primeng/api';
 import { map, Observable, of, shareReplay, switchMap } from 'rxjs';
@@ -69,10 +69,6 @@ export class EventDashboardComponent implements OnInit {
 
   mapGuestInvitations = (attendee: any) => {
     return attendee.guestInvitations;
-  }
-
-  hasSeats = (guest: Guest): boolean => {
-    return (guest?.seats || 0) > 0;
   }
 
   seatReducer = (acc: any, curr: any) => {

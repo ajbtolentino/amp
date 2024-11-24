@@ -5,11 +5,12 @@ namespace AMP.EMS.API.Core.Entities;
 public class Guest : FullAuditableEntity<Guid>
 {
     public required Guid EventId { get; set; }
+    public string Salutation { get; set; } = string.Empty;
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
+    public string MiddleName { get; set; } = string.Empty;
+    public string Suffix { get; set; } = string.Empty;
     public string NickName { get; set; } = string.Empty;
-    public string PhoneNumber { get; set; } = string.Empty;
-    public required int Seats { get; set; }
 
     public virtual Event? Event { get; set; }
     public virtual ICollection<GuestInvitation> GuestInvitations { get; set; } = [];

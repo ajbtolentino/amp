@@ -10,7 +10,7 @@
                 [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
                 [cdkDropListSortPredicate]="(disableAttendeeDrop)">
                 <ng-template let-guest pTemplate="item">
-                    <div class="w-full bg-white" cdkDrag [cdkDragData]="guest">
+                    <div class="w-full" cdkDrag [cdkDragData]="guest">
                         <div class="w-full p-2 border-round shadow-3 text-left flex gap-3 h-3rem align-items-center">
                             <i class="pi pi-user"></i>
                             <div class="w-full flex justify-content-between">
@@ -42,7 +42,7 @@
                         class="p-3 bg-white border-round gap-2 shadow-3 flex flex-column align-items-start align-items-center"
                         cdkDrag [cdkDragData]="zoneSeat.guest">
                         <ng-container
-                            *ngIf="(zoneSeat.guest?.guestInvitations || []) | reduce : attendeeReducer : [] as guestInvitations">
+                            *ngIf="(zoneSeat.guest?.guestInvitations || []) | filter: isGoing | reduce : attendeeReducer : [] as guestInvitations">
                             <div class="w-full flex flex-row gap-3 align-items-center">
                                 <i class="pi pi-user"></i>
                                 <div class="w-full flex justify-content-between">

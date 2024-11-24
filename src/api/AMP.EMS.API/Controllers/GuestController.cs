@@ -23,11 +23,12 @@ public class GuestController(IUnitOfWork unitOfWork, ILogger<GuestController> lo
             var newGuest = await EntityRepository.Add(new Guest
             {
                 EventId = request.EventId,
+                Salutation = request.Salutation ?? string.Empty,
                 FirstName = request.FirstName,
+                MiddleName = request.MiddleName ?? string.Empty,
                 LastName = request.LastName,
-                NickName = request.Nickname ?? string.Empty,
-                PhoneNumber = request.PhoneNumber ?? string.Empty,
-                Seats = request.Seats ?? 1
+                Suffix = request.Suffix ?? string.Empty,
+                NickName = request.Nickname ?? string.Empty
             });
 
             UpdateGuestInvitations(newGuest, request.InvitationIds ?? []);
@@ -58,14 +59,14 @@ public class GuestController(IUnitOfWork unitOfWork, ILogger<GuestController> lo
 
             UnitOfWork.BeginTransaction();
 
+            guest.Salutation = request.Salutation ?? string.Empty;
             guest.FirstName = request.FirstName;
+            guest.MiddleName = request.MiddleName ?? string.Empty;
             guest.LastName = request.LastName;
+            guest.Suffix = request.Suffix ?? string.Empty;
             guest.NickName = request.Nickname ?? string.Empty;
-            guest.PhoneNumber = request.PhoneNumber ?? string.Empty;
 
             UnitOfWork.Set<Guest>().Update(guest);
-
-            guest.Seats = request.Seats ?? 0;
 
             UpdateGuestInvitations(guest, request.InvitationIds ?? []);
             UpdateGuestRoles(guest, request.RoleIds ?? []);
@@ -151,11 +152,12 @@ public class GuestController(IUnitOfWork unitOfWork, ILogger<GuestController> lo
 
     public record GuestRequest(
         Guid EventId,
+        string? Salutation,
         string FirstName,
         string LastName,
+        string? MiddleName,
         string? Nickname,
-        string? PhoneNumber,
-        int? Seats,
+        string? Suffix,
         IEnumerable<Guid>? RoleIds,
         IEnumerable<Guid>? InvitationIds);
 }

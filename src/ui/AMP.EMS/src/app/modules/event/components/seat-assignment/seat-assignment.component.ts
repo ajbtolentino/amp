@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services';
 import { ZoneService } from '@modules/event';
-import { Guest, Zone } from '@shared/models';
+import { Guest, GuestInvitation, Zone } from '@shared/models';
 import { map, Observable, of, switchMap, tap } from 'rxjs';
 
 @Component({
@@ -62,11 +62,22 @@ export class SeatAssignmentComponent implements OnInit {
   }
 
   zoneSeatReducer = (acc: any, curr: any) => {
-    return acc + curr.guest?.seats;
+    if (!curr.guest.guestInvitations.length) return acc + 1;
+
+    const acceptedInvitations = curr.guest.guestInvitations.filter((g: any) => g.data && JSON.parse(g.data)?.response === 'ACCEPT')
+      .reduce((a: any, c: any) => a + (JSON.parse(c.data).guestNames?.length || 0), 0)
+
+    return acc + acceptedInvitations + 1;
   }
 
   disableAttendeeDrop = () => {
     return false;
+  }
+
+  isGoing = (guestInvitation: GuestInvitation) => {
+    if (!guestInvitation.data) return false;
+
+    return JSON.parse(guestInvitation.data).response === 'ACCEPT';
   }
 
   seatAttendee(event: any, zone: Zone, zones: Zone[]): void {
@@ -119,7 +130,7 @@ export class SeatAssignmentComponent implements OnInit {
 
   attendeeReducer = (acc: any, curr: any) => {
     if (!curr.data) return acc;
-    return [...acc, ...JSON.parse(curr.data).guestNames];
+    return [...acc, ...(JSON.parse(curr.data)?.guestNames || [])];
   }
 
   reOrderZone = (event: any, zones: Zone[]) => {
