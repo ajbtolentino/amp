@@ -29,6 +29,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TimelineModule } from 'primeng/timeline';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 import { VerifyComponent } from './guest/verify/verify.component';
@@ -76,6 +77,7 @@ import { VerifyComponent } from './guest/verify/verify.component';
     RadioButtonModule,
     StyleClassModule,
     TimelineModule,
+    ToggleButtonModule,
     PanelModule
   ],
   exports: [
@@ -119,6 +121,7 @@ import { VerifyComponent } from './guest/verify/verify.component';
     StyleClassModule,
     TimelineModule,
     PanelModule,
+    ToggleButtonModule,
     ListboxModule,
   ]
 })

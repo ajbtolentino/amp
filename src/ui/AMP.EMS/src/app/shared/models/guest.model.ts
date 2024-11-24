@@ -12,6 +12,6 @@ export interface Guest {
     seats?: number;
     guest?: Guest;
 
-    eventGuestInvitations?: GuestInvitation[];
-    eventGuestRoles?: GuestRole[];
+    guestInvitations?: GuestInvitation[];
+    guestRoles?: GuestRole[];
 }

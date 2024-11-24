@@ -2,7 +2,7 @@
     guests: guests$ | withStatus | async,
     zones: zones$ | withStatus | async
     } as data">
-    <div class="card flex  flex-column md:flex-row gap-2">
+    <div class="card flex flex-column md:flex-row gap-2">
         <div class="col-12 md:col-3 text-center drop-zone p-0">
             <p-listbox *ngIf="!data.guests?.loading" [options]="data.guests?.value!" [filter]="true"
                 [filterFields]="['firstName', 'lastName']" [listStyle]="{ 'max-height': '100vh' }" [draggable]="false"
@@ -10,8 +10,8 @@
                 [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
                 [cdkDropListSortPredicate]="(disableAttendeeDrop)">
                 <ng-template let-guest pTemplate="item">
-                    <div class="w-full" cdkDrag [cdkDragData]="guest">
-                        <div class="w-full p-2 border-round shadow-1 text-left flex gap-3 h-3rem align-items-center">
+                    <div class="w-full bg-white" cdkDrag [cdkDragData]="guest">
+                        <div class="w-full p-2 border-round shadow-3 text-left flex gap-3 h-3rem align-items-center">
                             <i class="pi pi-user"></i>
                             <div class="w-full flex justify-content-between">
                                 <span>{{guest.firstName}} {{guest.lastName}}</span>
@@ -39,18 +39,31 @@
                     [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds" [cdkDropListData]="zone.zoneSeats"
                     (cdkDropListDropped)="seatAttendee($event, zone, data.zones?.value!)">
                     <li *ngFor="let zoneSeat of zone.zoneSeats"
-                        class="p-2 border-round shadow-1 gap-3 flex align-items-start h-3rem align-items-center" cdkDrag
-                        [cdkDragData]="zoneSeat.guest">
-                        <i class="pi pi-user"></i>
-                        <div class="w-full flex justify-content-between">
-                            <span>{{ zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName
-                                }}</span>
-                            <span *ngIf="(zoneSeat.guest?.seats! - 1) > 0">+ {{zoneSeat.guest?.seats ?
-                                zoneSeat.guest?.seats!
-                                -
-                                1 :
-                                0}}</span>
-                        </div>
+                        class="p-3 bg-white border-round gap-2 shadow-3 flex flex-column align-items-start align-items-center"
+                        cdkDrag [cdkDragData]="zoneSeat.guest">
+                        <ng-container
+                            *ngIf="(zoneSeat.guest?.guestInvitations || []) | reduce : attendeeReducer : [] as guestInvitations">
+                            <div class="w-full flex flex-row gap-3 align-items-center">
+                                <i class="pi pi-user"></i>
+                                <div class="w-full flex justify-content-between">
+                                    <span>{{
+                                        zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName
+                                        }}</span>
+                                </div>
+                                <p-toggleButton *ngIf="guestInvitations.length" onIcon="pi pi-angle-up"
+                                    offIcon="pi pi-angle-down" styleClass="h-1rem"
+                                    pStyleClass="#secondary-{{zoneSeat.guest?.id}}" toggleClass="flex" />
+                            </div>
+                            <div id="secondary-{{zoneSeat.guest?.id}}"
+                                class="gap-2 hidden flex-column w-full animation-duration-1000 animate-width">
+                                <div class="w-full flex flex-row gap-3" *ngFor="let secondary of guestInvitations">
+                                    <i class="pi pi-user text-orange-200"></i>
+                                    <div class="w-full flex justify-content-between">
+                                        <span>{{secondary}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
                     </li>
                 </ul>
                 <ng-template pTemplate="footer">

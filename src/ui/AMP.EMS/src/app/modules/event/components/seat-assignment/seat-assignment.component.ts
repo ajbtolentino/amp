@@ -54,7 +54,7 @@ export class SeatAssignmentComponent implements OnInit {
   }
 
   loadGuests = (eventId: string): Observable<Zone[]> => {
-    return this.eventService.guestsWithoutSeats(eventId);
+    return this.eventService.unseatedGuests(eventId);
   }
 
   mapZoneIds = (zone: Zone) => {
@@ -117,6 +117,11 @@ export class SeatAssignmentComponent implements OnInit {
     }
   }
 
+  attendeeReducer = (acc: any, curr: any) => {
+    if (!curr.data) return acc;
+    return [...acc, ...JSON.parse(curr.data).guestNames];
+  }
+
   reOrderZone = (event: any, zones: Zone[]) => {
     moveItemInArray(zones, event.previousIndex, event.currentIndex);
 
@@ -136,7 +141,7 @@ export class SeatAssignmentComponent implements OnInit {
       .pipe(
         switchMap(() => this.loadZones(eventId!)),
         tap(() => {
-          this.guests$ = this.eventService.guestsWithoutSeats(eventId!);
+          this.guests$ = this.eventService.unseatedGuests(eventId!);
         })
       );
   }

@@ -81,8 +81,10 @@
                                     routerLink="/invitation/{{guestInvitation.code}}"></a>
                                 <button *ngIf="!guestInvitation.id" pButton pRipple type="button"
                                     icon="pi pi-fw pi-user-plus" class="p-button-text p-button-success mr-2 p-jc-end"
-                                    pTooltip="Add Recipient" (click)="add(guest.id)">
+                                    pTooltip="{{guest.seats ? 'Add Recipient' : 'Attendee does not have an allocated seat'}}"
+                                    (click)="add(guest.id)" [disabled]="!guest.seats" style="pointer-events: auto">
                                 </button>
+
                                 <button *ngIf="guestInvitation.id" pButton pRipple type="button"
                                     icon="pi pi-fw pi-user-minus" class="p-button-text p-button-warning mr-2 p-jc-end"
                                     pTooltip="Remove Guest" (click)="delete(guestInvitation)">

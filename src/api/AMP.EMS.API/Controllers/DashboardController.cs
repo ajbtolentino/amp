@@ -12,21 +12,17 @@ namespace AMP.EMS.API.Controllers;
 public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController> logger) : ControllerBase
 {
     [HttpGet("{eventId:guid}/[action]")]
-    public async Task<IActionResult> GuestInvitations(Guid eventId)
+    public IActionResult Attendees(Guid eventId)
     {
-        var invitationIds = unitOfWork.Set<Invitation>().GetAll().AsNoTracking()
-            .Where(_ => _.EventId == eventId).Select(_ => _.Id);
-
-        var mainGuests = unitOfWork.Set<Guest>().GetAll().Where(_ => _.EventId == eventId).AsNoTracking();
-
-        var guestInvitations = unitOfWork.Set<GuestInvitation>().GetAll().AsNoTracking()
-            .Where(_ => invitationIds.Contains(_.InvitationId));
+        var attendees = unitOfWork.Set<Guest>().GetAll()
+            .Include(_ => _.GuestInvitations)
+            .AsNoTracking();
 
         return Ok(new
         {
             data = new
             {
-                totalMainGuests = mainGuests.Count(), guestInvitations
+                attendees
             }
         });
     }

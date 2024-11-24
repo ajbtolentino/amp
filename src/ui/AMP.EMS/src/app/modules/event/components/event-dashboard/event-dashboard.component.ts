@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
 import { EventDashboardService, VendorContractService } from '@modules/event';
-import { GuestInvitation, Timeline, VendorContract, VendorContractPayment } from '@shared/models';
+import { Guest, GuestInvitation, Timeline, VendorContract, VendorContractPayment } from '@shared/models';
 import { EventVendorTypeBudget } from '@shared/models/event-vendor-type-budget.model';
 import { PrimeIcons } from 'primeng/api';
 import { map, Observable, of, shareReplay, switchMap } from 'rxjs';
@@ -18,7 +18,7 @@ export class EventDashboardComponent implements OnInit {
 
   chartOptions: any;
 
-  guestInvitations$: Observable<any> = new Observable<any>();
+  attendees$: Observable<any> = new Observable<any>();
   budgets$: Observable<any> = new Observable<any>();
   expenses$: Observable<any> = new Observable<any>();
 
@@ -41,7 +41,7 @@ export class EventDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.eventId$ = this.route.parent?.paramMap.pipe(map(params => params.get("eventId") || ''), shareReplay()) || of<string>('');
-    this.guestInvitations$ = this.eventId$.pipe(switchMap(eventId => this.eventDashboardService.guestInvitations(eventId)), shareReplay())!;
+    this.attendees$ = this.eventId$.pipe(switchMap(eventId => this.eventDashboardService.attendees(eventId)), shareReplay())!;
     this.budgets$ = this.eventId$.pipe(
       switchMap(eventId => this.eventDashboardService.budget(eventId)),
       shareReplay()
@@ -67,14 +67,30 @@ export class EventDashboardComponent implements OnInit {
     )!;
   }
 
+  mapGuestInvitations = (attendee: any) => {
+    return attendee.guestInvitations;
+  }
+
+  hasSeats = (guest: Guest): boolean => {
+    return (guest?.seats || 0) > 0;
+  }
+
+  seatReducer = (acc: any, curr: any) => {
+    return acc + curr.seats;
+  }
+
   isGoing = (guestInvitation: GuestInvitation): boolean => {
     if (!guestInvitation?.data) return false;
 
     return JSON.parse(guestInvitation?.data).response === "ACCEPT";
   }
 
-  secondaryGuestReducer = (acc: any, guestInvitation: GuestInvitation): boolean => {
-    return acc + JSON.parse(guestInvitation?.data).guestNames.length;
+  goingReducer = (acc: any, guestInvitation: GuestInvitation): boolean => {
+    return acc + (JSON.parse(guestInvitation?.data)?.guestNames?.length || 0) + 1;
+  }
+
+  guestInvitationReducer = (acc: any, curr: any) => {
+    return [...acc, ...curr.guestInvitations];
   }
 
   hasResponded = (guestInvitation: GuestInvitation): boolean => {

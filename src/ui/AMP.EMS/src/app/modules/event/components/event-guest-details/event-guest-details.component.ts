@@ -36,7 +36,7 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get('eventId') || '';
     this.eventGuestId = this.route.snapshot.paramMap.get('eventGuestId');
-    this.guest$ = of<Guest>({ eventId: this.eventId, seats: 1 });
+    this.guest$ = of<Guest>({ eventId: this.eventId, seats: 0 });
 
     this.loadArray();
 
@@ -46,19 +46,19 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   loadEventGuest = (): Observable<Guest> => {
     return this.guestService.get(this.eventGuestId || '').pipe(
-      switchMap(eventGuest => this.loadGuestRoles(eventGuest)),
-      switchMap(eventGuest => this.loadGuestInvitations(eventGuest)),
+      switchMap(guest => this.loadGuestRoles(guest)),
+      switchMap(guest => this.loadGuestInvitations(guest)),
       map(response => {
-        if (response.eventGuestRoles?.length) this.selectedRoleIds = response.eventGuestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
-        if (response.eventGuestInvitations?.length) this.selectedInvitationIds = response.eventGuestInvitations?.filter(_ => _.invitationId).map(_ => _.invitationId!);
+        if (response.guestRoles?.length) this.selectedRoleIds = response.guestRoles?.filter(_ => _.role?.id).map(_ => _.role?.id!);
+        if (response.guestInvitations?.length) this.selectedInvitationIds = response.guestInvitations?.filter(_ => _.invitationId).map(_ => _.invitationId!);
         return response;
       }));
   }
 
-  loadGuest = (eventGuest: Guest): Observable<Guest> => {
-    return this.guestService.get(eventGuest.guestId!).pipe(map(guest => {
+  loadGuest = (guest: Guest): Observable<Guest> => {
+    return this.guestService.get(guest.guestId!).pipe(map(guest => {
       return {
-        ...eventGuest,
+        ...guest,
         guest: guest
       }
     }));
@@ -66,33 +66,33 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
 
   loadGuestInvitations = (eventGuest: Guest): Observable<Guest> => {
     return this.eventGuestInvitationService.getByGuestIds([eventGuest.id!])
-      .pipe(map(eventGuestInvitations => ({
+      .pipe(map(guestInvitations => ({
         ...eventGuest,
-        eventGuestInvitations: eventGuestInvitations
+        guestInvitations: guestInvitations
       })));
   }
 
   loadGuestRoles = (guest: Guest): Observable<Guest> => {
     return this.eventGuestRoleService.getByGuestIds([guest.id!])
       .pipe(
-        switchMap(eventGuestRoles => this.loadRoles(eventGuestRoles)),
-        map(eventGuestRoles => (
+        switchMap(guestRoles => this.loadRoles(guestRoles)),
+        map(guestRoles => (
           {
             ...guest,
-            eventGuestRoles: eventGuestRoles
+            guestRoles: guestRoles
           }
         ))
       );
   }
 
-  loadRoles = (eventGuestRoles: GuestRole[]): Observable<GuestRole[]> => {
-    if (!eventGuestRoles.length) return of<GuestRole[]>([]);
+  loadRoles = (guestRoles: GuestRole[]): Observable<GuestRole[]> => {
+    if (!guestRoles.length) return of<GuestRole[]>([]);
 
-    return this.lookupService.getByIds('role', eventGuestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
+    return this.lookupService.getByIds('role', guestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
       .pipe(
-        map(roles => eventGuestRoles.map(eventGuestRole => ({
-          ...eventGuestRole,
-          role: roles.find(_ => _.id === eventGuestRole.roleId)
+        map(roles => guestRoles.map(guestRole => ({
+          ...guestRole,
+          role: roles.find(_ => _.id === guestRole.roleId)
         }))
         )
       );

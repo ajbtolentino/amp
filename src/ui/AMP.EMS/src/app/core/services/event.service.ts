@@ -38,8 +38,8 @@ export class EventService extends BaseApiService {
         });
     }
 
-    guestsWithoutSeats = (id: string): Observable<Guest[]> => {
-        return this.httpGet<Guest[]>(`event/${id}/guestswithoutseats`);
+    unseatedGuests = (id: string): Observable<Guest[]> => {
+        return this.httpGet<Guest[]>(`event/${id}/unseatedAttendees`);
     }
 
     getVendorContracts = (id: string): Observable<VendorContract[]> => {

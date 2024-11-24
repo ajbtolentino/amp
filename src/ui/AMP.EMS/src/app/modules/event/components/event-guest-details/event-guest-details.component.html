@@ -44,8 +44,8 @@
                         <p-skeleton *ngIf="guest.loading"></p-skeleton>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label htmlFor="seats">Seats</label>
-                        <p-inputNumber *ngIf="!guest.loading" [(ngModel)]="guest.value!.seats" [min]="1" inputId="seats"
+                        <label htmlFor="seats">Allocated Seats</label>
+                        <p-inputNumber *ngIf="!guest.loading" [(ngModel)]="guest.value!.seats" [min]="0" inputId="seats"
                             [showButtons]="true" inputId="seats" />
                         <p-skeleton *ngIf="guest.loading"></p-skeleton>
                     </div>
