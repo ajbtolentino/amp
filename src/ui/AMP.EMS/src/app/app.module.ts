@@ -2,6 +2,7 @@ import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@an
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
+import { apiResponseInterceptor, dateInterceptor } from '@core/interceptors';
 import { RsvpService } from '@core/services/rsvp.service';
 import { EventGuestInvitationRSVPChangeableLabelComponent, EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent } from '@modules/event';
 import { VerifyComponent } from '@modules/guest/verify/verify.component';
@@ -20,7 +21,6 @@ import { AppComponent } from '../app/app.component';
 import { AppLayoutModule } from '../app/layout/app.layout.module';
 import { UnauthorizedComponent } from '../app/pages/unauthorized/unauthorized.component';
 import { AuthConfigModule } from './core/auth-config.module';
-import { apiResponseInterceptor } from './core/interceptors/api.response.interceptor';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { HomeComponent } from './pages/home/home.component';
@@ -39,7 +39,7 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
         CodeEditorModule.forRoot(),
     ],
     providers: [
-        provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor(), apiResponseInterceptor])),
+        provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor(), apiResponseInterceptor, dateInterceptor])),
         provideDynamicHooks({
             parsers: [EventGuestInvitationRSVPFormComponent,
                 EventGuestInvitationRSVPLabelComponent,

@@ -8,8 +8,6 @@ export interface GuestInvitation {
     seats?: number;
     code?: string;
     invitation?: Invitation;
-    // guestInvitationRsvps?: GuestInvitationRsvp[];
     guest?: Guest;
     data?: any;
-    dateCreated?: Date;
 }

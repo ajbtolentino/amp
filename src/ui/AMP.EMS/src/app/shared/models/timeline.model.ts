@@ -4,8 +4,8 @@ export interface Timeline extends Base {
     eventId?: string;
     name?: string;
     description?: string;
-    startDate?: Date;
-    endDate?: Date;
+    startDate?: Date | undefined | null;
+    endDate?: Date | undefined | null;
 
     event?: Event;
 }

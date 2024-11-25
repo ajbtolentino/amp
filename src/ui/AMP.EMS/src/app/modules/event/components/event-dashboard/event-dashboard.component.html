@@ -101,7 +101,7 @@
                 [ngClass]="{'text-orange-500': expenses.value.totalUnsettledTransactions > 0, 'text-green-500': expenses.value.totalUnsettledTransactions <= 0}"
                 class="font-medium">{{expenses.value.totalUnsettledTransactions | currency :
                 'PHP'}}</span>
-            <span class="text-500"> Unreconciled Payments</span>
+            <span class="text-500"> Outstanding Balance</span>
         </div>
         <div class="card mb-0 text-center" *ngIf="expenses.loading">
             <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)" />

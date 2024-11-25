@@ -15,6 +15,5 @@ export interface EventGuestInvitationInfo {
 export interface EventGuestInvitationRsvpInfo {
     eventGuestInvitationRsvpId?: string;
     response?: string;
-    dateCreated?: Date;
     guestNames?: string[];
 }

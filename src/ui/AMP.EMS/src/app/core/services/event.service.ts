@@ -26,14 +26,15 @@ export class EventService extends BaseApiService {
         return this.httpGet<Invitation[]>(`event/${id}/invitations`);
     }
 
-    getGuests = (id: string, pageNumber: number, pageSize: number, search?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending'): Observable<PagedResult<Guest>> => {
+    getGuests = (id: string, pageNumber: number, pageSize: number, search?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending', roleIds?: string[]): Observable<PagedResult<Guest>> => {
         return this.httpGet<PagedResult<Guest>>(`event/${id}/guests`, {
             params: {
                 pageNumber: pageNumber + 1,
                 pageSize: pageSize,
                 search: search || '',
                 sortField: sortField || '',
-                sortDirection: sortDirection || ''
+                sortDirection: sortDirection || '',
+                roleIds: roleIds
             }
         });
     }

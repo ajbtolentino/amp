@@ -5,14 +5,16 @@
                 <p-table #dt [value]="guests.value?.result!" [rows]="10" [totalRecords]="guests.value?.totalRecords!"
                     (onLazyLoad)="refreshGrid($event)" [lazy]="true" [paginator]="true" editMode="row"
                     [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="guests.loading"
-                    [globalFilterFields]="['firstName', 'lastName']" [showLoader]="false">
+                    [globalFilterFields]="['firstName', 'lastName']" [showLoader]="false" stateStorage="session"
+                    stateKey="event-guest-list-session" [showCurrentPageReport]="!guests.loading"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between">
                             <div class="left">
                                 <span class="p-input-icon-left p-ml-auto">
                                     <i class="pi pi-search"></i>
-                                    <input pInputText type="text" (input)="onSearch($event)"
-                                        placeholder="Search keyword" />
+                                    <input pInputText type="text" placeholder="Search keyword" [ngModel]="searchKeyword"
+                                        (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
                                 </span>
                             </div>
                             <div class="right">
@@ -30,10 +32,22 @@
                             <th>
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
+                            <th pSortableColumn="salutation">
+                                <div class="flex justify-content-between align-items-center">
+                                    Salutation
+                                    <p-sortIcon field="salutation"></p-sortIcon>
+                                </div>
+                            </th>
                             <th pSortableColumn="firstName">
                                 <div class="flex justify-content-between align-items-center">
                                     First Name
                                     <p-sortIcon field="firstName"></p-sortIcon>
+                                </div>
+                            </th>
+                            <th pSortableColumn="middlename">
+                                <div class="flex justify-content-between align-items-center">
+                                    Middle Name
+                                    <p-sortIcon field="middlename"></p-sortIcon>
                                 </div>
                             </th>
                             <th pSortableColumn="lastName">
@@ -42,9 +56,29 @@
                                     <p-sortIcon field="lastName"></p-sortIcon>
                                 </div>
                             </th>
+                            <th pSortableColumn="suffix">
+                                <div class="flex justify-content-between align-items-center">
+                                    Suffix
+                                    <p-sortIcon field="suffix"></p-sortIcon>
+                                </div>
+                            </th>
                             <th>
-                                <div class="flex justify-content-center">
+                                <div class="flex align-items-center" *ngIf="roles$ | withStatus | async as roles">
                                     Role
+                                    <p-columnFilter field="role" display="menu" matchMode="in" display="menu"
+                                        [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                                        *ngIf="!roles.loading">
+                                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                            <p-multiSelect [ngModel]="value" [options]="roles.value" placeholder="Any"
+                                                (onChange)="filter($event.value)" optionLabel="name" optionValue="id">
+                                                <ng-template let-option pTemplate="item">
+                                                    <div class="inline-block vertical-align-middle">
+                                                        <span class="ml-1 mt-1">{{ option.name }}</span>
+                                                    </div>
+                                                </ng-template>
+                                            </p-multiSelect>
+                                        </ng-template>
+                                    </p-columnFilter>
                                 </div>
                             </th>
                             <th></th>
@@ -53,8 +87,11 @@
                     <ng-template pTemplate="body" let-item>
                         <tr>
                             <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
+                            <td>{{item.salutation}}</td>
                             <td>{{item.firstName}}</td>
+                            <td>{{item.middleName}}</td>
                             <td>{{item.lastName}}</td>
+                            <td>{{item.suffix}}</td>
                             <td class="text-center">
                                 <span *ngFor='let eventGuestRole of item.eventGuestRoles; let i = index'>
                                     {{eventGuestRole.role.name}}<span
@@ -74,17 +111,27 @@
                         </tr>
                     </ng-template>
 
+                    <ng-template pTemplate="summary">
+                        <div class="flex align-items-center justify-content-between">
+
+                        </div>
+                    </ng-template>
+
                     <ng-template pTemplate="emptymessage" let-columns>
                         <tr>
-                            <td [colSpan]="7">
+                            <td [colSpan]="10">
                                 No records found
                             </td>
                         </tr>
                     </ng-template>
 
+
                     <ng-template pTemplate="loadingbody">
                         <tr *ngFor="let i of [].constructor(5)">
                             <td></td>
+                            <td><p-skeleton></p-skeleton></td>
+                            <td><p-skeleton></p-skeleton></td>
+                            <td><p-skeleton></p-skeleton></td>
                             <td><p-skeleton></p-skeleton></td>
                             <td><p-skeleton></p-skeleton></td>
                             <td><p-skeleton></p-skeleton></td>

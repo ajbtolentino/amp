@@ -5,8 +5,8 @@ import { ConfirmationService } from 'primeng/api';
 import { LookupService } from '@core/services';
 import { EventService } from '@core/services/event.service';
 import { GuestRoleService, GuestService } from '@modules/event';
-import { Guest, GuestRole, PagedResult } from '@shared/models';
-import { Table } from 'primeng/table';
+import { Guest, GuestRole, PagedResult, Role } from '@shared/models';
+import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
@@ -18,10 +18,13 @@ export class EventGuestListComponent implements OnInit {
   eventId!: string;
 
   guests$: Observable<PagedResult<Guest>> = new Observable<PagedResult<Guest>>();
+  roles$: Observable<Role[]> = new Observable<Role[]>();
 
   selectedItems: Guest[] | null = [];
 
   @ViewChild('dt') table!: Table;
+
+  searchKeyword?: string;
 
   constructor(private eventService: EventService,
     private guestRoleService: GuestRoleService,
@@ -32,17 +35,22 @@ export class EventGuestListComponent implements OnInit {
 
   ngOnInit() {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
+    this.roles$ = this.eventService.getRoles(this.eventId);
   }
 
-  refreshGrid = (event: any) => {
+  refreshGrid = (event: TableLazyLoadEvent) => {
     this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
-    const pageNumber = event.first / event.rows;
+    const pageNumber = event.first! / event.rows!;
 
-    this.guests$ = this.loadGuests(pageNumber, event.rows, event.filters?.global?.value, event.sortField, event.sortOrder == 1 ? 'Ascending' : 'Descending');
+    const search: any = event.filters && event.filters || {};
+    const roleIds = search.role?.length && search.role[0].value?.map((_: any) => _) || [];
+    this.searchKeyword = search.global?.value;
+
+    this.guests$ = this.loadGuests(pageNumber, event.rows!, search.global?.value, event.sortField?.toString(), event.sortOrder == 1 ? 'Ascending' : 'Descending', roleIds);
   }
 
-  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending') => {
-    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection).pipe(
+  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending', roleIds?: string[]) => {
+    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection, roleIds).pipe(
       switchMap(eventGuests => this.loadGuestRole(eventGuests))
     );
   }

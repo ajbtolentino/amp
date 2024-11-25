@@ -2,6 +2,7 @@ using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Enums;
 using AMP.Infrastructure.Extensions;
+using AMP.Infrastructure.Filters;
 using AMP.Infrastructure.Pagination;
 using AMP.Infrastructure.Responses;
 using AMP.Infrastructure.Sorting;
@@ -35,24 +36,30 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
     public IActionResult Guests(Guid eventId, int pageNumber, int pageSize, string? search, string? sortField,
-        SortDirection? sortDirection)
+        SortDirection? sortDirection, [FromQuery] Guid[]? roleIds)
     {
-        var guests = UnitOfWork.Set<Guest>().GetAll()
-            .Where(guest => guest.EventId == eventId)
-            .AsNoTracking();
+        var query = UnitOfWork.Set<Guest>().GetAll().AsNoTracking()
+            .Where(guest => guest.EventId == eventId);
 
         if (!string.IsNullOrEmpty(search))
-            guests = guests.Where(_ =>
-                EF.Functions.Like(_.FirstName, $"%{search}%") || EF.Functions.Like(_.LastName, $"%{search}%"));
+            query = query.Where(_ =>
+                EF.Functions.Like(_.FirstName, $"%{search}%") ||
+                EF.Functions.Like(_.LastName, $"%{search}%") ||
+                EF.Functions.Like(_.Salutation, $"%{search}%") ||
+                EF.Functions.Like(_.Suffix, $"%{search}%"));
+
+        if (roleIds != null && roleIds.Any())
+            query = query.Include(_ => _.GuestRoles)
+                .Where(_ => _.GuestRoles.Any(gr => roleIds.Contains(gr.RoleId))).AsNoTracking();
 
         if (!string.IsNullOrEmpty(sortField))
-            guests = guests.ApplySorting(new SortingParameters
+            query = query.ApplySorting(new SortingParameters
             {
                 SortField = sortField,
                 SortDirection = sortDirection ?? SortDirection.Ascending
             });
 
-        var pagedResult = guests.ApplyPagination(pageNumber, pageSize);
+        var pagedResult = query.ApplyPagination(pageNumber, pageSize);
 
         return Ok(new OkResponse<PagedResult<Guest>>(string.Empty) { Data = pagedResult });
     }
@@ -288,4 +295,12 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
         int Seats,
         DateTime StartDate,
         DateTime EndDate);
+
+    public record GuestFilterRequest(
+        int PageNumber,
+        int PageSize,
+        string? Search,
+        string? SortField,
+        SortDirection? SortDirection,
+        IEnumerable<Filter> Filters);
 }
