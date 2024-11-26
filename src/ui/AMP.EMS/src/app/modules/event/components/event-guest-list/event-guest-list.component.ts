@@ -7,7 +7,7 @@ import { EventService } from '@core/services/event.service';
 import { GuestRoleService, GuestService } from '@modules/event';
 import { Guest, GuestRole, PagedResult, Role } from '@shared/models';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-event-guests',
@@ -17,12 +17,39 @@ import { map, Observable, of, switchMap } from 'rxjs';
 export class EventGuestListComponent implements OnInit {
   eventId!: string;
 
+  attendeeModal: boolean = false;
+  guest$: Observable<Guest> = new Observable<Guest>();
+  selectedInvitationIds: string[] = [];
+  selectedRoleIds: string[] = [];
+
   guests$: Observable<PagedResult<Guest>> = new Observable<PagedResult<Guest>>();
   roles$: Observable<Role[]> = new Observable<Role[]>();
 
   selectedItems: Guest[] | null = [];
 
   @ViewChild('dt') table!: Table;
+
+  salutations: string[] = [
+    "Mr.",
+    "Mrs.",
+    "Miss",
+    "Ms.",
+    "Dr.",
+    "Prof.",
+    "Rev.",
+    "Hon.",
+    "Sir",
+    "Madam",
+    "Engr."];
+
+  suffixes: string[] = [
+    "Jr.",
+    "Sr.",
+    "I",
+    "II",
+    "III",
+    "IV",
+  ]
 
   searchKeyword?: string;
 
@@ -31,26 +58,29 @@ export class EventGuestListComponent implements OnInit {
     private guestService: GuestService,
     private lookupService: LookupService,
     private confirmationService: ConfirmationService,
+    private eventGuestRoleService: GuestRoleService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
-    this.roles$ = this.eventService.getRoles(this.eventId);
+    this.roles$ = this.eventService.getRoles(this.eventId).pipe(shareReplay());
   }
 
   refreshGrid = (event: TableLazyLoadEvent) => {
     this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
+
+
+    this.guests$ = this.loadGuests(event);
+  }
+
+  loadGuests = (event: TableLazyLoadEvent) => {
     const pageNumber = event.first! / event.rows!;
 
     const search: any = event.filters && event.filters || {};
     const roleIds = search.role?.length && search.role[0].value?.map((_: any) => _) || [];
     this.searchKeyword = search.global?.value;
 
-    this.guests$ = this.loadGuests(pageNumber, event.rows!, search.global?.value, event.sortField?.toString(), event.sortOrder == 1 ? 'Ascending' : 'Descending', roleIds);
-  }
-
-  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending', roleIds?: string[]) => {
-    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection, roleIds).pipe(
+    return this.eventService.getGuests(this.eventId, pageNumber, event.rows!, search.global?.value, event.sortField?.toString(), event.sortOrder == 1 ? 'Ascending' : 'Descending', roleIds).pipe(
       switchMap(eventGuests => this.loadGuestRole(eventGuests))
     );
   }
@@ -58,14 +88,14 @@ export class EventGuestListComponent implements OnInit {
   loadGuestRole = (eventGuests: PagedResult<Guest>): Observable<PagedResult<Guest>> => {
     return this.guestRoleService.getByGuestIds(eventGuests.result!.filter(_ => _.id).map(_ => _.id!))
       .pipe(
-        switchMap(eventGuestRoles => this.loadRole(eventGuestRoles)),
-        map(eventGuestRoles => ({
+        switchMap(guestRoles => this.loadRole(guestRoles)),
+        map(guestRoles => ({
           pageNumber: eventGuests.pageNumber,
           totalRecords: eventGuests.totalRecords,
           result: eventGuests.result!.map(eventGuest => {
             return {
               ...eventGuest,
-              eventGuestRoles: eventGuestRoles.filter(_ => _.guestId === eventGuest.id)
+              guestRoles: guestRoles.sort((a, b) => a.role!.name! > b.role!.name! ? 1 : -1).filter(_ => _.guestId === eventGuest.id)
             }
           })
         })
@@ -80,7 +110,7 @@ export class EventGuestListComponent implements OnInit {
   loadRole = (guestRoles: GuestRole[]): Observable<GuestRole[]> => {
     if (!guestRoles.length) return of<GuestRole[]>(guestRoles);
 
-    return this.lookupService.getByIds('role', guestRoles.filter(_ => _.roleId).map(_ => _.roleId!))
+    return this.roles$
       .pipe(
         map(roles => {
           return guestRoles.map(guestRole => {
@@ -92,8 +122,71 @@ export class EventGuestListComponent implements OnInit {
         }));
   }
 
+  loadGuestRoles = (attendee: Guest): Observable<Guest> => {
+    return this.eventGuestRoleService.getByGuestIds([attendee.id!])
+      .pipe(
+        map(guestRoles => (
+          {
+            ...attendee,
+            guestRoles: guestRoles
+          }
+        )),
+        tap((_) => {
+          if (attendee.guestRoles) this.selectedRoleIds = _.guestRoles.map(_ => _.roleId!)
+        })
+      );
+  }
+
+  loadRoles = (guestRoles: GuestRole[]): Observable<GuestRole[]> => {
+    if (!guestRoles.length) return of<GuestRole[]>([]);
+
+    return this.roles$
+      .pipe(
+        map(roles => guestRoles.map(guestRole => ({
+          ...guestRole,
+          role: roles.find(_ => _.id === guestRole.roleId)
+        })),
+          tap((roles) => console.log(roles))
+        )
+      );
+  }
+
+  clear = () => {
+    this.table.clear();
+    this.table.clearState();
+  }
+
   hasResponded = (item: any) => {
     return item.eventGuestInvitations?.filter((_: any) => _.rsvps?.length ?? false).length ?? false;
+  }
+
+  showAttendeeModal = (attendee?: Guest) => {
+    if (!attendee) this.guest$ = of<Guest>({ eventId: this.eventId });
+    else this.guest$ = this.guestService.get(attendee.id!)
+      .pipe(
+        switchMap(attendee => this.loadGuestRoles(attendee))
+      );
+
+    this.attendeeModal = true;
+    this.selectedRoleIds = [];
+  }
+
+  saveAttendee = async (item: Guest) => {
+    if (item?.firstName?.trim() && item?.lastName?.trim())
+      if (item.id) {
+        this.guests$ = this.guestService.update(item, this.selectedRoleIds, this.selectedInvitationIds)
+          .pipe(
+            switchMap(() => this.loadGuests(this.table.createLazyLoadMetadata()))
+          );
+      }
+      else {
+        this.guests$ = this.guestService.add(item, this.selectedRoleIds, this.selectedInvitationIds)
+          .pipe(
+            switchMap(() => this.loadGuests(this.table.createLazyLoadMetadata()))
+          );
+      }
+
+    this.attendeeModal = false;
   }
 
   delete = (guest: Guest) => {
@@ -107,8 +200,7 @@ export class EventGuestListComponent implements OnInit {
           this.guests$ = this.guestService.delete(guest.id)
             .pipe(
               switchMap(() => {
-                const pageNumber = this.table.first! / this.table.rows!;
-                return this.loadGuests(pageNumber, this.table.rows!);
+                return this.loadGuests(this.table.createLazyLoadMetadata());
               })
             )
         }
@@ -127,8 +219,7 @@ export class EventGuestListComponent implements OnInit {
           this.guests$ = this.guestService.deleteSelected(this.selectedItems?.map(_ => _.id!)!)
             .pipe(
               switchMap(() => {
-                const pageNumber = this.table.first! / this.table.rows!;
-                return this.loadGuests(pageNumber, this.table.rows!);
+                return this.loadGuests(this.table.createLazyLoadMetadata());
               })
             )
         }

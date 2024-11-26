@@ -150,6 +150,69 @@ public class GuestController(IUnitOfWork unitOfWork, ILogger<GuestController> lo
             UnitOfWork.Set<GuestRole>().Delete(guestRole.Id);
     }
 
+    public override async Task<IActionResult> Delete(Guid id)
+    {
+        try
+        {
+            UnitOfWork.BeginTransaction();
+
+            var guestRoles = UnitOfWork.Set<GuestRole>().GetAll().Where(_ => _.GuestId == id);
+
+            foreach (var guestRole in guestRoles) UnitOfWork.Set<GuestRole>().Delete(guestRole.Id);
+
+            var guestInvitations = UnitOfWork.Set<GuestInvitation>().GetAll().Where(_ => _.GuestId == id);
+
+            foreach (var guestInvitation in guestInvitations)
+                UnitOfWork.Set<GuestInvitation>().Delete(guestInvitation.Id);
+
+            EntityRepository.Delete(id);
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<Guid>(string.Empty) { Data = id });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
+        }
+    }
+
+    public override async Task<IActionResult> DeleteAll(IEnumerable<Guid> ids)
+    {
+        try
+        {
+            UnitOfWork.BeginTransaction();
+
+            foreach (var id in ids)
+            {
+                var guestRoles = UnitOfWork.Set<GuestRole>().GetAll().Where(_ => _.GuestId == id);
+
+                foreach (var guestRole in guestRoles) UnitOfWork.Set<GuestRole>().Delete(guestRole.Id);
+
+                var guestInvitations = UnitOfWork.Set<GuestInvitation>().GetAll().Where(_ => _.GuestId == id);
+
+                foreach (var guestInvitation in guestInvitations)
+                    UnitOfWork.Set<GuestInvitation>().Delete(guestInvitation.Id);
+
+                EntityRepository.Delete(id);
+            }
+
+            await UnitOfWork.SaveChangesAsync();
+            await UnitOfWork.CommitTransactionAsync();
+
+            return Ok(new OkResponse<IEnumerable<Guid>>(string.Empty) { Data = ids });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message, ex);
+            await UnitOfWork.RollbackTransactionAsync();
+            return Problem(ex.Message);
+        }
+    }
+
     public record GuestRequest(
         Guid EventId,
         string? Salutation,

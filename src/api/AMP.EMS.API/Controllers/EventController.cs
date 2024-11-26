@@ -28,7 +28,10 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [Route("{eventId:guid}/[action]")]
     public IActionResult Roles(Guid eventId)
     {
-        var roles = UnitOfWork.Set<Role>().GetAll().Where(role => role.EventId == eventId).AsNoTracking();
+        var roles = UnitOfWork.Set<Role>().GetAll()
+            .Where(role => role.EventId == eventId)
+            .OrderBy(_ => _.Name)
+            .AsNoTracking();
 
         return Ok(new OkResponse<IEnumerable<Role>>(string.Empty) { Data = roles });
     }
@@ -38,7 +41,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     public IActionResult Guests(Guid eventId, int pageNumber, int pageSize, string? search, string? sortField,
         SortDirection? sortDirection, [FromQuery] Guid[]? roleIds)
     {
-        var query = UnitOfWork.Set<Guest>().GetAll().AsNoTracking()
+        var query = UnitOfWork.Set<Guest>().GetAll()
             .Where(guest => guest.EventId == eventId);
 
         if (!string.IsNullOrEmpty(search))
@@ -50,7 +53,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
 
         if (roleIds != null && roleIds.Any())
             query = query.Include(_ => _.GuestRoles)
-                .Where(_ => _.GuestRoles.Any(gr => roleIds.Contains(gr.RoleId))).AsNoTracking();
+                .Where(_ => _.GuestRoles.Any(gr => roleIds.Contains(gr.RoleId)));
 
         if (!string.IsNullOrEmpty(sortField))
             query = query.ApplySorting(new SortingParameters
@@ -59,7 +62,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
                 SortDirection = sortDirection ?? SortDirection.Ascending
             });
 
-        var pagedResult = query.ApplyPagination(pageNumber, pageSize);
+        var pagedResult = query.AsNoTracking().ApplyPagination(pageNumber, pageSize);
 
         return Ok(new OkResponse<PagedResult<Guest>>(string.Empty) { Data = pagedResult });
     }

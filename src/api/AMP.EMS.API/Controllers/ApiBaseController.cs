@@ -109,13 +109,13 @@ public class ApiBaseController<TEntity, TKey>(IUnitOfWork unitOfWork, ILogger lo
     }
 
     [HttpDelete]
-    public async Task<IActionResult> DeleteAll([FromBody] IEnumerable<TKey> keys)
+    public virtual async Task<IActionResult> DeleteAll([FromBody] IEnumerable<TKey> ids)
     {
         try
         {
             UnitOfWork.BeginTransaction();
 
-            foreach (var key in keys) EntityRepository.Delete(key);
+            foreach (var key in ids) EntityRepository.Delete(key);
 
             await UnitOfWork.SaveChangesAsync();
             await UnitOfWork.CommitTransactionAsync();

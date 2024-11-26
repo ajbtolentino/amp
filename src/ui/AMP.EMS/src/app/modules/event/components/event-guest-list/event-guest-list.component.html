@@ -1,28 +1,34 @@
-<ng-container *ngIf="guests$ | withStatus | async as guests">
+<ng-container *ngIf="{
+    guests: guests$ | withStatus | async,
+    roles: roles$ | withStatus | async
+    } as data">
     <div class="grid">
         <div class="col-12">
             <div class="card">
-                <p-table #dt [value]="guests.value?.result!" [rows]="10" [totalRecords]="guests.value?.totalRecords!"
-                    (onLazyLoad)="refreshGrid($event)" [lazy]="true" [paginator]="true" editMode="row"
-                    [(selection)]="selectedItems" [rowHover]="true" dataKey="id" [loading]="guests.loading"
-                    [globalFilterFields]="['firstName', 'lastName']" [showLoader]="false" stateStorage="session"
-                    stateKey="event-guest-list-session" [showCurrentPageReport]="!guests.loading"
+                <p-table #dt [value]="data.guests?.value?.result!" [rows]="10"
+                    [totalRecords]="data.guests?.value?.totalRecords!" (onLazyLoad)="refreshGrid($event)" [lazy]="true"
+                    [paginator]="true" editMode="row" [(selection)]="selectedItems" [rowHover]="true" dataKey="id"
+                    [loading]="data.guests?.loading" [globalFilterFields]="['firstName', 'lastName']"
+                    [showLoader]="false" stateStorage="session" stateKey="event-guest-list-session"
+                    [showCurrentPageReport]="!data.guests?.loading"
                     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between">
-                            <div class="left">
+                            <div class="flex left gap-3">
                                 <span class="p-input-icon-left p-ml-auto">
                                     <i class="pi pi-search"></i>
                                     <input pInputText type="text" placeholder="Search keyword" [ngModel]="searchKeyword"
                                         (input)="dt.filterGlobal($any($event.target).value, 'contains')" />
                                 </span>
+                                <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash"
+                                    (onClick)="clear()" />
                             </div>
                             <div class="right">
                                 <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
-                                    [loading]="guests.loading!" [routerLink]="['add']"></button>
+                                    [loading]="data.guests?.loading!" (click)="showAttendeeModal()"></button>
 
                                 <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"
-                                    [loading]="guests.loading!" (click)="deleteSelectedItems()"
+                                    [loading]="data.guests?.loading!" (click)="deleteSelectedItems()"
                                     [disabled]="!selectedItems || !selectedItems.length"></button>
                             </div>
                         </div>
@@ -63,14 +69,15 @@
                                 </div>
                             </th>
                             <th>
-                                <div class="flex align-items-center" *ngIf="roles$ | withStatus | async as roles">
+                                <div class="flex align-items-center">
                                     Role
                                     <p-columnFilter field="role" display="menu" matchMode="in" display="menu"
                                         [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
-                                        *ngIf="!roles.loading">
+                                        *ngIf="!data.roles?.loading">
                                         <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                            <p-multiSelect [ngModel]="value" [options]="roles.value" placeholder="Any"
-                                                (onChange)="filter($event.value)" optionLabel="name" optionValue="id">
+                                            <p-multiSelect [ngModel]="value" [options]="data.roles?.value"
+                                                placeholder="Any" (onChange)="filter($event.value)" optionLabel="name"
+                                                optionValue="id">
                                                 <ng-template let-option pTemplate="item">
                                                     <div class="inline-block vertical-align-middle">
                                                         <span class="ml-1 mt-1">{{ option.name }}</span>
@@ -92,16 +99,15 @@
                             <td>{{item.middleName}}</td>
                             <td>{{item.lastName}}</td>
                             <td>{{item.suffix}}</td>
-                            <td class="text-center">
-                                <span *ngFor='let eventGuestRole of item.eventGuestRoles; let i = index'>
-                                    {{eventGuestRole.role.name}}<span
-                                        *ngIf=" i < item.eventGuestRoles.length - 1">,</span>
+                            <td>
+                                <span *ngFor='let guestRole of item.guestRoles; let i = index'>
+                                    {{guestRole.role.name}}<span *ngIf=" i < item.guestRoles.length - 1">,</span>
                                 </span>
                             </td>
                             <td>
                                 <div class="flex">
                                     <button pButton pRipple type="button" icon="pi pi-pencil"
-                                        [routerLink]="[item.id,'edit']" class="p-button-text p-button-success mr-2"
+                                        (click)="showAttendeeModal(item)" class="p-button-text p-button-success mr-2"
                                         pTooltip="Edit">
                                     </button>
                                     <button pButton pRipple class="p-button-text p-button-warning" icon="pi pi-trash"
@@ -143,4 +149,55 @@
             </div>
         </div>
     </div>
+
+    <ng-container *ngIf="guest$ | withStatus | async as guest">
+        <p-dialog *ngIf="guest.value" header="Attendee Details" [modal]="true" [(visible)]="attendeeModal"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="salutation">Salutation</label>
+                    <p-dropdown [(ngModel)]="guest.value.salutation" inputId="inventoryStatus" appendTo="body"
+                        [options]="salutations" placeholder="Select" [showClear]="true"></p-dropdown>
+                </div>
+                <div class="field">
+                    <label for="firstName">First Name</label>
+                    <input pInputText [(ngModel)]="guest.value!.firstName"
+                        [ngClass]="{'ng-invalid ng-dirty' : !guest.value.firstName}" />
+                </div>
+                <div class="field">
+                    <label for="middleName">Middle Name</label>
+                    <input pInputText [(ngModel)]="guest.value!.middleName" />
+                </div>
+                <div class="field">
+                    <label for="lastName">Last Name</label>
+                    <input pInputText [(ngModel)]="guest.value!.lastName"
+                        [ngClass]="{'ng-invalid ng-dirty' : !guest.value.lastName}" />
+                </div>
+                <div class="field">
+                    <label for="suffix">Suffix</label>
+                    <p-dropdown [(ngModel)]="guest.value.suffix" inputId="suffix" [options]="suffixes" appendTo="body"
+                        [showClear]="true" placeholder="Select"></p-dropdown>
+                </div>
+                <div class="field">
+                    <label for="nickName">Nickname</label>
+                    <input pInputText [(ngModel)]="guest.value!.nickName" />
+                </div>
+                <div class="field">
+                    <label htmlFor="role">Role</label>
+                    <p-multiSelect #rolemultiselect *ngIf="!data.roles?.loading && !guest.loading" inputId="role"
+                        appendTo="body" placeholder="Select Role" [options]="data.roles?.value" optionLabel="name"
+                        optionValue="id" [loading]="data.roles?.loading" [(ngModel)]="selectedRoleIds" />
+
+                    <p-skeleton *ngIf="data.roles?.loading"></p-skeleton>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    [loading]="guest.loading! || data.guests?.loading!" (click)="attendeeModal = false"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    [loading]="guest.loading! || data.guests?.loading!" (click)="saveAttendee(guest.value)"></button>
+            </ng-template>
+        </p-dialog>
+    </ng-container>
 </ng-container>

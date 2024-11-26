@@ -10,13 +10,12 @@
                 [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
                 [cdkDropListSortPredicate]="(disableAttendeeDrop)">
                 <ng-template let-guest pTemplate="item">
-                    <div class="w-full" cdkDrag [cdkDragData]="guest">
-                        <div class="w-full p-2 border-round shadow-3 text-left flex gap-3 h-3rem align-items-center">
-                            <i class="pi pi-user"></i>
-                            <div class="w-full flex justify-content-between">
-                                <span>{{guest.firstName}} {{guest.lastName}}</span>
-                                <span *ngIf="(guest?.seats! - 1) > 0">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
-                            </div>
+                    <div class="w-full bg-white p-2 border-round shadow-3 text-left flex gap-3 h-3rem align-items-center"
+                        cdkDrag [cdkDragData]="guest">
+                        <i class="pi pi-user"></i>
+                        <div class="flex justify-content-between">
+                            <span>{{guest.firstName}} {{guest.lastName}}</span>
+                            <span *ngIf="(guest?.seats! - 1) > 0">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
                         </div>
                     </div>
                 </ng-template>
