@@ -31,7 +31,7 @@ export class EventVendorContractListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.eventId = this.route.snapshot.parent?.parent?.paramMap.get("eventId") || '';
+    this.eventId = this.route.snapshot.parent?.parent?.parent?.paramMap.get("eventId") || '';
 
     this.vendorContracts = this.loadVendorContracts();
 

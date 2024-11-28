@@ -24,7 +24,6 @@ import { AuthConfigModule } from './core/auth-config.module';
 import { EventsLayoutComponent } from './layout/events-layout/events-layout.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { HomeComponent } from './pages/home/home.component';
-import { NotfoundComponent } from './pages/notfound/notfound.component';
 
 @NgModule({
     imports: [
@@ -95,8 +94,8 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
                     path: 'error',
                     component: ErrorComponent
                 },
-                { path: 'notfound', component: NotfoundComponent },
-                { path: '**', redirectTo: '/notfound' },
+                // { path: 'notfound', component: NotfoundComponent },
+                // { path: '**', redirectTo: '/notfound' },
             ],
             withEnabledBlockingInitialNavigation()
         ),

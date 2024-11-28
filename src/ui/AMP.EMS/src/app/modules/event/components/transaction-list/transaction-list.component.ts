@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventService, LookupService } from '@core/services';
+import { EventService, LookupService, TransactionService } from '@core/services';
 import { Transaction } from '@shared/models';
+import { ConfirmationService } from 'primeng/api';
 import { map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
@@ -14,6 +15,8 @@ export class TransactionListComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
+    private confirmationService: ConfirmationService,
+    private transactionService: TransactionService,
     private lookupService: LookupService) { }
 
   ngOnInit(): void {
@@ -40,5 +43,20 @@ export class TransactionListComponent implements OnInit {
           })
         ))
       )
+  }
+
+  delete = (id: string) => {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete this transaction?`,
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: async () => {
+        this.transactions$ = this.transactionService.delete(id)
+          .pipe(
+            switchMap(() => this.route.parent?.paramMap!),
+            switchMap(params => this.loadTransactions(params.get("eventId")!))
+          )
+      }
+    });
   }
 }

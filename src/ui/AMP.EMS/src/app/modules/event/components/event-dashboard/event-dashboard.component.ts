@@ -1,4 +1,4 @@
-import { formatDate } from '@angular/common';
+import { formatCurrency, formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService, LookupService, VendorService } from '@core/services';
@@ -53,16 +53,25 @@ export class EventDashboardComponent implements OnInit {
     this.timelines$ = this.route.parent?.paramMap.pipe(
       switchMap(params => this.eventService.getTimelines(params.get("eventId")!)
         .pipe(
+          map(timelines => timelines.map(timeline => ({
+            ...timeline,
+            icon: PrimeIcons.CALENDAR,
+            color: '#FF9800'
+          }))),
           switchMap(timelines => this.loadContractPayments(params.get("eventId")!).pipe(
-            map(paymentTimelines => [...timelines, ...paymentTimelines])
+            map(paymentTimelines => [...timelines, ...paymentTimelines.map(paymentTimeline => ({
+              ...paymentTimeline,
+              icon: [PrimeIcons.DOLLAR],
+              color: 'green'
+            }))])
           )),
         )),
       map(timelines => timelines.sort((a, b) => new Date(a.startDate!).getTime() - new Date(b.startDate!).getTime()).map((timeline: any) => ({
         name: timeline.name,
         description: timeline.description,
         date: formatDate(timeline.startDate!, 'medium', 'en-PH'),
-        icon: timeline.isPayment ? PrimeIcons.DOLLAR : PrimeIcons.CALENDAR,
-        color: timeline.isPayment ? 'green' : '#FF9800'
+        icon: timeline.icon,
+        color: timeline.color
       })))
     )!;
   }
@@ -124,9 +133,8 @@ export class EventDashboardComponent implements OnInit {
           vendorContractPayment => (
             {
               name: `Payment Due`,
-              description: `Payment of ${vendorContractPayment.dueAmount} for ${vendorContractPayment.vendorContract?.vendor?.name}`,
+              description: `Payment of ${formatCurrency(vendorContractPayment.dueAmount!, 'en-PH', 'P', 'PHP')} for ${vendorContractPayment.vendorContract?.vendor?.name}`,
               startDate: vendorContractPayment.dueDate,
-              isPayment: true
             })
         )
         )

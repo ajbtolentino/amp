@@ -28,6 +28,6 @@ export class TransactionService extends BaseApiService {
   }
 
   delete = (id: string): Observable<Transaction> => {
-    return this.httpDelete(`event/${id}`);
+    return this.httpDelete(`transaction/${id}`);
   }
 }

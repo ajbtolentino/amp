@@ -2,59 +2,61 @@
     guests: guests$ | withStatus | async,
     zones: zones$ | withStatus | async
     } as data">
-    <div class="card flex flex-column md:flex-row gap-2">
-        <div class="col-12 md:col-3 text-center drop-zone p-0">
-            <p-listbox *ngIf="!data.guests?.loading" [options]="data.guests?.value!" [filter]="true"
-                [filterFields]="['firstName', 'lastName']" [listStyle]="{ 'max-height': '100vh' }" [draggable]="false"
-                filterPlaceHolder="Search Attendee" cdkDropList [cdkDropListData]="data.guests?.value!"
-                [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
-                [cdkDropListSortPredicate]="(disableAttendeeDrop)">
-                <ng-template let-guest pTemplate="item">
-                    <div class="w-full bg-white p-2 border-round shadow-3 text-left flex gap-3 h-3rem align-items-center"
-                        cdkDrag [cdkDragData]="guest">
-                        <i class="pi pi-user"></i>
-                        <div class="flex justify-content-between">
-                            <span>{{guest.firstName}} {{guest.lastName}}</span>
-                            <span *ngIf="(guest?.seats! - 1) > 0">+ {{guest?.seats ? guest?.seats! - 1 : 0}}</span>
-                        </div>
+    <div class="card flex flex-column md:flex-row gap-3">
+        <div class="flex flex-column gap-3 col-12 md:col-3 text-center p-0" cdkDropList
+            [cdkDropListData]="data.guests?.value!" [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds"
+            [cdkDropListSortPredicate]="(disableAttendeeDrop)" [style]="{'max-height': '100vh', 'overflow': 'auto'}">
+            <input pInputText placeholder="Search Attendee" [(ngModel)]="search" (ngModelChange)="filterAttendees()"
+                [style]="{'position': 'sticky', 'top': 0}" />
+            <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                <li class="p-3 bg-white border-round gap-2 surface-border border-1 flex
+                align-items-center" *ngFor="let guest of data.guests?.value! | orderBy : 'firstName'" cdkDrag
+                    [cdkDragData]="guest" cdkDragHandle>
+                    <i class="pi pi-user"></i>
+                    <div class="flex justify-content-between w-full">
+                        <span>{{guest.salutation}} {{guest.firstName}} {{guest.middleName}} {{guest.lastName}}
+                            {{guest.suffix}}</span>
+                        <span *ngIf="(guest?.guestInvitations | reduce : attendeeReducer : []).length">+
+                            {{(guest?.guestInvitations | reduce : attendeeReducer : []).length}}</span>
                     </div>
-                </ng-template>
-            </p-listbox>
+
+                </li>
+            </ul>
             <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)"
                 *ngIf="data.guests?.loading" />
         </div>
 
-        <div class="flex flex-wrap w-full h-full col-12 md:col-9 gap-2 p-0" *ngIf="!data.zones?.loading" cdkDropList
+        <div class="grid col-12 md:col-9 gap-2 w-full" *ngIf="!data.zones?.loading" cdkDropList
             [cdkDropListData]="data.zones" cdkDropListOrientation="mixed"
             (cdkDropListDropped)="reOrderZone($event, data.zones?.value!)">
-            <p-card *ngFor="let zone of data.zones?.value; let i = index" class="col-12 md:col-3 drop-zone" cdkDrag
-                [cdkDragData]="zone">
-                <ng-template pTemplate="header">
-                    <p class="text-center surface-border border-bottom-1 p-3" cdkDragHandle>
-                        <span class="font-bold">{{zone.name}}</span>
-                    </p>
-                </ng-template>
+            <div class="card flex flex-column surface-border flex-grow col-12 md:col-3 drop-zone gap-3"
+                *ngFor="let zone of data.zones?.value; let i = index" cdkDrag [cdkDragData]="zone"
+                [ngStyle]="{'height': 'fit-content'}">
+                <p class="text-center surface-border border-bottom-1 pb-2 mb-0" cdkDragHandle>
+                    <span class="font-bold">{{zone.name}}</span>
+                </p>
+
                 <ul class="list-none flex flex-column gap-2 p-0 m-0" *ngIf="zone.zoneSeats" cdkDropList [id]="zone.id!"
                     [cdkDropListConnectedTo]="data.zones?.value! | map : mapZoneIds" [cdkDropListData]="zone.zoneSeats"
                     (cdkDropListDropped)="seatAttendee($event, zone, data.zones?.value!)">
                     <li *ngFor="let zoneSeat of zone.zoneSeats"
-                        class="p-3 bg-white border-round gap-2 shadow-3 flex flex-column align-items-start align-items-center"
-                        cdkDrag [cdkDragData]="zoneSeat.guest">
+                        class="p-3 bg-white border-round gap-2 surface-border border-1 flex flex-column align-items-start align-items-center"
+                        cdkDrag [cdkDragData]="zoneSeat.guest" cdkDragHandle>
                         <ng-container
                             *ngIf="(zoneSeat.guest?.guestInvitations || []) | filter: isGoing | reduce : attendeeReducer : [] as guestInvitations">
                             <div class="w-full flex flex-row gap-3 align-items-center">
                                 <i class="pi pi-user"></i>
                                 <div class="w-full flex justify-content-between">
-                                    <span>{{
+                                    <span>{{zoneSeat.guest?.salutation}} {{
                                         zoneSeat.guest?.firstName }} {{ zoneSeat.guest?.lastName
-                                        }}</span>
+                                        }} {{zoneSeat.guest?.suffix}}</span>
                                 </div>
                                 <p-toggleButton *ngIf="guestInvitations.length" onIcon="pi pi-angle-up"
-                                    offIcon="pi pi-angle-down" styleClass="h-1rem"
+                                    offIcon="pi pi-angle-down" [style]="{'height': '3px'}"
                                     pStyleClass="#secondary-{{zoneSeat.guest?.id}}" toggleClass="flex" />
                             </div>
                             <div id="secondary-{{zoneSeat.guest?.id}}"
-                                class="gap-2 hidden flex-column w-full animation-duration-1000 animate-width">
+                                class="gap-2 hidden flex-column w-full animation-duration-1000 animate-height">
                                 <div class="w-full flex flex-row gap-3" *ngFor="let secondary of guestInvitations">
                                     <i class="pi pi-user text-orange-200"></i>
                                     <div class="w-full flex justify-content-between">
@@ -65,18 +67,16 @@
                         </ng-container>
                     </li>
                 </ul>
-                <ng-template pTemplate="footer">
-                    <div class="flex justify-content-between">
-                        <span><ng-container *ngIf="zone.capacity">Capacity:
-                                {{zone.capacity}}</ng-container></span>
-                        <span *ngIf="zone.zoneSeats" class="right"
-                            [ngClass]="{'text-red-500': zone.capacity && (zone.zoneSeats! | reduce : zoneSeatReducer : 0) > zone.capacity!}">Total:
-                            {{ zone.zoneSeats | reduce : zoneSeatReducer : 0 }}</span>
-                    </div>
-                </ng-template>
-            </p-card>
+                <div class="flex justify-content-between align-items-end">
+                    <span><ng-container *ngIf="zone.capacity">Capacity:
+                            {{zone.capacity}}</ng-container></span>
+                    <span *ngIf="zone.zoneSeats" class="right"
+                        [ngClass]="{'text-red-500': zone.capacity && (zone.zoneSeats! | reduce : zoneSeatReducer : 0) > zone.capacity!}">Total:
+                        {{ zone.zoneSeats | reduce : zoneSeatReducer : 0 }}</span>
+                </div>
+            </div>
         </div>
-        <div class="flex flex-column border-1 surface-border border-round col-12 md:col-9 text-center justify-content-center"
+        <div class="flex flex-column col-12 md:col-9 text-center justify-content-center p-0"
             *ngIf="data.zones?.loading">
             <p-progressSpinner styleClass="w-4rem h-6rem" strokeWidth="8" fill="var(--surface-ground)" />
         </div>

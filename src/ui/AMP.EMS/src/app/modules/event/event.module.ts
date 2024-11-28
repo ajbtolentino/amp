@@ -98,15 +98,15 @@ const routes: Routes = [
           {
             path: 'add',
             pathMatch: 'full',
-            title: 'Budgets',
-            data: { breadcrumb: null },
+            title: 'Add Budget',
+            data: { breadcrumb: 'Add' },
             component: EventVendorTypeBudgetDetailsComponent,
           },
           {
             path: ':eventVendorTypeBudgetId/edit',
             pathMatch: 'full',
-            title: 'Budgets',
-            data: { breadcrumb: null },
+            title: 'Edit Budget',
+            data: { breadcrumb: 'Edit' },
             component: EventVendorTypeBudgetDetailsComponent,
 
           },
@@ -118,32 +118,51 @@ const routes: Routes = [
         data: { breadcrumb: 'Vendors' },
         children: [
           {
+            title: 'Search Vendors',
             path: '',
+            data: { breadcrumb: null },
             component: EventVendorListComponent
           },
           {
+            title: 'Transactions',
             path: 'transactions',
+            data: { breadcrumb: 'Transactions' },
             component: EventVendorTransactionListComponent
           },
           {
+            title: 'Contracts',
             path: 'contracts',
-            pathMatch: 'full',
-            component: EventVendorContractListComponent
+            data: { breadcrumb: 'Contracts' },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                data: { breadcrumb: null },
+                component: EventVendorContractListComponent
+              },
+              {
+                title: 'Edit Contract',
+                path: ':vendorContractId',
+                data: { breadcrumb: 'Edit' },
+                component: EventVendorContractDetailsComponent
+              }
+            ]
           },
           {
             path: ':vendorId',
+            data: { breadcrumb: null },
             children: [
               {
+                title: 'Edit Vendor',
                 path: 'edit',
+                data: { breadcrumb: 'Edit' },
                 component: VendorDetailsComponent
               },
               {
+                title: 'Draft Contract',
                 path: 'contracts/draft',
                 pathMatch: 'full',
-                component: EventVendorContractDetailsComponent
-              },
-              {
-                path: 'contracts/:vendorContractId',
+                data: { breadcrumb: 'Draft' },
                 component: EventVendorContractDetailsComponent
               }
             ]
@@ -158,7 +177,7 @@ const routes: Routes = [
           {
             path: '',
             pathMatch: 'full',
-            title: 'Event Guests',
+            title: 'Guests',
             data: { breadcrumb: null },
             component: EventGuestListComponent,
           },
@@ -166,24 +185,25 @@ const routes: Routes = [
             path: 'add',
             pathMatch: 'full',
             title: 'Add Guest',
-            data: { breadcrumb: 'Add' },
+            data: { breadcrumb: 'Add Guest' },
             component: EventGuestDetailsComponent,
           },
           {
             path: ':eventGuestId/edit',
-            data: { breadcrumb: 'Guest Details' },
+            data: { breadcrumb: 'Edit Guest' },
             component: EventGuestDetailsComponent,
           }
         ]
       },
       {
+        title: 'Invitations',
         path: 'invitations',
         data: { breadcrumb: 'Invitations' },
         children: [
           {
+            title: 'Invitations',
             path: '',
             pathMatch: 'full',
-            title: 'Invitations',
             data: { breadcrumb: null },
             component: EventInvitationListComponent,
           },
@@ -191,7 +211,7 @@ const routes: Routes = [
             path: 'add',
             title: 'Add Invitation',
             pathMatch: 'full',
-            data: { breadcrumb: null },
+            data: { breadcrumb: 'Add Invitation' },
             component: EventInvitationDetailsComponent,
           },
           {
@@ -200,7 +220,9 @@ const routes: Routes = [
             data: { breadcrumb: null },
             children: [
               {
+                title: 'Edit Invitation',
                 path: 'edit',
+                data: { breadcrumb: 'Edit' },
                 pathMatch: 'full',
                 component: EventInvitationDetailsComponent,
               }
@@ -210,8 +232,8 @@ const routes: Routes = [
           {
             path: ':eventInvitationId/guests',
             pathMatch: 'full',
-            title: 'Invitation',
-            data: { breadcrumb: null },
+            title: 'Manage Recipients',
+            data: { breadcrumb: 'Recipients' },
             component: EventInvitationGuestListComponent,
           },
         ]
@@ -223,19 +245,23 @@ const routes: Routes = [
           {
             path: '',
             pathMatch: 'full',
+            data: { breadcrumb: null },
             component: EventAccountListComponent
           },
           {
             path: 'add',
             pathMatch: 'full',
+            data: { breadcrumb: 'Add Account' },
             component: EventAccountDetailsComponent
           },
           {
             path: ':accountId',
+            data: { breadcrumb: null },
             children: [
               {
                 path: 'edit',
                 pathMatch: 'full',
+                data: { breadcrumb: 'Edit Account' },
                 component: EventAccountDetailsComponent
               }
             ]
@@ -244,22 +270,27 @@ const routes: Routes = [
       },
       {
         path: 'transactions',
+        data: { breadcrumb: 'Transactions' },
         component: TransactionListComponent
       },
       {
         path: 'timeline',
+        data: { breadcrumb: 'Timeline' },
         component: TimelineListComponent
       },
       {
         path: 'tasks',
+        data: { breadcrumb: 'Tasks' },
         component: EventTaskListComponent
       },
       {
         path: 'zones',
+        data: { breadcrumb: 'Zones' },
         component: ZoneListComponent
       },
       {
         path: 'seat-assignment',
+        data: { breadcrumb: 'Seat Assignment' },
         component: SeatAssignmentComponent
       },
     ]

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services';
 import { TimelineService } from '@modules/event/services/timeline.service';
 import { Timeline } from '@shared/models';
+import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { map, Observable, of, switchMap } from 'rxjs';
 
@@ -20,6 +21,7 @@ export class TimelineListComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
+    private confirmationService: ConfirmationService,
     private timelineService: TimelineService) {
 
   }
@@ -51,6 +53,21 @@ export class TimelineListComponent implements OnInit {
     this.table.initRowEdit(timelines[0]);
 
     this.isCreating = true;
+  }
+
+  delete = (id: string) => {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete the selected record?`,
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.timelines$ = this.timelineService.delete(id)
+          .pipe(
+            switchMap(() => this.route.parent?.paramMap!),
+            switchMap(params => this.loadTimelines(params.get("eventId")!))
+          )
+      }
+    });
   }
 
   save = async (item: Timeline) => {

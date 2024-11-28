@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services';
 import { ZoneService } from '@modules/event/services/zone.service';
 import { Zone } from '@shared/models';
+import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Observable, of, switchMap, tap } from 'rxjs';
 
@@ -20,7 +21,8 @@ export class ZoneListComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
-    private zoneService: ZoneService) {
+    private zoneService: ZoneService,
+    private confirmationService: ConfirmationService) {
 
   }
 
@@ -50,7 +52,10 @@ export class ZoneListComponent implements OnInit {
     if (item?.name?.trim()) {
       if (item.id) {
         this.zones$ = this.route.parent?.paramMap.pipe(
-          switchMap(params => this.zoneService.update(item)),
+          switchMap(params => this.zoneService.update({
+            ...item,
+            capacity: item.capacity || 0
+          })),
           switchMap(zone => this.loadZones(item.eventId!)),
           tap(() => {
             this.isCreating = false;
@@ -61,6 +66,7 @@ export class ZoneListComponent implements OnInit {
         this.zones$ = this.route.parent?.paramMap.pipe(
           switchMap(params => this.zoneService.add({
             ...item,
+            capacity: item.capacity || 0,
             eventId: params.get("eventId")!
           })),
           switchMap(zone => this.loadZones(zone.eventId!)),
@@ -70,5 +76,23 @@ export class ZoneListComponent implements OnInit {
         ) || of<Zone[]>([]);
       }
     }
+  }
+
+  delete = (id: string) => {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.zones$ = this.zoneService.delete(id)
+          .pipe(
+            switchMap(() => this.route.parent?.paramMap!),
+            switchMap(params => this.loadZones(params.get("eventId")!)),
+            tap(() => {
+              this.isCreating = false;
+            })
+          ) || of<Zone[]>([]);
+      }
+    });
   }
 }

@@ -34,7 +34,7 @@ export class EventService extends BaseApiService {
                 search: search || '',
                 sortField: sortField || '',
                 sortDirection: sortDirection || '',
-                roleIds: roleIds
+                roleIds: roleIds || []
             }
         });
     }

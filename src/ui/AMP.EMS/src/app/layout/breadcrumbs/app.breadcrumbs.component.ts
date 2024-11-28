@@ -1,8 +1,7 @@
 import { Component, Injectable, OnInit } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { Observable } from 'rxjs';
-import { BreadcrumbService } from '../../core/services/breadcrumbs.service';
+import { filter, map, Observable, startWith } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -14,16 +13,43 @@ import { BreadcrumbService } from '../../core/services/breadcrumbs.service';
 })
 
 export class BreadcrumbsComponent implements OnInit {
-  readonly home = { icon: 'pi pi-home', routerLink: '/' };
+  static readonly ROUTE_DATA_BREADCRUMB = 'breadcrumb';
+  readonly home = { icon: 'pi pi-home', routerLink: ['./'] };
+  menuItems$: Observable<MenuItem[]> = new Observable<MenuItem[]>();
 
-  breadcrumbs$: Observable<MenuItem[]> = new Observable<MenuItem[]>();
-  routeData$: Observable<Data> = new Observable<Data>();
-
-  constructor(private breadcrumbService: BreadcrumbService, private route: ActivatedRoute) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.breadcrumbs$ = this.breadcrumbService.breadcrumbs$;
+    this.menuItems$ = this.router.events
+      .pipe(
+        filter((e) => e instanceof NavigationEnd),
+        startWith(this.router),
+        map((e) => this.createBreadcrumbs(this.activatedRoute.root)
+        )
+      );
+  }
 
-    this.routeData$ = this.route.data;
+  private createBreadcrumbs(route: ActivatedRoute, routerLink: string = '', breadcrumbs: MenuItem[] = []): MenuItem[] {
+    const children: ActivatedRoute[] = route.children;
+
+    if (children.length === 0) {
+      return breadcrumbs;
+    }
+
+    for (const child of children) {
+      const routeURL: string = child.snapshot.url.map(segment => segment.path).join('/');
+      if (routeURL !== '') {
+        routerLink += `/${routeURL}`;
+      }
+
+      const label = child.snapshot.data[BreadcrumbsComponent.ROUTE_DATA_BREADCRUMB];
+
+      if (label) {
+        breadcrumbs.push({ label, routerLink });
+      }
+
+      return this.createBreadcrumbs(child, routerLink, breadcrumbs);
+    }
+    return []
   }
 }

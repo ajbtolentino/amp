@@ -73,6 +73,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     {
         var guests = UnitOfWork.Set<Guest>().GetAll()
             .Include(_ => _.ZoneSeats)
+            .Include(_ => _.GuestInvitations)
             .Where(guest => guest.EventId == eventId && !guest.ZoneSeats.Any())
             .AsNoTracking();
 

@@ -1,3 +1,3 @@
-<ng-container *ngIf="routeData$ | withStatus | async as breadcrumbs">
-    <p-breadcrumb [home]="home" [model]="breadcrumbs?.value!['breadcrumbs']"></p-breadcrumb>
+<ng-container *ngIf="menuItems$ | withStatus | async as menuItems">
+    <p-breadcrumb [home]="home" [model]="menuItems.value"></p-breadcrumb>
 </ng-container>

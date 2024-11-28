@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EventService } from '@core/services';
 import { ZoneService } from '@modules/event';
 import { Guest, GuestInvitation, Zone } from '@shared/models';
-import { map, Observable, of, switchMap, tap } from 'rxjs';
+import { map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-seat-assignment',
@@ -14,6 +14,8 @@ import { map, Observable, of, switchMap, tap } from 'rxjs';
 export class SeatAssignmentComponent implements OnInit {
   guests$: Observable<Guest[]> = new Observable<Guest[]>();
   zones$: Observable<Zone[]> = new Observable<Zone[]>();
+
+  search: string = '';
 
   constructor(private route: ActivatedRoute,
     private eventService: EventService,
@@ -27,10 +29,10 @@ export class SeatAssignmentComponent implements OnInit {
     ) || of<Zone[]>([]);
 
     this.guests$ = this.route.parent?.paramMap.pipe(
-      switchMap(params => this.loadGuests(params.get("eventId")!))
+      switchMap(params => this.loadGuests(params.get("eventId")!)),
+      shareReplay()
     ) || of<Guest[]>([]);
   }
-
 
   loadZones = (eventId: string): Observable<Zone[]> => {
     return this.eventService.getZones(eventId)
@@ -53,7 +55,7 @@ export class SeatAssignmentComponent implements OnInit {
       );
   }
 
-  loadGuests = (eventId: string): Observable<Zone[]> => {
+  loadGuests = (eventId: string): Observable<Guest[]> => {
     return this.eventService.unseatedGuests(eventId);
   }
 
@@ -78,6 +80,15 @@ export class SeatAssignmentComponent implements OnInit {
     if (!guestInvitation.data) return false;
 
     return JSON.parse(guestInvitation.data).response === 'ACCEPT';
+  }
+
+  filterAttendees = () => {
+    this.guests$ = this.guests$.pipe(
+      map((guests) => guests.filter(
+        guest => `${guest.salutation?.toLowerCase()}${guest.firstName?.toLowerCase()}${guest.middleName?.toLowerCase()}${guest.lastName?.toLowerCase()}${guest.suffix?.toLowerCase()}`.includes(this.search.toLowerCase())
+      ))
+    )
+    // return 
   }
 
   seatAttendee(event: any, zone: Zone, zones: Zone[]): void {
@@ -134,16 +145,18 @@ export class SeatAssignmentComponent implements OnInit {
   }
 
   reOrderZone = (event: any, zones: Zone[]) => {
-    moveItemInArray(zones, event.previousIndex, event.currentIndex);
+    if (event.previousIndex != event.currentIndex) {
+      moveItemInArray(zones, event.previousIndex, event.currentIndex);
 
-    zones = zones.map((zone, index) => ({
-      ...zone,
-      configuration: JSON.stringify({
-        position: index
-      })
-    }));
+      zones = zones.map((zone, index) => ({
+        ...zone,
+        configuration: JSON.stringify({
+          position: index
+        })
+      }));
 
-    this.save(zones);
+      this.save(zones);
+    }
   }
 
   save = (zones: Zone[]) => {
