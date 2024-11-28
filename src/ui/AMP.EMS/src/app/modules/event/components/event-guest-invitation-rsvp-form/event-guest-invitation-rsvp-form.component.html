@@ -1,4 +1,5 @@
-<div class="change-response-container" *ngIf="checkIfResponded && this.guestInvitationRsvp.response">
+<div class="change-response-container overflow-hidden flex flex-column gap-3"
+  [@collapse]="!(checkIfResponded && guestInvitationRsvp.response && showRsvpForm)">
   <span *ngIf="checkIfRespondedMessage">
     {{checkIfRespondedMessage}}
   </span>
@@ -9,28 +10,30 @@
     {{checkIfDeclinedMessage}}
   </span>
   <div class="change-response-button-container">
-    <p-button (click)="changeResponse()">Change my response</p-button>
+    <p-button severity="info" (click)="changeResponse()">
+      {{changeResponseButtonLabel ?? 'Change my response'}}</p-button>
   </div>
 </div>
 
-<ng-container *ngIf="!(checkIfResponded && this.guestInvitationRsvp.response)">
+<div class="flex flex-column gap-3 overflow-hidden"
+  [@collapse]="!(checkIfResponded && !guestInvitationRsvp.response) || !showRsvpForm">
   <ng-content></ng-content>
 
   <form [formGroup]="rsvpForm" (ngSubmit)="onSendResponseClick()">
-    <div class="form-container">
+    <div class="form-container flex flex-column gap-3">
       <div *ngIf="choiceMessage">{{choiceMessage}}</div>
-      <div class="guest-names-container" *ngIf="rsvpForm.value['response'] === 'ACCEPT'">
+      <div class="guest-names-container flex flex-column gap-3" [@collapse]="rsvpForm.value['response'] !== 'ACCEPT'">
         <div *ngIf="acceptMessage">{{acceptMessage}}</div>
         <span *ngIf="secondaryGuestsLabel && guestNames.controls.length > 1">{{secondaryGuestsLabel}}</span>
         <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
           <input *ngIf="i < guestNames.controls.length" id="guest-{{i}}" [formControl]="guestNameControl" pInputText
-            type="text" [ngClass]="{'w-full m-1': true }" placeholder='{{secondaryGuestsPlaceholder || "Name " + i}}' />
+            type="text" [ngClass]="{'w-full': true }" placeholder='{{secondaryGuestsPlaceholder || "Name " + i}}' />
 
           <p-message *ngIf="i===0  && guestNameControl?.invalid && guestNameControl?.touched" severity="warn"
             class="w-full" text="Please enter your name">
           </p-message>
         </ng-container>
-        <div *ngIf="requestDetails">
+        <div *ngIf="requestDetails" class="gap-3">
           <div>{{requestDetailsMessage}}</div>
           <textarea pInputText id="request-details" rows="10" class="w-full" formControlName="details"></textarea>
         </div>
@@ -46,7 +49,7 @@
           <label class="ml-2" for="response-decline" class="decline-label">{{declineLabel}}</label>
         </div>
       </div>
-      <div class="button-container flex flex-wrap gap-3" *ngIf="rsvpForm.value['response']">
+      <div class="button-container flex flex-wrap gap-3">
         <p-button pRipple severity="info" [ngClass]="submitButtonClass" (click)="onSendResponseClick()"
           [disabled]="(rsvpForm.value['response'] === 'ACCEPT' && rsvpForm.get('guestNames')?.invalid)">Send
           Response</p-button>
@@ -54,4 +57,8 @@
       </div>
     </div>
   </form>
-</ng-container>
+</div>
+
+<div *ngIf="!showRsvpForm">
+  Rsvp is no longer available
+</div>

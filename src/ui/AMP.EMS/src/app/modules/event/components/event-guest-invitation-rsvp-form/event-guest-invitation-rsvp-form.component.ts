@@ -1,3 +1,4 @@
+import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GuestInvitationRsvp } from '@shared/models';
@@ -66,9 +67,24 @@ export class EventGuestInvitationRSVPDateComponent {
   @Input() dateFormat?: string | undefined | null | '';
 }
 
+const DEFAULT_DURATION = 300;
+
 @Component({
   selector: 'app-event-guest-invitation-rsvp-form',
-  templateUrl: './event-guest-invitation-rsvp-form.component.html'
+  templateUrl: './event-guest-invitation-rsvp-form.component.html',
+  styles: `
+  .guest-names-container {
+    overflow: hidden;
+  }
+  `,
+  animations: [
+    trigger('collapse', [
+      state('false', style({ height: AUTO_STYLE, visibility: AUTO_STYLE })),
+      state('true', style({ height: '0', visibility: 'hidden' })),
+      transition('false => true', animate(DEFAULT_DURATION + 'ms ease-in')),
+      transition('true => false', animate(DEFAULT_DURATION + 'ms ease-out'))
+    ])
+  ]
 })
 export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicMount {
   @Input() choiceMessage?: string;
@@ -83,6 +99,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Input() checkIfRespondedMessage?: string;
   @Input() checkIfAcceptedMessage?: string;
   @Input() checkIfDeclinedMessage?: string;
+  @Input() changeResponseButtonLabel?: string;
 
   @Input() acceptLabel: string = 'Accept';
   @Input() declineLabel: string = 'Decline';
@@ -120,6 +137,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   onDynamicMount(data: OnDynamicData): void {
     const length = data.context.guestInvitation.seats || 0;
 
+    this.showRsvpForm = data.context.guestInvitation.invitation.rsvpDeadline && new Date() <= new Date(data.context.guestInvitation.invitation.rsvpDeadline);
     this.guestInvitationId = data.context.guestInvitation.id;
     this.guestInvitationRsvp = data.context.guestInvitation.data ?
       JSON.parse(data.context.guestInvitation.data) :
