@@ -20,11 +20,11 @@
   <ng-content></ng-content>
 
   <form [formGroup]="rsvpForm" (ngSubmit)="onSendResponseClick()">
-    <div class="form-container flex flex-column gap-3">
+    <div class="form-container flex flex-column">
       <div *ngIf="choiceMessage">{{choiceMessage}}</div>
       <div class="guest-names-container flex flex-column gap-3" [@collapse]="rsvpForm.value['response'] !== 'ACCEPT'">
         <div *ngIf="acceptMessage">{{acceptMessage}}</div>
-        <span *ngIf="secondaryGuestsLabel && guestNames.controls.length > 1">{{secondaryGuestsLabel}}</span>
+        <span *ngIf="secondaryGuestsLabel && guestNames.controls.length">{{secondaryGuestsLabel}}</span>
         <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
           <input *ngIf="i < guestNames.controls.length" id="guest-{{i}}" [formControl]="guestNameControl" pInputText
             type="text" [ngClass]="{'w-full': true }" placeholder='{{secondaryGuestsPlaceholder || "Name " + i}}' />
