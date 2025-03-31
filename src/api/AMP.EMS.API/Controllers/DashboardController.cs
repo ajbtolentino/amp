@@ -15,6 +15,7 @@ public class DashboardController(IUnitOfWork unitOfWork, ILogger<EventController
     public IActionResult Attendees(Guid eventId)
     {
         var attendees = unitOfWork.Set<Guest>().GetAll()
+            .Where(_ => _.EventId == eventId)
             .Include(_ => _.GuestInvitations)
             .AsNoTracking();
 
