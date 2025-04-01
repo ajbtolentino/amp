@@ -25,6 +25,9 @@ export class EventGuestDetailsComponent implements OnInit, OnDestroy {
   selectedRoleIds: string[] = [];
 
   salutations: string[] = [
+    "Atty.",
+    "Mayor",
+    "Judge",
     "Mr.",
     "Mrs.",
     "Miss",

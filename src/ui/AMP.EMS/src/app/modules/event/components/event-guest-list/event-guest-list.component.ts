@@ -30,6 +30,9 @@ export class EventGuestListComponent implements OnInit {
   @ViewChild('dt') table!: Table;
 
   salutations: string[] = [
+    "Atty.",
+    "Mayor",
+    "Judge",
     "Mr.",
     "Mrs.",
     "Miss",
