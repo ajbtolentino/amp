@@ -99,7 +99,7 @@ export class EventDashboardComponent implements OnInit {
   }
 
   hasResponded = (guestInvitation: GuestInvitation): boolean => {
-    return guestInvitation?.data;
+    return guestInvitation?.data && JSON.parse(guestInvitation?.data).response;
   }
 
   loadVendors = (vendorContracts: VendorContract[]): Observable<VendorContract[]> => {
