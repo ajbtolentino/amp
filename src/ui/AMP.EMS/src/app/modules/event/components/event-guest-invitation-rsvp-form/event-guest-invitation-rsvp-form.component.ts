@@ -1,5 +1,5 @@
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GuestInvitationRsvp } from '@shared/models';
@@ -81,7 +81,7 @@ declare global {
   `,
   template: `<div [id]="id"></div>`
 })
-export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewInit {
+export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() id: string = "youtubePlayer";
   @Input() class?: string | undefined | null | '';
   @Input() title?: string | undefined | null | '';
@@ -93,6 +93,7 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
   @Input() videoId: string = "";
   @Input() volume?: number = 50;
   @Input() referrerpolicy?: string | undefined | null | '';
+  @Input() autoplay?: number = 0;
   player: any;
   youtubeUrl: SafeResourceUrl | undefined;
   intersectionObserver!: IntersectionObserver;
@@ -115,48 +116,51 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
         document.body.appendChild(tag);
       }
 
-      window.onYouTubeIframeAPIReady = () => {
-        this.createPlayer();
-      };
+      if (!window.onYouTubeIframeAPIReady) {
+        window.onYouTubeIframeAPIReady = () => {
+          this.createPlayer();
+        };
+      }
 
       if ((window as any).YT && (window as any).YT.Player) {
         this.createPlayer();
       }
-    }, 1000);
+    }, 200);
   }
 
   createPlayer(): void {
     this.player = new window.YT.Player(this.id, {
       videoId: this.videoId,
       playerVars: {
-        autoplay: 0,
-        height: this.height,
-        width: this.width,
+        autoplay: this.autoplay,
         mute: 1,
-        enablejsapi: 1,
         rel: 0,
-        showinfo: 0,
-        modestbranding: 1,
+        playsinline: 1,
       },
       events: {
         'onReady': (event: any) => {
-          event.target.setVolume(50);
-          event.target.unMute();
-          // event.target.playVideo();
-          document.getElementById(this.id)!.style.backgroundColor = '#fff';
-          this.setupIntersectionObserver();
+          this.setupIntersectionObserver(event);
         }
       }
     });
   }
 
-  setupIntersectionObserver(): void {
+  setupIntersectionObserver(event: any): void {
     // Set up Intersection Observer to detect visibility of the player
     this.intersectionObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           // Play the video if visible
-          if (this.player) this.player.playVideo();
+          if (this.player && this.player.getPlayerState !== 1) {
+            this.player.setVolume(50);
+            this.player.unMute();
+            this.player.playVideo();
+          }
+        }
+        else {
+          if (this.player) {
+            this.player.pauseVideo();
+          }
         }
       });
     }, {
@@ -168,6 +172,15 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
 
     if (youtubePlayerElement)
       this.intersectionObserver.observe(youtubePlayerElement);
+  }
+
+  ngOnDestroy() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
+    if (this.player && this.player.destroy) {
+      this.player.destroy();
+    }
   }
 }
 
