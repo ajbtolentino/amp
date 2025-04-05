@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { apiResponseInterceptor, dateInterceptor } from '@core/interceptors';
 import { RsvpService } from '@core/services/rsvp.service';
-import { EventGuestInvitationRSVPChangeableLabelComponent, EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent } from '@modules/event';
+import { EventGuestInvitationRSVPChangeableLabelComponent, EventGuestInvitationRSVPDateComponent, EventGuestInvitationRSVPFormComponent, EventGuestInvitationRSVPLabelComponent, EventGuestInvitationRSVPPluralizeLabelComponent, EventGuestInvitationYTPlayerComponent } from '@modules/event';
 import { VerifyComponent } from '@modules/guest/verify/verify.component';
 import { SharedModule } from '@modules/shared.module';
 import { CodeEditorModule } from '@ngstack/code-editor';
@@ -43,6 +43,7 @@ import { HomeComponent } from './pages/home/home.component';
             parsers: [EventGuestInvitationRSVPFormComponent,
                 EventGuestInvitationRSVPLabelComponent,
                 EventGuestInvitationRSVPDateComponent,
+                EventGuestInvitationYTPlayerComponent,
                 EventGuestInvitationRSVPPluralizeLabelComponent,
                 EventGuestInvitationRSVPChangeableLabelComponent,
                 Button,

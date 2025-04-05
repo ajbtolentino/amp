@@ -1,6 +1,7 @@
 import { animate, AUTO_STYLE, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { GuestInvitationRsvp } from '@shared/models';
 import { OnDynamicData, OnDynamicMount } from 'ngx-dynamic-hooks';
 
@@ -65,6 +66,108 @@ export class EventGuestInvitationRSVPChangeResponseFormComponent {
 export class EventGuestInvitationRSVPDateComponent {
   @Input() date?: string | undefined | null | '';
   @Input() dateFormat?: string | undefined | null | '';
+}
+
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: () => void;
+    YT: any;
+  }
+}
+
+@Component({
+  selector: 'app-event-guest-invitation-yt-player',
+  styles: `
+  `,
+  template: `<div [id]="id"></div>`
+})
+export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewInit {
+  @Input() id: string = "youtubePlayer";
+  @Input() class?: string | undefined | null | '';
+  @Input() title?: string | undefined | null | '';
+  @Input() width?: number | undefined | null | '';
+  @Input() height?: number | undefined | null | '';
+  @Input() frameborder?: number | undefined | null | '';
+  @Input() allow?: string | undefined | null | '';
+  @Input() src: string = "";
+  @Input() videoId: string = "";
+  @Input() volume?: number = 50;
+  @Input() referrerpolicy?: string | undefined | null | '';
+  player: any;
+  youtubeUrl: SafeResourceUrl | undefined;
+  intersectionObserver!: IntersectionObserver;
+
+  constructor(private sanitizer: DomSanitizer) {
+
+  }
+
+  ngOnInit(): void {
+    this.youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.src || '');
+  }
+
+  ngAfterViewInit(): void {
+    // Load YouTube API
+    if (!document.getElementById("iframe-api")) {
+      const tag = document.createElement('script');
+      tag.id = "iframe-api"
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.body.appendChild(tag);
+    }
+
+    window.onYouTubeIframeAPIReady = () => {
+      this.createPlayer();
+    };
+
+    if ((window as any).YT && (window as any).YT.Player) {
+      this.createPlayer();
+    }
+  }
+
+  createPlayer(): void {
+    this.player = new window.YT.Player(this.id, {
+      videoId: this.videoId,
+      playerVars: {
+        autoplay: 0,
+        height: this.height,
+        width: this.width,
+        mute: 1,
+        enablejsapi: 1,
+        rel: 0,
+        showinfo: 0,
+        fs: 0,
+        modestbranding: 1,
+      },
+      events: {
+        'onReady': (event: any) => {
+          event.target.setVolume(50);
+          event.target.unMute();
+          // event.target.playVideo();
+          document.getElementById(this.id)!.style.backgroundColor = '#fff';
+          this.setupIntersectionObserver();
+        }
+      }
+    });
+  }
+
+  setupIntersectionObserver(): void {
+    // Set up Intersection Observer to detect visibility of the player
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Play the video if visible
+          if (this.player) this.player.playVideo();
+        }
+      });
+    }, {
+      threshold: 0.5 // Trigger the observer when 50% of the element is visible
+    });
+
+    // Observe the YouTube player container
+    const youtubePlayerElement = document.getElementById(this.id);
+
+    if (youtubePlayerElement)
+      this.intersectionObserver.observe(youtubePlayerElement);
+  }
 }
 
 const DEFAULT_DURATION = 300;
