@@ -94,6 +94,16 @@ export class EventDashboardComponent implements OnInit {
     return acc + (JSON.parse(guestInvitation?.data)?.guestNames?.length || 0) + 1;
   }
 
+  getAllocatedSeatsReducer = (acc: any, guest: any) => {
+    if (!guest.guestInvitations?.length) return +acc;
+
+    const totalSeats: any = guest.guestInvitations.reduce((acc: any, c: any) => {
+      return +acc + c.seats;
+    }, 0)
+
+    return +acc + totalSeats;
+  }
+
   guestInvitationReducer = (acc: any, curr: any) => {
     return [...acc, ...curr.guestInvitations];
   }
