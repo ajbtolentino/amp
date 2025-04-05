@@ -106,21 +106,23 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
   }
 
   ngAfterViewInit(): void {
-    // Load YouTube API
-    if (!document.getElementById("iframe-api")) {
-      const tag = document.createElement('script');
-      tag.id = "iframe-api"
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
-    }
+    setTimeout(() => {
+      // Load YouTube API
+      if (!document.getElementById("iframe-api")) {
+        const tag = document.createElement('script');
+        tag.id = "iframe-api"
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.body.appendChild(tag);
+      }
 
-    window.onYouTubeIframeAPIReady = () => {
-      this.createPlayer();
-    };
+      window.onYouTubeIframeAPIReady = () => {
+        this.createPlayer();
+      };
 
-    if ((window as any).YT && (window as any).YT.Player) {
-      this.createPlayer();
-    }
+      if ((window as any).YT && (window as any).YT.Player) {
+        this.createPlayer();
+      }
+    }, 1000);
   }
 
   createPlayer(): void {
@@ -134,7 +136,6 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
         enablejsapi: 1,
         rel: 0,
         showinfo: 0,
-        fs: 0,
         modestbranding: 1,
       },
       events: {
