@@ -208,6 +208,7 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Input() acceptMessage?: string;
   @Input() requestDetailsMessage?: string;
   @Input() requestDetails?: boolean;
+  @Input() showGuestInput?: boolean;
 
   @Input() secondaryGuestsLabel?: string;
   @Input() secondaryGuestsPlaceholder?: string;

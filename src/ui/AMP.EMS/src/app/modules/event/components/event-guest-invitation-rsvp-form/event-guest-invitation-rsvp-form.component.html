@@ -24,14 +24,16 @@
       <div *ngIf="choiceMessage">{{choiceMessage}}</div>
       <div class="guest-names-container flex flex-column gap-3" [@collapse]="rsvpForm.value['response'] !== 'ACCEPT'">
         <div *ngIf="acceptMessage">{{acceptMessage}}</div>
-        <span *ngIf="secondaryGuestsLabel && guestNames.controls.length">{{secondaryGuestsLabel}}</span>
-        <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
-          <input *ngIf="i < guestNames.controls.length" id="guest-{{i}}" [formControl]="guestNameControl" pInputText
-            type="text" [ngClass]="{'w-full': true }" placeholder='{{secondaryGuestsPlaceholder || "Name " + i}}' />
+        <ng-container *ngIf="showGuestInput">
+          <span *ngIf="secondaryGuestsLabel && guestNames.controls.length">{{secondaryGuestsLabel}}</span>
+          <ng-container *ngFor="let guestNameControl of guestNames.controls; let i = index">
+            <input *ngIf="i < guestNames.controls.length" id="guest-{{i}}" [formControl]="guestNameControl" pInputText
+              type="text" [ngClass]="{'w-full': true }" placeholder='{{secondaryGuestsPlaceholder || "Name " + i}}' />
 
-          <p-message *ngIf="i===0  && guestNameControl?.invalid && guestNameControl?.touched" severity="warn"
-            class="w-full" text="Please enter your name">
-          </p-message>
+            <p-message *ngIf="i===0  && guestNameControl?.invalid && guestNameControl?.touched" severity="warn"
+              class="w-full" text="Please enter your name">
+            </p-message>
+          </ng-container>
         </ng-container>
         <div *ngIf="requestDetails" class="gap-3">
           <div>{{requestDetailsMessage}}</div>
