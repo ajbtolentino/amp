@@ -1,8 +1,9 @@
 <ng-container *ngIf="guestInvitation$ | withStatus | async as guestInvitation">
-    <ngx-dynamic-hooks *ngIf="!guestInvitation.loading"
+    <ngx-dynamic-hooks id="ngx-component" *ngIf="!guestInvitation.loading"
         [content]="guestInvitation.value?.invitation!.content!.htmlContent" [context]="{
             guestInvitation: guestInvitation!.value!,
-            onSubmit: onSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
+            onSubmit: onSubmit}" [options]="{sanitize: false}"
+        (componentsLoaded)="initScrollTrigger()"></ngx-dynamic-hooks>
 
     <div *ngIf="guestInvitation?.loading"
         class="flex flex-column gap-3 align-items-center justify-content-center w-full h-screen">

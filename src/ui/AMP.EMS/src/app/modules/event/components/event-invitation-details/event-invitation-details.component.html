@@ -52,16 +52,16 @@
                     <p-tabPanel header="Template" class="line-height-3 m-0">
                         <div [style]="{height: '100vh !important' , overflow: 'auto'}">
                             <ngx-dynamic-hooks [content]="data.content!.value!.htmlContent" [context]="{
-                                guestInvitation: { 
-                                    seats: 3, 
-                                    guest: { 
-                                        firstName: 'First Name', 
-                                        lastName: 'Last Name'
-                                    },
-                                    invitation: {
-                                        rsvpDeadline: data.eventInvitation?.value?.rsvpDeadline || currentDate}
-                                    },
-                                onSubmit: onRsvpSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
+                                        guestInvitation: { 
+                                            seats: 3, 
+                                            guest: { 
+                                                firstName: 'First Name', 
+                                                lastName: 'Last Name'
+                                            },
+                                            invitation: {
+                                                rsvpDeadline: data.eventInvitation?.value?.rsvpDeadline || currentDate}
+                                            },
+                                        onSubmit: onRsvpSubmit}" [options]="{sanitize: false}"></ngx-dynamic-hooks>
                         </div>
                     </p-tabPanel>
                     <p-tabPanel header="Editor" class="line-height-3 m-0" [style]="{height: '100vh', overflow: 'auto'}">

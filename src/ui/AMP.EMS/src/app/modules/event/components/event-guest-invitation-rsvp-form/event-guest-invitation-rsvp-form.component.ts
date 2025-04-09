@@ -139,6 +139,8 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
       },
       events: {
         'onReady': (event: any) => {
+          this.player.setVolume(50);
+          this.player.unMute();
           this.setupIntersectionObserver(event);
         }
       }
@@ -152,8 +154,6 @@ export class EventGuestInvitationYTPlayerComponent implements OnInit, AfterViewI
         if (entry.isIntersecting) {
           // Play the video if visible
           if (this.player && this.player.getPlayerState !== 1) {
-            this.player.setVolume(50);
-            this.player.unMute();
             this.player.playVideo();
           }
         }
