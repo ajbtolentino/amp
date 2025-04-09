@@ -3,8 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RsvpService } from '@core/services';
 import { GuestInvitationService } from '@modules/event';
 import { GuestInvitation } from '@shared/models';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 
+import { Title } from '@angular/platform-browser';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -20,11 +21,15 @@ export class InvitationDetailsComponent {
   constructor(private guestInvitationService: GuestInvitationService,
     private rsvpService: RsvpService, private route: ActivatedRoute,
     private router: Router,
-    private renderer2: Renderer2) {
+    private renderer2: Renderer2,
+    private titleService: Title) {
     const code = this.route.snapshot.paramMap.get("code");
     if (code)
       this.guestInvitation$ = this.guestInvitationService.rsvp(code)
         .pipe(
+          tap((e: GuestInvitation) => {
+            this.titleService.setTitle(`Invitation - ${e.guest?.firstName} ${e.guest?.lastName}`)
+          }),
           catchError(error => {
             this.router.navigate(['error'])
             return throwError(() => error);
