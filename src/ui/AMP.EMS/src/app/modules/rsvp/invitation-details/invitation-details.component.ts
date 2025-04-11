@@ -73,71 +73,73 @@ export class InvitationDetailsComponent {
         {
           trigger: '.sticky-cards',
           start: "top top",
-          end: `+=${window.innerHeight / 3}px`,
+          end: `+=${window.innerHeight * 3}px`,
           pin: true,
           // pinSpacing: true,
           markers: false,
           scrub: 1,
-          // onUpdate: (self) => {
-          //   const progress = self.progress;
-          //   const totalCards = cards.length;
-          //   const progressPerCard = 1 / totalCards;
+          onUpdate: (self) => {
+            const progress = self.progress;
+            const totalCards = cards.length;
+            const progressPerCard = 1 / totalCards;
 
-          //   cards.forEach((card, index) => {
-          //     const cardStart = index * progressPerCard;
-          //     let cardProgress = (progress - cardStart) / progressPerCard;
-          //     cardProgress = Math.min(Math.max(cardProgress, 0), 1);
+            cards.forEach((card, index) => {
+              // const cardStart = index * progressPerCard;
+              // let cardProgress = (progress - cardStart) / progressPerCard;
+              // cardProgress = Math.min(Math.max(cardProgress, 0), 1);
 
-          //     let yPosition = (window.innerHeight * 2) * (1 - cardProgress);
-          //     let xPosition = 0;
+              //     let yPosition = (window.innerHeight * 2) * (1 - cardProgress);
+              //     let xPosition = 0;
 
-          //     if (cardProgress === 1 && index < totalCards - 1) {
-          //       const remainingProgress = (progress - (cardStart + progressPerCard)) / (1 - (cardStart + progressPerCard));
+              //     if (cardProgress === 1 && index < totalCards - 1) {
+              //       const remainingProgress = (progress - (cardStart + progressPerCard)) / (1 - (cardStart + progressPerCard));
 
-          //       if (remainingProgress > 0) {
-          //         const distanceMultiplier = 1 - index * 0.05;
-          //         xPosition = -window.innerWidth * 0.3 * ((distanceMultiplier * .75) * (index % 2 ? -1 : 1)) * remainingProgress;
-          //         yPosition = -window.innerHeight * 0.3 * (distanceMultiplier * 0.05) * remainingProgress;
-          //       }
-          //     }
+              //       if (remainingProgress > 0) {
+              //         const distanceMultiplier = 1 - index * 0.05;
+              //         xPosition = -window.innerWidth * 0.3 * ((distanceMultiplier * .75) * (index % 2 ? -1 : 1)) * remainingProgress;
+              //         yPosition = -window.innerHeight * 0.3 * (distanceMultiplier * 0.05) * remainingProgress;
+              //       }
+              //     }
 
-          //     const currentRotate = cardProgress === 1 ? self.progress * rotations[index] : 0;
+              //     const currentRotate = cardProgress === 1 ? self.progress * rotations[index] : 0;
 
-          //     gsap.to(card,
-          //       {
-          //         y: yPosition,
-          //         x: xPosition,
-          //         duration: 0,
-          //         ease: "none"
-          //       });
+              //     gsap.to(card,
+              //       {
+              //         y: yPosition,
+              //         x: xPosition,
+              //         duration: 0,
+              //         ease: "none"
+              //       });
 
-          //     gsap.to(card,
-          //       {
-          //         rotate: currentRotate,
-          //         duration: .25,
-          //         ease: "none"
-          //       });
-          //   });
-          // }
+              //     gsap.to(card,
+              //       {
+              //         rotate: currentRotate,
+              //         duration: .25,
+              //         ease: "none"
+              //       });
+            });
+          }
         }
       });
 
     cards.forEach((card, index) => {
-      cardTimeline.from(card, {
+      cardTimeline.from(cards[index], {
         rotate: rotations[index],
         x: index > 0 ? `${index % 2 ? '+=100' : '-=100'}` : card.xPosition
-      });
-
-      cardTimeline.to(card, {
-        rotate: 0,
-        ease: 'elastic.in'
-      });
+      })
+        .to(cards[index], {
+          rotate: 0,
+          ease: 'elastic.in'
+        });
 
       if (index < cards.length - 1) {
         cardTimeline.to(card, {
           y: -window.innerHeight * 2,
           ease: 'power3.inOut',
-          duration: 2
+          duration: 2,
+          onUpdate: (a) => {
+
+          }
         });
       }
 
