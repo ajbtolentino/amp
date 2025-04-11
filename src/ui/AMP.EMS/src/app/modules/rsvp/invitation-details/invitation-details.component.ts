@@ -37,19 +37,6 @@ export class InvitationDetailsComponent {
 
   ngOnInit(): void {
     gsap.registerPlugin(ScrollTrigger);
-    // const lenis = new Lenis();
-
-    // Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
-    // lenis.on('scroll', ScrollTrigger.update);
-
-    // // Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
-    // // This ensures Lenis's smooth scroll animation updates on each GSAP tick
-    // gsap.ticker.add((time) => {
-    //   lenis.raf(time * 1000); // Convert time from seconds to milliseconds
-    // });
-
-    // // Disable lag smoothing in GSAP to prevent any delay in scroll animations
-    // gsap.ticker.lagSmoothing(0);
   }
 
   refresh(): void {
@@ -57,78 +44,139 @@ export class InvitationDetailsComponent {
   }
 
   initScrollTrigger(): void {
-    document.querySelectorAll("img[loading='lazy']").forEach(e => {
-      const observer = new ResizeObserver(entries => {
-        this.refresh();
-      });
+    // document.querySelectorAll("img[loading='lazy']").forEach(e => {
+    //   const observer = new ResizeObserver(entries => {
+    //     this.refresh();
+    //   });
 
-      observer.observe(e);
-    });
+    //   observer.observe(e);
+    // });
 
     window.addEventListener('resize', () => {
       ScrollTrigger.refresh();
     });
 
     const cards: any[] = gsap.utils.toArray(".sticky-card");
-    const rotations: any[] = [-10, 10, 0];
+    const rotations: any[] = [0, 10, -10];
 
-    const tl = gsap.timeline(
+    cards.forEach((card, index) => {
+      gsap.set(card, {
+        rotate: 0,
+        zIndex: -index,
+        transformOrigin: `${index % 2 ? '0% 100%' : '100% 100%'}`
+      })
+    });
+
+    const cardTimeline = gsap.timeline(
       {
         scrollTrigger:
         {
           trigger: '.sticky-cards',
           start: "top top",
-          end: `+=${window.innerHeight}px`,
+          end: `+=${window.innerHeight / 3}px`,
           pin: true,
-          pinSpacing: true,
+          // pinSpacing: true,
           markers: false,
           scrub: 1,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const totalCards = cards.length;
-            const progressPerCard = 1 / totalCards;
+          // onUpdate: (self) => {
+          //   const progress = self.progress;
+          //   const totalCards = cards.length;
+          //   const progressPerCard = 1 / totalCards;
 
-            cards.forEach((card, index) => {
-              const cardStart = index * progressPerCard;
-              let cardProgress = (progress - cardStart) / progressPerCard;
-              cardProgress = Math.min(Math.max(cardProgress, 0), 1);
+          //   cards.forEach((card, index) => {
+          //     const cardStart = index * progressPerCard;
+          //     let cardProgress = (progress - cardStart) / progressPerCard;
+          //     cardProgress = Math.min(Math.max(cardProgress, 0), 1);
 
-              let yPosition = (window.innerHeight * 2) * (1 - cardProgress);
-              let xPosition = 0;
+          //     let yPosition = (window.innerHeight * 2) * (1 - cardProgress);
+          //     let xPosition = 0;
 
-              if (cardProgress === 1 && index < totalCards - 1) {
-                const remainingProgress = (progress - (cardStart + progressPerCard)) / (1 - (cardStart + progressPerCard));
+          //     if (cardProgress === 1 && index < totalCards - 1) {
+          //       const remainingProgress = (progress - (cardStart + progressPerCard)) / (1 - (cardStart + progressPerCard));
 
-                if (remainingProgress > 0) {
-                  const distanceMultiplier = 1 - index * 0.05;
-                  xPosition = -window.innerWidth * 0.3 * ((distanceMultiplier * .75) * (index % 2 ? -1 : 1)) * remainingProgress;
-                  yPosition = -window.innerHeight * 0.3 * (distanceMultiplier * 0.05) * remainingProgress;
-                }
-              }
+          //       if (remainingProgress > 0) {
+          //         const distanceMultiplier = 1 - index * 0.05;
+          //         xPosition = -window.innerWidth * 0.3 * ((distanceMultiplier * .75) * (index % 2 ? -1 : 1)) * remainingProgress;
+          //         yPosition = -window.innerHeight * 0.3 * (distanceMultiplier * 0.05) * remainingProgress;
+          //       }
+          //     }
 
-              const currentRotate = cardProgress === 1 ? self.progress * rotations[index] : 0;
+          //     const currentRotate = cardProgress === 1 ? self.progress * rotations[index] : 0;
 
-              gsap.to(card,
-                {
-                  y: yPosition,
-                  x: xPosition,
-                  duration: 0,
-                  ease: "none"
-                });
+          //     gsap.to(card,
+          //       {
+          //         y: yPosition,
+          //         x: xPosition,
+          //         duration: 0,
+          //         ease: "none"
+          //       });
 
-              gsap.to(card,
-                {
-                  rotate: currentRotate,
-                  duration: .25,
-                  ease: "none"
-                });
-            });
-          }
+          //     gsap.to(card,
+          //       {
+          //         rotate: currentRotate,
+          //         duration: .25,
+          //         ease: "none"
+          //       });
+          //   });
+          // }
         }
       });
 
-    tl.to('.sticky-cards', {
-      backgroundColor: document.getElementsByClassName('sticky-cards')[0].getAttribute('data-to-color') ?? ''
+    cards.forEach((card, index) => {
+      cardTimeline.from(card, {
+        rotate: rotations[index],
+        x: index > 0 ? `${index % 2 ? '+=100' : '-=100'}` : card.xPosition
+      });
+
+      cardTimeline.to(card, {
+        rotate: 0,
+        ease: 'elastic.in'
+      });
+
+      if (index < cards.length - 1) {
+        cardTimeline.to(card, {
+          y: -window.innerHeight * 2,
+          ease: 'power3.inOut',
+          duration: 2
+        });
+      }
+
+      // tl.fromTo(card,
+      //   {
+      //     rotate: rotations[index],
+      //     delay: 2
+      //   },
+      //   {
+      //     rotate: 0,
+      //     y: -1 * window.innerHeight
+      //   });
+    });
+
+    const changeColorCollection: any[] = gsap.utils.toArray('.change-color');
+
+    const changeColorTL = gsap.timeline(
+      {
+        scrollTrigger:
+        {
+          trigger: '.change-color',
+          start: "top center+=100",
+          end: `bottom bottom`,
+          markers: false,
+          scrub: 1
+        }
+      });
+
+    changeColorCollection.forEach((item, index) => {
+      changeColorTL.to(item, {
+        backgroundColor: item.getAttribute('data-bg-color'),
+        ease: 'power1',
+        duration: 1
+      });
+
+      changeColorTL.to(item, {
+        color: item.getAttribute('data-color'),
+        ease: 'none'
+      });
     });
   }
 
