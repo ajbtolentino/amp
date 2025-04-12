@@ -120,7 +120,7 @@ export class InvitationDetailsComponent {
     cards.forEach((card, index) => {
       cardTimeline.from(cards[index], {
         rotate: card.getAttribute('data-rotation'),
-        x: index > 0 ? `${index % 2 ? '+=10' : '-=10'}` : card.xPosition
+        // x: index > 0 ? `${index % 2 ? '+=10' : '-=10'}` : card.xPosition
       })
         .to(cards[index], {
           rotate: 0,
