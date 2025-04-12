@@ -44,6 +44,12 @@ export class InvitationDetailsComponent {
   }
 
   initScrollTrigger(): void {
+    document.querySelectorAll('img').forEach((elem) => {
+      elem.addEventListener('onload', () => {
+        ScrollTrigger.refresh();
+      })
+    })
+
     window.addEventListener('resize', () => {
       ScrollTrigger.refresh();
     });
@@ -53,7 +59,6 @@ export class InvitationDetailsComponent {
 
   loadGsap(): void {
     const cards: any[] = gsap.utils.toArray(".sticky-card");
-    const rotations: any[] = [0, 10, -10];
 
     cards.forEach((card, index) => {
       gsap.set(card, {
@@ -114,12 +119,12 @@ export class InvitationDetailsComponent {
 
     cards.forEach((card, index) => {
       cardTimeline.from(cards[index], {
-        rotate: rotations[index],
-        x: index > 0 ? `${index % 2 ? '+=100' : '-=100'}` : card.xPosition
+        rotate: card.getAttribute('data-rotation'),
+        x: index > 0 ? `${index % 2 ? '+=10' : '-=10'}` : card.xPosition
       })
         .to(cards[index], {
           rotate: 0,
-          ease: 'elastic.in',
+          ease: 'none',
           duration: 0.1
         });
     });
@@ -141,7 +146,7 @@ export class InvitationDetailsComponent {
     changeColorCollection.forEach((item, index) => {
       changeColorTL.to(item, {
         backgroundColor: item.getAttribute('data-bg-color'),
-        ease: 'power1',
+        ease: 'none',
         duration: 1
       });
 
