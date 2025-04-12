@@ -73,7 +73,7 @@ export class InvitationDetailsComponent {
         {
           trigger: '.sticky-cards',
           start: "top top",
-          end: `+=${window.innerHeight * 3}px`,
+          end: `+=${window.innerHeight * 2}px`,
           pin: true,
           // pinSpacing: true,
           markers: false,
