@@ -72,7 +72,7 @@ export class InvitationDetailsComponent {
           end: `+=${window.innerHeight * 2}px`,
           pin: true,
           // pinSpacing: true,
-          markers: true,
+          markers: false,
           scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
