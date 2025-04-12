@@ -44,18 +44,14 @@ export class InvitationDetailsComponent {
   }
 
   initScrollTrigger(): void {
-    // document.querySelectorAll("img[loading='lazy']").forEach(e => {
-    //   const observer = new ResizeObserver(entries => {
-    //     this.refresh();
-    //   });
-
-    //   observer.observe(e);
-    // });
-
     window.addEventListener('resize', () => {
       ScrollTrigger.refresh();
     });
 
+    this.loadGsap();
+  }
+
+  loadGsap(): void {
     const cards: any[] = gsap.utils.toArray(".sticky-card");
     const rotations: any[] = [0, 10, -10];
 
@@ -76,7 +72,7 @@ export class InvitationDetailsComponent {
           end: `+=${window.innerHeight * 2}px`,
           pin: true,
           // pinSpacing: true,
-          markers: false,
+          markers: true,
           scrub: 1,
           onUpdate: (self) => {
             const progress = self.progress;
@@ -84,39 +80,33 @@ export class InvitationDetailsComponent {
             const progressPerCard = 1 / totalCards;
 
             cards.forEach((card, index) => {
-              // const cardStart = index * progressPerCard;
-              // let cardProgress = (progress - cardStart) / progressPerCard;
-              // cardProgress = Math.min(Math.max(cardProgress, 0), 1);
+              const cardStart = index * progressPerCard;
+              let cardProgress = (progress - cardStart) / progressPerCard;
+              cardProgress = Math.min(Math.max(cardProgress, 0), 1);
 
-              //     let yPosition = (window.innerHeight * 2) * (1 - cardProgress);
-              //     let xPosition = 0;
+              const rect = card.getBoundingClientRect();
+              const x = rect.left + window.scrollX;
+              const y = rect.top + window.scrollY;
 
-              //     if (cardProgress === 1 && index < totalCards - 1) {
-              //       const remainingProgress = (progress - (cardStart + progressPerCard)) / (1 - (cardStart + progressPerCard));
+              let yPosition = 0;
+              let xPosition = 0;
 
-              //       if (remainingProgress > 0) {
-              //         const distanceMultiplier = 1 - index * 0.05;
-              //         xPosition = -window.innerWidth * 0.3 * ((distanceMultiplier * .75) * (index % 2 ? -1 : 1)) * remainingProgress;
-              //         yPosition = -window.innerHeight * 0.3 * (distanceMultiplier * 0.05) * remainingProgress;
-              //       }
-              //     }
+              if (cardProgress === 1 && index < totalCards - 1) {
+                const remainingProgress = (progress - (cardStart + progressPerCard)) / (1 - (cardStart + progressPerCard));
 
-              //     const currentRotate = cardProgress === 1 ? self.progress * rotations[index] : 0;
+                if (remainingProgress > 0) {
+                  const distanceMultiplier = 3;
+                  // xPosition = -window.innerWidth * 0.3 * ((distanceMultiplier * .75) * (index % 2 ? -1 : 1)) * remainingProgress;
+                  yPosition = -window.innerHeight * distanceMultiplier * remainingProgress;
+                }
+              }
 
-              //     gsap.to(card,
-              //       {
-              //         y: yPosition,
-              //         x: xPosition,
-              //         duration: 0,
-              //         ease: "none"
-              //       });
-
-              //     gsap.to(card,
-              //       {
-              //         rotate: currentRotate,
-              //         duration: .25,
-              //         ease: "none"
-              //       });
+              gsap.to(card,
+                {
+                  y: yPosition,
+                  duration: 0,
+                  ease: "none"
+                });
             });
           }
         }
@@ -129,29 +119,9 @@ export class InvitationDetailsComponent {
       })
         .to(cards[index], {
           rotate: 0,
-          ease: 'elastic.in'
+          ease: 'elastic.in',
+          duration: 0.1
         });
-
-      if (index < cards.length - 1) {
-        cardTimeline.to(card, {
-          y: -window.innerHeight * 2,
-          ease: 'power3.inOut',
-          duration: 2,
-          onUpdate: (a) => {
-
-          }
-        });
-      }
-
-      // tl.fromTo(card,
-      //   {
-      //     rotate: rotations[index],
-      //     delay: 2
-      //   },
-      //   {
-      //     rotate: 0,
-      //     y: -1 * window.innerHeight
-      //   });
     });
 
     const changeColorCollection: any[] = gsap.utils.toArray('.change-color');
@@ -177,7 +147,35 @@ export class InvitationDetailsComponent {
 
       changeColorTL.to(item, {
         color: item.getAttribute('data-color'),
+        ease: 'none',
+        opacity: 1,
+      });
+    });
+
+    const appearBelowCollection: any[] = gsap.utils.toArray('.appear-below');
+
+    const appearBelowTL = gsap.timeline(
+      {
+        scrollTrigger:
+        {
+          trigger: '.appear-below',
+          start: "top center+=100",
+          end: `bottom bottom`,
+          markers: false,
+          scrub: 1
+        }
+      });
+
+    appearBelowCollection.forEach((item, index) => {
+      appearBelowTL.fromTo(item, {
+        opacity: 0,
+        y: '+=10',
         ease: 'none'
+      }, {
+        opacity: 1,
+        y: 0,
+        ease: 'none',
+        duration: 1
       });
     });
   }
