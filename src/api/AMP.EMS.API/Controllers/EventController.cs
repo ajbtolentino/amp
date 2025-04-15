@@ -84,7 +84,8 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
             if(guest.GuestInvitations.Any(_ => response.Any(__ => _.InvitationId == invitationId && _.Data.Contains(__))))
                 yield return guest;
             
-            if(responseFilter.Contains("awaiting-response") && guest.GuestInvitations.Any(_ => _.InvitationId == invitationId && _.Data == string.Empty))
+            if(responseFilter.Contains("awaiting-response") && 
+               guest.GuestInvitations.Any(_ => _.InvitationId == invitationId && !(_.Data.Contains("ACCEPT") || _.Data.Contains("DECLINE"))))
                 yield return guest;
             
             if(responseFilter.Contains("not-assigned") && !guest.GuestInvitations.Any(_ => _.InvitationId == invitationId))
