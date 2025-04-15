@@ -1,9 +1,13 @@
 <div class="grid" *ngIf="invitation$ | withStatus | async as invitation">
     <div class="col-12">
         <div class="card" *ngIf="guests$ | withStatus | async as guests">
+            <h1>{{invitation.value?.name}}</h1>
+
             <p-table #dt [value]="guests.value?.result!" dataKey="id" [loading]="guests.loading || guests.loading"
                 [showLoader]="false" [lazy]="true" [rows]="10" [paginator]="true" [lazyLoadOnInit]="true"
-                [totalRecords]="guests.value?.totalRecords!" (onLazyLoad)="refreshGrid($event)">
+                [totalRecords]="guests.value?.totalRecords!" (onLazyLoad)="refreshGrid($event)"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
                 <ng-template pTemplate="caption">
                     <span class="p-input-icon-left p-ml-auto">
                         <i class="pi pi-search"></i>
@@ -21,7 +25,31 @@
                         </th>
                         <th>Code</th>
                         <th>Going / Seats</th>
-                        <th>Response</th>
+                        <th>
+                            <div class="flex align-items-center">
+                                Response
+                                <p-columnFilter field="response" display="menu" display="menu" [showMatchModes]="false"
+                                    [showOperator]="false" [showAddButton]="false">
+                                    <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <p-multiSelect [ngModel]="value" [options]="[
+                                                {value: 'not-assigned', label: 'N/A'},
+                                                {value: 'awaiting-response', label: 'Awaiting Response'},
+                                                {value: 'ACCEPT', label: 'Accept'}, 
+                                                {value: 'DECLINE', label: 'Decline'}
+                                                ]" placeholder="Any" (onChange)="filter($event.value)" filter="false">
+                                            <ng-template let-option pTemplate="item">
+                                                <div class="inline-block vertical-align-middle">
+                                                    <span class="ml-1 mt-1">
+                                                        <span
+                                                            [class]="'invitation-badge status-' +option.value">{{option.label}}</span>
+                                                    </span>
+                                                </div>
+                                            </ng-template>
+                                        </p-multiSelect>
+                                    </ng-template>
+                                </p-columnFilter>
+                            </div>
+                        </th>
                         <th></th>
                     </tr>
                 </ng-template>

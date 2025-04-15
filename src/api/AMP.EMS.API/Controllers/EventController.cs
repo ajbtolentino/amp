@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AMP.Core.Repository;
 using AMP.EMS.API.Core.Entities;
 using AMP.Infrastructure.Enums;
@@ -8,6 +9,8 @@ using AMP.Infrastructure.Responses;
 using AMP.Infrastructure.Sorting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Driver.Linq;
 
 namespace AMP.EMS.API.Controllers;
 
@@ -39,11 +42,11 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
     [HttpGet]
     [Route("{eventId:guid}/[action]")]
     public IActionResult Guests(Guid eventId, int pageNumber, int pageSize, string? search, string? sortField,
-        SortDirection? sortDirection, [FromQuery] Guid[]? roleIds)
+        SortDirection? sortDirection, [FromQuery] Guid[]? roleIds, [FromQuery] string[]? responseFilter, [FromQuery] Guid? invitationId)
     {
-        var query = UnitOfWork.Set<Guest>().GetAll()
+        var query = UnitOfWork.Set<Guest>().GetAll().AsNoTracking()
             .Where(guest => guest.EventId == eventId);
-
+        
         if (!string.IsNullOrEmpty(search))
             query = query.Where(_ =>
                 EF.Functions.Like(_.FirstName, $"%{search}%") ||
@@ -54,7 +57,7 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
         if (roleIds != null && roleIds.Any())
             query = query.Include(_ => _.GuestRoles)
                 .Where(_ => _.GuestRoles.Any(gr => roleIds.Contains(gr.RoleId)));
-
+        
         if (!string.IsNullOrEmpty(sortField))
             query = query.ApplySorting(new SortingParameters
             {
@@ -62,9 +65,31 @@ public class EventController(IUnitOfWork unitOfWork, ILogger<EventController> lo
                 SortDirection = sortDirection ?? SortDirection.Ascending
             });
 
-        var pagedResult = query.AsNoTracking().ApplyPagination(pageNumber, pageSize);
+        if (invitationId != null && responseFilter != null && responseFilter.Any())
+        {
+            query = FilterResponse(query.Include(_ => _.GuestInvitations), responseFilter, invitationId).AsQueryable();
+        }
+        
+        var pagedResult = query.ApplyPagination(pageNumber, pageSize);
 
         return Ok(new OkResponse<PagedResult<Guest>>(string.Empty) { Data = pagedResult });
+    }
+
+    private static IEnumerable<Guest> FilterResponse(IQueryable<Guest> guests, string[]? responseFilter, Guid? invitationId)
+    {
+        foreach (var guest in guests)
+        {
+            var response = responseFilter.Where(_ => _ is "ACCEPT" or "DECLINE");
+            
+            if(guest.GuestInvitations.Any(_ => response.Any(__ => _.InvitationId == invitationId && _.Data.Contains(__))))
+                yield return guest;
+            
+            if(responseFilter.Contains("awaiting-response") && guest.GuestInvitations.Any(_ => _.InvitationId == invitationId && _.Data == string.Empty))
+                yield return guest;
+            
+            if(responseFilter.Contains("not-assigned") && !guest.GuestInvitations.Any(_ => _.InvitationId == invitationId))
+                yield return guest;
+        }
     }
 
     [HttpGet]

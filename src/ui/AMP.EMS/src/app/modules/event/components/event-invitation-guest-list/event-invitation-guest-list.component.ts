@@ -84,18 +84,20 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   refreshGrid = (event: any) => {
+    console.log(event.filters?.global?.value)
     this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
     let pageNumber = event.first / event.rows;
+    const responseFilters = event.filters?.response && event.filters?.response[0].value
 
-    this.guests$ = this.loadGuests(pageNumber, event.rows, event.filters?.global?.value, event.sortField, event.sortOrder == 1 ? 'Ascending' : 'Descending');
+    this.guests$ = this.loadGuests(pageNumber, event.rows, event.filters?.global?.value, event.sortField, event.sortOrder == 1 ? 'Ascending' : 'Descending', responseFilters);
   }
 
   loadInvitation = (): Observable<Invitation> => {
     return this.eventInvitationService.get(this.eventInvitationId);
   }
 
-  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending') => {
-    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection)
+  loadGuests = (pageNumber: number, rows: number, filter?: string, sortField?: string, sortDirection?: 'Ascending' | 'Descending', responseFilter?: string[]) => {
+    return this.eventService.getGuests(this.eventId, pageNumber, rows, filter, sortField, sortDirection, [], responseFilter, this.eventInvitationId)
       .pipe(
         switchMap(guests => this.loadGuestInvitations(guests)),
       );
@@ -224,6 +226,11 @@ export class EventInvitationGuestListComponent implements OnInit {
 
   onSearch = (event: any) => {
     this.table.filterGlobal(event.target!.value, 'contains');
+  }
+
+  onFilter = (event: any) => {
+    console.log(event.originalEvent.originalEvent);
+    this.table.filterGlobal(event.originalEvent.originalEvent, 'contains');
   }
 
   copyLink = (code: string) => {
