@@ -61,6 +61,10 @@
   </form>
 </div>
 
-<div *ngIf="!showRsvpForm">
+<div *ngIf="!rsvpStarted">
+  Rsvp is not yet available
+</div>
+
+<div *ngIf="rsvpEnded">
   Rsvp is no longer available
 </div>

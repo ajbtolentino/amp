@@ -16,6 +16,12 @@ public class RsvpController(IUnitOfWork unitOfWork, ILogger<RsvpController> logg
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
         ArgumentException.ThrowIfNullOrWhiteSpace(request.Data);
+        
+        if(guestInvitation.StartDate != null && guestInvitation.StartDate > DateTime.UtcNow)
+            return BadRequest("RSVP is not yet available.");
+        
+        if(guestInvitation.EndDate != null && guestInvitation.EndDate < DateTime.UtcNow)
+            return BadRequest("RSVP deadline has passed.");
 
         guestInvitation.Data = request.Data;
 

@@ -9,6 +9,8 @@ public class GuestInvitation : FullAuditableEntity<Guid>
     public int Seats { get; set; }
     public string Code { get; set; }
     public string Data { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
     public virtual Guest? Guest { get; set; }
     public virtual Invitation? Invitation { get; set; }
 }

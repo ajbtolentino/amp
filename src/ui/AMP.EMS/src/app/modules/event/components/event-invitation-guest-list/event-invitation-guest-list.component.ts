@@ -5,7 +5,7 @@ import { EventInvitationService, GuestInvitationService, GuestService } from '@m
 import { Guest, GuestInvitation, Invitation, PagedResult } from '@shared/models';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-event-invitation-guest-list',
@@ -84,7 +84,6 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   refreshGrid = (event: any) => {
-    console.log(event.filters?.global?.value)
     this.guests$ = of<PagedResult<Guest>>({ result: [], totalRecords: 0, pageNumber: 0 })
     let pageNumber = event.first / event.rows;
     const responseFilters = event.filters?.response && event.filters?.response[0].value
@@ -148,6 +147,12 @@ export class EventInvitationGuestListComponent implements OnInit {
   edit = (guestInvitation: GuestInvitation) => {
     this.editGuestInvitation = { ...guestInvitation };
 
+    if (guestInvitation.startDate)
+      this.editGuestInvitation.startDate = new Date(guestInvitation.startDate);
+
+    if (guestInvitation.endDate)
+      this.editGuestInvitation.endDate = new Date(guestInvitation.endDate);
+
     if (this.editGuestInvitation.data) {
       const data = JSON.parse(this.editGuestInvitation.data);
 
@@ -179,6 +184,11 @@ export class EventInvitationGuestListComponent implements OnInit {
       this.guests$ = this.guestInvitationService.update(this.editGuestInvitation.id, this.editGuestInvitation)
         .pipe(
           switchMap(() => {
+            const pageNumber = this.table.first! / this.table.rows!;
+            const globalFilter: any = this.table?.filters['global'] || '';
+            return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
+          }),
+          catchError(() => {
             const pageNumber = this.table.first! / this.table.rows!;
             const globalFilter: any = this.table?.filters['global'] || '';
             return this.loadGuests(pageNumber, this.table.rows!, globalFilter['value'] || '', this.table?.sortField || '', this.table.sortOrder == 1 ? 'Ascending' : 'Descending');
@@ -229,7 +239,6 @@ export class EventInvitationGuestListComponent implements OnInit {
   }
 
   onFilter = (event: any) => {
-    console.log(event.originalEvent.originalEvent);
     this.table.filterGlobal(event.originalEvent.originalEvent, 'contains');
   }
 

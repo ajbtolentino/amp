@@ -7,6 +7,8 @@ export interface GuestInvitation {
     invitationId?: string;
     seats?: number;
     code?: string;
+    startDate?: Date;
+    endDate?: Date;
     invitation?: Invitation;
     guest?: Guest;
     data?: any;

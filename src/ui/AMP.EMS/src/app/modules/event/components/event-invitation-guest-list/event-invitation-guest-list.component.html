@@ -196,6 +196,18 @@
                 </p-dropdown>
             </div>
             <div class="field">
+                <label for="startDate" class="font-semibold w-6rem">Start Date</label>
+                <p-calendar id="startDate" dateFormat="yy-mm-dd" [(ngModel)]="editGuestInvitation.startDate"
+                    [showButtonBar]="true" appendTo="body" [readonlyInput]="true" [showIcon]="true"
+                    [maxDate]="editGuestInvitation.endDate"></p-calendar>
+            </div>
+            <div class="field">
+                <label for="endDate" class="font-semibold w-6rem">End Date</label>
+                <p-calendar id="endDate" dateFormat="yy-mm-dd" [(ngModel)]="editGuestInvitation.endDate"
+                    [showButtonBar]="true" appendTo="body" [readonlyInput]="true" [showIcon]="true"
+                    [minDate]="editGuestInvitation.startDate"></p-calendar>
+            </div>
+            <div class="field">
                 <label for="seats" class="font-semibold w-6rem">Seats</label>
                 <p-inputNumber id="seats" [showButtons]="true" [(ngModel)]="editGuestInvitation.seats"
                     (ngModelChange)="guestInvitationSeatChange($event, data)" [min]="1" buttonLayout="horizontal"

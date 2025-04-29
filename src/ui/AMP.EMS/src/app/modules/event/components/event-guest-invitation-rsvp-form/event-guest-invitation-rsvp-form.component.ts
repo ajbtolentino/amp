@@ -225,6 +225,9 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   @Output() onResponseChange: EventEmitter<any> = new EventEmitter();
   @Output() onSubmit: EventEmitter<any> = new EventEmitter();
 
+  rsvpStarted: boolean = false;
+  rsvpEnded: boolean = false;
+
   showRsvpForm: boolean = false;
 
   guestInvitationId: string = '';
@@ -255,7 +258,11 @@ export class EventGuestInvitationRSVPFormComponent implements OnInit, OnDynamicM
   onDynamicMount(data: OnDynamicData): void {
     const length = data.context.guestInvitation.seats || 0;
 
-    this.showRsvpForm = data.context.guestInvitation.invitation.rsvpDeadline && new Date() <= new Date(data.context.guestInvitation.invitation.rsvpDeadline);
+    this.rsvpStarted = data.context.guestInvitation.startDate ? data.context.guestInvitation.startDate >= new Date() : true;
+    this.rsvpEnded = data.context.guestInvitation.endDate ? new Date(data.context.guestInvitation.endDate) < new Date() :
+      (data.context.guestInvitation.invitation.rsvpDeadline && new Date(data.context.guestInvitation.invitation.rsvpDeadline) < new Date());
+
+    this.showRsvpForm = this.rsvpStarted && !this.rsvpEnded;
     this.guestInvitationId = data.context.guestInvitation.id;
     this.guestInvitationRsvp = data.context.guestInvitation.data ?
       JSON.parse(data.context.guestInvitation.data) :

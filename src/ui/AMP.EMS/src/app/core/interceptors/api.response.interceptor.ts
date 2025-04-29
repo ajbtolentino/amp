@@ -30,7 +30,7 @@ export const apiResponseInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
       }
     }), catchError((error) => {
       if (req.url.includes(environment.EMS_SPA_APIURL)) {
-        const detail = error?.error?.title || 'An error occurred while processing your request.';
+        const detail = error?.error?.title ?? error?.error ?? 'An error occurred while processing your request.';
         messageService.add({ severity: 'error', summary: 'Error', detail: detail, life: 6000 });
       }
       return throwError(() => error);

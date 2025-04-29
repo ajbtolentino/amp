@@ -53,6 +53,9 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] GuestInvitationRequest request)
     {
+        if(request is { StartDate: not null, EndDate: not null } && request.StartDate > request.EndDate)
+            return BadRequest("Start date must be before end date.");
+        
         var guest = await UnitOfWork.Set<Guest>().Get(request.GuestId);
 
         ArgumentNullException.ThrowIfNull(guest);
@@ -63,6 +66,8 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
             InvitationId = request.InvitationId,
             Code = InvitationHelper.GenerateCode(),
             Seats = request.Seats,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
             Data = request.Data ?? string.Empty
         });
     }
@@ -71,6 +76,9 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
     [Route("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] GuestInvitationRequest request)
     {
+        if(request is { StartDate: not null, EndDate: not null } && request.StartDate > request.EndDate)
+            return BadRequest("Start date must be before end date.");
+        
         var guestInvitation = await EntityRepository.Get(id);
 
         ArgumentNullException.ThrowIfNull(guestInvitation);
@@ -80,6 +88,8 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
 
         guestInvitation.InvitationId = request.InvitationId;
         guestInvitation.Seats = request.Seats;
+        guestInvitation.StartDate = request.StartDate;
+        guestInvitation.EndDate = request.EndDate;
         guestInvitation.Data = request.Data ?? string.Empty;
 
         return await base.Put(guestInvitation);
@@ -106,5 +116,11 @@ public class GuestInvitationController(IUnitOfWork unitOfWork, ILogger<GuestInvi
         }
     }
 
-    public record GuestInvitationRequest(Guid InvitationId, Guid GuestId, string? Code, int Seats, string? Data);
+    public record GuestInvitationRequest(Guid InvitationId, 
+        Guid GuestId, 
+        string? Code, 
+        int Seats, 
+        DateTime? StartDate, 
+        DateTime? EndDate, 
+        string? Data);
 }

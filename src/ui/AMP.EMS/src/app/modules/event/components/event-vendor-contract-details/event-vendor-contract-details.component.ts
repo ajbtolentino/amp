@@ -153,7 +153,6 @@ export class EventVendorContractDetailsComponent implements OnInit {
   }
 
   saveTransaction = (vendorContractPayment: VendorContractPayment) => {
-    console.log(vendorContractPayment)
     if (vendorContractPayment.dueAmount && vendorContractPayment.vendorContractPaymentStateId && vendorContractPayment.vendorContractPaymentTypeId) {
       if (vendorContractPayment.transaction?.id) {
         this.vendorContractPaymentTransaction$ = this.transactionService.update(vendorContractPayment.transaction!)
