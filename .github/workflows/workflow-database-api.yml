@@ -12,6 +12,14 @@ on:
         description: 'Login to Azure'
         required: false
         type: boolean
+      environment:
+        description: 'Environment'
+        required: true
+        default: 'Development'
+        type: choice
+        options:
+          - 'Development'
+          - 'Production'
       action:
         description: 'Database Action'
         required: true
@@ -23,21 +31,10 @@ on:
           - 'Migrate and Seed'
 
 jobs:
-  set-environment:
-    name: Set Environment
-    runs-on: ubuntu-latest
-    outputs:
-      environment_name: ${{ steps.output-environment-name.outputs.environment_name }}
-    steps:
-      - id: output-environment-name
-        run: echo "environment_name=${{ github.ref == 'refs/heads/master' && 'Production' || 'Development' }}" >> "$GITHUB_OUTPUT"
-
   update-database:
-    name: ${{ github.event.inputs.action }} ${{ needs.set-environment.outputs.environment_name }} Database
-    needs: set-environment
-    if: ${{ github.event_name == 'workflow_dispatch' && needs.set-environment.outputs.environment_name != '' }}
+    name: ${{github.event.inputs.environment}} Database
     environment:
-      name: ${{ needs.set-environment.outputs.environment_name }}
+      name: ${{github.event.inputs.environment}}
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     runs-on: ubuntu-latest
     permissions:
